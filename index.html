@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExamHub — ระบบข้อสอบออนไลน์</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --accent3: #8b5cf6;
+    --gold: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #475569;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 900; font-size: 1.4rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--gold); -webkit-text-fill-color: var(--gold); }
+  nav { display: flex; gap: 0.5rem; }
+  nav button {
+    background: none; border: none; color: var(--text2);
+    font-family: 'Sarabun', sans-serif; font-size: 0.9rem;
+    padding: 0.4rem 1rem; border-radius: 8px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  nav button:hover, nav button.active {
+    background: var(--surface2); color: var(--text);
+  }
+  .score-badge {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: linear-gradient(135deg, #1a2235, #1e2d45);
+    border: 1px solid var(--border);
+    padding: 0.35rem 1rem; border-radius: 20px;
+    font-size: 0.85rem; font-weight: 600; color: var(--gold);
+  }
+  .score-badge::before { content: '⭐'; }
+
+  main { position: relative; z-index: 1; }
+
+  .hero {
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    max-width: 800px; margin: 0 auto;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
+    color: var(--accent); font-size: 0.8rem; font-weight: 600;
+    padding: 0.3rem 1rem; border-radius: 20px; margin-bottom: 1.5rem;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 900; line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { color: var(--text2); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2rem; }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem;
+    padding-top: 2rem; border-top: 1px solid var(--border);
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-size: 1.8rem; font-weight: 800; color: var(--text);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text3); margin-top: 2px; }
+
+  .section { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+  .section-title {
+    font-size: 1.1rem; font-weight: 700; color: var(--text2);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .category-block { margin-bottom: 2.5rem; }
+  .category-label {
+    font-size: 0.75rem; font-weight: 700; color: var(--text2);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .category-label::before {
+    content: ''; width: 3px; height: 14px; border-radius: 2px;
+    background: var(--cat-color, var(--accent));
+  }
+  .category-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .subject-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+    cursor: pointer; transition: all 0.25s;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .subject-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--card-color, var(--accent));
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .subject-card:hover {
+    border-color: var(--card-color, var(--accent));
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+  .subject-card:hover::before { opacity: 1; }
+  .subject-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--icon-bg, rgba(59,130,246,0.15));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .subject-name { font-weight: 700; font-size: 0.95rem; }
+  .subject-meta { font-size: 0.78rem; color: var(--text3); }
+  .subject-count {
+    margin-top: auto;
+    font-size: 0.75rem; color: var(--text2);
+    background: var(--surface2); padding: 0.25rem 0.75rem;
+    border-radius: 20px; width: fit-content;
+  }
+
+  .exam-view { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; }
+  .exam-view.active { display: block; }
+  .home-view { display: block; }
+  .home-view.hidden { display: none; }
+
+  .exam-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .back-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); width: 40px; height: 40px;
+    border-radius: 10px; cursor: pointer; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .back-btn:hover { border-color: var(--accent); }
+  .exam-title-block h2 {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.5rem; font-weight: 900;
+  }
+  .exam-title-block p { font-size: 0.85rem; color: var(--text2); margin-top: 2px; }
+
+  .progress-bar-wrap {
+    background: var(--surface2); height: 6px; border-radius: 3px;
+    margin-bottom: 0.6rem; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+  }
+  .progress-info {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; color: var(--text2); margin-bottom: 2rem;
+  }
+
+  .question-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .q-number {
+    font-size: 0.75rem; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;
+  }
+  .q-text {
+    font-size: 1.05rem; font-weight: 500; line-height: 1.8;
+    margin-bottom: 1.5rem; color: var(--text);
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 0.7rem; }
+  .choice-btn {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 0.9rem 1.2rem;
+    text-align: left; cursor: pointer; color: var(--text);
+    font-family: 'Sarabun', sans-serif; font-size: 0.95rem;
+    transition: all 0.2s; display: flex; align-items: center; gap: 0.8rem;
+    line-height: 1.6;
+  }
+  .choice-letter {
+    min-width: 28px; height: 28px; border-radius: 8px;
+    background: var(--border); display: flex; align-items: center;
+    justify-content: center; font-weight: 700; font-size: 0.8rem;
+    color: var(--text2); transition: all 0.2s; flex-shrink: 0;
+  }
+  .choice-btn:hover:not(.selected):not(.correct):not(.wrong) {
+    border-color: var(--accent); background: rgba(59,130,246,0.07);
+  }
+  .choice-btn:hover:not(.selected):not(.correct):not(.wrong) .choice-letter {
+    background: var(--accent); color: #fff;
+  }
+  .choice-btn.selected {
+    border-color: var(--accent); background: rgba(59,130,246,0.1);
+  }
+  .choice-btn.selected .choice-letter { background: var(--accent); color: #fff; }
+  .choice-btn.correct {
+    border-color: var(--green); background: rgba(16,185,129,0.1); pointer-events: none;
+  }
+  .choice-btn.correct .choice-letter { background: var(--green); color: #fff; }
+  .choice-btn.wrong {
+    border-color: var(--red); background: rgba(239,68,68,0.07); pointer-events: none;
+  }
+  .choice-btn.wrong .choice-letter { background: var(--red); color: #fff; }
+  .choice-btn.disabled { pointer-events: none; opacity: 0.5; }
+
+  .explanation {
+    margin-top: 1rem; padding: 1rem 1.2rem;
+    background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 12px; display: none;
+  }
+  .explanation.show { display: block; animation: slideUp 0.3s ease; }
+  .explanation-label {
+    font-size: 0.75rem; font-weight: 700; color: var(--green);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.4rem;
+  }
+  .explanation p { font-size: 0.9rem; color: var(--text2); line-height: 1.7; }
+
+  .exam-actions {
+    display: flex; gap: 1rem; justify-content: flex-end;
+  }
+  .btn {
+    padding: 0.75rem 1.75rem; border-radius: 12px;
+    font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .btn-ghost {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text2);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.4); }
+  .btn-primary:disabled {
+    opacity: 0.4; cursor: not-allowed; transform: none;
+    box-shadow: none;
+  }
+
+  .result-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 24px; padding: 3rem; text-align: center;
+    animation: slideUp 0.4s ease;
+  }
+  .result-emoji { font-size: 4rem; margin-bottom: 1rem; }
+  .result-score {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 3.5rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .result-label { font-size: 1.1rem; color: var(--text2); margin-bottom: 0.5rem; }
+  .result-grade {
+    display: inline-block; margin: 1rem 0 1.5rem;
+    padding: 0.4rem 1.5rem; border-radius: 20px;
+    font-weight: 700; font-size: 0.9rem;
+  }
+  .grade-a { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .grade-b { background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid rgba(59,130,246,0.3); }
+  .grade-c { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+  .grade-d { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .result-breakdown {
+    display: flex; justify-content: center; gap: 3rem;
+    padding: 1.5rem; background: var(--surface2); border-radius: 16px;
+    margin-bottom: 1.5rem;
+  }
+  .rb-item { text-align: center; }
+  .rb-num { font-size: 1.8rem; font-weight: 800; }
+  .rb-label { font-size: 0.75rem; color: var(--text3); }
+  .rb-correct .rb-num { color: var(--green); }
+  .rb-wrong .rb-num { color: var(--red); }
+
+  @media (max-width: 600px) {
+    header { padding: 0 1rem; }
+    .hero { padding: 3rem 1rem 2rem; }
+    .section { padding: 1rem; }
+    .exam-view { padding: 1rem; }
+    .hero-stats { gap: 1.5rem; }
+    .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Exam<span>Hub</span></div>
+  <nav>
+    <button class="active" onclick="showHome()">หน้าหลัก</button>
+  </nav>
+  <div class="score-badge" id="totalScore">0 คะแนน</div>
+</header>
+
+<main>
+  <div class="home-view" id="homeView">
+    <div class="hero">
+      <div class="hero-tag">ระบบข้อสอบออนไลน์</div>
+      <h1>ฝึกทำข้อสอบ<br><em>ทุกวิชาในที่เดียว</em></h1>
+      <p>เลือกวิชาที่ต้องการฝึกซ้อม ทำข้อสอบพร้อมดูเฉลยและคำอธิบาย<br>พัฒนาความรู้อย่างมีประสิทธิภาพ</p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num" id="statSubjects">10</div><div class="stat-label">วิชา</div></div>
+        <div class="stat"><div class="stat-num" id="statQuestions">0</div><div class="stat-label">ข้อสอบ</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">มีเฉลย</div></div>
+      </div>
+    </div>
+
+    <div class="section" id="subjectsContainer"></div>
+  </div>
+
+  <div class="exam-view" id="examView">
+    <div class="exam-header">
+      <button class="back-btn" onclick="showHome()">←</button>
+      <div class="exam-title-block">
+        <h2 id="examSubjectTitle"></h2>
+        <p id="examSubjectDesc"></p>
+      </div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-info">
+      <span id="progressText"></span>
+      <span id="progressScore"></span>
+    </div>
+    <div id="questionArea"></div>
+    <div class="exam-actions"></div>
+  </div>
+</main>
+
+<script src="examhub.js"></script>
+</body>
+</html>
