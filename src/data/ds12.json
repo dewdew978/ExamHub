@@ -1,0 +1,176 @@
+{
+  "id": "ds12",
+  "category": "Data Science",
+  "name": "DS Week 12",
+  "icon": "🤖",
+  "color": "#d946ef",
+  "iconBg": "rgba(217,70,239,0.15)",
+  "desc": "Machine Learning · Task Types · PyCaret",
+  "questions": [
+    {
+      "q": "ข้อใดคือความแตกต่างหลักระหว่าง Supervised และ Unsupervised Learning",
+      "choices": [
+        "Supervised ใช้ข้อมูลมาก Unsupervised ใช้น้อย",
+        "Supervised มี label (target variable) ส่วน Unsupervised ไม่มี",
+        "Supervised ช้ากว่า Unsupervised",
+        "Supervised ใช้ได้เฉพาะ Regression"
+      ],
+      "answer": 1,
+      "explain": "Supervised: มี label → Input(X) → Model → Output(y) | Unsupervised: ไม่มี label → Input(X) → Discover Structure"
+    },
+    {
+      "q": "ML Task ใดใช้เมื่อต้องการทำนายค่าตัวเลขต่อเนื่อง เช่น ราคาบ้านหรือค่า PM2.5",
+      "choices": [
+        "Classification",
+        "Clustering",
+        "Regression",
+        "Anomaly Detection"
+      ],
+      "answer": 2,
+      "explain": "Regression ใช้เมื่อ Output เป็นตัวเลขต่อเนื่อง เช่น ทำนายค่า PM2.5, ราคา, ยอดขาย"
+    },
+    {
+      "q": "ML Task ใดเหมาะกับการแบ่ง AQI เป็น Good/Moderate/Unhealthy",
+      "choices": [
+        "Regression",
+        "Clustering",
+        "Time-Series",
+        "Classification"
+      ],
+      "answer": 3,
+      "explain": "Classification ใช้เมื่อ Output เป็นหมวดหมู่ เช่น Good/Moderate/Unhealthy, Yes/No, Fraud/Not Fraud"
+    },
+    {
+      "q": "Clustering แตกต่างจาก Classification อย่างไร",
+      "choices": [
+        "Clustering มี label ส่วน Classification ไม่มี",
+        "Clustering ค้นหา pattern โดยไม่มี label ส่วน Classification ต้องมี label",
+        "Clustering ช้ากว่า Classification เสมอ",
+        "ทั้งสองอย่างเหมือนกัน"
+      ],
+      "answer": 1,
+      "explain": "Clustering = Unsupervised ค้นหาโครงสร้างที่ซ่อนอยู่โดยไม่มี label | Classification = Supervised ต้องมี label ในการฝึก"
+    },
+    {
+      "q": "Anomaly Detection ใช้ในกรณีใด",
+      "choices": [
+        "ทำนายค่าตัวเลข",
+        "แบ่งกลุ่มข้อมูล",
+        "ต้องการจับเหตุการณ์หายากหรือ deviation จาก pattern ปกติ",
+        "วิเคราะห์ข้อมูลที่มีลำดับเวลา"
+      ],
+      "answer": 2,
+      "explain": "Anomaly Detection ใช้จับเหตุการณ์ผิดปกติ เช่น วันค่าฝุ่น spike ผิดปกติ, ธุรกรรมต้องสงสัย, Sensor malfunction"
+    },
+    {
+      "q": "ทำไม Time-Series จึงห้าม shuffle ข้อมูล",
+      "choices": [
+        "เพราะข้อมูลจะสูญหาย",
+        "เพราะลำดับเวลามีความสำคัญ การใช้ข้อมูลอนาคตฝึกโมเดลคือ data leakage",
+        "เพราะ shuffle ทำให้โมเดลช้าลง",
+        "เพราะข้อมูล Time-Series มักมี missing values"
+      ],
+      "answer": 1,
+      "explain": "Time-Series ต้อง split ตามเวลา ห้าม shuffle เพราะอดีตมีผลต่ออนาคต การเอาข้อมูลอนาคตมาฝึกคือ data leakage"
+    },
+    {
+      "q": "Association Rule Mining ใช้ทำอะไร",
+      "choices": [
+        "ทำนายค่าตัวเลข",
+        "แบ่งกลุ่มลูกค้า",
+        "หากฎความสัมพันธ์แบบ If-Then เช่น สินค้า A มักซื้อคู่ B",
+        "ทำนายยอดขายในอนาคต"
+      ],
+      "answer": 2,
+      "explain": "Association Rule Mining หา co-occurrence pattern แบบ If-Then เช่น \"ถ้าซื้อ A มักซื้อ B ด้วย\""
+    },
+    {
+      "q": "Train/Validation/Test Split มีบทบาทต่างกันอย่างไร",
+      "choices": [
+        "ทั้งสามชุดใช้เพื่อฝึกโมเดล",
+        "Train=ฝึก, Validation=เลือกโมเดล, Test=ประเมินขั้นสุดท้าย",
+        "Train=ทดสอบ, Validation=ฝึก, Test=เลือกโมเดล",
+        "ทั้งสามชุดเหมือนกันทุกประการ"
+      ],
+      "answer": 1,
+      "explain": "Train: สร้างโมเดล | Validation: เลือกโมเดล/ปรับ hyperparameter | Test: ประเมินครั้งสุดท้าย (ใช้เมื่อตัดสินใจแล้วเท่านั้น)"
+    },
+    {
+      "q": "Overfitting คืออะไร",
+      "choices": [
+        "โมเดลทำงานช้าเกินไป",
+        "โมเดลจำข้อมูล train แต่ทำงานได้ไม่ดีกับข้อมูลใหม่",
+        "โมเดลใช้ feature มากเกินไป",
+        "โมเดลมีขนาดไฟล์ใหญ่เกินไป"
+      ],
+      "answer": 1,
+      "explain": "Overfitting คือโมเดลจำข้อมูล training แต่ทำงานได้ไม่ดีกับข้อมูลที่ไม่เคยเห็น เป็นเหตุผลที่ต้องแยก Train/Test"
+    },
+    {
+      "q": "Cross-Validation ดีกว่า Validation Set เดียวอย่างไร",
+      "choices": [
+        "CV คำนวณเร็วกว่า",
+        "CV ใช้ข้อมูลน้อยกว่า",
+        "CV ประเมินหลายรอบทำให้ผลเสถียรกว่า ไม่ขึ้นกับการสุ่มครั้งเดียว",
+        "CV ไม่ต้องการ Test set"
+      ],
+      "answer": 2,
+      "explain": "Cross-Validation แบ่งเป็นหลาย fold ประเมินหลายรอบ ผลเสถียรกว่า ไม่ขึ้นกับการสุ่มแบ่ง train/val ครั้งเดียว"
+    },
+    {
+      "q": "PyCaret มีประโยชน์อะไรใน ML Workflow",
+      "choices": [
+        "ใช้แทน pandas ในการจัดการข้อมูล",
+        "เปรียบเทียบหลายโมเดลได้เร็ว เหมาะสำหรับสร้าง baseline",
+        "ใช้ deploy โมเดลขึ้น production",
+        "ใช้สำหรับ Deep Learning เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "PyCaret = High-level ML library ที่ช่วยเปรียบเทียบหลายโมเดลได้เร็ว เหมาะสำหรับ baseline exploration"
+    },
+    {
+      "q": "การใช้ test set เพื่อเลือกโมเดลหลายครั้งผิดพลาดอย่างไร",
+      "choices": [
+        "ทำให้โมเดลช้าลง",
+        "ไม่มีผลอะไร",
+        "ทำให้ test set กลายเป็น validation โดยปริยาย ผลไม่ได้สะท้อนข้อมูลใหม่จริงๆ",
+        "ทำให้โมเดลใช้ RAM มากขึ้น"
+      ],
+      "answer": 2,
+      "explain": "Test set ควรใช้เมื่อตัดสินใจแล้วครั้งเดียว ถ้าใช้หลายครั้งเพื่อเลือกโมเดล test set จะกลายเป็น validation โดยปริยาย"
+    },
+    {
+      "q": "Stratified Split ใช้ในกรณีใด",
+      "choices": [
+        "Regression เสมอ",
+        "Time-Series เสมอ",
+        "Classification เพื่อรักษาสัดส่วน class ในทุก split",
+        "Clustering เสมอ"
+      ],
+      "answer": 2,
+      "explain": "Stratified Split ใช้ใน Classification เพื่อรักษาสัดส่วน class ให้เหมือนกันใน train/test เหมาะกับ imbalanced dataset"
+    },
+    {
+      "q": "โจทย์ \"มีอะไรผิดปกติในข้อมูล sensor?\" ควรใช้ ML Task ใด",
+      "choices": [
+        "Regression",
+        "Classification",
+        "Clustering",
+        "Anomaly Detection"
+      ],
+      "answer": 3,
+      "explain": "Anomaly Detection เหมาะกับการตรวจจับสิ่งผิดปกติ เช่น Sensor malfunction, ค่าที่ spike ผิดปกติ"
+    },
+    {
+      "q": "ข้อใดเป็นความผิดพลาดที่พบบ่อยใน Data Splitting",
+      "choices": [
+        "การใช้ random_state",
+        "การ scale ข้อมูลก่อน split ทำให้ข้อมูล test รั่วไหล",
+        "การใช้ stratify ใน Classification",
+        "การแบ่ง 80/20"
+      ],
+      "answer": 1,
+      "explain": "Scaling ก่อน split เป็นความผิดพลาดที่พบบ่อย เพราะ scaler จะเห็นข้อมูล test → data leakage ต้อง fit scaler บน train เท่านั้น"
+    }
+  ]
+}

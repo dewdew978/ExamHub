@@ -1,0 +1,176 @@
+{
+  "id": "ds11",
+  "category": "Data Science",
+  "name": "DS Week 11",
+  "icon": "📝",
+  "color": "#f43f5e",
+  "iconBg": "rgba(244,63,94,0.15)",
+  "desc": "NLP · Tokenization · Bag-of-Words · TF-IDF",
+  "questions": [
+    {
+      "q": "NLP คืออะไรในมุมมองของ Data Science",
+      "choices": [
+        "การแปลภาษาอัตโนมัติเท่านั้น",
+        "สาขาของ AI ที่ทำให้คอมพิวเตอร์จัดการ วิเคราะห์ และตีความภาษาในโลกจริง",
+        "เครื่องมือสำหรับสร้าง Chatbot เท่านั้น",
+        "การเขียนโปรแกรมภาษาธรรมชาติ"
+      ],
+      "answer": 1,
+      "explain": "NLP คือสาขาของ AI และ Data Science ที่ทำให้คอมพิวเตอร์สามารถจัดการ วิเคราะห์ และตีความภาษาในโลกจริง"
+    },
+    {
+      "q": "ทำไม Text จึงต้องแปลงเป็นตัวเลขก่อน",
+      "choices": [
+        "เพื่อลดขนาดไฟล์",
+        "เพราะโมเดลไม่สามารถทำงานกับตัวอักษรได้โดยตรง",
+        "เพื่อเพิ่มความเร็วในการอ่าน",
+        "เพราะภาษาไทยไม่มีรหัส ASCII"
+      ],
+      "answer": 1,
+      "explain": "Text เป็น unstructured data โมเดลทำงานกับตัวเลข ต้องแปลง Text → ตัวเลขผ่าน Text Representation ก่อน"
+    },
+    {
+      "q": "Tokenization คืออะไร",
+      "choices": [
+        "การแปลงข้อความเป็นภาษาอื่น",
+        "กระบวนการแบ่งข้อความออกเป็นหน่วยย่อย (tokens)",
+        "การลบ stopwords ออกจากข้อความ",
+        "การแปลงคำเป็น vector"
+      ],
+      "answer": 1,
+      "explain": "Tokenization คือกระบวนการแบ่งข้อความออกเป็นหน่วยย่อย (tokens) เช่น \"Data science\" → [\"data\", \"science\"]"
+    },
+    {
+      "q": "ภาษาไทยมีความท้าทายด้าน Tokenization อย่างไร",
+      "choices": [
+        "ภาษาไทยมี whitespace มากเกินไป",
+        "ภาษาไทยไม่มี delimiter ระหว่างคำ มี ambiguity สูง ต้องพึ่ง dictionary หรือ statistical model",
+        "ภาษาไทยมีตัวอักษรน้อยเกินไป",
+        "ภาษาไทย tokenize ได้ง่ายกว่าภาษาอังกฤษ"
+      ],
+      "answer": 1,
+      "explain": "ภาษาไทยไม่มี whitespace/delimiter ระหว่างคำ มี ambiguity สูง ต้องพึ่ง dictionary หรือ statistical model เช่น PyThaiNLP"
+    },
+    {
+      "q": "Bag-of-Words (BoW) มีแนวคิดหลักอย่างไร",
+      "choices": [
+        "คำนึงถึงลำดับคำในประโยค",
+        "เอกสาร = ถุงคำ ไม่สนลำดับ สนใจแค่ความถี่",
+        "วิเคราะห์ความหมายเชิงบริบทของคำ",
+        "ใช้ได้เฉพาะภาษาอังกฤษ"
+      ],
+      "answer": 1,
+      "explain": "BoW: เอกสาร = ถุงคำ ไม่สนลำดับ สนใจความถี่ | มุมมองเรขาคณิต: เอกสาร = vector, คำ = dimension"
+    },
+    {
+      "q": "TF-IDF ปรับน้ำหนักคำอย่างไร",
+      "choices": [
+        "ให้น้ำหนักคำที่ยาวที่สุดมากกว่า",
+        "ให้คำที่พบเยอะในเอกสารหนึ่งแต่ไม่พบในทุกเอกสารมีน้ำหนักสูง",
+        "ให้น้ำหนักเท่ากันทุกคำ",
+        "ให้คำที่พบในทุกเอกสารมีน้ำหนักสูง"
+      ],
+      "answer": 1,
+      "explain": "TF-IDF ให้น้ำหนักสูงกับคำที่พบบ่อยในเอกสารนั้นๆ แต่ไม่ได้พบในทุกเอกสาร ช่วยลดผลของคำที่พบบ่อยแต่ไม่ informative"
+    },
+    {
+      "q": "ข้อจำกัดสำคัญของ Bag-of-Words คืออะไร",
+      "choices": [
+        "คำนวณช้าเกินไป",
+        "ใช้หน่วยความจำมากเกินไป",
+        "ไม่เข้าใจความหมายของคำ รู้แค่คำไหนโผล่แต่ไม่รู้ว่าคำไหนคล้ายกัน",
+        "ใช้ได้เฉพาะภาษาที่มี dictionary"
+      ],
+      "answer": 2,
+      "explain": "BoW ไม่เข้าใจ semantic similarity เช่น \"แพทย์\" กับ \"โรงพยาบาล\" ถูกมองว่าไม่เกี่ยวกัน และไม่สนลำดับคำ"
+    },
+    {
+      "q": "Word Embedding แตกต่างจาก Bag-of-Words อย่างไร",
+      "choices": [
+        "Word Embedding คำนวณความถี่คำ",
+        "Word Embedding แทนคำด้วย vector ที่คำมีความหมายใกล้กันจะมี vector ใกล้กัน",
+        "Word Embedding ใช้ได้เฉพาะภาษาอังกฤษ",
+        "Word Embedding ไม่สามารถใช้กับ ML ได้"
+      ],
+      "answer": 1,
+      "explain": "Word Embedding แทนคำด้วย vector โดยคำที่มีความหมายใกล้กัน → vector ใกล้กัน สามารถจับ semantic similarity ได้"
+    },
+    {
+      "q": "Text Classification ใน NLP คืออะไร",
+      "choices": [
+        "การแบ่งประโยคออกเป็นคำ",
+        "การจัดประเภทข้อความออกเป็นหมวดหมู่",
+        "การแปลข้อความเป็นภาษาอื่น",
+        "การสรุปเนื้อหาข้อความ"
+      ],
+      "answer": 1,
+      "explain": "Text Classification คือการจัดประเภทข้อความ เช่น spam/not spam, positive/negative sentiment, policy/health/report"
+    },
+    {
+      "q": "Weak Labeling ในบริบท NLP หมายถึงอะไร",
+      "choices": [
+        "การใช้ label ที่ไม่ถูกต้อง",
+        "การใช้กฎ keyword-based ในการกำหนด label เบื้องต้นแทน human annotation",
+        "การฝึกโมเดลด้วยข้อมูลน้อย",
+        "การใช้โมเดลที่ไม่แม่นยำ"
+      ],
+      "answer": 1,
+      "explain": "Weak Labeling คือการใช้ keyword/rule-based เพื่อกำหนด label เบื้องต้น เร็วกว่า manual annotation แต่ label อาจไม่สมบูรณ์"
+    },
+    {
+      "q": "ข้อใดเป็น NLP Task ที่วิเคราะห์ทัศนคติ (บวก/ลบ/กลาง)",
+      "choices": [
+        "Topic Modeling",
+        "Sentiment Analysis",
+        "Information Extraction",
+        "Summarization"
+      ],
+      "answer": 1,
+      "explain": "Sentiment Analysis วิเคราะห์ทัศนคติหรือความรู้สึกในข้อความ เช่น รีวิว \"ดีมาก\" = positive"
+    },
+    {
+      "q": "การเลือก Text Representation มีผลต่อโมเดลอย่างไร",
+      "choices": [
+        "ไม่มีผลต่อโมเดลเลย",
+        "มีผลเฉพาะขนาดไฟล์",
+        "Representation = assumption สิ่งที่ไม่ represent = information loss ส่งผลต่อสิ่งที่โมเดลมองเห็น",
+        "มีผลเฉพาะความเร็วในการ train"
+      ],
+      "answer": 2,
+      "explain": "Representation = assumption | สิ่งที่เลือก represent = สิ่งที่โมเดลมองเห็น | สิ่งที่ไม่ represent = information loss"
+    },
+    {
+      "q": "Stopwords คืออะไรและทำไมต้องลบออก",
+      "choices": [
+        "คำที่ยาวที่สุดในประโยค ลบเพื่อลดขนาด",
+        "คำที่พบบ่อยแต่มีความหมายน้อย เช่น the is ใน และ ลบเพื่อลด noise",
+        "คำที่สะกดผิด ลบเพื่อความถูกต้อง",
+        "คำที่เป็น technical terms ลบเพื่อความเข้าใจง่าย"
+      ],
+      "answer": 1,
+      "explain": "Stopwords คือคำที่พบบ่อยแต่ไม่มีความหมายเชิง content เช่น \"the\", \"is\", \"ใน\", \"และ\" ลบออกเพื่อลด noise และขนาด feature space"
+    },
+    {
+      "q": "LLM เชื่อมโยงกับ NLP แบบดั้งเดิมอย่างไร",
+      "choices": [
+        "LLM ไม่เกี่ยวข้องกับ NLP เลย",
+        "LLM พัฒนาต่อยอดจาก BoW → representation learning → context → general-purpose",
+        "LLM ใช้ BoW เป็นหลัก",
+        "LLM ทำงานโดยไม่ต้องการ Text Representation"
+      ],
+      "answer": 1,
+      "explain": "วิวัฒนาการ: manual feature (BoW) → representation learning (Word Embedding) → context-aware → task-specific → general-purpose (LLM)"
+    },
+    {
+      "q": "ข้อใดเป็น Evaluation Metric สำหรับ Classification Model ใน NLP",
+      "choices": [
+        "RMSE, MAE, R²",
+        "Precision, Recall, F1-score",
+        "Silhouette Score",
+        "Pearson Correlation"
+      ],
+      "answer": 1,
+      "explain": "สำหรับ Text Classification ใช้ Precision, Recall, F1-score ซึ่งเหมาะกับ classification task มากกว่า regression metric"
+    }
+  ]
+}

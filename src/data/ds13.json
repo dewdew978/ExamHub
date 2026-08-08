@@ -1,0 +1,176 @@
+{
+  "id": "ds13",
+  "category": "Data Science",
+  "name": "DS Week 13",
+  "icon": "📊",
+  "color": "#fb923c",
+  "iconBg": "rgba(251,146,60,0.15)",
+  "desc": "Model Evaluation · Metrics · Classification · Regression",
+  "questions": [
+    {
+      "q": "Confusion Matrix ประกอบด้วยอะไรบ้าง",
+      "choices": [
+        "Precision, Recall, F1, Accuracy",
+        "TP, TN, FP, FN",
+        "MAE, MSE, RMSE, R²",
+        "Silhouette, Calinski, Davies-Bouldin"
+      ],
+      "answer": 1,
+      "explain": "Confusion Matrix แสดง TP (ทายถูกบวก), TN (ทายถูกลบ), FP (ทายผิดเป็นบวก), FN (ทายผิดเป็นลบ)"
+    },
+    {
+      "q": "Precision คืออะไร",
+      "choices": [
+        "สัดส่วนของการทำนายถูกต้องทั้งหมด",
+        "TP / (TP + FP) ความแม่นยำในการทำนายค่าบวก",
+        "TP / (TP + FN) ความไวในการทำนายค่าบวก",
+        "ค่าเฉลี่ยของ Precision และ Recall"
+      ],
+      "answer": 1,
+      "explain": "Precision = TP / (TP + FP) บอกว่าในสิ่งที่โมเดลทายว่าบวก มีที่ถูกต้องกี่ % ป้องกัน False Alarm"
+    },
+    {
+      "q": "Recall (Sensitivity) คืออะไร",
+      "choices": [
+        "TP / (TP + FP)",
+        "TP / (TP + FN) ความไวในการจับ True Positive",
+        "(TP + TN) / Total",
+        "2 × Precision × Recall / (Precision + Recall)"
+      ],
+      "answer": 1,
+      "explain": "Recall = TP / (TP + FN) บอกว่าในของจริงที่เป็นบวกทั้งหมด โมเดลจับได้กี่ % สำคัญเมื่อ False Negative อันตราย"
+    },
+    {
+      "q": "F1 Score คืออะไรและใช้เมื่อใด",
+      "choices": [
+        "ค่าเฉลี่ยแบบธรรมดาของ Precision และ Recall",
+        "ค่าเฉลี่ย Harmonic ของ Precision และ Recall ใช้เมื่อต้องการ balance ระหว่างสองค่า",
+        "เหมือน Accuracy แต่คำนวณต่างกัน",
+        "ใช้เฉพาะ Regression"
+      ],
+      "answer": 1,
+      "explain": "F1 = 2×P×R/(P+R) เป็น Harmonic Mean ให้น้ำหนักเท่ากันระหว่าง Precision และ Recall เหมาะกับ imbalanced data"
+    },
+    {
+      "q": "ทำไม Accuracy อาจหลอกในกรณี Class Imbalance",
+      "choices": [
+        "Accuracy คำนวณผิดพลาด",
+        "โมเดลที่ทายทุกตัวเป็น majority class อาจได้ Accuracy สูงโดยไม่ได้เรียนรู้อะไร",
+        "Accuracy ไม่ใช่ metric ที่ถูกต้อง",
+        "Accuracy ใช้ได้เฉพาะ Binary Classification"
+      ],
+      "answer": 1,
+      "explain": "ถ้า 90% เป็น class A โมเดลทาย A ทุกตัว → Accuracy 90% แต่ไม่ได้เรียนรู้อะไร Cohen Kappa และ MCC แกปัญหานี้"
+    },
+    {
+      "q": "Cohen Kappa วัดอะไร",
+      "choices": [
+        "ความแม่นยำโดยรวม",
+        "ระดับความสอดคล้องหลังหักความสอดคล้องที่เกิดโดยบังเอิญออก",
+        "ความเร็วของโมเดล",
+        "จำนวน feature ที่ใช้"
+      ],
+      "answer": 1,
+      "explain": "Kappa = (Po - Pe) / (1 - Pe) วัดว่าโมเดลดีกว่าการเดาแบบสุ่มตามสัดส่วนข้อมูลแค่ไหน"
+    },
+    {
+      "q": "MCC มีข้อดีอะไรเหนือ Accuracy",
+      "choices": [
+        "MCC คำนวณเร็วกว่า",
+        "MCC ไม่ถูกหลอกโดย class imbalance ให้ค่า 0 เมื่อโมเดลแยกคลาสได้ไม่จริง",
+        "MCC ใช้ได้เฉพาะ Binary Classification",
+        "MCC เหมือน Accuracy ทุกประการ"
+      ],
+      "answer": 1,
+      "explain": "MCC ไม่ถูกหลอกโดย class imbalance โมเดลที่ทาย majority class ทุกตัวจะได้ MCC ≈ 0 ไม่ใช่ 90%"
+    },
+    {
+      "q": "MAE (Mean Absolute Error) คืออะไร",
+      "choices": [
+        "รากที่สองของ MSE",
+        "ค่าเฉลี่ยของ |ค่าจริง - ค่าทำนาย| ทุก sample",
+        "สัดส่วนความแปรปรวนที่โมเดลอธิบายได้",
+        "ค่าเฉลี่ยของ error ยกกำลังสอง"
+      ],
+      "answer": 1,
+      "explain": "MAE = (1/n)Σ|yi - ŷi| ค่าเฉลี่ยของความคลาดเคลื่อนสัมบูรณ์ ตีความง่าย ไม่ลงโทษ error ใหญ่พิเศษ"
+    },
+    {
+      "q": "RMSE ต่างจาก MAE อย่างไร",
+      "choices": [
+        "RMSE ง่ายกว่า MAE ในการตีความ",
+        "RMSE ลงโทษ error ใหญ่มากกว่า MAE เพราะยกกำลังสอง",
+        "RMSE ให้ค่าน้อยกว่า MAE เสมอ",
+        "ไม่มีความแตกต่าง"
+      ],
+      "answer": 1,
+      "explain": "RMSE = √MSE ลงโทษ error ขนาดใหญ่มากกว่า MAE เพราะยกกำลังสอง เหมาะเมื่อ error ใหญ่มีผลกระทบมาก"
+    },
+    {
+      "q": "R² (R-squared) มีความหมายว่าอะไร",
+      "choices": [
+        "ค่าเฉลี่ยของ error",
+        "สัดส่วนของความแปรปรวนใน y ที่โมเดลอธิบายได้ ค่าใกล้ 1 = ดี",
+        "จำนวน feature ที่มีนัยสำคัญ",
+        "ความเร็วของโมเดล"
+      ],
+      "answer": 1,
+      "explain": "R² บอกว่าโมเดลอธิบายความแปรปรวนของ y ได้กี่ % R²=1 = สมบูรณ์, R²=0 = ไม่ดีกว่าทายค่าเฉลี่ย"
+    },
+    {
+      "q": "Silhouette Score ใน Clustering ตีความอย่างไร",
+      "choices": [
+        "ค่าสูง = กลุ่มทับซ้อนกัน",
+        "ค่าใกล้ 1 = sample อยู่ในกลุ่มที่ถูกต้องและกลุ่มแตกต่างจากกลุ่มอื่นชัดเจน",
+        "ค่าใกล้ 0 = การ clustering ดีที่สุด",
+        "ค่าเป็นลบ = clustering ไม่มีความหมาย"
+      ],
+      "answer": 1,
+      "explain": "Silhouette: ใกล้ 1 = ดีมาก | ใกล้ 0 = อยู่บนเส้นแบ่งระหว่างกลุ่ม | ติดลบ = อาจอยู่ผิดกลุ่ม"
+    },
+    {
+      "q": "Davies-Bouldin Index ควรมีค่าอย่างไรเมื่อ clustering ดี",
+      "choices": [
+        "ค่าสูงที่สุดเท่าที่เป็นไปได้",
+        "ค่าต่ำที่สุด กลุ่มแยกจากกันชัดและ compact",
+        "ค่าเท่ากับ 1 เสมอ",
+        "ค่าอยู่ระหว่าง -1 ถึง 1"
+      ],
+      "answer": 1,
+      "explain": "Davies-Bouldin Index ยิ่งต่ำยิ่งดี หมายถึงกลุ่มมีความ compact สูงและแยกจากกลุ่มอื่นชัดเจน"
+    },
+    {
+      "q": "การเลือก Metric ผิดประเภทกับโจทย์ส่งผลอย่างไร",
+      "choices": [
+        "ไม่มีผลใดๆ",
+        "อาจทำให้สรุปผิดทั้งงาน เช่น ใช้ Accuracy กับ imbalanced data",
+        "ทำให้โมเดล train ช้าลง",
+        "ทำให้ feature มีขนาดใหญ่ขึ้น"
+      ],
+      "answer": 1,
+      "explain": "การใช้ metric ผิดประเภทอาจทำให้สรุปผิด เช่น Accuracy สูงแต่โมเดลใช้ไม่ได้จริง ต้องเลือก metric ให้สอดคล้องกับปัญหา"
+    },
+    {
+      "q": "AUC-ROC วัดอะไร",
+      "choices": [
+        "ค่าเฉลี่ยของ Precision ทุก threshold",
+        "พื้นที่ใต้กราฟ ROC วัดประสิทธิภาพในการแยกแยะระหว่างคลาส",
+        "ค่า R² ของ Regression",
+        "จำนวน True Positive"
+      ],
+      "answer": 1,
+      "explain": "AUC (Area Under ROC Curve) วัดความสามารถของโมเดลในการแยกแยะระหว่างคลาส AUC=1 สมบูรณ์, AUC=0.5 ไม่ดีกว่าสุ่ม"
+    },
+    {
+      "q": "Calinski-Harabasz Index ยิ่งสูงหมายความว่าอะไร",
+      "choices": [
+        "Clustering แย่",
+        "Clustering ดีและชัดเจน กลุ่มแน่นและแยกจากกัน",
+        "ข้อมูลมี noise มาก",
+        "จำนวนกลุ่มมากเกินไป"
+      ],
+      "answer": 1,
+      "explain": "Calinski-Harabasz Index ยิ่งสูงยิ่งดี หมายถึงความแปรปรวนระหว่างกลุ่มสูงเทียบกับความแปรปรวนภายในกลุ่ม"
+    }
+  ]
+}

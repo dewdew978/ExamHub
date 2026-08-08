@@ -1,0 +1,231 @@
+{
+  "id": "ds9",
+  "category": "Data Science",
+  "name": "DS Week 9",
+  "icon": "🧮",
+  "color": "#0ea5e9",
+  "iconBg": "rgba(14,165,233,0.15)",
+  "desc": "Logical · Probabilistic · Bayesian Reasoning",
+  "questions": [
+    {
+      "q": "Deductive Reasoning แตกต่างจาก Inductive Reasoning อย่างไร",
+      "choices": [
+        "Deductive ใช้ข้อมูลสรุปเป็นกฎ ส่วน Inductive ใช้กฎสรุปเป็นกรณีเฉพาะ",
+        "Deductive ใช้กฎสรุปเป็นกรณีเฉพาะ ส่วน Inductive ใช้ข้อมูลสรุปเป็นแนวโน้ม",
+        "ทั้งสองอย่างเหมือนกัน",
+        "Deductive ให้ผลเป็นความน่าจะเป็น"
+      ],
+      "answer": 1,
+      "explain": "Deductive: กฎทั่วไป → กรณีเฉพาะ (ผลแน่นอน 100%) | Inductive: กรณีเฉพาะ → ข้อสรุปทั่วไป (เป็นความน่าจะเป็น)"
+    },
+    {
+      "q": "โค้ด if pm25 > 50: alert = True เป็นตัวอย่างของ Reasoning แบบใด",
+      "choices": [
+        "Probabilistic Reasoning",
+        "Bayesian Reasoning",
+        "Deductive Reasoning",
+        "Inductive Reasoning"
+      ],
+      "answer": 2,
+      "explain": "เป็น Deductive Reasoning เพราะใช้กฎที่กำหนดไว้ล่วงหน้า ผลลัพธ์ถูกบังคับด้วยเงื่อนไข ไม่มีความน่าจะเป็น"
+    },
+    {
+      "q": "Logical Reasoning เป็นรูปแบบของ Reasoning ประเภทใด",
+      "choices": [
+        "Inductive Reasoning",
+        "Deductive Reasoning",
+        "Probabilistic Reasoning",
+        "Bayesian Reasoning"
+      ],
+      "answer": 1,
+      "explain": "Logical Reasoning คือการนำ Deductive Reasoning มาทำให้เป็นรูปธรรมผ่าน Logical Operators"
+    },
+    {
+      "q": "Logical Operator ใดที่จริงเมื่ออย่างน้อยหนึ่งเงื่อนไขจริง",
+      "choices": [
+        "AND",
+        "NOT",
+        "OR",
+        "XOR"
+      ],
+      "answer": 2,
+      "explain": "OR (Disjunction) จริงเมื่ออย่างน้อยหนึ่งเงื่อนไขจริง ตรงข้ามกับ AND ที่ต้องทุกเงื่อนไขจริง"
+    },
+    {
+      "q": "Implication (A → B) เป็นเท็จได้ในกรณีใด",
+      "choices": [
+        "A เท็จ B จริง",
+        "A เท็จ B เท็จ",
+        "A จริง B เท็จ",
+        "A จริง B จริง"
+      ],
+      "answer": 2,
+      "explain": "A → B เป็นเท็จเฉพาะเมื่อ A จริงแต่ B เท็จ (ขัดแย้ง) กรณีอื่นๆ ทั้งหมดเป็นจริง"
+    },
+    {
+      "q": "XOR (Exclusive OR) ต่างจาก OR อย่างไร",
+      "choices": [
+        "XOR จริงเมื่อทั้งสองเงื่อนไขจริง",
+        "XOR จริงเมื่อเงื่อนไขใดหนึ่งจริงเพียงตัวเดียวเท่านั้น",
+        "XOR เหมือน AND ทุกประการ",
+        "XOR จริงเมื่ออย่างน้อยหนึ่งเงื่อนไขจริง"
+      ],
+      "answer": 1,
+      "explain": "XOR จริงเมื่อ A หรือ B จริงเพียงตัวเดียว ถ้าทั้งสองจริงพร้อมกัน XOR จะเป็นเท็จ"
+    },
+    {
+      "q": "Conditional Probability P(A|B) หมายความว่าอะไร",
+      "choices": [
+        "ความน่าจะเป็นของ A คูณ B",
+        "ความน่าจะเป็นของ A หรือ B",
+        "ความน่าจะเป็นของ A เมื่อรู้ว่า B เกิดขึ้นแล้ว",
+        "ความน่าจะเป็นของ A และ B พร้อมกัน"
+      ],
+      "answer": 2,
+      "explain": "P(A|B) คือ Conditional Probability ความน่าจะเป็นของ A โดยมีเงื่อนไขว่า B เกิดขึ้นแล้ว"
+    },
+    {
+      "q": "ใน Bayesian Reasoning คำว่า Prior หมายถึงอะไร",
+      "choices": [
+        "ความเชื่อหลังจากได้รับข้อมูลใหม่",
+        "ความเชื่อเดิมก่อนได้รับหลักฐานใหม่",
+        "ความน่าจะเป็นของหลักฐาน",
+        "ผลลัพธ์สุดท้ายของการคำนวณ"
+      ],
+      "answer": 1,
+      "explain": "Prior คือความเชื่อเดิม (ก่อนรับข้อมูลใหม่) เช่น P(PM2.5 สูง) = 0.30 จากข้อมูลย้อนหลัง"
+    },
+    {
+      "q": "ถ้า P(A)=0.30, P(B|A)=0.60, P(B)=0.40 ค่า Posterior P(A|B) คือเท่าใด",
+      "choices": [
+        "0.30",
+        "0.45",
+        "0.60",
+        "0.72"
+      ],
+      "answer": 1,
+      "explain": "P(A|B) = (0.60 × 0.30) / 0.40 = 0.18 / 0.40 = 0.45 ความเชื่อเพิ่มจาก 30% เป็น 45% หลังรู้ว่า B เกิดขึ้น"
+    },
+    {
+      "q": "ข้อใดกล่าวถูกต้องเกี่ยวกับข้อจำกัดของ Deductive Reasoning",
+      "choices": [
+        "รองรับความไม่แน่นอนได้ดี",
+        "ถ้ากฎตั้งต้นผิด ข้อสรุปจะผิดทั้งหมด",
+        "เหมาะกับ Machine Learning มากที่สุด",
+        "ให้ผลเป็นความน่าจะเป็นเสมอ"
+      ],
+      "answer": 1,
+      "explain": "ข้อจำกัดสำคัญของ Deductive คือถ้า Premise ผิด ข้อสรุปจะผิดทั้งหมด และไม่รองรับความไม่แน่นอน"
+    },
+    {
+      "q": "ในการรวม Logical + Probabilistic Reasoning เข้าด้วยกัน Logical Reasoning ทำหน้าที่อะไร",
+      "choices": [
+        "ประเมินระดับความเสี่ยง",
+        "กำหนด Hard constraints ที่ห้ามผิด",
+        "อัปเดตความเชื่อตามข้อมูลใหม่",
+        "คำนวณความน่าจะเป็น Posterior"
+      ],
+      "answer": 1,
+      "explain": "ในการใช้ร่วมกัน: Logical = Hard constraints (กรอบที่ห้ามผิด) ส่วน Probabilistic = ประเมินความเสี่ยงภายในกรอบนั้น"
+    },
+    {
+      "q": "Probabilistic Reasoning เป็นรูปแบบของ Reasoning ประเภทใด",
+      "choices": [
+        "Deductive Reasoning",
+        "Inductive Reasoning",
+        "Explicit Reasoning",
+        "Logical Reasoning"
+      ],
+      "answer": 1,
+      "explain": "Probabilistic/Bayesian Reasoning เป็นรูปแบบของ Inductive Reasoning ที่ใช้ข้อมูลประเมินความน่าจะเป็นและความเชื่อ"
+    },
+    {
+      "q": "ข้อจำกัดของ Inductive Reasoning คือข้อใด",
+      "choices": [
+        "ไม่รองรับความไม่แน่นอน",
+        "ไม่สามารถใช้กับ Machine Learning ได้",
+        "เสี่ยงต่อ Overgeneralization และอ่อนไหวต่อ bias",
+        "ผลลัพธ์ต้องแน่นอน 100%"
+      ],
+      "answer": 2,
+      "explain": "ข้อจำกัดของ Inductive: Overgeneralization, ขึ้นกับคุณภาพข้อมูล, อ่อนไหวต่อ bias"
+    },
+    {
+      "q": "Biconditional (A ↔ B) หมายความว่าอะไร",
+      "choices": [
+        "A จริงถ้า B จริง (ทิศทางเดียว)",
+        "A จริงก็ต่อเมื่อ B จริง ทั้งสองต้องมีค่าความจริงเหมือนกัน",
+        "A หรือ B จริงอย่างน้อยหนึ่งตัว",
+        "A และ B จริงพร้อมกันเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "Biconditional (↔) คือ \"ก็ต่อเมื่อ\" ทั้งสองต้องมีค่าความจริงเหมือนกัน (T↔T=T, F↔F=T, T↔F=F)"
+    },
+    {
+      "q": "ข้อใดเป็นตัวอย่างของ Inductive Reasoning",
+      "choices": [
+        "ถ้า PM2.5 > 50 ต้องประกาศเตือน",
+        "if pm25 > 50: alert = True",
+        "จากข้อมูล 4 ปี พบว่า 70% ของวันลมสงบ PM2.5 จะเกิน 50",
+        "นโยบายกำหนดให้เตือนเมื่อ PM2.5 เกิน 37"
+      ],
+      "answer": 2,
+      "explain": "การสรุปจากข้อมูลย้อนหลังว่า \"70% ของวันลมสงบ PM2.5 สูง\" คือ Inductive Reasoning เพราะสรุปจากข้อมูลจำนวนมาก"
+    },
+    {
+      "q": "Likelihood P(B|A) ใน Bayesian Reasoning หมายถึงอะไร",
+      "choices": [
+        "ความเชื่อเดิมก่อนรับข้อมูล",
+        "ความน่าจะเป็นที่จะพบหลักฐาน B เมื่อ A เป็นจริง",
+        "ความเชื่อหลังอัปเดต",
+        "ความน่าจะเป็นรวมของหลักฐาน B"
+      ],
+      "answer": 1,
+      "explain": "Likelihood คือ P(B|A) ความน่าจะเป็นที่จะพบหลักฐาน B เมื่อสมมติว่า A เป็นจริง เช่น P(ลมสงบ|PM2.5 สูง) = 0.60"
+    },
+    {
+      "q": "Deductive Reasoning เหมาะกับงานประเภทใดมากที่สุด",
+      "choices": [
+        "Machine Learning",
+        "Data Mining",
+        "Rule-based system นโยบาย กฎหมาย",
+        "Clustering"
+      ],
+      "answer": 2,
+      "explain": "Deductive เหมาะกับ Rule-based system, Policy enforcement, Safety condition เพราะผลลัพธ์เด็ดขาดและตรวจสอบได้"
+    },
+    {
+      "q": "การแปลง Implication: A → B ด้วย AND/OR/NOT คืออะไร",
+      "choices": [
+        "A → B ≡ A ∧ B",
+        "A → B ≡ (¬A) ∨ B",
+        "A → B ≡ A ∨ (¬B)",
+        "A → B ≡ (¬A) ∧ (¬B)"
+      ],
+      "answer": 1,
+      "explain": "A → B ≡ (¬A) ∨ B \"ถ้า A แล้ว B\" เท่ากับ \"A เป็นเท็จ หรือ B เป็นจริง\""
+    },
+    {
+      "q": "เหตุใด Data Scientist จึงต้องรู้จัก Reasoning ก่อนสร้าง ML Model",
+      "choices": [
+        "เพราะ Reasoning ทำให้โมเดล train เร็วขึ้น",
+        "เพราะต้องสร้าง baseline decision วิเคราะห์ความเสี่ยง และออกแบบ logic ก่อน",
+        "เพราะ ML ไม่สามารถทำงานได้โดยไม่มี Reasoning",
+        "เพราะ Reasoning แทน ML ได้ทุกกรณี"
+      ],
+      "answer": 1,
+      "explain": "ก่อนสร้าง ML ต้องสร้าง baseline decision, วิเคราะห์ความเสี่ยง, ออกแบบ logic/probability ถ้า reasoning ไม่เป็นจะตัดสินใจผิดพลาดได้"
+    },
+    {
+      "q": "Bayesian Reasoning อัปเดตความเชื่อ หมายความว่าอะไร",
+      "choices": [
+        "เปลี่ยนกฎความปลอดภัยตามสถานการณ์",
+        "ปรับระดับความน่าจะเป็น Prior ให้เป็น Posterior เมื่อมีหลักฐานใหม่",
+        "ลบข้อมูลเก่าและใช้ข้อมูลใหม่แทน",
+        "เปลี่ยน Threshold การตัดสินใจ"
+      ],
+      "answer": 1,
+      "explain": "Bayesian Reasoning อัปเดตความเชื่อ: Prior → Posterior เมื่อมีหลักฐานใหม่ เป็นการปรับระดับความเสี่ยงตาม evidence"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "mis",
+    "category": "MIS",
+    "name": "MIS บทที่ 6,7,8",
+    "icon": "🗄️",
+    "color": "#f97316",
+    "iconBg": "rgba(249,115,22,0.15)",
+    "desc": "Database · Supply Chain · CRM · Data Mining",
+    "questionCount": 25
+  },
+  {
+    "id": "mis2",
+    "category": "MIS",
+    "name": "MIS & KM (บทที่ 9-10)",
+    "icon": "🧠",
+    "color": "#a855f7",
+    "iconBg": "rgba(168,85,247,0.15)",
+    "desc": "Decision Making · AI · Knowledge Management",
+    "questionCount": 20
+  },
+  {
+    "id": "mis3",
+    "category": "MIS",
+    "name": "MIS บทที่ 11",
+    "icon": "⚙️",
+    "color": "#14b8a6",
+    "iconBg": "rgba(20,184,166,0.15)",
+    "desc": "SDLC · Agile · BPR · Project Management",
+    "questionCount": 20
+  },
+  {
+    "id": "ds9",
+    "category": "Data Science",
+    "name": "DS Week 9",
+    "icon": "🧮",
+    "color": "#0ea5e9",
+    "iconBg": "rgba(14,165,233,0.15)",
+    "desc": "Logical · Probabilistic · Bayesian Reasoning",
+    "questionCount": 20
+  },
+  {
+    "id": "ds10",
+    "category": "Data Science",
+    "name": "DS Week 10",
+    "icon": "📷",
+    "color": "#84cc16",
+    "iconBg": "rgba(132,204,22,0.15)",
+    "desc": "Computer Vision · Image Processing · CV Tasks",
+    "questionCount": 15
+  },
+  {
+    "id": "ds11",
+    "category": "Data Science",
+    "name": "DS Week 11",
+    "icon": "📝",
+    "color": "#f43f5e",
+    "iconBg": "rgba(244,63,94,0.15)",
+    "desc": "NLP · Tokenization · Bag-of-Words · TF-IDF",
+    "questionCount": 15
+  },
+  {
+    "id": "ds12",
+    "category": "Data Science",
+    "name": "DS Week 12",
+    "icon": "🤖",
+    "color": "#d946ef",
+    "iconBg": "rgba(217,70,239,0.15)",
+    "desc": "Machine Learning · Task Types · PyCaret",
+    "questionCount": 15
+  },
+  {
+    "id": "ds13",
+    "category": "Data Science",
+    "name": "DS Week 13",
+    "icon": "📊",
+    "color": "#fb923c",
+    "iconBg": "rgba(251,146,60,0.15)",
+    "desc": "Model Evaluation · Metrics · Classification · Regression",
+    "questionCount": 15
+  },
+  {
+    "id": "ds14",
+    "category": "Data Science",
+    "name": "DS Week 14",
+    "icon": "🚀",
+    "color": "#22c55e",
+    "iconBg": "rgba(34,197,94,0.15)",
+    "desc": "Deployment · MLOps · Gradio · Responsible AI",
+    "questionCount": 15
+  },
+  {
+    "id": "dataviz",
+    "category": "Data Visualization & Analytics",
+    "name": "Data Visualization & Analytics",
+    "icon": "📈",
+    "color": "#06b6d4",
+    "iconBg": "rgba(6,182,212,0.15)",
+    "desc": "Data Warehouse · DAX · Charts · Storytelling · Dashboard",
+    "questionCount": 20
+  }
+]

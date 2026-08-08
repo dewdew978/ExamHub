@@ -1,0 +1,231 @@
+{
+  "id": "mis2",
+  "category": "MIS",
+  "name": "MIS & KM (บทที่ 9-10)",
+  "icon": "🧠",
+  "color": "#a855f7",
+  "iconBg": "rgba(168,85,247,0.15)",
+  "desc": "Decision Making · AI · Knowledge Management",
+  "questions": [
+    {
+      "q": "การตัดสินใจประเภทใดที่คำนวณค่าจ้างขั้นต้นสำหรับคนงานรายชั่วโมง",
+      "choices": [
+        "ไม่มีโครงสร้าง (Unstructured decision)",
+        "มีโครงสร้าง (Structured decision)",
+        "กึ่งโครงสร้าง (Semistructured decision)",
+        "ชัดเจน (Explicit decision)"
+      ],
+      "answer": 1,
+      "explain": "การคำนวณค่าจ้างมีสูตรแน่นอน (ชั่วโมงทำงาน x อัตราจ้าง) จึงเป็น Structured decision ที่มีขั้นตอนชัดเจน"
+    },
+    {
+      "q": "Siri ของ Apple เป็นตัวอย่างของข้อใด",
+      "choices": [
+        "Neural networks",
+        "Augmented reality",
+        "Data mining",
+        "Intelligent agents"
+      ],
+      "answer": 3,
+      "explain": "Siri เป็นซอฟต์แวร์ที่ทำหน้าที่เป็น Intelligent agent เพื่อช่วยเหลือผู้ใช้ตามคำสั่งเสียง"
+    },
+    {
+      "q": "การตัดสินใจว่าจะเปิดการขายสินค้าในตลาดใหม่ คือแอฟริกาหรือไม่ เป็นการตัดสินใจประเภทใด",
+      "choices": [
+        "มีโครงสร้าง (Structured decision)",
+        "ไม่มีโครงสร้าง (Unstructured decision)",
+        "การตัดสินใจที่กำหนดไว้ล่วงหน้า (Programmed Decisions)",
+        "ชัดเจน (Explicit decision)"
+      ],
+      "answer": 1,
+      "explain": "การบุกตลาดใหม่มีความเสี่ยงและปัจจัยไม่แน่นอนสูง ต้องใช้ดุลยพินิจ จึงเป็น Unstructured decision"
+    },
+    {
+      "q": "การนำวัตถุ 3D ไฟล์วิดีโอ หรือกราฟิก มาซ้อนเข้ากับโลกแห่งความจริง เรียกว่าอะไร",
+      "choices": [
+        "Augmented reality (AR)",
+        "Expert system",
+        "Computer-Aided Design",
+        "Knowledge Work System"
+      ],
+      "answer": 0,
+      "explain": "AR คือการนำข้อมูลเสมือนไปทับซ้อนบนภาพสภาพแวดล้อมจริงผ่านกล้องหรืออุปกรณ์"
+    },
+    {
+      "q": "ข้อใดไม่ใช่ Tacit knowledge (ความรู้ในตัวคน)",
+      "choices": [
+        "Skill, Personal Talent",
+        "Know How",
+        "Experience, Innovative",
+        "Textbook, Report"
+      ],
+      "answer": 3,
+      "explain": "ตำราและรายงานจัดเป็น Explicit knowledge เพราะถูกบันทึกออกมาเป็นลายลักษณ์อักษรแล้ว"
+    },
+    {
+      "q": "ข้อใดต่อไปนี้ไม่ได้กล่าวถึงมิติของความรู้ในองค์กร",
+      "choices": [
+        "เป็นไปตามบริบทและใช้ได้เฉพาะสถานการณ์ที่เกี่ยวข้อง",
+        "มันไม่มีตัวตน",
+        "อยู่ภายใต้กฎหมายว่าด้วยการลดผลตอบแทน (Diminishing returns)",
+        "ถูกฝังอยู่ในวัฒนธรรมของบริษัท"
+      ],
+      "answer": 2,
+      "explain": "ความรู้เป็นทรัพยากรที่ยิ่งใช้ยิ่งเพิ่มพูน (Increasing returns) ไม่ได้ลดน้อยลงเหมือนทรัพยากรทางกายภาพ"
+    },
+    {
+      "q": "ข้อใดไม่ใช่เอกสารแบบไม่มีโครงสร้าง (Unstructured documents)",
+      "choices": [
+        "แบบสอบถามวัดความพึงพอใจ 5 ระดับ",
+        "Memo",
+        "Contract สัญญา",
+        "Article บทความ"
+      ],
+      "answer": 0,
+      "explain": "แบบสอบถามที่มีระดับคะแนน (1-5) มีโครงสร้างที่แน่นอน สามารถประมวลผลเชิงปริมาณได้ทันที"
+    },
+    {
+      "q": "ซอฟต์แวร์ที่ทำงานอัตโนมัติเพื่อดำเนินงานเฉพาะสำหรับผู้ใช้ โดยไม่มีมนุษย์แทรกแซงโดยตรง คือข้อใด",
+      "choices": [
+        "Intelligent agents",
+        "Intelligent techniques",
+        "Business intelligence",
+        "AI hybrid systems"
+      ],
+      "answer": 0,
+      "explain": "Intelligent agents คือซอฟต์แวร์ที่ทำงานแทนมนุษย์โดยอัตโนมัติในงานเฉพาะด้าน"
+    },
+    {
+      "q": "ข้อใดต่อไปนี้ไม่ใช่องค์ประกอบหลักใน BI environment",
+      "choices": [
+        "Managerial users and methods",
+        "Organizational culture",
+        "User interface",
+        "Data from the business environment"
+      ],
+      "answer": 1,
+      "explain": "วัฒนธรรมองค์กรเป็นปัจจัยภายนอกที่ส่งผลกระทบ แต่ไม่ใช่ส่วนประกอบเชิงเทคนิคหลักของระบบ BI"
+    },
+    {
+      "q": "ข้อใดต่อไปนี้ไม่ถูกจัดเป็น Knowledge Work System (KWS)",
+      "choices": [
+        "CAD system",
+        "3D visualization system",
+        "AR applications",
+        "Expert system"
+      ],
+      "answer": 3,
+      "explain": "Expert system เป็นระบบผู้เชี่ยวชาญเพื่อช่วยตัดสินใจ ส่วน KWS คือเครื่องมือที่ช่วยให้คนทำงานสร้างความรู้ใหม่"
+    },
+    {
+      "q": "เทคโนโลยีที่ช่วยในการ \"เผยแพร่\" ความรู้คือข้อใด",
+      "choices": [
+        "Machine learning",
+        "Database",
+        "Portals",
+        "Robotics"
+      ],
+      "answer": 2,
+      "explain": "Portal ทำหน้าที่เป็นช่องทางกลางในการเข้าถึงและกระจายข้อมูลสู่คนในองค์กร"
+    },
+    {
+      "q": "ประเภทของระบบการจัดการความรู้ 3 ประเภทหลักคือข้อใด",
+      "choices": [
+        "MIS, DSS, and TPS",
+        "CRM, SCM, and CAD",
+        "DBMS, DSS, and ECM",
+        "Enterprise-wide KMS, KWS, and intelligent techniques"
+      ],
+      "answer": 3,
+      "explain": "การแบ่งประเภทหลักของ KM Systems ตามมาตรฐานตำรา MIS คือ Enterprise-wide KMS, KWS และ Intelligent techniques"
+    },
+    {
+      "q": "ข้อใดกล่าวถูกต้องที่สุดเกี่ยวกับลำดับชั้นข้อมูล",
+      "choices": [
+        "Information เป็นข้อมูลดิบ",
+        "Data เป็น knowledge ที่ผ่านการประมวลผล",
+        "Wisdom เป็น data ที่นำไปใช้แก้ปัญหาได้",
+        "Knowledge เป็น information ที่ได้รับการวิเคราะห์และนำไปใช้"
+      ],
+      "answer": 3,
+      "explain": "ลำดับชั้นที่ถูกต้องคือ Data → Information → Knowledge → Wisdom"
+    },
+    {
+      "q": "ข้อใดคือเทคนิคอัจฉริยะ (Intelligent technique)",
+      "choices": [
+        "Digital asset management",
+        "Neural network",
+        "CAD",
+        "Augmented reality"
+      ],
+      "answer": 1,
+      "explain": "Neural network เป็นเทคนิค AI ที่เลียนแบบโครงข่ายประสาทมนุษย์ จัดเป็น Intelligent technique"
+    },
+    {
+      "q": "ความเชี่ยวชาญของสมาชิกที่ไม่ได้ทำเป็นเอกสาร เรียกว่าอะไร",
+      "choices": [
+        "Information",
+        "Data",
+        "Experience",
+        "Tacit knowledge"
+      ],
+      "answer": 3,
+      "explain": "ความรู้ที่ฝังอยู่ในตัวบุคคลและไม่ได้บันทึกเป็นเอกสาร คือ Tacit Knowledge"
+    },
+    {
+      "q": "ระบบสารสนเทศสำหรับผู้มีหน้าที่สร้างความรู้ใหม่ให้กับบริษัท คือข้อใด",
+      "choices": [
+        "Knowledge Work Systems (KWS)",
+        "Learning Management Systems (LMS)",
+        "Enterprise-wide knowledge management systems",
+        "Wikis"
+      ],
+      "answer": 0,
+      "explain": "KWS ออกแบบมาเฉพาะสำหรับกลุ่มวิศวกร นักวิทยาศาสตร์ หรือผู้ออกแบบที่สร้างความรู้ใหม่"
+    },
+    {
+      "q": "การตัดสินใจเกี่ยวกับกิจกรรมวันต่อวัน (Day-to-day) หมายถึงข้อใด",
+      "choices": [
+        "Business intelligence",
+        "Analytical intelligence",
+        "Operational intelligence",
+        "Production intelligence"
+      ],
+      "answer": 2,
+      "explain": "กิจกรรมการปฏิบัติงานรายวันจัดอยู่ในระดับ Operational intelligence"
+    },
+    {
+      "q": "ข้อใดคือคุณลักษณะของ Executive Support Systems (ESS)",
+      "choices": [
+        "สนับสนุนการตัดสินใจอย่างมีโครงสร้าง",
+        "มีความสามารถในการเจาะลึกลง (drill-down) ไปในรายละเอียด",
+        "รวมข้อมูลจากระบบต่างๆ ได้ยาก",
+        "ขับเคลื่อนโดยข้อมูลดิบเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "ESS ช่วยให้ผู้บริหารดูภาพรวมและเจาะลึกดูรายละเอียด (Drill-down) ได้เมื่อพบความผิดปกติ"
+    },
+    {
+      "q": "การตัดสินใจที่ไม่มีวิธีแก้ไขชัดเจน และไม่เป็นไปตามเกณฑ์ที่รู้ล่วงหน้า คือข้อใด",
+      "choices": [
+        "มีโครงสร้าง (Structured decision)",
+        "ไม่มีโครงสร้าง (Unstructured decision)",
+        "กึ่งโครงสร้าง (Semistructured decision)",
+        "ชัดเจน (Explicit decision)"
+      ],
+      "answer": 1,
+      "explain": "เป็นนิยามของ Unstructured decision ในสถานการณ์ใหม่หรือไม่คุ้นเคย ต้องใช้ดุลยพินิจมาก"
+    },
+    {
+      "q": "ข้อใดไม่ใช่หนึ่งในมิติหลักของความรู้",
+      "choices": [
+        "ความรู้เป็นทรัพย์สินขององค์กร",
+        "ความรู้มีรูปแบบที่แตกต่างกัน",
+        "ความรู้มีที่ตั้ง",
+        "ความรู้เป็นอมตะ (Knowledge is timeless)"
+      ],
+      "answer": 3,
+      "explain": "ความรู้สามารถล้าสมัยได้ตามกาลเวลาและเทคโนโลยีที่เปลี่ยนไป จึงไม่เป็นอมตะ"
+    }
+  ]
+}

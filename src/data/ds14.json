@@ -1,0 +1,176 @@
+{
+  "id": "ds14",
+  "category": "Data Science",
+  "name": "DS Week 14",
+  "icon": "🚀",
+  "color": "#22c55e",
+  "iconBg": "rgba(34,197,94,0.15)",
+  "desc": "Deployment · MLOps · Gradio · Responsible AI",
+  "questions": [
+    {
+      "q": "ใน CRISP-DM Deployment หมายถึงอะไร",
+      "choices": [
+        "การเอาโมเดลขึ้น server เท่านั้น",
+        "การทำให้ผลลัพธ์ถูกนำไปใช้ตัดสินใจได้จริง รวมถึงสื่อสาร ติดตาม และจัดการความเสี่ยง",
+        "การเขียน documentation ของโมเดล",
+        "การลบโมเดลเก่าและเปลี่ยนใหม่"
+      ],
+      "answer": 1,
+      "explain": "Deployment ครอบคลุม: ทำให้ผลลัพธ์ใช้ตัดสินใจได้จริง, สื่อสารข้อจำกัด, วางกลไกเฝ้าระวัง drift และ misuse"
+    },
+    {
+      "q": "Batch Prediction แตกต่างจาก Real-Time Prediction อย่างไร",
+      "choices": [
+        "Batch ตอบทันที Real-Time ทำงานเป็นรอบ",
+        "Batch ทำงานเป็นรอบ Real-Time ผู้ใช้ส่ง input แล้วโมเดลตอบทันที",
+        "ทั้งสองอย่างเหมือนกัน",
+        "Batch ใช้ Deep Learning เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "Batch: ทำงานเป็นรอบ เช่น ทำนาย PM2.5 ทุกวัน | Real-Time: User → API → Model → Response ทันที เช่น fraud detection"
+    },
+    {
+      "q": "Data Drift ในบริบท MLOps คืออะไร",
+      "choices": [
+        "โมเดลเขียนโค้ดผิดพลาด",
+        "Distribution ของข้อมูล input เปลี่ยนไปจากตอน training ทำให้โมเดลแม่นยำน้อยลง",
+        "ข้อมูลสูญหาย",
+        "โมเดลใช้ RAM มากขึ้น"
+      ],
+      "answer": 1,
+      "explain": "Data Drift คือ distribution ของข้อมูลเปลี่ยนไปจากตอน train เช่น climate change ทำให้โมเดลเสื่อม"
+    },
+    {
+      "q": "Concept Drift แตกต่างจาก Data Drift อย่างไร",
+      "choices": [
+        "เหมือนกัน",
+        "Concept Drift คือความสัมพันธ์ระหว่าง input และ output เปลี่ยน ส่วน Data Drift คือ distribution ของ input เปลี่ยน",
+        "Concept Drift เกิดเร็วกว่า Data Drift",
+        "Data Drift อันตรายกว่า Concept Drift เสมอ"
+      ],
+      "answer": 1,
+      "explain": "Data Drift: distribution ของ X เปลี่ยน | Concept Drift: ความสัมพันธ์ X→y เปลี่ยน เช่น Humidity เคยทำให้ PM2.5 สูง แต่ตอนนี้อาจไม่ใช่"
+    },
+    {
+      "q": "Gradio ช่วยอะไรใน ML Deployment",
+      "choices": [
+        "ช่วย train โมเดลให้เร็วขึ้น",
+        "ช่วยสร้าง ML Web Interface โดยไม่ต้องเขียน frontend",
+        "ช่วยจัดการ database",
+        "ช่วย optimize hyperparameter"
+      ],
+      "answer": 1,
+      "explain": "Gradio = Python library ที่ช่วยสร้าง ML Web App โดยไม่ต้องเขียน HTML/CSS/JS เหมาะสำหรับ demo และ prototype"
+    },
+    {
+      "q": "Model Card ควรมีข้อมูลอะไรบ้าง",
+      "choices": [
+        "เฉพาะ source code ของโมเดล",
+        "Model description, Training data, Performance metrics, Intended use, Limitations, Ethical considerations",
+        "เฉพาะ hyperparameter ที่ใช้",
+        "เฉพาะ accuracy ของโมเดล"
+      ],
+      "answer": 1,
+      "explain": "Model Card ควรมี: Model description, Training data, Metrics, Intended use, Limitations, Ethical considerations เพื่อ transparency"
+    },
+    {
+      "q": "Overtrust ใน Responsible AI หมายถึงอะไร",
+      "choices": [
+        "โมเดลมีความมั่นใจสูงเกินไป",
+        "ผู้ใช้เชื่อโมเดลมากเกินไปโดยไม่คำนึงถึงข้อจำกัด",
+        "โมเดลใช้ข้อมูลมากเกินไป",
+        "การ train โมเดลนานเกินไป"
+      ],
+      "answer": 1,
+      "explain": "Overtrust คือผู้ใช้เชื่อโมเดลมากเกินไป แก้ไขโดยแสดงข้อจำกัด ไม่ใช้ภาษาฟันธง และระบุ uncertainty"
+    },
+    {
+      "q": "MLOps Pipeline มีขั้นตอนหลักอะไรบ้าง",
+      "choices": [
+        "Train → Deploy เท่านั้น",
+        "Data Collection → Training → Evaluation → Deployment → Monitoring → Retraining",
+        "Code → Test → Release",
+        "Design → Build → Test"
+      ],
+      "answer": 1,
+      "explain": "MLOps Pipeline: Data Collection → Training → Evaluation → Deployment → Monitoring → Retraining เพราะโมเดลมีอายุการใช้งาน"
+    },
+    {
+      "q": "ทำไม Model จึงต้องมีการ Retraining",
+      "choices": [
+        "เพราะโมเดลลืมข้อมูลเก่า",
+        "เพราะข้อมูลเปลี่ยน ความสัมพันธ์เปลี่ยน ทำให้โมเดลเสื่อมประสิทธิภาพเมื่อเวลาผ่านไป",
+        "เพราะ hardware เปลี่ยน",
+        "เพราะต้องการเพิ่ม feature ใหม่เสมอ"
+      ],
+      "answer": 1,
+      "explain": "โมเดลมีอายุการใช้งาน เมื่อเวลาผ่านไป data/concept drift ทำให้โมเดลเสื่อม จึงต้องมี monitoring และ retraining"
+    },
+    {
+      "q": "Interactive Analytical Apps ต่างจาก Batch/Real-Time อย่างไร",
+      "choices": [
+        "ทำงานช้าที่สุด",
+        "ผู้ใช้สามารถทดลอง scenario ต่างๆ ได้เอง เช่น PM2.5 simulator",
+        "ใช้ได้เฉพาะบน mobile",
+        "ไม่ใช้โมเดล ML"
+      ],
+      "answer": 1,
+      "explain": "Interactive Apps ให้ผู้ใช้ทดลอง scenario เองได้ เช่น ปรับ humidity/wind แล้วดูว่า PM2.5 จะเป็นเท่าใด เครื่องมือ: Gradio, Streamlit"
+    },
+    {
+      "q": "Misuse ในบริบท Responsible AI คืออะไร",
+      "choices": [
+        "การใช้โมเดลที่ error มาก",
+        "โมเดลถูกนำไปใช้ผิดวัตถุประสงค์เดิม เช่น โมเดล PM2.5 ถูกใช้ฟันธงนโยบาย",
+        "การ train โมเดลด้วยข้อมูลน้อย",
+        "โมเดลทำงานช้า"
+      ],
+      "answer": 1,
+      "explain": "Misuse คือนำโมเดลไปใช้นอกขอบเขตที่ออกแบบไว้ เช่น โมเดลที่ออกแบบเพื่อ educational demo ถูกใช้ตัดสินนโยบายจริง"
+    },
+    {
+      "q": "Level ใดของ Deployment Architecture เหมาะสำหรับ classroom/prototype",
+      "choices": [
+        "Level 3: ML Platform (MLflow, Kubeflow)",
+        "Level 2: Application Deployment (Flask, FastAPI, Docker)",
+        "Level 1: Demo Deployment (Gradio, Streamlit, Jupyter)",
+        "ไม่มี level ใดเหมาะ"
+      ],
+      "answer": 2,
+      "explain": "Level 1 Demo Deployment (Gradio, Streamlit, Jupyter) เหมาะสำหรับ research, classroom, prototype ใช้งานง่ายและรวดเร็ว"
+    },
+    {
+      "q": "Model as a Service (MaaS) หมายความว่าอะไร",
+      "choices": [
+        "โมเดลฟรีทุกคน",
+        "โมเดลถูกให้บริการเหมือน API: User → Application → API → Model → Prediction",
+        "โมเดลที่ขายเป็นซอฟต์แวร์",
+        "โมเดลที่ใช้ cloud เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "MaaS คือแนวคิดที่โมเดลถูกให้บริการเหมือน API ผู้ใช้เรียก API เพื่อรับ prediction โดยไม่ต้องรู้ implementation"
+    },
+    {
+      "q": "ข้อใดถูกต้องเกี่ยวกับ Bias ใน Deployment",
+      "choices": [
+        "Bias ไม่ส่งผลต่อ deployment",
+        "ข้อมูล training ที่มี bias ทำให้โมเดล deploy ออกมามี bias เช่น เก็บข้อมูลเฉพาะบางพื้นที่",
+        "Bias เกิดเฉพาะใน Deep Learning",
+        "Bias แก้ได้ด้วยการเพิ่ม feature"
+      ],
+      "answer": 1,
+      "explain": "Data bias ใน training → Model bias ใน deployment เช่น เก็บข้อมูล PM2.5 เฉพาะ กทม. โมเดลอาจใช้ไม่ได้กับจังหวัดอื่น"
+    },
+    {
+      "q": "Performance Monitoring ใน MLOps ติดตามอะไรบ้าง",
+      "choices": [
+        "เฉพาะ model accuracy",
+        "prediction error, system latency, user feedback เพื่อตรวจจับการเสื่อมของโมเดล",
+        "เฉพาะจำนวน user",
+        "เฉพาะ server uptime"
+      ],
+      "answer": 1,
+      "explain": "Performance Monitoring ติดตาม: prediction error (model performance), system latency (speed), user feedback เพื่อตรวจจับ drift"
+    }
+  ]
+}

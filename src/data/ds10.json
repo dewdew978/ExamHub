@@ -1,0 +1,176 @@
+{
+  "id": "ds10",
+  "category": "Data Science",
+  "name": "DS Week 10",
+  "icon": "📷",
+  "color": "#84cc16",
+  "iconBg": "rgba(132,204,22,0.15)",
+  "desc": "Computer Vision · Image Processing · CV Tasks",
+  "questions": [
+    {
+      "q": "ในมุมมอง Data Science ภาพดิจิทัลคืออะไร",
+      "choices": [
+        "ไฟล์กราฟิกที่ไม่สามารถนำมาวิเคราะห์ได้",
+        "ข้อมูลอีกชนิดหนึ่ง (data modality) ในรูปของ array/tensor",
+        "ผลลัพธ์สุดท้ายของการวิเคราะห์",
+        "เครื่องมือสำหรับสร้าง visualization เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "ใน Data Science ภาพ = ข้อมูล (array/feature space), Image processing = feature engineering รูปแบบหนึ่ง"
+    },
+    {
+      "q": "ภาพสี RGB มีโครงสร้างเป็นอย่างไร",
+      "choices": [
+        "เมทริกซ์ 2 มิติ (H × W)",
+        "เวกเตอร์ 1 มิติ",
+        "เทนเซอร์ 3 มิติ (H × W × 3)",
+        "สเกลาร์ตัวเดียว"
+      ],
+      "answer": 2,
+      "explain": "ภาพสี RGB = Tensor 3 มิติ (Height × Width × 3 channels) ส่วนภาพขาวดำ = Matrix 2 มิติ (H × W)"
+    },
+    {
+      "q": "ความแตกต่างระหว่าง Image Processing และ Computer Vision คืออะไร",
+      "choices": [
+        "Image Processing = เป้าหมาย Computer Vision = เครื่องมือ",
+        "ทั้งสองอย่างเหมือนกัน",
+        "Image Processing = ปรับปรุงคุณภาพภาพ Computer Vision = เข้าใจความหมายในภาพ",
+        "Computer Vision ทำได้เฉพาะภาพขาวดำ"
+      ],
+      "answer": 2,
+      "explain": "Image Processing = เครื่องมือ (blur, edge, ปรับภาพ) | Computer Vision = เป้าหมาย (เข้าใจความหมาย detect, classify)"
+    },
+    {
+      "q": "Metric Sharpness วัดจากอะไร",
+      "choices": [
+        "ค่าเฉลี่ยของความสว่าง",
+        "Variance ของ Laplacian",
+        "Standard Deviation ของ pixel",
+        "จำนวน edge ในภาพ"
+      ],
+      "answer": 1,
+      "explain": "Sharpness วัดจาก Variance of Laplacian ค่าสูง = ภาพคม, ค่าต่ำ = ภาพเบลอ"
+    },
+    {
+      "q": "CV Task ประเภทใดที่ตอบคำถามว่าภาพนี้คืออะไร",
+      "choices": [
+        "Object Detection",
+        "Segmentation",
+        "Image Classification",
+        "Feature Extraction"
+      ],
+      "answer": 2,
+      "explain": "Image Classification ตอบคำถาม \"ภาพนี้คืออะไร\" เช่น ภาพท้องฟ้า → clear หรือ smog"
+    },
+    {
+      "q": "Object Detection แตกต่างจาก Image Classification อย่างไร",
+      "choices": [
+        "Object Detection บอกประเภทภาพ Classification ระบุตำแหน่ง",
+        "Object Detection ระบุตำแหน่ง + ประเภทวัตถุ Classification บอกแค่ประเภทภาพ",
+        "ทั้งสองอย่างเหมือนกัน",
+        "Object Detection ใช้ได้เฉพาะวิดีโอ"
+      ],
+      "answer": 1,
+      "explain": "Classification: ภาพนี้คืออะไร | Detection: ระบุตำแหน่ง (bounding box) + ประเภทวัตถุในภาพ"
+    },
+    {
+      "q": "Gaussian Blur ใน Image Processing มีประโยชน์อะไร",
+      "choices": [
+        "เพิ่มความคมชัดของภาพ",
+        "ลด noise ก่อนทำ Edge Detection",
+        "เพิ่มจำนวน pixel",
+        "แปลงภาพสีเป็นขาวดำ"
+      ],
+      "answer": 1,
+      "explain": "Gaussian Blur ลด noise ในภาพ มักใช้ก่อน Edge Detection เช่น Canny เพื่อให้ผลลัพธ์ดีขึ้น"
+    },
+    {
+      "q": "การแปลง RGB เป็น Grayscale เปรียบเหมือนอะไรใน Data Science",
+      "choices": [
+        "Data augmentation",
+        "Feature scaling",
+        "Dimension reduction",
+        "Data imputation"
+      ],
+      "answer": 2,
+      "explain": "การแปลง RGB (3 channels) เป็น Grayscale (1 channel) คือการลดมิติข้อมูล (Dimension Reduction)"
+    },
+    {
+      "q": "Metric Mean Saturation บอกอะไรในบริบท haze",
+      "choices": [
+        "ความคมชัดของภาพ",
+        "ความสว่างโดยรวม",
+        "ภาพซีดหรือหม่น haze มัก saturation ต่ำ",
+        "จำนวน edge ในภาพ"
+      ],
+      "answer": 2,
+      "explain": "Mean Saturation วัดจาก HSV channel S ภาพที่มีหมอกหรือหม่นจะมี saturation ต่ำ ใช้แยก hazy vs clear ได้"
+    },
+    {
+      "q": "Segmentation Task ใน Computer Vision ทำอะไร",
+      "choices": [
+        "จัดประเภทภาพทั้งใบ",
+        "ระบุตำแหน่งวัตถุด้วย bounding box",
+        "แยกพื้นที่ของวัตถุออกจากกันในระดับ pixel",
+        "วัดขนาดของภาพ"
+      ],
+      "answer": 2,
+      "explain": "Segmentation แยกพื้นที่ของวัตถุใน pixel level เช่น แยกพื้นที่หมอกควันในภาพดาวเทียม"
+    },
+    {
+      "q": "ข้อจำกัดของ Image Representation ในทาง Data Science คืออะไร",
+      "choices": [
+        "ภาพมีขนาดใหญ่เกินไปเสมอ",
+        "แสง มุมกล้อง สภาพอากาศ ทำให้เกิด noise และภาพเดียวกันอาจตีความต่างกัน",
+        "ภาพไม่สามารถแปลงเป็นตัวเลขได้",
+        "Computer Vision ต้องการ labeled data เสมอ"
+      ],
+      "answer": 1,
+      "explain": "ข้อจำกัดสำคัญ: แสง มุมกล้อง สภาพอากาศ → noise | ภาพเดียวกันอาจตีความต่าง | ภาพไม่ใช่ ground truth เสมอ"
+    },
+    {
+      "q": "Edge Density metric คืออะไร และ haze ส่งผลอย่างไร",
+      "choices": [
+        "วัดความสว่าง haze ทำให้สว่างขึ้น",
+        "วัดสัดส่วนของโครงสร้างหรือขอบในภาพ haze ทำให้ edge หายไป",
+        "วัดขนาดของภาพ haze ไม่ส่งผล",
+        "วัด saturation haze ทำให้เพิ่มขึ้น"
+      ],
+      "answer": 1,
+      "explain": "Edge Density วัดสัดส่วนของโครงสร้างหรือขอบในภาพ เมื่อมี haze/blur ภาพจะเบลอและ edge จะหายไป ทำให้ค่าลดลง"
+    },
+    {
+      "q": "ใน CRISP-DM Computer Vision เกี่ยวข้องกับ phase ใด",
+      "choices": [
+        "เฉพาะ Deployment",
+        "เฉพาะ Data Collection",
+        "ทุก phase ตั้งแต่ Business Understanding ถึง Evaluation",
+        "เฉพาะ Modeling"
+      ],
+      "answer": 2,
+      "explain": "CV เกี่ยวข้องทุก phase: Business Understanding (ต้องการเห็นอะไร?) Data Understanding (ภาพแทนจริงได้แค่ไหน?) Modeling Evaluation"
+    },
+    {
+      "q": "Intensity Range (Max-Min) มีข้อจำกัดอะไร",
+      "choices": [
+        "ใช้หน่วยความจำมากเกินไป",
+        "คำนวณช้า",
+        "Sensitive ต่อ outlier pixel เดียวก็ทำให้ค่าพังได้",
+        "ไม่สามารถใช้กับภาพสีได้"
+      ],
+      "answer": 2,
+      "explain": "Intensity Range = Max-Min มีปัญหาว่า sensitive ต่อ outlier pixel เพียงตัวเดียวที่สว่างหรือมืดมากก็ทำให้ค่าผิดเพี้ยนได้"
+    },
+    {
+      "q": "Shannon Entropy ในบริบทภาพบอกอะไร",
+      "choices": [
+        "ความสว่างเฉลี่ยของภาพ",
+        "จำนวน edge ในภาพ",
+        "ความหลากหลายของ intensity ในภาพ",
+        "ขนาดไฟล์ของภาพ"
+      ],
+      "answer": 2,
+      "explain": "Shannon Entropy บอกความหลากหลายของ intensity ภาพ hazy/blur มัก entropy ต่ำ เพราะ pixel มีความหลากหลายน้อยลง"
+    }
+  ]
+}
