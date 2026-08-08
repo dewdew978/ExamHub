@@ -110,13 +110,13 @@
     "year": 2
   },
   {
-    "id": "isd_midterm_01",
-    "category": "Intelligent System",
-    "name": "ISD Midterm Review",
-    "icon": "🤖",
+    "id": "midterm_ch2_7",
+    "category": "Intelligent System Development",
+    "name": "Midterm Exam (Chapter 2-7)",
+    "icon": "🧠",
     "color": "#10b981",
     "iconBg": "rgba(16,185,129,0.15)",
-    "desc": "Chapter 1 & Chapter 6 Review",
+    "desc": "รวมข้อสอบเตรียมสอบมิดเทอมตั้งแต่บทที่ 2 ถึง 7 แบบจัดเต็มครอบคลุม CV, ML, DL, CNN, RNN, Generative Models และ RL",
     "questionCount": 30,
     "year": 3
   }
