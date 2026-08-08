@@ -7,7 +7,8 @@
     "color": "#f97316",
     "iconBg": "rgba(249,115,22,0.15)",
     "desc": "Database · Supply Chain · CRM · Data Mining",
-    "questionCount": 25
+    "questionCount": 25,
+    "year": 2
   },
   {
     "id": "mis2",
@@ -17,7 +18,8 @@
     "color": "#a855f7",
     "iconBg": "rgba(168,85,247,0.15)",
     "desc": "Decision Making · AI · Knowledge Management",
-    "questionCount": 20
+    "questionCount": 20,
+    "year": 2
   },
   {
     "id": "mis3",
@@ -27,7 +29,8 @@
     "color": "#14b8a6",
     "iconBg": "rgba(20,184,166,0.15)",
     "desc": "SDLC · Agile · BPR · Project Management",
-    "questionCount": 20
+    "questionCount": 20,
+    "year": 2
   },
   {
     "id": "ds9",
@@ -37,7 +40,8 @@
     "color": "#0ea5e9",
     "iconBg": "rgba(14,165,233,0.15)",
     "desc": "Logical · Probabilistic · Bayesian Reasoning",
-    "questionCount": 20
+    "questionCount": 20,
+    "year": 2
   },
   {
     "id": "ds10",
@@ -47,7 +51,8 @@
     "color": "#84cc16",
     "iconBg": "rgba(132,204,22,0.15)",
     "desc": "Computer Vision · Image Processing · CV Tasks",
-    "questionCount": 15
+    "questionCount": 15,
+    "year": 2
   },
   {
     "id": "ds11",
@@ -57,7 +62,8 @@
     "color": "#f43f5e",
     "iconBg": "rgba(244,63,94,0.15)",
     "desc": "NLP · Tokenization · Bag-of-Words · TF-IDF",
-    "questionCount": 15
+    "questionCount": 15,
+    "year": 2
   },
   {
     "id": "ds12",
@@ -67,7 +73,8 @@
     "color": "#d946ef",
     "iconBg": "rgba(217,70,239,0.15)",
     "desc": "Machine Learning · Task Types · PyCaret",
-    "questionCount": 15
+    "questionCount": 15,
+    "year": 2
   },
   {
     "id": "ds13",
@@ -77,7 +84,8 @@
     "color": "#fb923c",
     "iconBg": "rgba(251,146,60,0.15)",
     "desc": "Model Evaluation · Metrics · Classification · Regression",
-    "questionCount": 15
+    "questionCount": 15,
+    "year": 2
   },
   {
     "id": "ds14",
@@ -87,7 +95,8 @@
     "color": "#22c55e",
     "iconBg": "rgba(34,197,94,0.15)",
     "desc": "Deployment · MLOps · Gradio · Responsible AI",
-    "questionCount": 15
+    "questionCount": 15,
+    "year": 2
   },
   {
     "id": "dataviz",
@@ -97,7 +106,8 @@
     "color": "#06b6d4",
     "iconBg": "rgba(6,182,212,0.15)",
     "desc": "Data Warehouse · DAX · Charts · Storytelling · Dashboard",
-    "questionCount": 20
+    "questionCount": 20,
+    "year": 2
   },
   {
     "id": "isd_midterm_01",
@@ -107,6 +117,7 @@
     "color": "#10b981",
     "iconBg": "rgba(16,185,129,0.15)",
     "desc": "Chapter 1 & Chapter 6 Review",
-    "questionCount": 30
+    "questionCount": 30,
+    "year": 3
   }
 ]

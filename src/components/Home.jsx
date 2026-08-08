@@ -66,7 +66,7 @@ export default function Home({ subjects, onSelectSubject }) {
             color: 'var(--text)',
             display: 'inline-block'
           }}>
-            {subjects.length} วิชา
+            {subjects.filter(s => s.year === 2).length} วิชา
           </div>
         </div>
 
@@ -119,7 +119,10 @@ export default function Home({ subjects, onSelectSubject }) {
             alignItems: 'center',
             gap: '0.5rem'
           }}>
-            <Clock size={16} /> Coming Soon
+            {subjects.filter(s => s.year === 3).length > 0 
+              ? `${subjects.filter(s => s.year === 3).length} วิชา` 
+              : <><Clock size={16} /> Coming Soon</>
+            }
           </div>
         </div>
       </div>
@@ -127,7 +130,9 @@ export default function Home({ subjects, onSelectSubject }) {
   );
 
   const renderSubjectList = (year) => {
-    if (year === 3) {
+    const filteredSubjects = subjects.filter(sub => sub.year === year);
+
+    if (filteredSubjects.length === 0) {
       return (
         <div style={{ marginTop: '4rem' }} className="animate-fade-in">
           <button 
@@ -140,16 +145,15 @@ export default function Home({ subjects, onSelectSubject }) {
           
           <div className="glass-panel" style={{ padding: '5rem 2rem', textAlign: 'center', borderRadius: '24px' }}>
             <Clock size={64} style={{ color: 'var(--warning)', margin: '0 auto 1.5rem' }} />
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>เตรียมพบกับข้อสอบปี 3 เร็วๆ นี้!</h3>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>เตรียมพบกับข้อสอบปี {year} เร็วๆ นี้!</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-              เรากำลังรวบรวมข้อสอบและจัดทำเฉลยสำหรับรายวิชาชั้นปีที่ 3 โปรดติดตามการอัปเดต
+              เรากำลังรวบรวมข้อสอบและจัดทำเฉลยสำหรับรายวิชาชั้นปีที่ {year} โปรดติดตามการอัปเดต
             </p>
           </div>
         </div>
       );
     }
 
-    // Year 2 subjects (currently all of them)
     return (
       <div style={{ marginTop: '4rem' }} className="animate-fade-in">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
@@ -171,7 +175,7 @@ export default function Home({ subjects, onSelectSubject }) {
           </button>
           <h2 style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text)', fontSize: '1.5rem', margin: 0 }}>
             <Layout size={24} className="text-gradient" />
-            รายวิชาชั้นปีที่ 2
+            รายวิชาชั้นปีที่ {year}
           </h2>
         </div>
 
@@ -180,7 +184,7 @@ export default function Home({ subjects, onSelectSubject }) {
           gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
           gap: '1.5rem' 
         }}>
-          {subjects.map(sub => (
+          {filteredSubjects.map(sub => (
             <div 
               key={sub.id} 
               className="glass-panel"
