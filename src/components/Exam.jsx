@@ -21,20 +21,12 @@ export default function Exam({ subject, onBack, onComplete }) {
     if (currentQ < subject.questions.length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
-      // Complete exam
       const score = answers.reduce((sum, ans, idx) => {
         return sum + (ans === subject.questions[idx].answer ? 1 : 0);
       }, 0);
       onComplete(score);
       setShowResult(true);
     }
-  };
-
-  const getChoiceClass = (idx) => {
-    if (!answered) return 'choice-btn';
-    if (idx === q.answer) return 'choice-btn correct';
-    if (answers[currentQ] === idx && idx !== q.answer) return 'choice-btn wrong';
-    return 'choice-btn disabled';
   };
 
   if (showResult) {
@@ -44,36 +36,34 @@ export default function Exam({ subject, onBack, onComplete }) {
     const wrong = answers.filter((a, i) => a !== null && a !== subject.questions[i].answer).length;
     const skipped = answers.filter(a => a === null).length;
 
-    let emoji = '🎉';
-    if (pct < 80) emoji = '😊';
-    if (pct < 60) emoji = '😅';
-    if (pct < 40) emoji = '😓';
-
     return (
-      <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div className="glass-panel" style={{ padding: '4rem 2rem', borderRadius: '24px', textAlign: 'center' }}>
-          <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>{emoji}</div>
-          <div className="text-gradient" style={{ fontSize: '4rem', fontFamily: 'var(--font-serif)', fontWeight: '900', lineHeight: 1 }}>
+      <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '4rem auto' }}>
+        <div className="card" style={{ padding: '4rem 2rem', borderRadius: '12px', textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', fontWeight: 600, letterSpacing: '-1.5px', marginBottom: '0.5rem' }}>
             {score}/{total}
           </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', marginTop: '1rem', marginBottom: '2rem' }}>คะแนนที่คุณทำได้</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '3rem' }}>คะแนนที่คุณทำได้</p>
           
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', background: 'rgba(0,0,0,0.2)', padding: '2rem', borderRadius: '16px', marginBottom: '3rem' }}>
+          <div style={{ 
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', 
+            padding: '1.5rem', borderRadius: '8px', boxShadow: 'var(--shadow-border)',
+            marginBottom: '3rem', background: 'var(--surface-hover)'
+          }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--success)' }}>{score}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ถูก</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{score}</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ถูก</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--error)' }}>{wrong}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ผิด</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{wrong}</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ผิด</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--warning)' }}>{skipped}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ข้าม</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{skipped}</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ข้าม</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', fontWeight: '800', color: 'white' }}>{pct}%</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>เปอร์เซ็นต์</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{pct}%</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>เปอร์เซ็นต์</div>
             </div>
           </div>
 
@@ -83,11 +73,11 @@ export default function Exam({ subject, onBack, onComplete }) {
               setCurrentQ(0);
               setShowResult(false);
             }}>
-              <RotateCcw size={18} />
+              <RotateCcw size={16} />
               ลองใหม่
             </button>
             <button className="btn btn-primary" onClick={onBack}>
-              <HomeIcon size={18} />
+              <HomeIcon size={16} />
               กลับหน้าหลัก
             </button>
           </div>
@@ -97,100 +87,95 @@ export default function Exam({ subject, onBack, onComplete }) {
   }
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
+    <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '2rem auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
         <button 
+          className="btn btn-outline"
           onClick={onBack}
-          style={{
-            background: 'var(--surface-hover)',
-            border: '1px solid var(--border)',
-            color: 'var(--text)',
-            width: '48px', height: '48px',
-            borderRadius: '12px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', transition: 'all 0.2s'
-          }}
-          onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-          onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+          style={{ width: '36px', height: '36px', padding: 0 }}
         >
-          <ArrowLeft size={24} />
+          <ArrowLeft size={16} />
         </button>
         <div>
-          <h2 style={{ fontSize: '1.75rem', marginBottom: '0.25rem' }}>{subject.name}</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{subject.desc}</p>
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '0.125rem', letterSpacing: '-0.5px' }}>{subject.name}</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{subject.desc}</p>
         </div>
       </div>
 
-      <div style={{ background: 'var(--surface-hover)', height: '6px', borderRadius: '3px', marginBottom: '0.5rem', overflow: 'hidden' }}>
+      <div style={{ 
+        background: 'var(--border-divider)', height: '4px', borderRadius: '2px', 
+        marginBottom: '0.75rem', overflow: 'hidden' 
+      }}>
         <div style={{ 
           height: '100%', 
-          background: 'var(--accent-gradient)', 
+          background: 'var(--text)', 
           width: `${((currentQ) / subject.questions.length) * 100}%`,
           transition: 'width 0.3s ease'
         }}></div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '2.5rem', fontWeight: 500 }}>
         <span>ข้อที่ {currentQ + 1} จาก {subject.questions.length}</span>
       </div>
 
-      <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '24px', marginBottom: '2rem' }}>
-        <div style={{ color: 'var(--accent)', fontSize: '0.875rem', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>
+      <div className="card" style={{ padding: '2rem', borderRadius: '12px', marginBottom: '2rem' }}>
+        <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '1rem' }}>
           Question {currentQ + 1}
         </div>
-        <h3 style={{ fontSize: '1.25rem', lineHeight: '1.8', marginBottom: '2rem', fontWeight: '500' }}>
+        <h3 style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '2rem', fontWeight: 500 }}>
           {q.q}
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {q.choices.map((choice, idx) => {
             const isSelected = answers[currentQ] === idx;
             const isRight = answered && idx === q.answer;
             const isWrong = answered && isSelected && !isRight;
 
-            let btnStyle = {
-              background: 'var(--surface-hover)',
-              border: '2px solid var(--border)',
-              borderRadius: '16px',
-              padding: '1.25rem 1.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              cursor: answered ? 'default' : 'pointer',
-              transition: 'all 0.2s ease',
-              textAlign: 'left',
-              color: 'var(--text)',
-              fontSize: '1rem',
-              opacity: (answered && !isSelected && !isRight) ? 0.5 : 1
-            };
+            let boxShadow = 'var(--shadow-border)';
+            let bg = 'var(--surface)';
+            let color = 'var(--text)';
 
             if (isRight) {
-              btnStyle.borderColor = 'var(--success)';
-              btnStyle.background = 'rgba(16, 185, 129, 0.1)';
+              boxShadow = '0px 0px 0px 1px var(--success)';
+              bg = 'rgba(16, 185, 129, 0.1)';
             } else if (isWrong) {
-              btnStyle.borderColor = 'var(--error)';
-              btnStyle.background = 'rgba(239, 68, 68, 0.1)';
-            } else if (!answered) {
-              // hover effect handled by css class or inline
+              boxShadow = '0px 0px 0px 1px var(--error)';
+              bg = 'rgba(238, 0, 0, 0.1)';
+            } else if (answered) {
+              color = 'var(--text-muted)';
             }
 
             return (
               <button 
                 key={idx} 
-                style={btnStyle}
+                className="btn"
+                style={{
+                  background: bg,
+                  boxShadow: boxShadow,
+                  borderRadius: '8px',
+                  padding: '1rem 1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  cursor: answered ? 'default' : 'pointer',
+                  textAlign: 'left',
+                  color: color,
+                  fontSize: '0.9375rem',
+                  width: '100%',
+                  justifyContent: 'flex-start'
+                }}
                 onClick={() => handleSelect(idx)}
-                onMouseEnter={!answered ? e => e.currentTarget.style.borderColor = 'var(--accent)' : null}
-                onMouseLeave={!answered ? e => e.currentTarget.style.borderColor = 'var(--border)' : null}
               >
                 <div style={{
-                  width: '32px', height: '32px', borderRadius: '8px', flexShrink: 0,
-                  background: isRight ? 'var(--success)' : isWrong ? 'var(--error)' : 'rgba(255,255,255,0.1)',
-                  color: (isRight || isWrong) ? 'white' : 'var(--text-muted)',
+                  width: '24px', height: '24px', borderRadius: '4px', flexShrink: 0,
+                  background: isRight ? 'var(--success)' : isWrong ? 'var(--error)' : 'var(--surface-active)',
+                  color: (isRight || isWrong) ? '#fff' : 'var(--text-muted)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: '700', fontSize: '1rem'
+                  fontWeight: 600, fontSize: '0.75rem'
                 }}>
-                  {isRight ? <CheckCircle size={18} /> : isWrong ? <XCircle size={18} /> : String.fromCharCode(65 + idx)}
+                  {isRight ? <CheckCircle size={14} /> : isWrong ? <XCircle size={14} /> : String.fromCharCode(65 + idx)}
                 </div>
-                <span style={{ lineHeight: '1.6' }}>{choice}</span>
+                <span style={{ lineHeight: 1.5 }}>{choice}</span>
               </button>
             );
           })}
@@ -199,15 +184,15 @@ export default function Exam({ subject, onBack, onComplete }) {
         {answered && (
           <div className="animate-fade-in" style={{ 
             marginTop: '2rem', 
-            padding: '1.5rem', 
-            background: 'rgba(16, 185, 129, 0.05)', 
-            border: '1px solid rgba(16, 185, 129, 0.2)',
-            borderRadius: '16px' 
+            padding: '1.25rem', 
+            background: 'var(--surface-hover)', 
+            boxShadow: 'var(--shadow-border)',
+            borderRadius: '8px' 
           }}>
-            <div style={{ color: 'var(--success)', fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Check size={18} /> เฉลยและคำอธิบาย
+            <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Check size={16} /> เฉลยและคำอธิบาย
             </div>
-            <p style={{ color: 'var(--text-muted)', lineHeight: '1.7' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6 }}>
               {q.explain}
             </p>
           </div>
@@ -220,7 +205,7 @@ export default function Exam({ subject, onBack, onComplete }) {
           onClick={nextQuestion}
         >
           {currentQ < subject.questions.length - 1 ? 'ข้อถัดไป' : 'ดูผลคะแนน'}
-          <ChevronRight size={18} />
+          <ChevronRight size={16} />
         </button>
       </div>
     </div>

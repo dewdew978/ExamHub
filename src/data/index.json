@@ -110,14 +110,14 @@
     "year": 2
   },
   {
-    "id": "midterm_ch2_7",
+    "id": "isd_midterm_60_items",
     "category": "Intelligent System Development",
-    "name": "Midterm Exam (Chapter 2-7)",
-    "icon": "🧠",
+    "name": "ISD Midterm Mock Exam",
+    "icon": "📝",
     "color": "#10b981",
     "iconBg": "rgba(16,185,129,0.15)",
-    "desc": "รวมข้อสอบเตรียมสอบมิดเทอมตั้งแต่บทที่ 2 ถึง 7 แบบจัดเต็มครอบคลุม CV, ML, DL, CNN, RNN, Generative Models และ RL",
-    "questionCount": 30,
+    "desc": "แนวข้อสอบกลางภาค 60 ข้อ (Git, CV, ML/DL, CNN, RNN, GAN, RL)",
+    "questionCount": 60,
     "year": 3
   }
 ]

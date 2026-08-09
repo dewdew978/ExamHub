@@ -8,120 +8,81 @@ export default function Home({ subjects, onSelectSubject }) {
 
   const renderYearSelection = () => (
     <div style={{ marginTop: '4rem' }} className="animate-fade-in">
-      <h2 style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '1rem' }}>
-        <GraduationCap size={20} />
+      <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 500, letterSpacing: '0px' }}>
+        <GraduationCap size={16} />
         เลือกระดับชั้นปี
-        <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
       </h2>
 
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '2rem' 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+        gap: '1.5rem' 
       }}>
-        {/* Year 2 Card */}
         <div 
-          className="glass-panel"
+          className="card"
           onClick={() => setSelectedYear(2)}
           style={{
-            padding: '3rem 2rem',
-            borderRadius: '24px',
+            padding: '2rem',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1rem'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-5px)';
-            e.currentTarget.style.borderColor = 'var(--accent)';
-            e.currentTarget.style.boxShadow = '0 10px 30px var(--accent-glow)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)';
-            e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.3)';
+            gap: '1rem',
+            borderRadius: '12px'
           }}
         >
-          <div style={{ 
-            width: '80px', height: '80px', borderRadius: '24px', 
-            background: 'var(--accent-glow)', color: 'var(--accent)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '2.5rem'
-          }}>
-            📚
-          </div>
           <div>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>วิชาชั้นปีที่ 2</h3>
-            <p style={{ color: 'var(--text-muted)' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ 2</p>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', letterSpacing: '-0.5px' }}>วิชาชั้นปีที่ 2</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ 2</p>
           </div>
           <div style={{ 
-            marginTop: '1rem',
-            background: 'rgba(255,255,255,0.05)',
-            padding: '0.5rem 1rem',
-            borderRadius: '999px',
-            fontSize: '0.875rem',
+            marginTop: '0.5rem',
+            background: 'var(--surface-hover)',
+            padding: '0.25rem 0.5rem',
+            borderRadius: '4px',
+            fontSize: '0.75rem',
             color: 'var(--text)',
-            display: 'inline-block'
+            display: 'inline-block',
+            width: 'fit-content',
+            fontWeight: 500,
+            boxShadow: 'var(--shadow-border)'
           }}>
             {subjects.filter(s => s.year === 2).length} วิชา
           </div>
         </div>
 
-        {/* Year 3 Card */}
         <div 
-          className="glass-panel"
+          className="card"
           onClick={() => setSelectedYear(3)}
           style={{
-            padding: '3rem 2rem',
-            borderRadius: '24px',
+            padding: '2rem',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            textAlign: 'center',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1rem'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-5px)';
-            e.currentTarget.style.borderColor = 'var(--warning)';
-            e.currentTarget.style.boxShadow = '0 10px 30px rgba(245, 158, 11, 0.2)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)';
-            e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.3)';
+            gap: '1rem',
+            borderRadius: '12px'
           }}
         >
-          <div style={{ 
-            width: '80px', height: '80px', borderRadius: '24px', 
-            background: 'rgba(245, 158, 11, 0.15)', color: 'var(--warning)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '2.5rem'
-          }}>
-            🎓
-          </div>
           <div>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>วิชาชั้นปีที่ 3</h3>
-            <p style={{ color: 'var(--text-muted)' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ 3</p>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', letterSpacing: '-0.5px' }}>วิชาชั้นปีที่ 3</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ 3</p>
           </div>
           <div style={{ 
-            marginTop: '1rem',
-            background: 'rgba(255,255,255,0.05)',
-            padding: '0.5rem 1rem',
-            borderRadius: '999px',
-            fontSize: '0.875rem',
-            color: 'var(--warning)',
+            marginTop: '0.5rem',
+            background: 'var(--surface-hover)',
+            padding: '0.25rem 0.5rem',
+            borderRadius: '4px',
+            fontSize: '0.75rem',
+            color: 'var(--text-muted)',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '0.5rem'
+            gap: '0.375rem',
+            width: 'fit-content',
+            fontWeight: 500,
+            boxShadow: 'var(--shadow-border)'
           }}>
             {subjects.filter(s => s.year === 3).length > 0 
               ? `${subjects.filter(s => s.year === 3).length} วิชา` 
-              : <><Clock size={16} /> Coming Soon</>
+              : <><Clock size={12} /> Coming Soon</>
             }
           </div>
         </div>
@@ -140,13 +101,13 @@ export default function Home({ subjects, onSelectSubject }) {
             className="btn btn-outline"
             style={{ marginBottom: '2rem' }}
           >
-            <ArrowLeft size={18} /> ย้อนกลับ
+            <ArrowLeft size={16} /> ย้อนกลับ
           </button>
           
-          <div className="glass-panel" style={{ padding: '5rem 2rem', textAlign: 'center', borderRadius: '24px' }}>
-            <Clock size={64} style={{ color: 'var(--warning)', margin: '0 auto 1.5rem' }} />
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>เตรียมพบกับข้อสอบปี {year} เร็วๆ นี้!</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
+          <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', borderRadius: '12px' }}>
+            <Clock size={32} style={{ color: 'var(--text-muted)', margin: '0 auto 1rem' }} />
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>เตรียมพบกับข้อสอบปี {year} เร็วๆ นี้!</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
               เรากำลังรวบรวมข้อสอบและจัดทำเฉลยสำหรับรายวิชาชั้นปีที่ {year} โปรดติดตามการอัปเดต
             </p>
           </div>
@@ -155,73 +116,41 @@ export default function Home({ subjects, onSelectSubject }) {
     }
 
     return (
-      <div style={{ marginTop: '4rem' }} className="animate-fade-in">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
+      <div style={{ marginTop: '3rem' }} className="animate-fade-in">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
           <button 
             onClick={() => setSelectedYear(null)}
-            style={{
-              background: 'var(--surface-hover)',
-              border: '1px solid var(--border)',
-              color: 'var(--text)',
-              width: '48px', height: '48px',
-              borderRadius: '12px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.2s'
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+            className="btn btn-outline"
+            style={{ width: '32px', height: '32px', padding: 0 }}
           >
-            <ArrowLeft size={24} />
+            <ArrowLeft size={16} />
           </button>
-          <h2 style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text)', fontSize: '1.5rem', margin: 0 }}>
-            <Layout size={24} className="text-gradient" />
+          <h2 style={{ color: 'var(--text)', fontSize: '1.25rem', margin: 0, letterSpacing: '-0.5px', fontWeight: 600 }}>
             รายวิชาชั้นปีที่ {year}
           </h2>
         </div>
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
           gap: '1.5rem' 
         }}>
           {filteredSubjects.map(sub => (
             <div 
               key={sub.id} 
-              className="glass-panel"
+              className="card"
               onClick={() => onSelectSubject(sub.id)}
               style={{
-                padding: '2rem',
-                borderRadius: '16px',
+                padding: '1.5rem',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                position: 'relative',
-                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.borderColor = sub.color;
-                e.currentTarget.style.boxShadow = `0 10px 30px ${sub.color}33`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)';
-                e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.3)';
+                gap: '0.75rem',
+                borderRadius: '12px'
               }}
             >
-              <div style={{ 
-                width: '56px', height: '56px', borderRadius: '16px', 
-                background: sub.iconBg, color: sub.color,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.75rem'
-              }}>
-                {sub.icon}
-              </div>
-              
               <div>
-                <h3 style={{ fontSize: '1.125rem', marginBottom: '0.25rem' }}>{sub.name}</h3>
+                <h3 style={{ fontSize: '1rem', marginBottom: '0.25rem', letterSpacing: '-0.25px', fontWeight: 600 }}>{sub.name}</h3>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{sub.desc}</p>
               </div>
 
@@ -229,15 +158,17 @@ export default function Home({ subjects, onSelectSubject }) {
                 marginTop: 'auto', 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: '0.5rem',
-                fontSize: '0.875rem',
+                gap: '0.375rem',
+                fontSize: '0.75rem',
                 color: 'var(--text-muted)',
-                background: 'rgba(255,255,255,0.05)',
-                padding: '0.5rem 1rem',
-                borderRadius: '999px',
-                width: 'fit-content'
+                background: 'var(--surface-hover)',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '4px',
+                width: 'fit-content',
+                fontWeight: 500,
+                boxShadow: 'var(--shadow-border)'
               }}>
-                <FileText size={16} />
+                <FileText size={12} />
                 {sub.questionCount} ข้อ
               </div>
             </div>
@@ -249,50 +180,33 @@ export default function Home({ subjects, onSelectSubject }) {
 
   return (
     <div className="animate-fade-in">
-      <div className="text-center max-w-3xl mx-auto py-12">
-        <div style={{
-          display: 'inline-block',
-          padding: '0.5rem 1.5rem',
-          borderRadius: '999px',
-          background: 'rgba(59,130,246,0.1)',
-          border: '1px solid rgba(59,130,246,0.3)',
-          color: 'var(--accent)',
-          fontSize: '0.875rem',
-          fontWeight: '600',
-          letterSpacing: '1px',
-          textTransform: 'uppercase',
-          marginBottom: '2rem'
-        }}>
-          ระบบข้อสอบออนไลน์
-        </div>
-        
-        <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '1.5rem' }}>
-          ฝึกทำข้อสอบ<br />
-          <span className="text-gradient">ทุกวิชาในที่เดียว</span>
+      <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', padding: '4rem 0 2rem' }}>
+        <h1 style={{ fontSize: '48px', fontWeight: 600, letterSpacing: '-2.4px', margin: '0 0 1rem 0', textWrap: 'balance' }}>
+          ฝึกทำข้อสอบทุกวิชาในที่เดียว
         </h1>
         
-        <p style={{ color: 'var(--text-muted)', fontSize: '1.125rem', marginBottom: '3rem', maxWidth: '600px', mx: 'auto' }}>
-          เลือกวิชาที่ต้องการฝึกซ้อม ทำข้อสอบพร้อมดูเฉลยและคำอธิบาย<br />พัฒนาความรู้อย่างมีประสิทธิภาพ
+        <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '2.5rem', lineHeight: 1.5 }}>
+          เลือกวิชาที่ต้องการฝึกซ้อม ทำข้อสอบพร้อมดูเฉลยและคำอธิบาย พัฒนาความรู้อย่างมีประสิทธิภาพ
         </p>
 
         <div style={{ 
           display: 'flex', 
           justifyContent: 'center', 
           gap: '3rem',
-          paddingTop: '3rem',
-          borderTop: '1px solid var(--border)'
+          paddingTop: '2.5rem',
+          borderTop: '1px solid var(--border-divider)'
         }}>
-          <div style={{ textAlign: 'center' }}>
-            <div className="text-gradient" style={{ fontSize: '2.5rem', fontWeight: '800' }}>{subjects.length}</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>วิชาทั้งหมด</div>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>{subjects.length}</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>วิชาทั้งหมด</div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div className="text-gradient" style={{ fontSize: '2.5rem', fontWeight: '800' }}>{totalQuestions}</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>ข้อสอบ</div>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>{totalQuestions}</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ข้อสอบ</div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div className="text-gradient" style={{ fontSize: '2.5rem', fontWeight: '800' }}>100%</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.5rem' }}>มีเฉลยพร้อมอธิบาย</div>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>100%</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>มีเฉลยอธิบาย</div>
           </div>
         </div>
       </div>
