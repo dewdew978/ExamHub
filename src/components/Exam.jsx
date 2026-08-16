@@ -1,5 +1,18 @@
 import { useState } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, ChevronRight, RotateCcw, Home as HomeIcon, Check } from 'lucide-react';
+import 'katex/dist/katex.min.css';
+import { InlineMath } from 'react-katex';
+
+const renderTextWithMath = (text) => {
+  if (typeof text !== 'string') return text;
+  const parts = text.split('$');
+  return parts.map((part, index) => {
+    if (index % 2 === 1) {
+      return <InlineMath key={index} math={part} />;
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
 
 export default function Exam({ subject, onBack, onComplete }) {
   const [currentQ, setCurrentQ] = useState(0);
@@ -122,7 +135,7 @@ export default function Exam({ subject, onBack, onComplete }) {
           Question {currentQ + 1}
         </div>
         <h3 style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '2rem', fontWeight: 500 }}>
-          {q.q}
+          {renderTextWithMath(q.q)}
         </h3>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -175,7 +188,7 @@ export default function Exam({ subject, onBack, onComplete }) {
                 }}>
                   {isRight ? <CheckCircle size={14} /> : isWrong ? <XCircle size={14} /> : String.fromCharCode(65 + idx)}
                 </div>
-                <span style={{ lineHeight: 1.5 }}>{choice}</span>
+                <span style={{ lineHeight: 1.5 }}>{renderTextWithMath(choice)}</span>
               </button>
             );
           })}
@@ -193,7 +206,7 @@ export default function Exam({ subject, onBack, onComplete }) {
               <Check size={16} /> เฉลยและคำอธิบาย
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6 }}>
-              {q.explain}
+              {renderTextWithMath(q.explain)}
             </p>
           </div>
         )}

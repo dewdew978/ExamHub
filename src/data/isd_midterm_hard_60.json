@@ -1,0 +1,616 @@
+{
+  "id": "isd_midterm_hard_60",
+  "category": "Intelligent System Development",
+  "name": "Midterm Hard Mode (60 Questions)",
+  "icon": "🔥",
+  "color": "#ef4444",
+  "iconBg": "rgba(239,68,68,0.15)",
+  "desc": "ชุดข้อสอบจำลอง 60 ข้อ ระดับความยากขั้นสูง อ้างอิงจากเนื้อหา Git, CV, ML, CNN, RNN/GAN และ RL อย่างเจาะลึก",
+  "questions": [
+    {
+      "q": "ตามหลักการ Team Workflow ข้อใดคือข้อห้ามสำคัญที่สุดในการจัดการ Main Branch",
+      "choices": [
+        "ห้ามทำการ Pull Request ข้าม Branch",
+        "ห้ามทำงานหรือเขียนโค้ดลงบน main โดยตรงเด็ดขาด",
+        "ห้ามใช้คำสั่ง git pull origin main ก่อนเริ่มงาน",
+        "ห้ามสร้าง Branch ใหม่จาก Main Branch"
+      ],
+      "answer": 1,
+      "explain": "Main Branch คือกิ่งหลักของโปรเจกต์ ห้ามทำงานหรือเขียนโค้ดลงบน main โดยตรงเด็ดขาด โค้ดในนี้ต้องเป็นโค้ดที่สมบูรณ์และใช้งานได้จริงเท่านั้น"
+    },
+    {
+      "q": "เมื่อเขียนโค้ดใน Branch ของตัวเองเสร็จสิ้น ขั้นตอนใดที่จำเป็นต้องทำก่อนที่จะนำโค้ดไปรวมกับกิ่งหลัก (main)",
+      "choices": [
+        "ใช้คำสั่ง git rm --cached ทันที",
+        "เปิด Pull Request (PR) บน GitHub เพื่อให้เพื่อนในทีมช่วยรีวิวโค้ด",
+        "สร้างไฟล์ .env ใหม่",
+        "เปลี่ยนชื่อ Branch ให้ตรงกับ Main"
+      ],
+      "answer": 1,
+      "explain": "เมื่อเขียนโค้ดและ Push ขึ้นไปแล้ว ต้องเปิด PR บน GitHub เพื่อให้เพื่อนในทีมช่วยรีวิวโค้ด (Review) ก่อนที่จะรวม (Merge) เข้ากิ่งหลัก"
+    },
+    {
+      "q": "หากคุณเผลอ Push ไฟล์ .env ขึ้นไปยัง GitHub แล้ว วิธีการแก้ไขที่ถูกต้องที่สุดคือข้อใด",
+      "choices": [
+        "ลบ Repository ทิ้งแล้วสร้างใหม่",
+        "เปลี่ยนรหัสผ่านของฐานข้อมูลทั้งหมดทันที",
+        "ใช้คำสั่ง git rm --cached .env เพื่อลบออกจากระบบติดตามของ Git",
+        "ใช้คำสั่ง git checkout -b เพื่อสร้างกิ่งใหม่หลบซ่อนไฟล์"
+      ],
+      "answer": 2,
+      "explain": "หากเผลอ Push ไฟล์ .env ไปแล้ว ให้ใช้คำสั่ง git rm --cached .env เพื่อลบออกจากระบบติดตามของ Git แต่ไฟล์ยังอยู่บนเครื่องเรา"
+    },
+    {
+      "q": "ใน Daily Checklist หลังจากที่ย้ายไปกิ่งหลัก (git checkout main) และดึงอัปเดตล่าสุดแล้ว ขั้นตอนต่อไปคืออะไร",
+      "choices": [
+        "กลับไปกิ่งตัวเอง และเอาโค้ดใหม่ของเพื่อนมารวมกับกิ่งเรา (git merge main)",
+        "ทำการ git push โค้ดของตัวเองขึ้นทันที",
+        "เปิด Pull Request ทันที",
+        "ลบ Branch เดิมทิ้งและสร้างใหม่"
+      ],
+      "answer": 0,
+      "explain": "หลังจากดึงอัปเดต ต้องกลับไปกิ่งตัวเองด้วย git checkout ตามด้วยเอาโค้ดใหม่ของเพื่อนมารวมกับกิ่งเราด้วยคำสั่ง git merge main"
+    },
+    {
+      "q": "คำสั่งใดใช้สำหรับสร้าง Branch ใหม่พร้อมกับสลับไปยัง Branch นั้นทันที",
+      "choices": [
+        "git branch new_branch",
+        "git checkout -b",
+        "git pull origin",
+        "git merge new_branch"
+      ],
+      "answer": 1,
+      "explain": "ทุกครั้งที่จะทำฟีเจอร์ใหม่ ต้องแตกกิ่ง (Branch) ออกมาจาก main เสมอด้วยคำสั่ง git checkout -b"
+    },
+    {
+      "q": "ในเชิงคณิตศาสตร์ Image Filtering แตกต่างจาก Image Warping อย่างไร",
+      "choices": [
+        "Filtering เปลี่ยนแปลง Domain แต่ Warping เปลี่ยนแปลง Range",
+        "Filtering เปลี่ยนแปลง Range ของฟังก์ชันภาพ ส่วน Warping เปลี่ยนแปลง Domain",
+        "Filtering ใช้กับภาพ 3 มิติ ส่วน Warping ใช้กับภาพ 2 มิติ",
+        "ทั้งสองกระบวนการเปลี่ยน Domain ของฟังก์ชันภาพเหมือนกัน"
+      ],
+      "answer": 1,
+      "explain": "Filtering เป็นการเปลี่ยนแปลง Range ของฟังก์ชันภาพ (changes range of image function) ในขณะที่ Warping เป็นการเปลี่ยนแปลง Domain ของฟังก์ชันภาพ (changes domain of image function)"
+    },
+    {
+      "q": "โอเปอเรเตอร์ Sobel และ Prewitt จัดเป็นเทคนิคการหาขอบภาพประเภทใด",
+      "choices": [
+        "Frequency-Based Edge Detection",
+        "Gradient-Based Edge Detection",
+        "Region-Based Edge Detection",
+        "Morphology-Based Edge Detection"
+      ],
+      "answer": 1,
+      "explain": "Sobel และ Prewitt Operators นำไปประยุกต์ใช้ใน Gradient-Based Edge Detection"
+    },
+    {
+      "q": "ตัวอย่างการใช้งาน Edge Detection ในภาพถ่ายดาวเทียม (Satellite imagery) มีจุดประสงค์หลักเพื่อสิ่งใด",
+      "choices": [
+        "เพื่อกำจัดสัญญาณรบกวน (Noise removal)",
+        "เพื่อบีบอัดภาพให้มีขนาดเล็กลง",
+        "เพื่อทำ Feature extraction",
+        "เพื่อเปลี่ยนภาพให้เบลอ (Blurring)"
+      ],
+      "answer": 2,
+      "explain": "ตัวอย่างการใช้งานคือ การทำไฮไลท์ขอบ (Highlighting edges) ในภาพถ่ายดาวเทียมสำหรับ Feature extraction"
+    },
+    {
+      "q": "การจับคู่ลักษณะเด่น (Feature matching) เป็นตัวอย่างของการทำ Image Transformation ประเภทใด",
+      "choices": [
+        "Image Filtering",
+        "Image Warping",
+        "Camera Calibration",
+        "Image Segmentation"
+      ],
+      "answer": 1,
+      "explain": "Feature matching เป็นตัวอย่างของการทำ Image transformation แบบ Warping (Warping example: feature matching)"
+    },
+    {
+      "q": "ข้อใด ไม่ใช่ ตัวอย่างของแอปพลิเคชันที่ต้องอาศัยการคำนวณ Image Transformation",
+      "choices": [
+        "Object recognition",
+        "3D reconstruction",
+        "Audio synthesis",
+        "Augmented reality"
+      ],
+      "answer": 2,
+      "explain": "การคำนวณ Transformation ประยุกต์ใช้กับ Object recognition, 3D reconstruction, Augmented reality และ Image stitching"
+    },
+    {
+      "q": "กระบวนการ Image Stitching (การต่อภาพ) จัดเป็นการประยุกต์ใช้ทฤษฎีใดใน Computer Vision",
+      "choices": [
+        "Image Filtering",
+        "Camera Matrices และ 3D Reconstruction",
+        "Image Transformations",
+        "Gradient-Based Detection"
+      ],
+      "answer": 2,
+      "explain": "Image stitching เป็นหนึ่งในการคำนวณ Image transformation"
+    },
+    {
+      "q": "หน้าที่หลักของ Camera Matrices ใน Computer Vision คืออะไร",
+      "choices": [
+        "ใช้สำหรับการแปลงพิกัดจากโลก 3 มิติ ลงบนภาพ 2 มิติ",
+        "ใช้สำหรับบีบอัดไฟล์ภาพ",
+        "ใช้ลด Noise แบบ Salt-and-Pepper",
+        "ใช้สำหรับจัดกลุ่ม Pixel ที่มีสีเดียวกัน"
+      ],
+      "answer": 0,
+      "explain": "Camera matrices ใช้เป็นโมเดลคณิตศาสตร์ในการอธิบายการโปรเจกต์ภาพจาก 3D เป็น 2D"
+    },
+    {
+      "q": "Median Filter มีประสิทธิภาพสูงที่สุดในการจัดการกับปัญหาใด",
+      "choices": [
+        "ภาพที่มีความสว่างน้อยเกินไป",
+        "สัญญาณรบกวนแบบจุดขาวดำ (Salt-and-Pepper Noise)",
+        "ภาพที่ขาดความคมชัดที่ขอบ",
+        "การตรวจจับวัตถุเคลื่อนไหว"
+      ],
+      "answer": 1,
+      "explain": "Median Filter จะแทนที่ค่าพิกเซลด้วยค่ามัธยฐาน ซึ่งกำจัดจุดกะโดดสุ่ม (Salt/Pepper) ได้ดีโดยรักษาขอบภาพไว้"
+    },
+    {
+      "q": "ในทางคณิตศาสตร์ อนุพันธ์อันดับสอง (Second Derivative) เช่น Laplacian Filter ถูกนำมาใช้ใน CV เพื่ออะไร",
+      "choices": [
+        "Image Smoothing",
+        "Edge Detection โดยหาจุดตัดแกนศูนย์ (Zero-crossing)",
+        "Histogram Equalization",
+        "Color Space Conversion"
+      ],
+      "answer": 1,
+      "explain": "Laplacian ใช้ในการหา Edge Detection โดยจะพบจุด Zero-crossing ที่ตำแหน่งที่เป็นขอบภาพพอดี"
+    },
+    {
+      "q": "กระบวนการ Convolution แตกต่างจาก Cross-Correlation อย่างไร",
+      "choices": [
+        "Convolution ต้องทำการพลิก (Flip) Kernel ก่อนนำไปคำนวณ",
+        "Cross-Correlation ใช้สำหรับภาพสีเท่านั้น",
+        "Convolution ไม่สามารถทำ Edge Detection ได้",
+        "ไม่มีความแตกต่างกันในเชิงคณิตศาสตร์"
+      ],
+      "answer": 0,
+      "explain": "ตามหลักคณิตศาสตร์ Convolution ต้อง Flip ตัว Filter (หรือ Kernel) ก่อนทำการเลื่อนคูณ ทว่าใน Deep Learning (CNN) มักใช้ Cross-correlation และเรียกรวมว่า Convolution"
+    },
+    {
+      "q": "คำนิยามของ Iterations ในการเทรน Machine Learning คืออะไร",
+      "choices": [
+        "จำนวนรอบทั้งหมดที่โมเดลประมวลผลข้อมูลครบทุกตัวใน Dataset",
+        "จำนวน Batches ที่จำเป็นต้องใช้เพื่อให้ครบ 1 Epoch",
+        "ขนาดของกลุ่มข้อมูลที่ถูกแบ่งย่อย",
+        "ผลรวมของค่า Loss ทั้งหมดในระบบ"
+      ],
+      "answer": 1,
+      "explain": "Iterations คือจำนวนของ Batches ที่จำเป็นต้องใช้เพื่อให้ประมวลผลข้อมูลครบ 1 Epoch (Iterations is the number of batches needed to complete one epoch)"
+    },
+    {
+      "q": "หากมี Training Dataset จำนวน 55,000 รูป และตั้งค่า Batch Size ไว้ที่ 200 จะต้องใช้กี่ Iterations จึงจะครบ 1 Epoch",
+      "choices": [
+        "27.5 iterations",
+        "200 iterations",
+        "275 iterations",
+        "55,000 iterations"
+      ],
+      "answer": 2,
+      "explain": "การคำนวณหา Iterations = จำนวน Dataset / Batch Size ดังนั้น 55,000 / 200 = 275 iterations จะทำให้ train ครบ 1 epoch"
+    },
+    {
+      "q": "Logistic Regression เป็นเทคนิคสำหรับทำนายข้อมูลรูปแบบใด",
+      "choices": [
+        "ทำนายค่าตัวเลขต่อเนื่อง (Numeric value)",
+        "ทำนายค่าความน่าจะเป็น (Probability)",
+        "สร้างรูปภาพใหม่จาก Noise",
+        "ทำนายแนวโน้มราคาหุ้น"
+      ],
+      "answer": 1,
+      "explain": "Logistic regression ทำนายค่าความน่าจะเป็น (predicts a probability)"
+    },
+    {
+      "q": "ข้อใดเป็นตัวอย่างของปัญหาการจัดหมวดหมู่ (Classification) ใน Machine Learning",
+      "choices": [
+        "การทำนายราคาของบ้าน",
+        "การทำนายอายุของบุคคล",
+        "การประเมินความเสี่ยงของผู้ป่วย (High risk / Low risk)",
+        "การพยากรณ์ค่า GDP ในปีหน้า"
+      ],
+      "answer": 2,
+      "explain": "การพยากรณ์ความเสี่ยงผู้ป่วย (Predicting patient risk: high risk/low risk) เป็นปัญหา Classification"
+    },
+    {
+      "q": "ปัญหาข้อใดที่จัดอยู่ในกลุ่ม Regression",
+      "choices": [
+        "การตรวจจับอีเมลสแปม (Spam detection)",
+        "การวิเคราะห์ความรู้สึกจากข้อความ (Text sentiment analysis)",
+        "การจำแนกเนื้องอกว่าเป็นมะเร็งหรือไม่ (Tumor classification)",
+        "การทำนายราคาหุ้นในวันพรุ่งนี้ (Predicting stock price)"
+      ],
+      "answer": 3,
+      "explain": "การทำนายราคาหุ้นสำหรับวันพรุ่งนี้ (Predicting the stock price for tomorrow) เป็นการทำนายค่าตัวเลขต่อเนื่อง จึงจัดเป็น Regression"
+    },
+    {
+      "q": "จุดมุ่งหมายหลักของโมเดล Classification คืออะไร",
+      "choices": [
+        "จัดกลุ่มข้อมูลที่ไม่มีป้ายกำกับเข้าด้วยกันด้วยตนเอง",
+        "ทำนายว่าข้อมูลชิ้นใหม่ควรอยู่ในหมวดหมู่ใด โดยเรียนรู้จากตัวอย่างที่มีป้ายกำกับ (Labeled examples)",
+        "ทำนายค่าเป้าหมายที่เป็นค่าตัวเลขต่อเนื่อง (Continuous value target)",
+        "ค้นหากฎความสัมพันธ์ที่ซ่อนอยู่"
+      ],
+      "answer": 1,
+      "explain": "Classification ใช้ทำนายว่า item หนึ่งๆ อยู่ใน Category ใด โดยอิงจากตัวอย่างที่มีป้ายกำกับมาแล้ว (labeled examples) เพื่อใช้แยกแยะข้อมูลใหม่ (classify a new data)"
+    },
+    {
+      "q": "ในบริบทของ Machine Learning, Linear Regression ให้ผลลัพธ์การทำนายออกมาเป็นแบบใด",
+      "choices": [
+        "ความน่าจะเป็น (Probability)",
+        "หมวดหมู่ (Category)",
+        "ค่าตัวเลข (Numeric value)",
+        "ชุดกฎ (Rules)"
+      ],
+      "answer": 2,
+      "explain": "Linear regression ทำนายค่าตัวเลข (predicts a numeric value)"
+    },
+    {
+      "q": "ข้อใดเป็นตัวอย่างของปัญหา Regression ที่ระบุในเอกสาร",
+      "choices": [
+        "Credit card application (good/bad credit)",
+        "Credit card fraud detection (fraud/not fraud)",
+        "Predicting age of a person",
+        "Classifying a tumor as malignant or not"
+      ],
+      "answer": 2,
+      "explain": "การทำนายอายุของบุคคล (Predicting age of a person) เป็นปัญหาแบบ Regression"
+    },
+    {
+      "q": "ข้อใดเป็นตัวอย่างของปัญหา Classification ที่ระบุในเอกสาร",
+      "choices": [
+        "Predicting next year GDP",
+        "Text sentiment analysis (happy, not happy)",
+        "Predicting the price of the house",
+        "Image noise filtering"
+      ],
+      "answer": 1,
+      "explain": "การวิเคราะห์ความรู้สึกของข้อความ เช่น happy หรือ not happy (Text sentiment analysis) จัดเป็นปัญหา Classification"
+    },
+    {
+      "q": "หากโมเดลมี Bias สูงเกินไป และมีความสามารถในการเรียนรู้ Training data ได้ต่ำมาก จะเกิดสภาวะใด",
+      "choices": [
+        "Overfitting",
+        "Underfitting",
+        "Vanishing Gradient",
+        "Divergence"
+      ],
+      "answer": 1,
+      "explain": "Underfitting เกิดจากการที่โมเดลเรียบง่ายเกินไป (High Bias) ทำให้ไม่สามารถเรียนรู้รูปแบบที่ซับซ้อนในข้อมูล Training ได้"
+    },
+    {
+      "q": "การใช้เทคนิค K-Fold Cross Validation มีประโยชน์อย่างไร",
+      "choices": [
+        "ลดขนาดของ Dataset ลง K เท่า",
+        "หมุนเวียนแบ่งข้อมูลเป็น Fold ไว้เทรนและเทสต์ เพื่อประเมินประสิทธิภาพโมเดลให้ครอบคลุมและลด Overfitting",
+        "แปลงข้อมูลชนิดตัวอักษรให้เป็นตัวเลข",
+        "เพิ่มความลึกของ Network K ชั้น"
+      ],
+      "answer": 1,
+      "explain": "K-Fold ช่วยให้ข้อมูลทุกส่วนได้เป็นทั้ง Training และ Validation ทำให้ผลการประเมินโมเดลน่าเชื่อถือยิ่งขึ้น"
+    },
+    {
+      "q": "Hyperparameter 'Learning Rate' มีผลต่อ Optimizer อย่างไร",
+      "choices": [
+        "ควบคุมขนาดของสเต็ป (Step size) ในการอัปเดต Weight แต่ละครั้ง",
+        "ควบคุมจำนวน Layer ทั้งหมดในโมเดล",
+        "กำหนดรูปแบบ Activation function แบบอัตโนมัติ",
+        "เพิ่มอัตราการดรอปเอาต์เซลล์ประสาท"
+      ],
+      "answer": 0,
+      "explain": "Learning Rate คือตัวคูณที่บอกว่าในการ Gradient Descent จะก้าวปรับ Weight ทีละมากหรือน้อย"
+    },
+    {
+      "q": "Activation Function แบบใดที่มักนำมาใช้ในชั้น Output ของปัญหา Binary Classification",
+      "choices": [
+        "ReLU",
+        "Softmax",
+        "Sigmoid",
+        "Tanh"
+      ],
+      "answer": 2,
+      "explain": "Sigmoid จะบีบค่าให้อยู่ในช่วง 0 ถึง 1 ซึ่งสามารถตีความหมายเป็น Probability ของสองคลาสได้"
+    },
+    {
+      "q": "ในสถาปัตยกรรม CNN, การทำ 'Zero-padding' มีประโยชน์หลักเพื่ออะไร",
+      "choices": [
+        "เพื่อบีบอัดขนาดของภาพให้เล็กลงทันที",
+        "เพื่อลบข้อมูลที่ขอบภาพทิ้งไป",
+        "เพื่อรักษามิติความกว้างและความสูง (Spatial size) ของ Feature Map หลังทำ Convolution ไม่ให้เล็กลง",
+        "เพื่อแปลงภาพขาวดำให้เป็นภาพสี"
+      ],
+      "answer": 2,
+      "explain": "การเติมศูนย์ที่ขอบภาพ (Padding) ช่วยให้ Kernel ทาบที่ขอบได้เต็มที่ และรักษามิติภาพให้เท่ากับ Input"
+    },
+    {
+      "q": "คุณลักษณะใดที่ทำให้ CNN โดดเด่นกว่า Feed-forward ธรรมดาเมื่อประมวลผลรูปภาพ",
+      "choices": [
+        "CNN ไม่ต้องใช้ Activation Function",
+        "CNN มีการแบ่งปันน้ำหนัก (Weight Sharing) ใน Kernel ทำให้สกัด Feature ทางพื้นที่ได้ดีและพารามิเตอร์น้อยกว่า",
+        "CNN ประมวลผลเป็นสมการเชิงเส้น 100%",
+        "CNN รับ Input เป็นเวกเตอร์ 1 มิติเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "Weight sharing ของ Kernel ทำให้ CNN หาคุณลักษณะเดียวกันไม่ว่าจะอยู่มุมไหนของภาพ (Translation invariance) และลดจำนวน Weight"
+    },
+    {
+      "q": "ข้อใดอธิบายการทำงานของ Max Pooling Layer ได้ถูกต้องที่สุด",
+      "choices": [
+        "สุ่มเลือกค่าที่น้อยที่สุดมาเป็นตัวแทน",
+        "หาค่าเฉลี่ยของพิกเซลในกรอบหน้าต่าง",
+        "เลือกพิกเซลที่มีค่าสูงที่สุด (เด่นชัดที่สุด) ในกรอบหน้าต่างนั้นมาเป็นตัวแทน",
+        "เพิ่มค่า 0 รอบกรอบหน้าต่าง"
+      ],
+      "answer": 2,
+      "explain": "Max Pooling ทำหน้าที่ดึงเฉพาะฟีเจอร์ที่แข็งแรง/ชัดเจนที่สุด (ค่ามากสุด) เพื่อลดขนาดข้อมูล"
+    },
+    {
+      "q": "สถาปัตยกรรม CNN ชื่อดังใด ที่ใช้แนวคิด Residual Network (Skip Connection) แก้ปัญหา Vanishing Gradient ในเครือข่ายที่ลึกมากๆ",
+      "choices": [
+        "AlexNet",
+        "VGG-16",
+        "ResNet",
+        "LeNet-5"
+      ],
+      "answer": 2,
+      "explain": "ResNet (Residual Network) สร้างทางลัด (Skip Connection) ให้ Gradient ไหลผ่านเลเยอร์ที่ลึกมากๆ ได้ง่ายขึ้น"
+    },
+    {
+      "q": "การออกแบบเลเยอร์สุดท้าย (Output Layer) ของ CNN สำหรับแยกแยะภาพ 10 หมวดหมู่ (Multi-class) ควรใช้ Activation Function ใด",
+      "choices": [
+        "Sigmoid",
+        "Softmax",
+        "ReLU",
+        "Linear"
+      ],
+      "answer": 1,
+      "explain": "Softmax จะแปลง Output ให้อยู่ในรูปของการแจกแจงความน่าจะเป็นที่ผลรวมทุกคลาสเท่ากับ 1 เหมาะสำหรับ Multi-class"
+    },
+    {
+      "q": "ถ้า Input มีขนาด 32x32x3 ผ่าน Convolution ที่มี 10 Filters ขนาด 3x3 ไม่มี Padding ผลลัพธ์ Feature Map จะมี Depth เท่าใด",
+      "choices": [
+        "3",
+        "9",
+        "10",
+        "30"
+      ],
+      "answer": 2,
+      "explain": "จำนวนช่องของ Output (Depth) จะเท่ากับจำนวน Filters ที่ใช้เสมอ ในที่นี้คือ 10"
+    },
+    {
+      "q": "ข้อใดคือ Data Augmentation สำหรับภาพวิดีโอหรือรูปภาพ",
+      "choices": [
+        "สุ่มหมุน ซูม กลับซ้ายขวา (Flipping) เพื่อเพิ่มความหลากหลายของ Training set",
+        "การปรับ Learning rate ระหว่างเทรนอัตโนมัติ",
+        "การปิด Neuron ทิ้งครึ่งหนึ่ง",
+        "การรวมหลายโมเดลเข้าด้วยกัน (Ensemble)"
+      ],
+      "answer": 0,
+      "explain": "Data Augmentation คือการบิดเบือนรูปภาพต้นฉบับเล็กน้อยเพื่อจำลองให้เกิดข้อมูลสอนจำนวนมากขึ้น"
+    },
+    {
+      "q": "ปัญหา Vanishing Gradient ในการเทรน RNN ขั้นพื้นฐาน มักเกิดจากสาเหตุใด",
+      "choices": [
+        "การคูณกันของ Gradient ย้อนกลับผ่านเวลาที่ยาวนาน ทำให้ค่าลดลงจนเข้าใกล้ศูนย์ โมเดลจึงลืมอดีต",
+        "Learning rate ตั้งไว้สูงเกินไป",
+        "ข้อมูลมีขนาดเล็กเกินไป",
+        "การใช้ ReLU Activation function มากเกินไป"
+      ],
+      "answer": 0,
+      "explain": "เมื่อ Sequence ยาว การ Backpropagate Through Time (BPTT) จะเกิดการคูณด้วยค่าน้อยๆ ซ้ำๆ จน Gradient จางหายไป"
+    },
+    {
+      "q": "ส่วนใดใน LSTM ที่ทำหน้าที่ตัดสินใจว่าข้อมูลในเซลล์ความจำ (Cell State) ส่วนไหนควร 'ทิ้ง' หรือ 'ลืม'",
+      "choices": [
+        "Input Gate",
+        "Output Gate",
+        "Forget Gate",
+        "Update Gate"
+      ],
+      "answer": 2,
+      "explain": "Forget Gate ใช้อินพุตปัจจุบันและสถานะก่อนหน้าเข้า Sigmoid เพื่อคำนวณสัดส่วนการทิ้งความจำเก่า"
+    },
+    {
+      "q": "Generative Adversarial Network (GAN) เป็นโมเดลประเภท Unsupervised Learning หรือไม่",
+      "choices": [
+        "ใช่ GAN จัดเป็น Unsupervised Learning แบบหนึ่ง",
+        "ไม่ใช่ GAN เป็น Supervised Learning",
+        "ไม่ใช่ GAN เป็น Reinforcement Learning",
+        "ใช่ แต่ใช้ได้เฉพาะกับข้อความเท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "GAN ถือเป็นการเรียนรู้แบบ Unsupervised (บ้างเรียกว่า Self-supervised) เนื่องจากเรียนรู้การแจกแจงโดยไม่ต้องมี Label"
+    },
+    {
+      "q": "ในกระบวนการเทรน GAN, Loss ของ Discriminator ควรจะมีแนวโน้มเป็นอย่างไรในทฤษฎีที่สมบูรณ์",
+      "choices": [
+        "ลดลงเป็นศูนย์",
+        "พุ่งเข้าหาอนันต์",
+        "สมดุลจนไม่สามารถแยกของจริงกับปลอมได้ (ความแม่นยำ 50%)",
+        "ผันผวนอย่างรุนแรงตลอดเวลา"
+      ],
+      "answer": 2,
+      "explain": "จุดสมดุลของ Nash Equilibrium ใน GAN คือ Generator เก่งมากจน Discriminator เดาได้แค่ 50/50 เหมือนการโยนเหรียญ"
+    },
+    {
+      "q": "ข้อจำกัดหลักของสถาปัตยกรรม GAN ที่มักพบเจอคือปัญหาใด",
+      "choices": [
+        "ไม่สามารถสร้างรูปภาพสีได้",
+        "ปัญหา Mode Collapse ที่ Generator สร้างภาพซ้ำๆ แบบเดิมเพียงไม่กี่รูปแบบ",
+        "Generator ประมวลผลช้ากว่ามนุษย์ร้อยเท่า",
+        "ต้องใช้ Reinforcement Learning มาช่วยกำกับเสมอ"
+      ],
+      "answer": 1,
+      "explain": "Mode Collapse คือภาวะที่ Generator ค้นพบช่องโหว่ที่หลอก Discriminator ได้ง่าย จึงสร้างแต่ภาพแบบนั้นซ้ำๆ ขาดความหลากหลาย"
+    },
+    {
+      "q": "สถาปัตยกรรมใดในกลุ่ม RNN ที่มีลักษณะโครงสร้างเรียบง่ายกว่า LSTM แต่ยังคงกลไก Gate เพื่อแก้ปัญหาความจำ",
+      "choices": [
+        "GAN",
+        "GRU (Gated Recurrent Unit)",
+        "Transformer",
+        "CNN"
+      ],
+      "answer": 1,
+      "explain": "GRU เป็นเครือข่ายที่พัฒนาต่อจาก LSTM โดยรวบ Gate บางตัวเข้าด้วยกัน ทำให้เร็วกว่าแต่ประสิทธิภาพใกล้เคียงกัน"
+    },
+    {
+      "q": "กลไก Self-Attention ใน Transformer Model มีหน้าที่สำคัญอย่างไรเมื่อประมวลผลข้อความ",
+      "choices": [
+        "ลบคำที่ไม่สำคัญทิ้งอัตโนมัติ",
+        "แปลงคำศัพท์เป็นภาพ",
+        "คำนวณหาความสัมพันธ์และน้ำหนักของคำทุกคำในประโยคที่มีต่อกัน เพื่อหาบริบท",
+        "แปลภาษาแบบคำต่อคำทันที"
+      ],
+      "answer": 2,
+      "explain": "Self-attention ช่วยให้โมเดลทราบว่าคำใดเชื่อมโยงหรืออ้างอิงถึงคำใดในประโยคเดียวกันแม้จะอยู่ห่างกัน"
+    },
+    {
+      "q": "หากมีตัวเลือก Action 2 ทาง: A ให้โอกาส 70% ได้แต้ม 4 และ 30% ได้แต้ม -5 ส่วน B ให้ผล 100% ได้แต้ม 4 Q-value ของ A คือเท่าใด",
+      "choices": [
+        "1.3",
+        "4.0",
+        "5.5",
+        "6.5"
+      ],
+      "answer": 0,
+      "explain": "คำนวณ Q(s,A) = 0.7(4) + 0.3(-5) = 2.8 - 1.5 = 1.3"
+    },
+    {
+      "q": "จากข้อที่แล้ว Q-value ของ Action B คือ 4.0 Agent ควรเลือก Action ใด เพราะเหตุใด",
+      "choices": [
+        "เลือก Action A เพราะมีโอกาสได้คะแนนสูงกว่า",
+        "เลือก Action B เพราะ Q(s,B) = 4 ซึ่งมากกว่า Q(s,A) = 1.3",
+        "เลือกแบบสุ่ม เพราะเป็นพื้นฐานของ Reinforcement Learning",
+        "ไม่เลือกทั้งคู่เพื่อหลีกเลี่ยงการติดลบ"
+      ],
+      "answer": 1,
+      "explain": "ถ้าเลือกตาม Q-value จะต้องเลือกค่าที่มากกว่า ซึ่งในที่นี้คือ Action B (ผลลัพธ์คือ 4 > 1.3) แม้ในชีทตัวอย่างจะเปรียบเทียบกับอีกสถานการณ์ก็ตาม"
+    },
+    {
+      "q": "ในสมการ Bellman Equation: $Q(s_t,a_t) = r_t + \\gamma \\max_a Q(s_{t+1},a)$ ตัวแปร $r_t$ หมายความว่าอย่างไร",
+      "choices": [
+        "สุ่มเลือก Action ถัดไป (random action)",
+        "รางวัลทันทีที่ได้รับจากการทำ Action ณ เวลา t (reward ทันที)",
+        "สถานะถัดไป (next state)",
+        "ตัวลดน้ำหนักอนาคต (discount factor)"
+      ],
+      "answer": 1,
+      "explain": "ในสมการ Bellman ตัวแปร $r_t$ หมายถึง reward ทันทีที่ได้รับ"
+    },
+    {
+      "q": "จากสมการ Bellman Equation ตัวแปร $\\gamma$ (Gamma) มีบทบาทอย่างไรในระบบการเรียนรู้",
+      "choices": [
+        "เพิ่มรางวัลทันทีให้มากขึ้น",
+        "ลดค่าอิทธิพลของรางวัลในอนาคต (ลดค่าอนาคต)",
+        "เป็นตัวแทนของสถานะถัดไป",
+        "เลือก Action ถัดไปที่ดีที่สุด"
+      ],
+      "answer": 1,
+      "explain": "$\\gamma$ (Gamma) มีหน้าที่ในการลดค่าอนาคต (Discount factor) ทำให้รางวัลที่อยู่ไกลออกไปมีน้ำหนักลดลง"
+    },
+    {
+      "q": "จากสมการ Bellman Equation ตัวแปร $s_{t+1}$ หมายความว่าอย่างไร",
+      "choices": [
+        "สถานะก่อนหน้า",
+        "รางวัลทันที",
+        "สถานะถัดไป (state ถัดไป)",
+        "การกระทำที่ดีที่สุด"
+      ],
+      "answer": 2,
+      "explain": "ในสมการ $s_{t+1}$ ย่อมาจาก state ถัดไป"
+    },
+    {
+      "q": "ส่วนของ $\\max_a Q$ ในสมการ Bellman Equation มีจุดประสงค์เพื่ออะไร",
+      "choices": [
+        "สุ่มเลือกรางวัลสูงสุด",
+        "เลือก action ถัดไปที่ดีที่สุด (maximum expected return)",
+        "ทำโทษเมื่อ Agent เลือกทางผิด",
+        "หาค่าเฉลี่ยของการกระทำทั้งหมด"
+      ],
+      "answer": 1,
+      "explain": "$\\max_a Q$ คือฟังก์ชันที่ใช้เพื่อเลือก action ถัดไปที่ดีที่สุด"
+    },
+    {
+      "q": "แนวคิดสำคัญของ Bellman equation ต่อการจัดการเงื่อนเวลาคืออะไร",
+      "choices": [
+        "ผสานอดีตและอนาคตเข้าด้วยกันจนไม่สามารถแยกได้",
+        "แยก \"ตอนนี้\" (ตอนที่ประเมิน) ออกจาก \"อนาคต\" อย่างชัดเจน",
+        "สนใจเฉพาะอดีตที่ผ่านพ้นไปแล้ว",
+        "ให้ค่าของอนาคตมีน้ำหนักเท่ากับอดีตเสมอ"
+      ],
+      "answer": 1,
+      "explain": "สมการ Bellman equation ถูกคิดค้นมาเพื่อแยก \"ตอนนี้\" ออกจาก \"อนาคต\" ทำให้ Agent คิดทีละก้าวได้"
+    },
+    {
+      "q": "อัลกอริทึม Q-learning มีวิธีการปรับค่า Q-value อย่างไร",
+      "choices": [
+        "คาดเดาแบบสุ่มโดยไม่ต้องพึ่งพาสภาพแวดล้อม",
+        "ปรับค่า Q จากประสบการณ์ซ้ำ ๆ ผ่านการลองผิดลองถูก",
+        "ให้มนุษย์ป้อนค่าที่ถูกต้องเข้าไปในทุกสถานะ",
+        "คำนวณค่า Loss ผ่านระบบ Supervised Learning ด้วย Dataset"
+      ],
+      "answer": 1,
+      "explain": "Q-learning เหมาะกับการเรียนรู้แบบปรับค่า Q จากประสบการณ์ซ้ำ ๆ (Trial and Error)"
+    },
+    {
+      "q": "Deep Q-Network (DQN) แตกต่างจาก Q-learning แบบดั้งเดิมอย่างไร",
+      "choices": [
+        "DQN ไม่ใช้สมการ Bellman เลย",
+        "DQN ไม่จำเป็นต้องมี Environment",
+        "DQN ใช้ Neural Network มาช่วยในการประมาณค่า Q(s,a) แทนการใช้ตารางข้อมูล (Q-Table)",
+        "DQN ประมวลผลได้ช้ากว่ามากและไม่มีประสิทธิภาพ"
+      ],
+      "answer": 2,
+      "explain": "ใน Deep Q-Network (DQN) จะใช้ neural network ประมาณค่า Q(s,a) ทำให้รับมือกับ State ที่ซับซ้อนมากๆ ได้ เช่น ภาพจากหน้าจอเกม"
+    },
+    {
+      "q": "Exploration และ Exploitation ใน Reinforcement Learning คือความสมดุลระหว่างสิ่งใด",
+      "choices": [
+        "ความเร็วและหน่วยความจำ",
+        "การสุ่มลองทางเลือกใหม่ๆ (Explore) และการทำสิ่งเดิมที่รู้ว่าได้ผลตอบแทนดีอยู่แล้ว (Exploit)",
+        "การโจมตีและการป้องกัน",
+        "การเพิ่ม Layer และการลด Loss"
+      ],
+      "answer": 1,
+      "explain": "เป็น Trade-off สำคัญ ถ้า Exploit อย่างเดียวอาจติดกับดัก Local Optima ถ้า Explore อย่างเดียวอาจไม่มุ่งเป้าหมาย"
+    },
+    {
+      "q": "ใน RL ค่า State Value Function: $V(s)$ แตกต่างจาก Action Value Function: $Q(s, a)$ อย่างไร",
+      "choices": [
+        "$V(s)$ ประเมินค่าของสถานะนั้นๆ ส่วน $Q(s, a)$ ประเมินค่าของการทำ Action นั้นในสถานะนั้น",
+        "ไม่มีความแตกต่างกัน",
+        "$V(s)$ ใช้คำนวณในอดีต $Q(s, a)$ ใช้คำนวณอนาคต",
+        "$V(s)$ พิจารณาเฉพาะ Reward ทันที"
+      ],
+      "answer": 0,
+      "explain": "$V$ สนใจแค่ความได้เปรียบของ State ส่วน $Q$ สนใจว่าถ้าอยู่ State นี้แล้วทำ Action นี้ จะได้ผลตอบแทนเท่าไหร่"
+    },
+    {
+      "q": "คำว่า 'Agent' ใน Reinforcement Learning คือใครหรือสิ่งใด",
+      "choices": [
+        "กฎที่กำหนดว่าอะไรถูกหรือผิด",
+        "สภาพแวดล้อมที่โมเดลต้องทำงานอยู่",
+        "ตัวแทนหรือสมองกลที่ทำหน้าที่ตัดสินใจและเรียนรู้เพื่อปฏิสัมพันธ์กับโลกจำลอง",
+        "เครื่องเซิร์ฟเวอร์สำหรับเทรนข้อมูล"
+      ],
+      "answer": 2,
+      "explain": "Agent คือโปรแกรม/โมเดล ที่คอยรับรู้ (Observe State), ตัดสินใจกระทำ (Action) และเรียนรู้จากรางวัล (Reward)"
+    },
+    {
+      "q": "กลยุทธ์ Epsilon-Greedy (ε-greedy) ใน Q-Learning มีไว้เพื่อแก้ไขปัญหาเรื่องใด",
+      "choices": [
+        "การบาลานซ์ระหว่าง Exploration และ Exploitation โดยการสุ่มเลือกด้วยความน่าจะเป็น Epsilon",
+        "การแก้ปัญหา Vanishing Gradient",
+        "การทำ Feature Extraction ในภาพ",
+        "การป้องกัน Overfitting"
+      ],
+      "answer": 0,
+      "explain": "Epsilon-Greedy บังคับให้ Agent มีโอกาสเล็กน้อย (ε) ที่จะแหกคอกสุ่มทำสิ่งใหม่ๆ เพื่อค้นหาเส้นทางที่ดีกว่า"
+    }
+  ]
+}

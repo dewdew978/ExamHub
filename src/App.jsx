@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import Home from './components/Home';
 import Exam from './components/Exam';
+import Calculator from './components/Calculator';
+import Scratchpad from './components/Scratchpad';
 import { BookOpen, Star, Sun, Moon } from 'lucide-react';
 import './index.css';
 import indexData from './data/index.json';
@@ -96,6 +98,8 @@ function App() {
           />
         )}
       </main>
+      <Calculator />
+      <Scratchpad />
     </div>
   );
 }

@@ -1,0 +1,671 @@
+{
+  "id": "ds_ml_60q",
+  "category": "Data Science & Machine Learning",
+  "name": "Applied Machine Learning Exam (60 Questions)",
+  "icon": "🤖",
+  "color": "#0ea5e9",
+  "iconBg": "rgba(14,165,233,0.15)",
+  "desc": "Supervised · Unsupervised · Reinforcement Learning · Clustering · Model Evaluation · Ensemble Methods",
+  "questions": [
+    {
+      "q": "ข้อใดอธิบายความสัมพันธ์ระหว่าง Artificial Intelligence (AI), Machine Learning (ML) และ Deep Learning (DL) ได้ถูกต้องที่สุด",
+      "choices": [
+        "ML คือเซตใหญ่สุด โดยมี AI เป็นส่วนหนึ่งของ ML และ DL เป็นเทคนิคอิสระ",
+        "AI คือแนวคิดกว้างสุด โดยมี ML เป็นส่วนหนึ่งของ AI และ DL เป็นส่วนหนึ่งของ ML",
+        "DL คือเทคนิคหลัก โดยมี ML และ AI เป็นส่วนย่อยของ DL",
+        "ทั้ง AI, ML และ DL คือสิ่งเดียวกัน สามารถใช้แทนกันได้ทุกกรณี"
+      ],
+      "answer": 1,
+      "explain": "AI เป็นขอบเขตกว้างที่สุดที่ครอบคลุมการทำให้เครื่องจักรมีความฉลาด, ML เป็นสาขาย่อยของ AI ที่เรียนรู้จากข้อมูลได้เอง, และ DL เป็นสาขาย่อยของ ML ที่ใช้โครงข่ายประสาทเทียมหลายชั้น"
+    },
+    {
+      "q": "คุณลักษณะสำคัญที่สุดของ Machine Learning ที่แตกต่างจากการเขียนโปรแกรมแบบดั้งเดิม (Traditional Programming) คือข้อใด",
+      "choices": [
+        "คอมพิวเตอร์ประมวลผลได้เร็วขึ้นโดยใช้ฮาร์ดแวร์ขนาดใหญ่",
+        "ระบบสามารถเรียนรู้และปรับปรุงประสิทธิภาพจากข้อมูลได้เองโดยไม่ต้องเขียนกฎสั่งงานไว้ทุกขั้นตอน",
+        "ต้องใช้มนุษย์คอยป้อนคำสั่งเงื่อนไข If-Else ให้ครบถ้วนเสมอ",
+        "รองรับการทำงานเฉพาะกับข้อมูลที่เป็นไฟล์รูปภาพเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "Machine Learning มุ่งเน้นการสร้างโมเดลที่เรียนรู้รูปแบบจากข้อมูลได้เอง โดยไม่ต้องให้โปรแกรมเมอร์เขียนกฎเงื่อนไขระบุไว้ล่วงหน้าทุกกรณี"
+    },
+    {
+      "q": "Data Mining (การทำเหมืองข้อมูล) แตกต่างจาก Data Analytics ทั่วไปอย่างไรตามสไลด์บทเรียน",
+      "choices": [
+        "Data Mining เน้นการสกัดความสัมพันธ์ แนวทาง และโครงสร้างที่ซ่อนอยู่ในข้อมูลขนาดใหญ่",
+        "Data Mining ใช้เฉพาะกับการคำนวณสถิติขั้นพื้นฐาน เช่น การหาค่าเฉลี่ย",
+        "Data Mining ไม่ต้องใช้คอมพิวเตอร์ในการประมวลผล",
+        "Data Mining ใช้เฉพาะการสร้างกราฟแสดงผลลัพธ์ย้อนหลังเท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "Data Mining คือกระบวนการวิเคราะห์ชุดข้อมูลขนาดใหญ่เพื่อค้นหาความสัมพันธ์ ความลับ หรือแพตเทิร์นที่ซ่อนอยู่เพื่อนำไปใช้คาดการณ์หรือจัดหมวดหมู่"
+    },
+    {
+      "q": "ข้อใด **ไม่ใช่** ประเภทหลักของการเรียนรู้ใน Machine Learning (Types of ML)",
+      "choices": [
+        "Supervised Learning",
+        "Unsupervised Learning",
+        "Reinforcement Learning",
+        "Heuristic Rule Programming"
+      ],
+      "answer": 3,
+      "explain": "ประเภทหลักของ ML มี 3 ชนิด คือ Supervised Learning, Unsupervised Learning และ Reinforcement Learning ส่วน Heuristic Rule คือการเขียนกฎเกณฑ์ควบคุมด้วยมนุษย์"
+    },
+    {
+      "q": "โมเดลที่ฝึกสอนด้วยชุดข้อมูลที่มีการกำกับคำตอบล่วงหน้า (Labeled Data / Target Variable) จัดอยู่ในประเภทใด",
+      "choices": [
+        "Supervised Learning",
+        "Unsupervised Learning",
+        "Reinforcement Learning",
+        "Self-Directed Learning"
+      ],
+      "answer": 0,
+      "explain": "Supervised Learning เป็นการเรียนรู้แบบมีผู้สอน ซึ่งชุดข้อมูลจะมีทั้ง Input (Features) และ Desired Output (Labels) เพื่อให้โมเดลฝึกทำนายคำตอบ"
+    },
+    {
+      "q": "การแบ่งกลุ่มลูกค้าตามพฤติกรรมโดยที่ไม่มีการกำหนดประเภทคลาสล่วงหน้า (No Prior Class Label) เป็นโจทย์ประเภทใด",
+      "choices": [
+        "Classification",
+        "Regression",
+        "Unsupervised Learning (Clustering)",
+        "Reinforcement Learning"
+      ],
+      "answer": 2,
+      "explain": "การจัดกลุ่มข้อมูลที่ไม่มีคำตอบเฉลี่ยหรือคำตอบกำกับล่วงหน้า จัดเป็น Unsupervised Learning โดยเฉพาะการทำ Cluster Analysis"
+    },
+    {
+      "q": "อัลกอริทึมเรียนรู้จากการลองผิดลองถูกผ่านการได้รับรางวัล (Reward) และบทลงโทษ (Penalty) ในสิ่งแวดล้อม คืออะไร",
+      "choices": [
+        "Supervised Learning",
+        "Unsupervised Learning",
+        "Reinforcement Learning",
+        "Semi-Supervised Learning"
+      ],
+      "answer": 2,
+      "explain": "Reinforcement Learning (การเรียนรู้แบบเสริมกำลัง) อาศัย Agent ที่ปฏิสัมพันธ์กับ Environment เพื่อเลือก Action ที่ทำให้ได้สะสม Reward สูงสุด"
+    },
+    {
+      "q": "โจทย์ประเภท Supervised Learning แบ่งออกเป็น 2 กลุ่มหลักตามลักษณะของตัวแปรตาม (Target) คืออะไรบ้าง",
+      "choices": [
+        "Clustering และ Association Rule",
+        "Classification และ Regression",
+        "Dimensionality Reduction และ Filtering",
+        "Optimization และ Simulation"
+      ],
+      "answer": 1,
+      "explain": "Supervised Learning แบ่งเป็น Classification (ทายผลแบบกลุ่ม/คลาสที่ไม่ต่อเนื่อง) และ Regression (ทายผลแบบค่าตัวเลขต่อเนื่อง)"
+    },
+    {
+      "q": "งานใดต่อไปนี้จัดเป็นงานประเภท **Classification**",
+      "choices": [
+        "การทำนายราคาบ้านในอีก 5 ปีข้างหน้า",
+        "การจำแนกอีเมลว่าเป็น 'ขยะ (Spam)' หรือ 'ปกติ (Ham)'",
+        "การประมาณการยอดขายสินค้าประจำเดือน",
+        "การวัดอุณหภูมิของวันพรุ่งนี้"
+      ],
+      "answer": 1,
+      "explain": "การแยกแยะคลาสแบบไม่ต่อเนื่อง เช่น Spam/Ham หรือ ผ่าน/ไม่ผ่าน เป็นโจทย์ Classification ส่วนการทายราคา หรืออุณหภูมิเป็นตัวเลขต่อเนื่อง (Regression)"
+    },
+    {
+      "q": "งานใดต่อไปนี้จัดเป็นงานประเภท **Regression**",
+      "choices": [
+        "การระบุชนิดของผลไม้จากภาพถ่าย",
+        "การพิจารณาอนุมัติสินเชื่อเป็น 'ผ่าน' หรือ 'ไม่ผ่าน'",
+        "การคาดการณ์รายได้ของบริษัทในไตรมาสถัดไป",
+        "การตรวจวินิจฉัยโรคว่าผู้ป่วยเป็นหรือไม่เป็นมะเร็ง"
+      ],
+      "answer": 2,
+      "explain": "การคาดการณ์รายได้ซึ่งมีค่าเป็นตัวเลขจริงอย่างต่อเนื่อง (Continuous Value) คือโจทย์แบบ Regression"
+    },
+    {
+      "q": "ข้อใดเป็นอัลกอริทึมในกลุ่ม Classification ทั้งหมด",
+      "choices": [
+        "Naive Bayes, Decision Trees, Support Vector Machines (SVM), Random Forest",
+        "Linear Regression, K-Means, Q-Learning, DBSCAN",
+        "K-Means, Mean-shift, DBSCAN, Agglomerative",
+        "Neural Network Regression, Lasso Regression, Ridge Regression, PCA"
+      ],
+      "answer": 0,
+      "explain": "Naive Bayes, Decision Tree, SVM, Random Forest และ KNN (กรณีทายคลาส) เป็นอัลกอริทึมสำหรับ Classification"
+    },
+    {
+      "q": "ข้อใดเป็นอัลกอริทึมในกลุ่ม Regression ทั้งหมด",
+      "choices": [
+        "Logistic Regression, Naive Bayes, DBSCAN",
+        "Linear Regression, Lasso Regression, Ridge Regression, Decision Tree Regression",
+        "K-Means, Q-Learning, Random Forest Classification",
+        "Mean-shift, Agglomerative Clustering, Support Vector Classifier"
+      ],
+      "answer": 1,
+      "explain": "Linear, Lasso, Ridge และ Decision Tree Regression ถูกออกแบบมาสำหรับการทำนายค่าต่อเนื่อง (Regression)"
+    },
+    {
+      "q": "แม้ว่าชื่อจะมีคำว่า 'Regression' แต่อัลกอริทึม **Logistic Regression** ถูกนิยมนำมาใช้กับงานประเภทใดเป็นหลัก",
+      "choices": [
+        "Continuous Value Forecasting",
+        "Binary Classification",
+        "Unsupervised Clustering",
+        "Reinforcement Decision Making"
+      ],
+      "answer": 1,
+      "explain": "Logistic Regression เป็นโมเดลสำหรับงาน Classification (โดยเฉพาะ Binary Classification) โดยแปลงผลลัพธ์เป็นค่าความน่าจะเป็นในช่วง 0 ถึง 1"
+    },
+    {
+      "q": "ฟังก์ชันใดใน Logistic Regression ที่ใช้แปลงค่า Log(odds) หรือค่า z ให้อยู่ในช่วงความน่าจะเป็น $[0, 1]$",
+      "choices": [
+        "ReLU Function",
+        "Sigmoid Function (Logistic Function)",
+        "Step Function",
+        "Softplus Function"
+      ],
+      "answer": 1,
+      "explain": "Sigmoid Function มีสูตร $p = \\frac{1}{1 + e^{-z}}$ ทำหน้าที่แปลงค่า z Real number ใดๆ ให้กลายเป็นความน่าจะเป็นระหว่าง 0 ถึง 1"
+    },
+    {
+      "q": "หากโมเดล Logistic Regression มีสมการ $z = \\ln\\left(\\frac{p}{1-p}\\right) = -64 + 2x$ (เมื่อ $x$ คือชั่วโมงที่อ่าน) ถ้าอ่านหนังสือ 33 ชั่วโมง ค่า $z$ และความน่าจะเป็น ($p$) ในการสอบผ่านมีค่าเท่าใด",
+      "choices": [
+        "z = 0, p = 0.50",
+        "z = 2, p ≈ 0.88",
+        "z = 66, p = 1.00",
+        "z = -2, p ≈ 0.12"
+      ],
+      "answer": 1,
+      "explain": "แทนค่า: $z = -64 + (2 \\times 33) = 2$ จากนั้นคำนวณ $p = \\frac{1}{1 + e^{-2}} \\approx \\frac{1}{1 + 0.1353} \\approx 0.88$ (หรือ 88%)"
+    },
+    {
+      "q": "สมมติว่าค่า z ที่คำนวณได้จาก Logistic Regression มีค่าเท่ากับ 0 ค่าความน่าจะเป็น (p) ที่ได้จาก Sigmoid Function จะเป็นเท่าใด",
+      "choices": [
+        "0.00",
+        "0.25",
+        "0.50",
+        "1.00"
+      ],
+      "answer": 2,
+      "explain": "เมื่อ $z = 0$ แทนใน $p = \\frac{1}{1 + e^0} = \\frac{1}{1 + 1} = 0.5$ (หรือ 50%) ซึ่งเป็นจุดตัดสินใจ (Decision Boundary) ทั่วไป"
+    },
+    {
+      "q": "ความหมายของค่า Log(odds) หรือ Logit ใน Logistic Regression คือข้อใด",
+      "choices": [
+        "อัตราส่วนระหว่างค่าความแม่นยำและความผิดพลาดของโมเดล",
+        "ลอการิทึมของอัตราส่วนความน่าจะเป็นที่เหตุการณ์จะเกิดขึ้น เทียบกับความน่าจะเป็นที่ไม่เกิดขึ้น $ln\\left(\\frac{p}{1-p}\\right)$",
+        "ค่าเฉลี่ยของข้อมูลฟีเจอร์ทั้งหมดใน Data Frame",
+        "ระยะห่างแบบยูคลิดระหว่างจุดข้อมูลกับจุดศูนย์กลาง"
+      ],
+      "answer": 1,
+      "explain": "$\\log(\\text{odds})$ คือ $ln\\left(\\frac{p}{1-p}\\right)$ ซึ่งแสดงถึงความสัมพันธ์เชิงเส้นระหว่างคุณลักษณะ (Features) กับ Log-odds ของการเกิดคลาสเป้าหมาย"
+    },
+    {
+      "q": "คำนิยามของ True Positive (TP) ใน Confusion Matrix คือข้อใด",
+      "choices": [
+        "ข้อมูลจริงเป็นลบ และโมเดลทำนายว่าเป็นลบ",
+        "ข้อมูลจริงเป็นบวก แต่โมเดลทำนายว่าเป็นลบ",
+        "ข้อมูลจริงเป็นบวก และโมเดลทำนายว่าเป็นบวกถูกต้อง",
+        "ข้อมูลจริงเป็นลบ แต่โมเดลทำนายว่าเป็นบวก"
+      ],
+      "answer": 2,
+      "explain": "True Positive (TP) คือกรณีที่ข้อมูลจริงเป็นคลาสบวก (Positive) และโมเดลสามารถทำนายได้อย่างถูกต้องว่าเป็นคลาสบวก"
+    },
+    {
+      "q": "ความผิดพลาดประเภท False Positive (FP) เรียกอีกอย่างหนึ่งว่าอะไร และตรงกับสถานการณ์ใด",
+      "choices": [
+        "Type I Error (สัญญาณเตือนเท็จ: จริงเป็น 0 แต่ทายว่าเป็น 1)",
+        "Type II Error (การพลาดเป้า: จริงเป็น 1 แต่ทายว่าเป็น 0)",
+        "True Negative Ratio",
+        "Accuracy Bias"
+      ],
+      "answer": 0,
+      "explain": "False Positive (FP) หรือ Type I Error เกิดขึ้นเมื่อข้อมูลจริงเป็นลบ (0) แต่โมเดลคาดการณ์ผิดว่าเป็นบวก (1)"
+    },
+    {
+      "q": "สูตรการคำนวณค่า Precision (ความแม่นยำ) ของโมเดล Classification คือข้อใด",
+      "choices": [
+        "$\\frac{TP + TN}{TP + TN + FP + FN}$",
+        "$\\frac{TP}{TP + FP}$",
+        "$\\frac{TP}{TP + FN}$",
+        "$\\frac{TN}{TN + FP}$"
+      ],
+      "answer": 1,
+      "explain": "Precision สะท้อนว่า 'ในบรรดาข้อมูลที่โมเดลทายว่าเป็นบวกทั้งหมด มีกี่รายการที่เป็นบวกจริง' สูตรคือ $TP / (TP + FP)$"
+    },
+    {
+      "q": "สูตรการคำนวณค่า Recall (ความครอบคลุม / Sensitivity) ของโมเดล คือข้อใด",
+      "choices": [
+        "$\\frac{TP}{TP + FP}$",
+        "$\\frac{TP}{TP + FN}$",
+        "$\\frac{TN}{TN + FN}$",
+        "$\\frac{FP}{FP + FN}$"
+      ],
+      "answer": 1,
+      "explain": "Recall สะท้อนว่า 'ในบรรดาข้อมูลที่เป็นบวกจริงทั้งหมด โมเดลจับหรือตรวจพบได้กี่รายการ' สูตรคือ $TP / (TP + FN)$"
+    },
+    {
+      "q": "หากโมเดลทำนายหนี้เสียมีผลสรุป: TP=20, FP=5, FN=20, TN=155 ค่า Precision สำหรับการทำนายหนี้เสียมีค่าเท่าใด",
+      "choices": [
+        "0.50 (50%)",
+        "0.80 (80%)",
+        "0.875 (87.5%)",
+        "0.20 (20%)"
+      ],
+      "answer": 1,
+      "explain": "Precision = $TP / (TP + FP) = 20 / (20 + 5) = 20 / 25 = 0.80$ หรือ 80%"
+    },
+    {
+      "q": "จากข้อมูลเดิม (TP=20, FP=5, FN=20, TN=155) ค่า Recall สำหรับการทำนายหนี้เสียมีค่าเท่าใด",
+      "choices": [
+        "0.80 (80%)",
+        "0.50 (50%)",
+        "0.66 (66%)",
+        "0.90 (90%)"
+      ],
+      "answer": 1,
+      "explain": "Recall = $TP / (TP + FN) = 20 / (20 + 20) = 20 / 40 = 0.50$ หรือ 50%"
+    },
+    {
+      "q": "ในงานตรวจจับโรคร้ายแรง ซึ่งต้องการไม่ให้หลุดเคสที่เป็นโรคเลยแม้แต่รายเดียว (ต้องการลด FN ให้ต่ำที่สุด) ควรเลือกใช้ดรรชนีประเมินใดเป็นหลัก",
+      "choices": [
+        "Precision",
+        "Recall",
+        "R-Squared",
+        "Mean Squared Error"
+      ],
+      "answer": 1,
+      "explain": "หากต้องการป้องกันไม่ให้เกิดเคสหลุดรอด (False Negative ต่ำ) เช่น การตรวจโรค หรือสแกนโกง ต้องเน้นค่า Recall สูงๆ"
+    },
+    {
+      "q": "ดรรชนี F1-Score คำนวณมาจากค่าใด และประโยคใดอธิบายได้ถูกต้อง",
+      "choices": [
+        "ค่าเฉลี่ยเลขคณิตระหว่าง Accuracy และ Precision",
+        "ค่า Harmonic Mean (ค่าเฉลี่ยฮาร์มอนิก) ระหว่าง Precision และ Recall",
+        "ผลคูณระหว่าง True Positive และ True Negative",
+        "ผลต่างระหว่างค่าจริงและค่าทำนายจากสมการ Linear Regression"
+      ],
+      "answer": 1,
+      "explain": "F1-Score คือ $2 \\times \\frac{Precision \\times Recall}{Precision + Recall}$ ซึ่งเป็น Harmonic Mean เพื่อปรับสมดุลระหว่าง Precision และ Recall"
+    },
+    {
+      "q": "อัลกอริทึม K-Means Clustering จัดอยู่ในกลุ่มการเรียนรู้แบบใด และมีหลักการทำงานอย่างไร",
+      "choices": [
+        "Supervised Learning โดยหาเส้นแบ่งคลาสที่กว้างที่สุด",
+        "Unsupervised Learning โดยแบ่งข้อมูลเป็น k กลุ่มรอบจุด Centroid ให้สมาชิกในกลุ่มเดียวกันมีความคล้ายกันสูงสุด",
+        "Reinforcement Learning โดยปรับ Centroid จากคะแนน Reward",
+        "Semi-Supervised Learning โดยอาศัย Decision Tree ช่วยจัดกลุ่ม"
+      ],
+      "answer": 1,
+      "explain": "K-Means เป็น Unsupervised Learning แบบ Centroid-based ที่จัดข้อมูล k กลุ่ม โดยลดผลรวมความแปรปรวนระยะห่างภายในกลุ่ม (Within-cluster variance)"
+    },
+    {
+      "q": "สูตรระยะห่างพื้นฐานที่ K-Means นิยมใช้คำนวณระยะระหว่างจุดข้อมูลกับจุด Centroid คือข้อใด",
+      "choices": [
+        "Cosine Similarity",
+        "Euclidean Distance $d(p,q) = \\sqrt{\\sum_{i=1}^n (q_i - p_i)^2}$",
+        "Manhattan Distance",
+        "Jaccard Index"
+      ],
+      "answer": 1,
+      "explain": "K-Means โดยทั่วไปใช้ระยะทาง Euclidean Distance ในการวัดระยะห่างระหว่างจุดข้อมูลในแต่ละมิติกับจุด Centroid"
+    },
+    {
+      "q": "ในขั้นตอนกระบวนการของ K-Means ข้อใดเรียงลำดับขั้นตอนได้อย่างถูกต้อง",
+      "choices": [
+        "คำนวณ Centroid ใหม่ → สุ่มกำหนด k → วัดระยะห่าง → จบการทำงาน",
+        "กำหนดค่า k และสุ่ม Centroid เริ่มต้น → คำนวณระยะห่างเพื่อจัดกลุ่ม → คำนวณ Centroid ใหม่จากสมาชิก → ทำซ้ำจน Centroid ไม่เปลี่ยนแปลง",
+        "จัดกลุ่มข้อมูลตามสี → หาค่าเฉลี่ย → กำหนดค่า k → คำนวณ Euclidean Distance",
+        "แบ่งข้อมูลเป็น Train/Test → สุ่ม Centroid → วัดค่า Precision"
+      ],
+      "answer": 1,
+      "explain": "ลำดับขั้นตอน K-Means: 1. กำหนด k และสุ่ม Centroid 2. คำนวณระยะห่างเลือก Centroid ที่ใกล้สุด 3. อัปเดต Centroid ใหม่จากค่าเฉลี่ยสมาชิกกลุ่ม 4. ทำซ้ำจนหยุดเปลี่ยน"
+    },
+    {
+      "q": "จุด Centroid ใหม่ในแต่ละรอบของ K-Means คำนวณมาจากค่าใด",
+      "choices": [
+        "ค่ามัธยฐาน (Median) ของสมาชิกในกลุ่ม",
+        "ค่าเฉลี่ย (Mean/Average) ของตำแหน่งสมาชิกทั้งหมดในกลุ่มนั้น",
+        "ค่าฐานนิยม (Mode) ของสมาชิกในกลุ่ม",
+        "การสุ่มตำแหน่งใหม่จากทั้งชุดข้อมูล"
+      ],
+      "answer": 1,
+      "explain": "จุด Centroid ใหม่ได้มาจากการหาค่าเฉลี่ย (Mean) ของพิกัดข้อมูลทุกจุดที่เป็นสมาชิกใน Cluster นั้นๆ"
+    },
+    {
+      "q": "ข้อใดเป็นข้อจำกัดสำคัญของอัลกอริทึม K-Means Clustering",
+      "choices": [
+        "ไม่สามารถใช้กับข้อมูลที่มีโครงสร้างรูปทรงซับซ้อนหรือไม่เป็นทรงกลม (Non-convex / arbitrary shapes) ได้ดี",
+        "ประมวลผลได้ช้ามากเมื่อเทียบกับอัลกอริทึม Hierarchical ทั้งหมด",
+        "ต้องมีข้อมูล Target Label ที่สมบูรณ์แบบเสมอจึงจะทำงานได้",
+        "ไม่สามารถกำหนดจำนวนกลุ่ม k ให้มากกว่า 2 กลุ่มได้"
+      ],
+      "answer": 0,
+      "explain": "K-Means เหมาะกับ Cluster ที่เป็นกลุ่มก้อนทรงกลม (Convex shapes) แต่มักล้มเหลวหากกลุ่มข้อมูลมีรูปทรงคดเคี้ยวหรือมีความหนาแน่นต่างกันมาก"
+    },
+    {
+      "q": "อัลกอริทึม **DBSCAN** ย่อมาจากคำว่าอะไร",
+      "choices": [
+        "Data-Based System Clustering and Node Analysis",
+        "Density-Based Spatial Clustering of Applications with Noise",
+        "Decision-Based Supervised Classification and Network",
+        "Direct Binary Search Clustering and Neighboring"
+      ],
+      "answer": 1,
+      "explain": "DBSCAN ย่อมาจาก Density-Based Spatial Clustering of Applications with Noise"
+    },
+    {
+      "q": "พารามิเตอร์หลัก 2 ตัวที่ต้องกำหนดเมื่อใช้อัลกอริทึม DBSCAN คือข้อใด",
+      "choices": [
+        "k และ Centroid",
+        "eps (Epsilon) และ MinPts (Minimum Points)",
+        "Learning Rate และ Epochs",
+        "Max Depth และ Min Samples Split"
+      ],
+      "answer": 1,
+      "explain": "DBSCAN ต้องการพารามิเตอร์ eps (รัศมีรอบจุด) และ MinPts (จำนวนจุดขั้นต่ำในรัศมี eps เพื่อสร้างกลุ่มแน่น)"
+    },
+    {
+      "q": "จุดประเภท **Core Point** ใน DBSCAN มีคุณลักษณะอย่างไร",
+      "choices": [
+        "มีจำนวนจุดเพื่อนบ้านภายในรัศมี eps เท่ากับหรือมากกว่าค่า MinPts ที่กำหนดไว้",
+        "อยู่นอกรัศมี eps ของทุกจุดในชุดข้อมูล",
+        "อยู่ใกล้กับ Core point แต่มีเพื่อนบ้านไม่ถึงค่า MinPts",
+        "คือจุดที่เป็นศูนย์กลางการคำนวณค่าเฉลี่ยของทุกกลุ่ม"
+      ],
+      "answer": 0,
+      "explain": "Core Point คือจุดที่มีจำนวนจุดรอบๆ ภายในรัศมี eps ครบตามเงื่อนไข $\\ge MinPts$"
+    },
+    {
+      "q": "จุดประเภท **Border Point** ใน DBSCAN อธิบายได้ถูกต้องตามข้อใด",
+      "choices": [
+        "จุดที่มีเพื่อนบ้านครบตาม MinPts แต่ไม่อยู่ใกล้จุดอื่นเลย",
+        "จุดที่มีจำนวนเพื่อนบ้านไม่ถึง MinPts แต่ตั้งอยู่ในรัศมี eps ของ Core point",
+        "จุดที่ไม่ถูกนับรวมในกลุ่มใดๆ เลย และถือว่าเป็น Noise",
+        "จุดศูนย์กลางของ Cluster ใหม่"
+      ],
+      "answer": 1,
+      "explain": "Border Point มีเพื่อนบ้านไม่ถึง MinPts (จึงไม่ใช่ Core point เอง) แต่มันตกอยู่ในรัศมี eps ของ Core Point จึงถูกนับเข้าร่วมกลุ่มด้วย"
+    },
+    {
+      "q": "จุดประเภท **Noise Point** ใน DBSCAN คือจุดลักษณะใด",
+      "choices": [
+        "จุดที่เป็น Core point ของกลุ่มที่มีขนาดใหญ่ที่สุด",
+        "จุดที่ไม่ใช่ทั้ง Core point และไม่ได้อยู่ในรัศมี eps ของ Core point ใดๆ",
+        "จุดที่ใช้สำหรับเชื่อมระหว่างสองกลุ่มเข้าด้วยกัน",
+        "จุดที่มีค่าระยะทางเป็นศูนย์"
+      ],
+      "answer": 1,
+      "explain": "Noise Point (หรือ Outlier) คือจุดที่ไม่ใช่ Core point และไม่ได้รับอิทธิพลจาก Core point ใดๆ จึงถูกระบุว่าเป็นจุดรบกวน"
+    },
+    {
+      "q": "ข้อดีที่โดดเด่นของ DBSCAN เมื่อเทียบกับ K-Means คือข้อใด",
+      "choices": [
+        "ไม่ต้องกำหนดจำนวนกลุ่ม k ล่วงหน้า และสามารถค้นหากลุ่มที่มีรูปทรงอิสระรวมถึงตรวจจับ Noise ได้",
+        "คำนวณได้รวดเร็วกว่า K-Means ในชุดข้อมูลมิติสูงเสมอ",
+        "ผลลัพธ์การจับกลุ่มจะเหมือนเดิมเสมอไม่ว่าจะตั้งค่า eps เป็นเท่าใด",
+        "ใช้จำแนกประเภทข้อมูลแบบ Supervised Learning ได้แม่นยำกว่า"
+      ],
+      "answer": 0,
+      "explain": "DBSCAN ไม่ต้องระบุจำนวนกลุ่ม k ล่วงหน้า สามารถจัดกลุ่มรูปทรงซับซ้อนได้ดี และจำแนกจุดที่เป็น Noise ออกจากกลุ่มได้"
+    },
+    {
+      "q": "เกณฑ์ทั่วไปในการตั้งค่าพารามิเตอร์ MinPts ใน DBSCAN สำหรับชุดข้อมูลที่มีจำนวนมิติเท่ากับ D คืออะไร",
+      "choices": [
+        "MinPts = D / 2",
+        "MinPts ≥ D + 1",
+        "MinPts = D^2",
+        "MinPts = 100"
+      ],
+      "answer": 1,
+      "explain": "กฎทั่วไปในการตั้งค่า MinPts พื้นฐานคือ $MinPts \\ge D + 1$ เมื่อ D คือจำนวนมิติ (Dimensions) ของข้อมูล"
+    },
+    {
+      "q": "การประเมินประสิทธิภาพการจัดกลุ่มด้วย **Silhouette Coefficient** มีช่วงของค่าคะแนนอยู่ที่เท่าใด และค่าใดดีที่สุด",
+      "choices": [
+        "ช่วง 0 ถึง 100 โดยค่า 100 ดีที่สุด",
+        "ช่วง -1 ถึง +1 โดยค่าใกล้ +1 หมายถึงการจัดกลุ่มมีความหนาแน่นและแยกจากกลุ่มอื่นได้ดีเยี่ยม",
+        "ช่วง 0 ถึง 1 โดยค่า 0 ดีที่สุด",
+        "ไม่มีขอบเขตคะแนน ยิ่งค่าติดลบมากยิ่งดี"
+      ],
+      "answer": 1,
+      "explain": "Silhouette Score มีค่าอยู่ระหว่าง -1 ถึง +1 โดยค่าเข้าใกล้ +1 แสดงว่าจุดข้อมูลอยู่ถูกกลุ่มและแยกห่างจากกลุ่มอื่นชัดเจน"
+    },
+    {
+      "q": "หากค่า Silhouette Score ของจุดข้อมูลหนึ่งมีค่าใกล้เคียงกับ **0** หมายความว่าอย่างไร",
+      "choices": [
+        "จุดข้อมูลนั้นถูกจัดกลุ่มผิดพลาดอย่างแน่นอน",
+        "จุดข้อมูลนั้นตั้งอยู่บนหรือใกล้กับเส้นขอบเขตการตัดสินใจระหว่าง 2 กลุ่ม (Overlapping clusters)",
+        "จุดข้อมูลนั้นเป็น Core point ของกลุ่มที่มีความแน่นสูงสุด",
+        "จุดข้อมูลนั้นเป็น Noise point"
+      ],
+      "answer": 1,
+      "explain": "คะแนน Silhouette ใกล้ 0 หมายถึงจุดนั้นอยู่บริเวณคาบเกี่ยวหรือตรงขอบเขตระหว่างสองกลุ่ม"
+    },
+    {
+      "q": "หากค่า Silhouette Score มีค่าเป็น **ติดลบ (ติด -1)** หมายความว่าอย่างไร",
+      "choices": [
+        "จัดกลุ่มได้สมบูรณ์แบบที่สุด",
+        "จุดข้อมูลนั้นอาจถูกจัดเข้าไปอยู่ในกลุ่มผิด (Wrong cluster)",
+        "กลุ่มข้อมูลมีความหนาแน่นสูงมาก",
+        "ไม่สามารถสรุปผลอะไรได้"
+      ],
+      "answer": 1,
+      "explain": "ค่า Silhouette เป็นติดลบ (เข้าใกล้ -1) บ่งบอกว่าจุดนั้นมีความคล้ายกับกลุ่มอื่นมากกว่ากลุ่มที่มันถูกจัดให้อยู่ ซึ่งหมายถึงการจัดกลุ่มผิดพลาด"
+    },
+    {
+      "q": "ข้อจำกัดของดรรชนี Silhouette Coefficient คืออะไร",
+      "choices": [
+        "มักจะให้คะแนนสูงกับ Cluster ที่เป็นนูน/ทรงกลม (Convex clusters) มากกว่า Cluster แบบความหนาแน่นทรงอิสระอย่าง DBSCAN",
+        "คำนวณค่าได้เฉพาะข้อมูล 1 มิติเท่านั้น",
+        "ไม่รองรับชุดข้อมูลที่มีขนาดมากกว่า 100 แถว",
+        "ให้ค่าติดลบเสมอเมื่อใช้กับ K-Means"
+      ],
+      "answer": 0,
+      "explain": "Silhouette Score เหมาะกับการวัดกลุ่มทรงกลม (Convex) แต่มักให้คะแนนต่ำกับกลุ่มรูปทรงซับซ้อนตามความหนาแน่น แม้ว่า DBSCAN จะจัดกลุ่มได้ถูกต้องก็ตาม"
+    },
+    {
+      "q": "ดรรชนีประเมินผล Clustering อีกตัวหนึ่งคือ **Davies-Bouldin Index** มีหลักการประเมินอย่างไร",
+      "choices": [
+        "ยิ่งค่าสูงยิ่งดี",
+        "วัดค่าความคล้ายคลึงระหว่างกลุ่ม ยิ่งค่าต่ำยิ่งดี (แสดงว่าภายในกลุ่มเกาะกลุ่มแน่น และระหว่างกลุ่มแยกกันชัดเจน)",
+        "คำนวณเฉพาะจำนวน Noise point เท่านั้น",
+        "มีค่าคงที่เท่ากับ 1.0 เสมอ"
+      ],
+      "answer": 1,
+      "explain": "Davies-Bouldin Index วัดอัตราส่วนความกระจัดกระจายภายในกลุ่มต่อระยะห่างระหว่างกลุ่ม โดยค่าต่ำสุด (เข้าใกล้ 0) จะดีที่สุด"
+    },
+    {
+      "q": "คำว่า **Base Model** หรือ **Base Learner** ใน Ensemble Methods หมายถึงอะไร",
+      "choices": [
+        "โมเดลเดี่ยวแต่ละตัวที่นำมาร่วมกันทำนายผลในระบบ Ensemble",
+        "ข้อมูลชุดหลักก่อนนำไปทำ Data Cleaning",
+        "ซอฟต์แวร์ฮาร์ดแวร์ที่ใช้ในการเทรนโมเดล",
+        "โมเดลตัวเดียวที่ชนะการประกวดแข่งขัน"
+      ],
+      "answer": 0,
+      "explain": "Ensemble ประกอบด้วยโมเดลเดี่ยวๆ หลายตัวเรียกว่า Base Models / Base Learners ซึ่งถูกฝึกและนำผลลัพธ์มารวมกันเพื่อเพิ่มประสิทธิภาพ"
+    },
+    {
+      "q": "การจัดประเภท Ensemble Methods แบ่งตามกระบวนการฝึกสอนโมเดลย่อย ออกเป็น 2 กลุ่มหลัก คืออะไร",
+      "choices": [
+        "Linear และ Non-Linear Ensembles",
+        "Parallel Ensembles และ Sequential Ensembles",
+        "Supervised และ Unsupervised Ensembles",
+        "Static และ Dynamic Ensembles"
+      ],
+      "answer": 1,
+      "explain": "Ensemble แบ่งหลักๆ เป็น Parallel (ฝึกโมเดลย่อยขนานกันอย่างอิสระ เช่น Random Forest) และ Sequential (ฝึกแบบต่อลำดับเพื่อแก้ข้อผิดพลาดตัวก่อนหน้า เช่น Boosting)"
+    },
+    {
+      "q": "ข้อใดอธิบายคุณลักษณะของ **Homogeneous Parallel Ensembles** ได้ถูกต้องที่สุด",
+      "choices": [
+        "โมเดลย่อยทั้งหมดทำสืบต่อกันเป็นลำดับและเป็นคนละประเภทกัน",
+        "โมเดลย่อย (Base Learners) ทั้งหมดเป็นประเภทเดียวกัน และถูกฝึกขนานกันโดยเป็นอิสระต่อกัน",
+        "นำโมเดล Regression และ Clustering มารวมกัน",
+        "ใช้เฉพาะโมเดล Neural Network เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "Homogeneous หมายถึง Base Learners เป็นอัลกอริทึมชนิดเดียวกันทั้งหมด (เช่น Decision Trees ทุกตัว) และ Parallel คือฝึกขนานกันได้"
+    },
+    {
+      "q": "โมเดล **Random Forest** จัดเป็น Ensemble ประเภทใด",
+      "choices": [
+        "Sequential Heterogeneous Ensemble",
+        "Homogeneous Parallel Ensemble (Bagging)",
+        "Single Base Model",
+        "Unsupervised Clustering Ensemble"
+      ],
+      "answer": 1,
+      "explain": "Random Forest นำ Decision Tree หลายๆ ต้น (Homogeneous) มาสร้างแบบขนานกันอิสระ (Parallel/Bagging) แล้วใช้เสียงส่วนมาก (Majority Vote) ในการตัดสิน"
+    },
+    {
+      "q": "กระบวนการ **CRISP-DM** ย่อมาจากอะไร และเป็นมาตรฐานสำหรับงานประเภทใด",
+      "choices": [
+        "Cross-Industry Standard Process for Data Mining",
+        "Computer Real-time Intelligence System for Data Management",
+        "Core Research In Statistical Programming and Data Modeling",
+        "Creative Regression Integration and Signal Processing"
+      ],
+      "answer": 0,
+      "explain": "CRISP-DM ย่อมาจาก Cross-Industry Standard Process for Data Mining เป็นวงจรมาตรฐานการทำงานโครงการเหมืองข้อมูลและ Data Science"
+    },
+    {
+      "q": "ขั้นตอนแรกสุดในวงจรพัฒนา CRISP-DM คือขั้นตอนใด",
+      "choices": [
+        "Data Preparation",
+        "Business Understanding",
+        "Modeling",
+        "Deployment"
+      ],
+      "answer": 1,
+      "explain": "ขั้นตอนแรกของ CRISP-DM คือ Business Understanding (ความเข้าใจในเป้าหมายทางธุรกิจและโจทย์)"
+    },
+    {
+      "q": "ปรากฏการณ์ **Overfitting** ในการสร้างโมเดล Machine Learning หมายถึงอะไร",
+      "choices": [
+        "โมเดลทำนายข้อมูล Training Data ได้แย่ แต่ทำนาย Test Data ได้ดีมาก",
+        "โมเดลจดจำข้อมูลที่ใช้ฝึก (Training Data) ดีเกินไป แต่ไม่สามารถนำไปใช้ทำนายข้อมูลใหม่ที่ไม่เคยเห็น (Test Data) ได้ดี",
+        "โมเดลใช้เวลาฝึกน้อยเกินไปจนไม่พบความสัมพันธ์ในข้อมูล",
+        "โมเดลมีค่า Accuracy เป็น 0 ทั้งใน Train และ Test Set"
+      ],
+      "answer": 1,
+      "explain": "Overfitting คือภาวะที่โมเดลปรับตัวเข้ากับข้อมูลฝึกสอนมากเกินไป (High Variance) จนเสียความสามารถในการคาดการณ์ข้อมูลทั่วไป"
+    },
+    {
+      "q": "ปรากฏการณ์ **Underfitting** แก้ไขได้อย่างไรในเบื้องต้น",
+      "choices": [
+        "ลดจำนวนฟีเจอร์ลงให้เหลือเพียงฟีเจอร์เดียว",
+        "เพิ่มความซับซ้อนของโมเดล หรือเพิ่มฟีเจอร์ที่มีนัยสำคัญ และเทรนให้เพียงพอ",
+        "ตัดข้อมูลฝั่ง Training Set ออกให้หมด",
+        "เพิ่มค่า Regularization ให้สูงขึ้นมากๆ"
+      ],
+      "answer": 1,
+      "explain": "Underfitting (High Bias) เกิดจากโมเดลเรียบง่ายเกินไป การแก้ไขคือเพิ่มความซับซ้อนของโมเดล เพิ่มฟีเจอร์ หรือลดระดับการตัดทอน (Regularization)"
+    },
+    {
+      "q": "เทคนิค **Lasso Regression (L1 Regularization)** ช่วยป้องกัน Overfitting และมีจุดเด่นอย่างไร",
+      "choices": [
+        "สามารถปรับสัมประสิทธิ์ (Weights) ของฟีเจอร์ที่ไม่สำคัญให้กลายเป็น 0 ได้อย่างสมบูรณ์ (Feature Selection)",
+        "ไม่มีวันทำให้ค่าสัมประสิทธิ์เป็น 0",
+        "เปลี่ยนโมเดลจาก Regression กลายเป็น Clustering",
+        "ใช้เฉพาะกับข้อมูลที่เป็นไฟล์เสียงเท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "Lasso Regression เพิ่ม Penalty ค่าสัมบูรณ์ $|w|$ ทำให้โมเดลสามารถบีบให้ Weight ของฟีเจอร์ที่ไม่จำเป็นลดลงเหลือ 0 ได้ จึงช่วยคัดเลือกฟีเจอร์ไปในตัว"
+    },
+    {
+      "q": "เทคนิค **Ridge Regression (L2 Regularization)** มีลักษณะตรงกับข้อใด",
+      "choices": [
+        "บีบให้ค่าสัมประสิทธิ์ลดลงใกล้เคียง 0 แต่ไม่เท่ากับ 0 เด็ดขาด",
+        "บีบให้ค่าสัมประสิทธิ์เป็น 0 ทุกตัว",
+        "ใช้สำหรับงาน Unsupervised Learning เท่านั้น",
+        "เพิ่มค่า Error ให้กับโมเดลแบบทวีคูณ"
+      ],
+      "answer": 0,
+      "explain": "Ridge Regression เพิ่ม Penalty ด้วยผลรวมกำลังสอง $w^2$ ช่วยลดความแปรปรวนของ Weight โดยบีบให้มีขนาดเล็กเข้าใกล้ 0 แต่จะไม่ปรับจนเป็น 0 พอดีเหมือน Lasso"
+    },
+    {
+      "q": "การคำนวณระยะทาง Euclidean ในมิติ $n$ มิติ ระหว่างจุด $p = (p_1, p_2)$ และ $q = (q_1, q_2)$ หากจุด $p = (3, 4)$ และ $q = (0, 0)$ ระยะทางมีค่าเท่าใด",
+      "choices": [
+        "3",
+        "4",
+        "5",
+        "7"
+      ],
+      "answer": 2,
+      "explain": "ระยะทาง Euclidean = $\\sqrt{(3-0)^2 + (4-0)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$"
+    },
+    {
+      "q": "หากข้อมูลชนิดหนึ่งมีระยะทางจาก Centroid 1 เท่ากับ 12 และ Centroid 2 เท่ากับ 5 ในกระบวนการ K-Means ข้อมูลนี้จะถูกจัดให้อยู่ในกลุ่มใด",
+      "choices": [
+        "กลุ่มของ Centroid 1",
+        "กลุ่มของ Centroid 2",
+        "ไม่ถูกจัดกลุ่มใดเลย สรุปว่าเป็น Noise",
+        "สร้าง Cluster ใหม่ขึ้นมาเอง"
+      ],
+      "answer": 1,
+      "explain": "K-Means จะจัดจุดข้อมูลเข้ากับกลุ่มที่มีจุด Centroid ใกล้ที่สุด (ระยะทางสั้นที่สุด) ดังนั้น 5 < 12 จึงจัดเข้า Centroid 2"
+    },
+    {
+      "q": "อัลกอริทึม **Naive Bayes Classifier** ตั้งอยู่บนสมมติฐานสำคัญข้อใด",
+      "choices": [
+        "แต่ละฟีเจอร์ (Features) มีความสัมพันธ์กันอย่างซับซ้อนและพึ่งพากันตลอดเวลา",
+        "แต่ละฟีเจอร์เป็นอิสระจากกันอย่างสมบูรณ์ (Feature Independence) เมื่อทราบคลาสเป้าหมาย",
+        "ข้อมูลต้องมีการเรียงลำดับเวลาเสมอ (Time-Series)",
+        "ไม่จำเป็นต้องใช้ทฤษฎีความน่าจะเป็นของเบย์"
+      ],
+      "answer": 1,
+      "explain": "Naive Bayes ได้ชื่อว่า 'Naive' เพราะตั้งสมมติฐานแบบง่ายเกินจริงว่า ฟีเจอร์ทุกตัวเป็นอิสระต่อกันโดยสิ้นเชิง (Naive Independence)"
+    },
+    {
+      "q": "จุดประสงค์ของการแบ่งชุดข้อมูลออกเป็น **Train Set** และ **Test Set** คืออะไร",
+      "choices": [
+        "เพื่อเพิ่มจำนวนข้อมูลให้มีขนาดเป็นสองเท่า",
+        "เพื่อประเมินความสามารถในการคาดการณ์ของโมเดลกับข้อมูลใหม่ที่ไม่เคยเห็นมาก่อน (Generalization Ability)",
+        "เพื่อชะลอการทำงานของคอมพิวเตอร์ให้ประมวลผลได้แม่นยำขึ้น",
+        "เพื่อหลีกเลี่ยงการทำ Data Cleaning"
+      ],
+      "answer": 1,
+      "explain": "การแยก Test Set ไว้ช่วยในการประเมินประสิทธิภาพจริงว่าโมเดลนำไปใช้กับข้อมูลใหม่นอกเหนือจากที่ใช้เทรนได้ดีเพียงใด"
+    },
+    {
+      "q": "ข้อใดคือนิยามของ **Cross-Validation (เช่น K-Fold Cross-Validation)**",
+      "choices": [
+        "เทคนิคแบ่งข้อมูลเป็น K ส่วน สลับนำ 1 ส่วนเป็น Test Set และ K-1 ส่วนเป็น Train Set จนครบทุกส่วน เพื่อลดความลำเอียงในการประเมินผล",
+        "การเทรนโมเดล K ตัวพร้อมกันโดยไม่ใช้ Test Set เลย",
+        "การรันโมเดลเดิมซ้ำ K รอบบนชุดข้อมูลเดิมโดยไม่เปลี่ยนอะไร",
+        "การแปลงข้อมูลให้เป็นกราฟเส้นเพื่อดูแนวโน้ม"
+      ],
+      "answer": 0,
+      "explain": "K-Fold Cross-Validation เป็นการแบ่งข้อมูล K ส่วนเพื่อหมุนเวียนฝึกและทดสอบจนครบ เพื่อให้ได้ดรรชนีประเมินที่เที่ยงตรงไม่ขึ้นกับโชคในการสุ่มแบ่ง Train/Test"
+    },
+    {
+      "q": "เหตุใดการวัดประสิทธิภาพโมเดล Classification ด้วย **Accuracy** เพียงอย่างเดียวจึงอาจหลอกตาได้ (Misleading) ในกรณี Imbalanced Data",
+      "choices": [
+        "เพราะ Accuracy คำนวณได้เฉพาะข้อมูลชนิดตัวเลขเท่านั้น",
+        "เพราะหากข้อมูลคลาสส่วนใหญ่มีถึง 99% โมเดลที่เดาเฉพาะคลาสส่วนใหญ่จะได้ Accuracy 99% ทั้งที่ตรวจคลาสส่วนน้อยไม่ได้เลย",
+        "เพราะ Accuracy ให้ค่าเป็นติดลบเสมอ",
+        "เพราะค่า Accuracy เปลี่ยนแปลงตามค่า Centroid"
+      ],
+      "answer": 1,
+      "explain": "ใน Imbalanced Data (เช่น ข้อมูลสแกนโรคมะเร็งพบคนป่วย 1%) ถ้าโมเดลทายว่า 'ไม่ป่วย' ทุกคน จะได้ Accuracy 99% ทั้งที่โมเดลใช้การไม่ได้จริง"
+    },
+    {
+      "q": "ดรรชนีประเมินผลสำหรับงาน Regression ข้อใดวัดความแตกต่างระหว่างค่าจริงกับค่าทายแบบกำลังสองเฉลี่ย",
+      "choices": [
+        "Confusion Matrix",
+        "Mean Squared Error (MSE)",
+        "Silhouette Score",
+        "Adjusted Rand Index"
+      ],
+      "answer": 1,
+      "explain": "MSE (Mean Squared Error) คำนวณจากค่าเฉลี่ยของ $(y_{true} - y_{pred})^2$ เป็นตัววัดความผิดพลาดของโมเดล Regression"
+    },
+    {
+      "q": "ค่า **R-Squared ($R^2$)** หรือ Coefficient of Determination ในงาน Regression แสดงถึงสิ่งใด",
+      "choices": [
+        "จำนวนคลาสที่โมเดลแยกได้",
+        "สัดส่วนความแปรปรวนของตัวแปรตามที่สมการโมเดลสามารถอธิบายได้ (ค่าเข้าใกล้ 1.0 แสดงว่าโมเดลอธิบายข้อมูลได้ดีมาก)",
+        "ความเร็วในการประมวลผลของอัลกอริทึม",
+        "ค่าความน่าจะเป็นที่สุ่มได้จาก Sigmoid"
+      ],
+      "answer": 1,
+      "explain": "$R^2$ มีค่าตั้งแต่ 0 ถึง 1 (หรือติดลบได้ถ้าโมเดลแย่มาก) บอกสัดส่วนว่าโมเดลสามารถอธิบายความแปรปรวนของข้อมูลจริงได้มากน้อยเพียงใด"
+    }
+  ]
+}

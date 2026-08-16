@@ -10,9 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "katex": "^0.18.4",
     "lucide-react": "^1.30.0",
+    "mathjs": "^15.2.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-katex": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

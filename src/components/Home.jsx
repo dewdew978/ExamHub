@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Layout, FileText, GraduationCap, ArrowLeft, Clock } from 'lucide-react';
+import { FileText, Folder, ArrowLeft, Clock, GraduationCap } from 'lucide-react';
 
 export default function Home({ subjects, onSelectSubject }) {
   const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const totalQuestions = subjects.reduce((sum, s) => sum + s.questionCount, 0);
 
+  // 1. Render Year Selection
   const renderYearSelection = () => (
     <div style={{ marginTop: '4rem' }} className="animate-fade-in">
       <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 500, letterSpacing: '0px' }}>
@@ -18,82 +20,57 @@ export default function Home({ subjects, onSelectSubject }) {
         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
         gap: '1.5rem' 
       }}>
-        <div 
-          className="card"
-          onClick={() => setSelectedYear(2)}
-          style={{
-            padding: '2rem',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            borderRadius: '12px'
-          }}
-        >
-          <div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', letterSpacing: '-0.5px' }}>วิชาชั้นปีที่ 2</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ 2</p>
-          </div>
-          <div style={{ 
-            marginTop: '0.5rem',
-            background: 'var(--surface-hover)',
-            padding: '0.25rem 0.5rem',
-            borderRadius: '4px',
-            fontSize: '0.75rem',
-            color: 'var(--text)',
-            display: 'inline-block',
-            width: 'fit-content',
-            fontWeight: 500,
-            boxShadow: 'var(--shadow-border)'
-          }}>
-            {subjects.filter(s => s.year === 2).length} วิชา
-          </div>
-        </div>
-
-        <div 
-          className="card"
-          onClick={() => setSelectedYear(3)}
-          style={{
-            padding: '2rem',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            borderRadius: '12px'
-          }}
-        >
-          <div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', letterSpacing: '-0.5px' }}>วิชาชั้นปีที่ 3</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ 3</p>
-          </div>
-          <div style={{ 
-            marginTop: '0.5rem',
-            background: 'var(--surface-hover)',
-            padding: '0.25rem 0.5rem',
-            borderRadius: '4px',
-            fontSize: '0.75rem',
-            color: 'var(--text-muted)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.375rem',
-            width: 'fit-content',
-            fontWeight: 500,
-            boxShadow: 'var(--shadow-border)'
-          }}>
-            {subjects.filter(s => s.year === 3).length > 0 
-              ? `${subjects.filter(s => s.year === 3).length} วิชา` 
-              : <><Clock size={12} /> Coming Soon</>
-            }
-          </div>
-        </div>
+        {[2, 3].map(year => {
+          const yearSubjects = subjects.filter(s => s.year === year);
+          return (
+            <div 
+              key={year}
+              className="card"
+              onClick={() => setSelectedYear(year)}
+              style={{
+                padding: '2rem',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                borderRadius: '12px'
+              }}
+            >
+              <div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.25rem', letterSpacing: '-0.5px' }}>วิชาชั้นปีที่ {year}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>รวมข้อสอบรายวิชาของนักศึกษาปีที่ {year}</p>
+              </div>
+              <div style={{ 
+                marginTop: '0.5rem',
+                background: 'var(--surface-hover)',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                color: 'var(--text)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                width: 'fit-content',
+                fontWeight: 500,
+                boxShadow: 'var(--shadow-border)'
+              }}>
+                {yearSubjects.length > 0 
+                  ? `${yearSubjects.length} ชุดข้อสอบ` 
+                  : <><Clock size={12} /> Coming Soon</>
+                }
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 
-  const renderSubjectList = (year) => {
-    const filteredSubjects = subjects.filter(sub => sub.year === year);
+  // 2. Render Category Selection for a Specific Year
+  const renderCategorySelection = () => {
+    const yearSubjects = subjects.filter(sub => sub.year === selectedYear);
 
-    if (filteredSubjects.length === 0) {
+    if (yearSubjects.length === 0) {
       return (
         <div style={{ marginTop: '4rem' }} className="animate-fade-in">
           <button 
@@ -106,14 +83,33 @@ export default function Home({ subjects, onSelectSubject }) {
           
           <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', borderRadius: '12px' }}>
             <Clock size={32} style={{ color: 'var(--text-muted)', margin: '0 auto 1rem' }} />
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>เตรียมพบกับข้อสอบปี {year} เร็วๆ นี้!</h3>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>เตรียมพบกับข้อสอบปี {selectedYear} เร็วๆ นี้!</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              เรากำลังรวบรวมข้อสอบและจัดทำเฉลยสำหรับรายวิชาชั้นปีที่ {year} โปรดติดตามการอัปเดต
+              เรากำลังรวบรวมข้อสอบและจัดทำเฉลยสำหรับรายวิชาชั้นปีที่ {selectedYear} โปรดติดตามการอัปเดต
             </p>
           </div>
         </div>
       );
     }
+
+    // Get unique categories and compute metadata for this year
+    const categoryMap = yearSubjects.reduce((acc, sub) => {
+      if (!acc[sub.category]) {
+        acc[sub.category] = {
+          name: sub.category,
+          count: 0,
+          questionCount: 0,
+          icon: sub.icon || '📚',
+          color: sub.color || '#0ea5e9',
+          iconBg: sub.iconBg || 'rgba(14,165,233,0.15)'
+        };
+      }
+      acc[sub.category].count += 1;
+      acc[sub.category].questionCount += sub.questionCount;
+      return acc;
+    }, {});
+
+    const categories = Object.values(categoryMap);
 
     return (
       <div style={{ marginTop: '3rem' }} className="animate-fade-in">
@@ -126,7 +122,87 @@ export default function Home({ subjects, onSelectSubject }) {
             <ArrowLeft size={16} />
           </button>
           <h2 style={{ color: 'var(--text)', fontSize: '1.25rem', margin: 0, letterSpacing: '-0.5px', fontWeight: 600 }}>
-            รายวิชาชั้นปีที่ {year}
+            หมวดหมู่วิชาปีที่ {selectedYear}
+          </h2>
+        </div>
+
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          gap: '1.5rem' 
+        }}>
+          {categories.map((cat, idx) => (
+            <div 
+              key={idx}
+              className="card"
+              onClick={() => setSelectedCategory(cat.name)}
+              style={{
+                padding: '2rem',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                borderRadius: '12px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '8px',
+                  background: cat.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.25rem'
+                }}>
+                  {cat.icon}
+                </div>
+                <h3 style={{ fontSize: '1.125rem', letterSpacing: '-0.25px', margin: 0, fontWeight: 600 }}>{cat.name}</h3>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
+                <div style={{ 
+                  background: 'var(--surface-hover)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  color: 'var(--text)',
+                  fontWeight: 500,
+                  boxShadow: 'var(--shadow-border)'
+                }}>
+                  {cat.count} ชุดข้อสอบ
+                </div>
+                <div style={{ 
+                  background: 'var(--surface-hover)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  color: 'var(--text-muted)',
+                  fontWeight: 500,
+                  boxShadow: 'var(--shadow-border)'
+                }}>
+                  {cat.questionCount} ข้อ
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // 3. Render Subject (Quiz) List for a Specific Category
+  const renderSubjectList = () => {
+    const filteredSubjects = subjects.filter(sub => sub.year === selectedYear && sub.category === selectedCategory);
+
+    return (
+      <div style={{ marginTop: '3rem' }} className="animate-fade-in">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+          <button 
+            onClick={() => setSelectedCategory(null)}
+            className="btn btn-outline"
+            style={{ width: '32px', height: '32px', padding: 0 }}
+          >
+            <ArrowLeft size={16} />
+          </button>
+          <h2 style={{ color: 'var(--text)', fontSize: '1.25rem', margin: 0, letterSpacing: '-0.5px', fontWeight: 600 }}>
+            {selectedCategory}
           </h2>
         </div>
 
@@ -197,21 +273,26 @@ export default function Home({ subjects, onSelectSubject }) {
           borderTop: '1px solid var(--border-divider)'
         }}>
           <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>2</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ระดับชั้นปี</div>
+          </div>
+          <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>{subjects.length}</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>วิชาทั้งหมด</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ชุดข้อสอบ</div>
           </div>
           <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>{totalQuestions}</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ข้อสอบ</div>
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-1px' }}>100%</div>
-            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>มีเฉลยอธิบาย</div>
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ข้อทั้งหมด</div>
           </div>
         </div>
       </div>
 
-      {selectedYear === null ? renderYearSelection() : renderSubjectList(selectedYear)}
+      {selectedYear === null 
+        ? renderYearSelection() 
+        : selectedCategory === null 
+          ? renderCategorySelection() 
+          : renderSubjectList()
+      }
     </div>
   );
 }

@@ -119,5 +119,60 @@
     "desc": "แนวข้อสอบกลางภาค 60 ข้อ (Git, CV, ML/DL, CNN, RNN, GAN, RL)",
     "questionCount": 60,
     "year": 3
+  },
+  {
+    "id": "isd_midterm_hard_60",
+    "category": "Intelligent System Development",
+    "name": "Midterm Hard Mode (60 Questions)",
+    "icon": "🔥",
+    "color": "#ef4444",
+    "iconBg": "rgba(239,68,68,0.15)",
+    "desc": "ชุดข้อสอบจำลอง 60 ข้อ ระดับความยากขั้นสูง อ้างอิงจากเนื้อหา Git, CV, ML, CNN, RNN/GAN และ RL อย่างเจาะลึก",
+    "questionCount": 55,
+    "year": 3
+  },
+  {
+    "id": "dw30",
+    "category": "Data Warehousing",
+    "name": "DW Comprehensive Quiz 30",
+    "icon": "🏭",
+    "color": "#0ea5e9",
+    "iconBg": "rgba(14,165,233,0.15)",
+    "desc": "OLTP/OLAP · Architecture · Star & Snowflake · SCD · Bus Matrix",
+    "questionCount": 30,
+    "year": 3
+  },
+  {
+    "id": "med_img_dl_30q",
+    "category": "Medical Image & Deep Learning",
+    "name": "Deep Learning in Medical Image & Video Analysis Quiz",
+    "icon": "🩺",
+    "color": "#0ea5e9",
+    "iconBg": "rgba(14,165,233,0.15)",
+    "desc": "Biomedical Imaging · DICOM · ICD & DRG · Digital Image Processing · Tensors & ML",
+    "questionCount": 30,
+    "year": 3
+  },
+  {
+    "id": "ds_ml_60q",
+    "category": "Data Science & Machine Learning",
+    "name": "Applied Machine Learning Exam (60 Questions)",
+    "icon": "🤖",
+    "color": "#0ea5e9",
+    "iconBg": "rgba(14,165,233,0.15)",
+    "desc": "Supervised · Unsupervised · Reinforcement Learning · Clustering · Model Evaluation · Ensemble Methods",
+    "questionCount": 60,
+    "year": 3
+  },
+  {
+    "id": "ds_ml_calc_30q",
+    "category": "Data Science & Machine Learning",
+    "name": "Applied Machine Learning - Calculations (30 Questions)",
+    "icon": "🔢",
+    "color": "#ef4444",
+    "iconBg": "rgba(239,68,68,0.15)",
+    "desc": "Logistic/Linear Regression · Decision Tree (Entropy, Gain) · Confusion Matrix · Euclidean Distance",
+    "questionCount": 30,
+    "year": 3
   }
 ]
