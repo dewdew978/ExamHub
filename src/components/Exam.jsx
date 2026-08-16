@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, RotateCcw, Home as HomeIcon, Check } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -39,6 +39,12 @@ export default function Exam({ subject, onBack, onComplete }) {
       }, 0);
       onComplete(score);
       setShowResult(true);
+    }
+  };
+
+  const prevQuestion = () => {
+    if (currentQ > 0) {
+      setCurrentQ(currentQ - 1);
     }
   };
 
@@ -212,7 +218,16 @@ export default function Exam({ subject, onBack, onComplete }) {
         )}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <button 
+          className="btn btn-outline" 
+          onClick={prevQuestion}
+          disabled={currentQ === 0}
+          style={{ visibility: currentQ === 0 ? 'hidden' : 'visible' }}
+        >
+          <ChevronLeft size={16} />
+          ก่อนหน้า
+        </button>
         <button 
           className="btn btn-primary" 
           onClick={nextQuestion}
