@@ -1,14 +1,24 @@
 import { useState, useEffect } from 'react';
 import Home from './components/Home';
 import Exam from './components/Exam';
-import { BookOpen, Star, Sun, Moon } from 'lucide-react';
+import { Pattern } from './components/Pattern';
+import Schedule from './components/Schedule';
+import Login from './components/Login';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User } from 'lucide-react';
+import { supabase } from './lib/supabase';
 import './index.css';
-import indexData from './data/index.json';
 
 function App() {
-  const [currentView, setCurrentView] = useState('home');
+  const [currentView, setCurrentView] = useState('login');
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
+  const [categoryScores, setCategoryScores] = useState({});
+  const [showChart, setShowChart] = useState(false);
+  
+  const [subjects, setSubjects] = useState([]);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -26,15 +36,99 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  // Fetch initial data
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        // 1. Fetch subjects from Supabase
+        const { data: examsData, error: examsError } = await supabase
+          .from('exams')
+          .select('*');
+          
+        if (examsError) throw examsError;
+        setSubjects(examsData || []);
+
+        // 2. Check auth status
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          setUser(session.user);
+          await loadUserScores(session.user.id);
+          setCurrentView('home');
+        } else {
+          setCurrentView('login');
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialData();
+
+    // Set up auth listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+        loadUserScores(session.user.id);
+        setCurrentView('home');
+      } else {
+        setUser(null);
+        setTotalScore(0);
+        setCategoryScores({});
+        setCurrentView('login');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadUserScores = async (userId) => {
+    try {
+      const { data: scores, error } = await supabase
+        .from('user_scores')
+        .select('score, exam_id, exams(category)')
+        .eq('user_id', userId);
+
+      if (error) throw error;
+      
+      let total = 0;
+      let categories = {};
+      
+      if (scores) {
+        scores.forEach(s => {
+          total += s.score;
+          const cat = s.exams?.category;
+          if (cat) {
+            categories[cat] = (categories[cat] || 0) + s.score;
+          }
+        });
+      }
+      
+      setTotalScore(total);
+      setCategoryScores(categories);
+    } catch (err) {
+      console.error("Error loading scores:", err);
+    }
+  };
+
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   const startExam = async (subjectId) => {
-    // Dynamic import the json data
-    const mod = await import(`./data/${subjectId}.json`);
-    setSelectedSubject(mod.default);
-    setCurrentView('exam');
+    try {
+      const mod = await import(`./data/${subjectId}.json`);
+      const subjectMeta = subjects.find(s => s.id === subjectId);
+      
+      setSelectedSubject({
+        ...subjectMeta,
+        ...mod.default
+      });
+      setCurrentView('exam');
+    } catch (err) {
+      console.error("Failed to load exam data:", err);
+    }
   };
 
   const goHome = () => {
@@ -42,9 +136,74 @@ function App() {
     setSelectedSubject(null);
   };
 
-  const addScore = (score) => {
+  const addScore = async (score) => {
     setTotalScore((prev) => prev + score);
+    if (selectedSubject) {
+      setCategoryScores(prev => ({
+        ...prev,
+        [selectedSubject.category]: (prev[selectedSubject.category] || 0) + score
+      }));
+    }
+
+    if (user && selectedSubject) {
+      try {
+        const { error } = await supabase
+          .from('user_scores')
+          .insert([
+            { user_id: user.id, exam_id: selectedSubject.id, score }
+          ]);
+        
+        if (error) throw error;
+      } catch (err) {
+        console.error("Error saving score:", err);
+      }
+    }
   };
+  
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
+  const allCategories = [...new Set(subjects.map(s => s.category))];
+  
+  const chartData = allCategories.map(category => {
+    let shortName = category;
+    if (category.includes('Intelligent System')) shortName = 'ISD';
+    else if (category.includes('Data Visualization')) shortName = 'Data Viz';
+    else if (category.includes('Medical Image')) shortName = 'Med Image';
+    else shortName = category.split(' ')[0];
+
+    return {
+      skill: shortName,
+      score: (categoryScores[category] || 0) * 10
+    };
+  });
+
+  if (loading) {
+    return (
+      <div className="app-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid var(--border)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  // Hide header on login view
+  if (currentView === 'login') {
+    return (
+      <div className="app-container">
+        <main className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Login 
+            onLogin={(user) => {
+              setUser(user);
+              setCurrentView('home');
+            }} 
+            onClose={() => setCurrentView('home')} // Guest mode
+          />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
@@ -57,10 +216,10 @@ function App() {
           }}>
             <BookOpen size={14} />
           </div>
-          <span>ExamHub</span>
+          <span className="logo-text">ExamHub</span>
         </a>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button 
             className="btn btn-outline" 
             onClick={toggleTheme}
@@ -69,24 +228,46 @@ function App() {
           >
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
-          <button className="btn btn-outline" onClick={goHome}>
-            หน้าหลัก
+          
+          <button className={`btn ${currentView === 'schedule' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setCurrentView('schedule')}>
+            <CalendarDays size={16} />
+            <span className="hidden sm:inline">ตารางสอบ</span>
           </button>
-          <div style={{ 
-            fontSize: '0.875rem', fontWeight: 500, display: 'flex', 
-            alignItems: 'center', gap: '0.375rem', color: 'var(--text-muted)',
-            boxShadow: 'var(--shadow-border)', padding: '0.5rem 0.75rem',
-            borderRadius: '6px', background: 'var(--surface)'
-          }}>
+          
+          <button className={`btn ${currentView === 'home' ? 'btn-primary' : 'btn-outline'}`} onClick={goHome}>
+            <span>หน้าหลัก</span>
+          </button>
+          
+          <button 
+            className="btn"
+            onClick={() => setShowChart(true)}
+            style={{ 
+              fontSize: '0.875rem', fontWeight: 500, display: 'flex', 
+              alignItems: 'center', gap: '0.375rem', color: 'var(--accent)',
+              boxShadow: 'var(--shadow-border)', padding: '0.5rem 0.75rem',
+              borderRadius: '6px', background: 'rgba(0, 112, 243, 0.1)'
+            }}
+          >
             <Star size={14} />
             <span>{totalScore} คะแนน</span>
-          </div>
+          </button>
+          
+          {user ? (
+            <button className="btn btn-outline" onClick={handleLogout} title={user.email}>
+              <LogOut size={16} />
+            </button>
+          ) : (
+            <button className="btn btn-primary" onClick={() => setCurrentView('login')}>
+              <LogIn size={16} />
+              <span>Login</span>
+            </button>
+          )}
         </div>
       </header>
 
       <main className="main-content">
         {currentView === 'home' && (
-          <Home subjects={indexData} onSelectSubject={startExam} />
+          <Home subjects={subjects} onSelectSubject={startExam} />
         )}
         {currentView === 'exam' && selectedSubject && (
           <Exam 
@@ -95,7 +276,14 @@ function App() {
             onComplete={addScore} 
           />
         )}
+        {currentView === 'schedule' && (
+          <Schedule />
+        )}
       </main>
+      
+      {showChart && (
+        <Pattern data={chartData} onClose={() => setShowChart(false)} />
+      )}
     </div>
   );
 }

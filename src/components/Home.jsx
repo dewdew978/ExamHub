@@ -4,6 +4,7 @@ import { FileText, Folder, ArrowLeft, Clock, GraduationCap } from 'lucide-react'
 export default function Home({ subjects, onSelectSubject }) {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedExamType, setSelectedExamType] = useState('All');
 
   const totalQuestions = subjects.reduce((sum, s) => sum + s.questionCount, 0);
 
@@ -15,11 +16,7 @@ export default function Home({ subjects, onSelectSubject }) {
         เลือกระดับชั้นปี
       </h2>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-        gap: '1.5rem' 
-      }}>
+      <div className="card-grid">
         {[2, 3].map(year => {
           const yearSubjects = subjects.filter(s => s.year === year);
           return (
@@ -115,7 +112,10 @@ export default function Home({ subjects, onSelectSubject }) {
       <div style={{ marginTop: '3rem' }} className="animate-fade-in">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
           <button 
-            onClick={() => setSelectedYear(null)}
+            onClick={() => {
+              setSelectedYear(null);
+              setSelectedExamType('All');
+            }}
             className="btn btn-outline"
             style={{ width: '32px', height: '32px', padding: 0 }}
           >
@@ -126,11 +126,7 @@ export default function Home({ subjects, onSelectSubject }) {
           </h2>
         </div>
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-          gap: '1.5rem' 
-        }}>
+        <div className="card-grid">
           {categories.map((cat, idx) => (
             <div 
               key={idx}
@@ -189,11 +185,15 @@ export default function Home({ subjects, onSelectSubject }) {
 
   // 3. Render Subject (Quiz) List for a Specific Category
   const renderSubjectList = () => {
-    const filteredSubjects = subjects.filter(sub => sub.year === selectedYear && sub.category === selectedCategory);
+    const filteredSubjects = subjects.filter(sub => 
+      sub.year === selectedYear && 
+      sub.category === selectedCategory &&
+      (selectedExamType === 'All' || sub.type === selectedExamType)
+    );
 
     return (
       <div style={{ marginTop: '3rem' }} className="animate-fade-in">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
           <button 
             onClick={() => setSelectedCategory(null)}
             className="btn btn-outline"
@@ -206,50 +206,94 @@ export default function Home({ subjects, onSelectSubject }) {
           </h2>
         </div>
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
-          gap: '1.5rem' 
-        }}>
-          {filteredSubjects.map(sub => (
-            <div 
-              key={sub.id} 
-              className="card"
-              onClick={() => onSelectSubject(sub.id)}
-              style={{
-                padding: '1.5rem',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.75rem',
-                borderRadius: '12px'
-              }}
-            >
-              <div>
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.25rem', letterSpacing: '-0.25px', fontWeight: 600 }}>{sub.name}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{sub.desc}</p>
-              </div>
-
-              <div style={{ 
-                marginTop: 'auto', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '0.375rem',
-                fontSize: '0.75rem',
-                color: 'var(--text-muted)',
-                background: 'var(--surface-hover)',
-                padding: '0.25rem 0.5rem',
-                borderRadius: '4px',
-                width: 'fit-content',
-                fontWeight: 500,
-                boxShadow: 'var(--shadow-border)'
-              }}>
-                <FileText size={12} />
-                {sub.questionCount} ข้อ
-              </div>
-            </div>
-          ))}
+        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem' }}>
+          <button 
+            className={`btn ${selectedExamType === 'All' ? 'btn-primary' : 'btn-outline'}`} 
+            onClick={() => setSelectedExamType('All')}
+            style={{ padding: '0.375rem 1rem', fontSize: '0.875rem' }}
+          >
+            ทั้งหมด
+          </button>
+          <button 
+            className={`btn ${selectedExamType === 'Midterm' ? 'btn-primary' : 'btn-outline'}`} 
+            onClick={() => setSelectedExamType('Midterm')}
+            style={{ padding: '0.375rem 1rem', fontSize: '0.875rem' }}
+          >
+            Midterm
+          </button>
+          <button 
+            className={`btn ${selectedExamType === 'Final' ? 'btn-primary' : 'btn-outline'}`} 
+            onClick={() => setSelectedExamType('Final')}
+            style={{ padding: '0.375rem 1rem', fontSize: '0.875rem' }}
+          >
+            Final
+          </button>
         </div>
+
+        {filteredSubjects.length === 0 ? (
+          <div className="card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <FileText size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.2 }} />
+            <p style={{ fontSize: '1.125rem', fontWeight: 500 }}>ไม่มีข้อสอบหมวด {selectedExamType} ในวิชานี้</p>
+          </div>
+        ) : (
+          <div className="card-grid">
+            {filteredSubjects.map(sub => (
+              <div 
+                key={sub.id} 
+                className="card"
+                onClick={() => onSelectSubject(sub.id)}
+                style={{
+                  padding: '1.5rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem',
+                  borderRadius: '12px',
+                  position: 'relative'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <h3 style={{ fontSize: '1rem', letterSpacing: '-0.25px', fontWeight: 600, paddingRight: '1rem' }}>{sub.name}</h3>
+                    {sub.type && (
+                      <span style={{ 
+                        fontSize: '0.65rem', 
+                        fontWeight: 600, 
+                        padding: '0.125rem 0.375rem', 
+                        borderRadius: '4px',
+                        background: sub.type === 'Midterm' ? 'rgba(245, 166, 35, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                        color: sub.type === 'Midterm' ? 'var(--warning)' : 'var(--success)',
+                        textTransform: 'uppercase',
+                        flexShrink: 0
+                      }}>
+                        {sub.type}
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{sub.desc}</p>
+                </div>
+
+                <div style={{ 
+                  marginTop: 'auto', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.375rem',
+                  fontSize: '0.75rem',
+                  color: 'var(--text-muted)',
+                  background: 'var(--surface-hover)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '4px',
+                  width: 'fit-content',
+                  fontWeight: 500,
+                  boxShadow: 'var(--shadow-border)'
+                }}>
+                  <FileText size={12} />
+                  {sub.questionCount} ข้อ
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   };

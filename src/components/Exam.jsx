@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -18,6 +18,34 @@ export default function Exam({ subject, onBack, onComplete }) {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState(Array(subject.questions.length).fill(null));
   const [showResult, setShowResult] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(subject.questions.length * 60); // 1 min per question
+  const [showAlert, setShowAlert] = useState(true);
+  const [isReviewMode, setIsReviewMode] = useState(false);
+
+  const answersRef = useRef(answers);
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
+
+  useEffect(() => {
+    if (showResult) return;
+    
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          const currentAnswers = answersRef.current;
+          const score = currentAnswers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
+          onComplete(score);
+          setShowResult(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [showResult, subject.questions, onComplete]);
 
   const q = subject.questions[currentQ];
   const answered = answers[currentQ] !== null;
@@ -48,7 +76,106 @@ export default function Exam({ subject, onBack, onComplete }) {
     }
   };
 
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
   if (showResult) {
+    if (isReviewMode) {
+      return (
+        <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
+            <button 
+              className="btn btn-outline"
+              onClick={() => setIsReviewMode(false)}
+              style={{ width: '36px', height: '36px', padding: 0 }}
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <div>
+              <h2 style={{ fontSize: '1.25rem', marginBottom: '0.125rem', letterSpacing: '-0.5px' }}>เฉลยข้อสอบ: {subject.name}</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ทบทวนข้อผิดพลาดและดูคำอธิบาย</p>
+            </div>
+          </div>
+  
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {subject.questions.map((q, idx) => {
+              const userAnswer = answers[idx];
+              const isRight = userAnswer === q.answer;
+              const isSkipped = userAnswer === null;
+  
+              return (
+                <div key={idx} className="card" style={{ padding: '2rem', borderRadius: '12px', borderLeft: isRight ? '4px solid var(--success)' : isSkipped ? '4px solid var(--text-muted)' : '4px solid var(--error)' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                    <div style={{
+                      width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+                      background: isRight ? 'rgba(16, 185, 129, 0.15)' : isSkipped ? 'var(--surface-active)' : 'rgba(238, 0, 0, 0.15)',
+                      color: isRight ? 'var(--success)' : isSkipped ? 'var(--text-muted)' : 'var(--error)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600
+                    }}>
+                      {idx + 1}
+                    </div>
+                    <div style={{ flex: 1, minWidth: '250px' }}>
+                      <h3 style={{ fontSize: '1.0625rem', lineHeight: 1.6, marginBottom: '1.5rem', fontWeight: 500 }}>
+                        {renderTextWithMath(q.q)}
+                      </h3>
+  
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                        {q.choices.map((choice, cIdx) => {
+                          const isSelected = userAnswer === cIdx;
+                          const isCorrectChoice = cIdx === q.answer;
+                          
+                          let bg = 'var(--surface)';
+                          let color = 'var(--text)';
+                          let boxShadow = 'var(--shadow-border)';
+                          let icon = null;
+  
+                          if (isCorrectChoice) {
+                            bg = 'rgba(16, 185, 129, 0.1)';
+                            boxShadow = '0px 0px 0px 1px var(--success)';
+                            icon = <CheckCircle size={16} color="var(--success)" />;
+                          } else if (isSelected && !isCorrectChoice) {
+                            bg = 'rgba(238, 0, 0, 0.1)';
+                            boxShadow = '0px 0px 0px 1px var(--error)';
+                            icon = <XCircle size={16} color="var(--error)" />;
+                          } else {
+                            color = 'var(--text-muted)';
+                          }
+  
+                          return (
+                            <div key={cIdx} style={{
+                              padding: '0.75rem 1rem', borderRadius: '8px',
+                              background: bg, boxShadow: boxShadow, color: color,
+                              display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9375rem'
+                            }}>
+                              <div style={{ width: '20px', display: 'flex', justifyContent: 'center' }}>
+                                {icon || <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{String.fromCharCode(65 + cIdx)}</span>}
+                              </div>
+                              <span style={{ lineHeight: 1.5 }}>{renderTextWithMath(choice)}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+  
+                      <div style={{ 
+                        padding: '1rem', background: 'var(--surface-hover)', 
+                        borderRadius: '8px', fontSize: '0.875rem' 
+                      }}>
+                        <div style={{ fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text)' }}>คำอธิบาย:</div>
+                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>{renderTextWithMath(q.explain)}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
     const total = subject.questions.length;
     const score = answers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
     const pct = Math.round((score / total) * 100);
@@ -56,7 +183,7 @@ export default function Exam({ subject, onBack, onComplete }) {
     const skipped = answers.filter(a => a === null).length;
 
     return (
-      <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '4rem auto' }}>
+      <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '4rem auto', padding: '0 1rem' }}>
         <div className="card" style={{ padding: '4rem 2rem', borderRadius: '12px', textAlign: 'center' }}>
           <div style={{ fontSize: '3rem', fontWeight: 600, letterSpacing: '-1.5px', marginBottom: '0.5rem' }}>
             {score}/{total}
@@ -64,7 +191,7 @@ export default function Exam({ subject, onBack, onComplete }) {
           <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '3rem' }}>คะแนนที่คุณทำได้</p>
           
           <div style={{ 
-            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', 
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '1rem', 
             padding: '1.5rem', borderRadius: '8px', boxShadow: 'var(--shadow-border)',
             marginBottom: '3rem', background: 'var(--surface-hover)'
           }}>
@@ -86,16 +213,23 @@ export default function Exam({ subject, onBack, onComplete }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn btn-primary" onClick={() => setIsReviewMode(true)}>
+              <FileText size={16} />
+              ดูเฉลย
+            </button>
             <button className="btn btn-outline" onClick={() => {
               setAnswers(Array(subject.questions.length).fill(null));
               setCurrentQ(0);
+              setTimeLeft(subject.questions.length * 60);
+              setShowAlert(true);
+              setIsReviewMode(false);
               setShowResult(false);
             }}>
               <RotateCcw size={16} />
               ลองใหม่
             </button>
-            <button className="btn btn-primary" onClick={onBack}>
+            <button className="btn btn-outline" onClick={onBack}>
               <HomeIcon size={16} />
               กลับหน้าหลัก
             </button>
@@ -107,19 +241,81 @@ export default function Exam({ subject, onBack, onComplete }) {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '2rem auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
-        <button 
-          className="btn btn-outline"
-          onClick={onBack}
-          style={{ width: '36px', height: '36px', padding: 0 }}
-        >
-          <ArrowLeft size={16} />
-        </button>
-        <div>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '0.125rem', letterSpacing: '-0.5px' }}>{subject.name}</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{subject.desc}</p>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '2.5rem', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button 
+            className="btn btn-outline"
+            onClick={onBack}
+            style={{ width: '36px', height: '36px', padding: 0 }}
+          >
+            <ArrowLeft size={16} />
+          </button>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', marginBottom: '0.125rem', letterSpacing: '-0.5px' }}>{subject.name}</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{subject.desc}</p>
+          </div>
+        </div>
+        
+        <div style={{ 
+          display: 'flex', alignItems: 'center', gap: '0.5rem', 
+          background: timeLeft < 60 ? 'rgba(239, 68, 68, 0.1)' : 'var(--surface-hover)', 
+          color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
+          padding: '0.5rem 1rem', borderRadius: '8px', 
+          boxShadow: 'var(--shadow-border)', fontWeight: 600, fontSize: '1.125rem',
+          marginLeft: 'auto'
+        }}>
+          <Clock size={20} />
+          <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
         </div>
       </div>
+
+      {showAlert && (
+        <div className="animate-fade-in" style={{
+          background: 'rgba(0, 112, 243, 0.05)',
+          border: '1px solid rgba(0, 112, 243, 0.2)',
+          borderRadius: '8px',
+          padding: '1rem',
+          marginBottom: '2rem',
+          display: 'flex',
+          gap: '0.75rem',
+          alignItems: 'flex-start',
+          position: 'relative'
+        }}>
+          <div style={{ color: 'var(--accent)', marginTop: '0.125rem' }}>
+            <Info size={18} />
+          </div>
+          <div style={{ paddingRight: '2rem' }}>
+            <h3 style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.25rem' }}>
+              ระบบจับเวลาสอบ
+            </h3>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที เวลาทั้งหมดคือ {subject.questions.length} นาที 
+              ตัวจับเวลาจะเปลี่ยนเป็นสีแดงเมื่อเวลาเหลือน้อยกว่า 1 นาที และเมื่อเวลาหมดระบบจะทำการส่งข้อสอบและแสดงผลคะแนนทันที
+            </p>
+          </div>
+          <button 
+            onClick={() => setShowAlert(false)}
+            style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.25rem',
+              borderRadius: '4px'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
 
       <div style={{ 
         background: 'var(--border-divider)', height: '4px', borderRadius: '2px', 

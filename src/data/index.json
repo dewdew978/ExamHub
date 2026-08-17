@@ -8,7 +8,8 @@
     "iconBg": "rgba(249,115,22,0.15)",
     "desc": "Database · Supply Chain · CRM · Data Mining",
     "questionCount": 25,
-    "year": 2
+    "year": 2,
+    "type": "Midterm"
   },
   {
     "id": "mis2",
@@ -19,7 +20,8 @@
     "iconBg": "rgba(168,85,247,0.15)",
     "desc": "Decision Making · AI · Knowledge Management",
     "questionCount": 20,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "mis3",
@@ -30,7 +32,8 @@
     "iconBg": "rgba(20,184,166,0.15)",
     "desc": "SDLC · Agile · BPR · Project Management",
     "questionCount": 20,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "ds9",
@@ -41,7 +44,8 @@
     "iconBg": "rgba(14,165,233,0.15)",
     "desc": "Logical · Probabilistic · Bayesian Reasoning",
     "questionCount": 20,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "ds10",
@@ -52,7 +56,8 @@
     "iconBg": "rgba(132,204,22,0.15)",
     "desc": "Computer Vision · Image Processing · CV Tasks",
     "questionCount": 15,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "ds11",
@@ -63,7 +68,8 @@
     "iconBg": "rgba(244,63,94,0.15)",
     "desc": "NLP · Tokenization · Bag-of-Words · TF-IDF",
     "questionCount": 15,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "ds12",
@@ -74,7 +80,8 @@
     "iconBg": "rgba(217,70,239,0.15)",
     "desc": "Machine Learning · Task Types · PyCaret",
     "questionCount": 15,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "ds13",
@@ -85,7 +92,8 @@
     "iconBg": "rgba(251,146,60,0.15)",
     "desc": "Model Evaluation · Metrics · Classification · Regression",
     "questionCount": 15,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "ds14",
@@ -96,7 +104,8 @@
     "iconBg": "rgba(34,197,94,0.15)",
     "desc": "Deployment · MLOps · Gradio · Responsible AI",
     "questionCount": 15,
-    "year": 2
+    "year": 2,
+    "type": "Final"
   },
   {
     "id": "dataviz",
@@ -107,7 +116,8 @@
     "iconBg": "rgba(6,182,212,0.15)",
     "desc": "Data Warehouse · DAX · Charts · Storytelling · Dashboard",
     "questionCount": 20,
-    "year": 2
+    "year": 2,
+    "type": "Midterm"
   },
   {
     "id": "isd_midterm_60_items",
@@ -118,7 +128,8 @@
     "iconBg": "rgba(16,185,129,0.15)",
     "desc": "แนวข้อสอบกลางภาค 60 ข้อ (Git, CV, ML/DL, CNN, RNN, GAN, RL)",
     "questionCount": 60,
-    "year": 3
+    "year": 3,
+    "type": "Midterm"
   },
   {
     "id": "isd_midterm_hard_60",
@@ -129,7 +140,8 @@
     "iconBg": "rgba(239,68,68,0.15)",
     "desc": "ชุดข้อสอบจำลอง 60 ข้อ ระดับความยากขั้นสูง อ้างอิงจากเนื้อหา Git, CV, ML, CNN, RNN/GAN และ RL อย่างเจาะลึก",
     "questionCount": 55,
-    "year": 3
+    "year": 3,
+    "type": "Midterm"
   },
   {
     "id": "dw30",
@@ -140,7 +152,8 @@
     "iconBg": "rgba(14,165,233,0.15)",
     "desc": "OLTP/OLAP · Architecture · Star & Snowflake · SCD · Bus Matrix",
     "questionCount": 30,
-    "year": 3
+    "year": 3,
+    "type": "Midterm"
   },
   {
     "id": "med_img_dl_30q",
@@ -151,7 +164,8 @@
     "iconBg": "rgba(14,165,233,0.15)",
     "desc": "Biomedical Imaging · DICOM · ICD & DRG · Digital Image Processing · Tensors & ML",
     "questionCount": 30,
-    "year": 3
+    "year": 3,
+    "type": "Midterm"
   },
   {
     "id": "ds_ml_60q",
@@ -162,7 +176,8 @@
     "iconBg": "rgba(14,165,233,0.15)",
     "desc": "Supervised · Unsupervised · Reinforcement Learning · Clustering · Model Evaluation · Ensemble Methods",
     "questionCount": 60,
-    "year": 3
+    "year": 3,
+    "type": "Midterm"
   },
   {
     "id": "ds_ml_calc_30q",
@@ -173,6 +188,7 @@
     "iconBg": "rgba(239,68,68,0.15)",
     "desc": "Logistic/Linear Regression · Decision Tree (Entropy, Gain) · Confusion Matrix · Euclidean Distance",
     "questionCount": 30,
-    "year": 3
+    "year": 3,
+    "type": "Midterm"
   }
 ]

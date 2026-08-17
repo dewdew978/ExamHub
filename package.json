@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/server": "^1.4.1",
+    "@supabase/supabase-js": "^2.112.3",
+    "dotenv": "^17.4.2",
     "katex": "^0.18.4",
     "lucide-react": "^1.30.0",
     "mathjs": "^15.2.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-katex": "^3.1.0"
+    "react-katex": "^3.1.0",
+    "recharts": "^3.10.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
