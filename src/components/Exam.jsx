@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -17,12 +17,19 @@ const renderTextWithMath = (text) => {
 export default function Exam({ subject, onBack, onComplete }) {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState(Array(subject.questions.length).fill(null));
+  const [bookmarks, setBookmarks] = useState(Array(subject.questions.length).fill(false));
   const [showResult, setShowResult] = useState(false);
   const [timeLeft, setTimeLeft] = useState(subject.questions.length * 60); // 1 min per question
   const [showAlert, setShowAlert] = useState(true);
   const [isReviewMode, setIsReviewMode] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [showNavigator, setShowNavigator] = useState(false);
+
+  const toggleBookmark = () => {
+    const newBookmarks = [...bookmarks];
+    newBookmarks[currentQ] = !newBookmarks[currentQ];
+    setBookmarks(newBookmarks);
+  };
 
   const answersRef = useRef(answers);
   useEffect(() => {
@@ -327,6 +334,10 @@ export default function Exam({ subject, onBack, onComplete }) {
                 <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'var(--surface)', border: '1px solid var(--border-divider)' }}></div>
                 ยังไม่ได้ทำ
               </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <Bookmark size={12} fill="var(--warning)" color="var(--warning)" />
+                ติดดาว
+              </div>
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '0.5rem' }}>
@@ -353,6 +364,7 @@ export default function Exam({ subject, onBack, onComplete }) {
                   key={idx}
                   onClick={() => { setCurrentQ(idx); setShowNavigator(false); }}
                   style={{
+                    position: 'relative',
                     height: '40px',
                     borderRadius: '6px',
                     background: bg,
@@ -375,6 +387,11 @@ export default function Exam({ subject, onBack, onComplete }) {
                   }}
                 >
                   {idx + 1}
+                  {bookmarks[idx] && (
+                    <div style={{ position: 'absolute', top: '-4px', right: '-4px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', borderRadius: '50%', padding: '2px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                      <Bookmark size={10} fill="var(--warning)" color="var(--warning)" />
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -446,8 +463,25 @@ export default function Exam({ subject, onBack, onComplete }) {
       </div>
 
       <div className="card" style={{ padding: '2rem', borderRadius: '12px', marginBottom: '2rem' }}>
-        <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '1rem' }}>
-          Question {currentQ + 1}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+            Question {currentQ + 1}
+          </div>
+          <button 
+            onClick={toggleBookmark}
+            style={{ 
+              background: 'transparent', border: 'none', cursor: 'pointer', 
+              color: bookmarks[currentQ] ? 'var(--warning)' : 'var(--text-muted)',
+              display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 500,
+              padding: '0.375rem 0.5rem', borderRadius: '4px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <Bookmark size={16} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
+            <span className="hidden sm:inline">{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาวข้อนี้'}</span>
+          </button>
         </div>
         <h3 style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '2rem', fontWeight: 500 }}>
           {renderTextWithMath(q.q)}
