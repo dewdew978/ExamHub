@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -22,6 +22,7 @@ export default function Exam({ subject, onBack, onComplete }) {
   const [showAlert, setShowAlert] = useState(true);
   const [isReviewMode, setIsReviewMode] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [showNavigator, setShowNavigator] = useState(false);
 
   const answersRef = useRef(answers);
   useEffect(() => {
@@ -285,6 +286,14 @@ export default function Exam({ subject, onBack, onComplete }) {
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
           <button 
+            className={`btn ${showNavigator ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => setShowNavigator(!showNavigator)}
+            style={{ width: '36px', height: '36px', padding: 0 }}
+            title="นำทางข้อสอบ"
+          >
+            <LayoutGrid size={16} />
+          </button>
+          <button 
             className="btn btn-outline" 
             onClick={() => setIsPaused(true)}
             style={{ width: '36px', height: '36px', padding: 0 }}
@@ -304,6 +313,74 @@ export default function Exam({ subject, onBack, onComplete }) {
           </div>
         </div>
       </div>
+
+      {showNavigator && (
+        <div className="card animate-fade-in" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>นำทางข้อสอบ</h3>
+            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--success)' }}></div>
+                ทำแล้ว
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'var(--surface)', border: '1px solid var(--border-divider)' }}></div>
+                ยังไม่ได้ทำ
+              </div>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '0.5rem' }}>
+            {subject.questions.map((_, idx) => {
+              const isCurrent = currentQ === idx;
+              const isAnswered = answers[idx] !== null;
+              
+              let bg = 'var(--surface)';
+              let border = '1px solid var(--border-divider)';
+              let color = 'var(--text)';
+              
+              if (isCurrent) {
+                bg = 'var(--accent)';
+                border = '1px solid var(--accent)';
+                color = 'white';
+              } else if (isAnswered) {
+                bg = 'rgba(16, 185, 129, 0.1)';
+                border = '1px solid var(--success)';
+                color = 'var(--success)';
+              }
+
+              return (
+                <button
+                  key={idx}
+                  onClick={() => { setCurrentQ(idx); setShowNavigator(false); }}
+                  style={{
+                    height: '40px',
+                    borderRadius: '6px',
+                    background: bg,
+                    border: border,
+                    color: color,
+                    fontWeight: isCurrent ? 600 : 400,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.875rem',
+                    transition: 'all 0.2s ease',
+                    fontFamily: 'inherit'
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isCurrent) e.currentTarget.style.opacity = '0.8';
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isCurrent) e.currentTarget.style.opacity = '1';
+                  }}
+                >
+                  {idx + 1}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {showAlert && (
         <div className="animate-fade-in" style={{
