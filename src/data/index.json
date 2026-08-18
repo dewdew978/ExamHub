@@ -214,5 +214,31 @@
     "questionCount": 65,
     "year": 3,
     "type": "Midterm"
+  },
+  {
+    "id": "aws_aca_modules_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "AWS Academy Cloud Architecting (ACA) — Module 2-6 (50 Questions)",
+    "icon": "☁️",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 2-6) จาก AWS Academy Cloud Architecting (ACA) จำนวน 50 ข้อ by lnwfilmSynthesis.md",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Midterm",
+    "requiresAuth": true
+  },
+  {
+    "id": "aws_acf_modules_71q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "AWS Academy Cloud Foundations (ACF) — Module 1-8 (71 Questions)",
+    "icon": "☁️",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 1-8) จาก AWS Academy Cloud Foundations (ACF) จำนวน 71 ข้อ by lnwfilmSynthesis.md",
+    "questionCount": 71,
+    "year": 3,
+    "type": "Midterm",
+    "requiresAuth": true
   }
 ]

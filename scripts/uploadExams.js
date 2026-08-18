@@ -27,9 +27,11 @@ async function uploadExams() {
 
     console.log(`Found ${indexData.length} exams. Uploading to Supabase...`);
 
+    const sanitizedData = indexData.map(({ requiresAuth, ...rest }) => rest);
+
     const { data, error } = await supabase
       .from('exams')
-      .upsert(indexData, { onConflict: 'id' });
+      .upsert(sanitizedData, { onConflict: 'id' });
 
     if (error) {
       console.error("Error uploading exams:", error.message, error.details);

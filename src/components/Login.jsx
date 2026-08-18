@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Lock } from 'lucide-react';
 
-export default function Login({ onLogin, onClose }) {
+export default function Login({ onLogin, onClose, authRequiredMessage }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isVisible, setIsVisible] = useState(false);
@@ -104,6 +104,18 @@ export default function Login({ onLogin, onClose }) {
             {isSignUp ? 'Enter your email below to create your account' : 'Sign in to save your scores and track your progress'}
           </p>
         </div>
+        
+        {authRequiredMessage && (
+          <div className="animate-fade-in" style={{ 
+            display: 'flex', alignItems: 'center', gap: '0.625rem', 
+            color: 'var(--accent)', fontSize: '0.875rem', textAlign: 'left', 
+            padding: '0.75rem 1rem', background: 'rgba(0, 112, 243, 0.1)', 
+            borderRadius: '8px', border: '1px solid rgba(0, 112, 243, 0.2)' 
+          }}>
+            <Lock size={16} style={{ flexShrink: 0 }} />
+            <span>{authRequiredMessage}</span>
+          </div>
+        )}
         
         {error && <div className="animate-fade-in" style={{ color: 'var(--error)', fontSize: '0.875rem', textAlign: 'center', padding: '0.75rem', background: 'rgba(255,0,0,0.1)', borderRadius: '8px', border: '1px solid rgba(255,0,0,0.2)' }}>{error}</div>}
         

@@ -1,0 +1,793 @@
+{
+  "id": "aws_acf_modules_71q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "AWS Academy Cloud Foundations (ACF) — Module 1-8 (71 Questions)",
+  "icon": "☁️",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 1-8) จาก AWS Academy Cloud Foundations (ACF) จำนวน 71 ข้อ ช้อยส์ภาษาไทยพร้อมศัพท์เทคนิคภาษาอังกฤษ by lnwfilmSynthesis.md",
+  "requiresAuth": true,
+  "questions": [
+    {
+      "q": "[Module 1] ข้อดีของ cloud computing เมื่อเทียบกับการใช้งานแบบ on-premises คืออะไร",
+      "choices": [
+        "หลีกเลี่ยงการจัดซื้อฮาร์ดแวร์ด้วยเงินลงทุนก้อนใหญ่ล่วงหน้า (Avoid large capital purchases)",
+        "ใช้กำลังการประมวลผลได้ตามความต้องการ (Use on-demand capacity)",
+        "ขยายสู่ระดับโลกได้ภายในไม่กี่นาที (Go global in minutes)",
+        "ถูกทุกข้อที่กล่าวมา (All of the above)"
+      ],
+      "answer": 3,
+      "explain": "ด้วย cloud computing ช่วยให้หลีกเลี่ยงค่าใช้จ่ายลงทุนล่วงหน้า, ปรับขนาดได้ตามต้องการ, ขยายสู่ระดับสากลได้รวดเร็ว และเพิ่มความคล่องตัว"
+    },
+    {
+      "q": "[Module 1] รูปแบบการคิดราคาแบบใดที่ทำให้ลูกค้าของ AWS จ่ายค่าทรัพยากรตามการใช้งานจริง",
+      "choices": [
+        "Pay as you decommission",
+        "Pay as you go",
+        "Pay as you buy",
+        "Pay as you reserve"
+      ],
+      "answer": 1,
+      "explain": "ด้วย AWS คุณจ่ายค่าทรัพยากรตามการใช้งานจริง (pay as you go)"
+    },
+    {
+      "q": "[Module 1] ข้อใดต่อไปนี้ไม่ใช่โมเดลของ cloud computing",
+      "choices": [
+        "Platform as a Service (PaaS)",
+        "Infrastructure as a Service (IaaS)",
+        "System administration as a service",
+        "Software as a Service (SaaS)"
+      ],
+      "answer": 2,
+      "explain": "โมเดลหลักของ Cloud Computing ประกอบด้วย IaaS, PaaS และ SaaS ส่วน System administration as a service ไม่ใช่โมเดลบริการคลาวด์"
+    },
+    {
+      "q": "[Module 1] จริงหรือเท็จ? AWS เป็นเจ้าของและดูแลรักษาฮาร์ดแวร์ที่เชื่อมต่อเครือข่ายซึ่งจำเป็นสำหรับบริการแอปพลิเคชัน ในขณะที่คุณเป็นผู้จัดสรรและใช้งานสิ่งที่คุณต้องการ",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะบน Private Cloud เท่านั้น",
+        "เท็จ เนื่องจากลูกค้าเป็นเจ้าของฮาร์ดแวร์ทั้งหมด"
+      ],
+      "answer": 0,
+      "explain": "AWS เป็นเจ้าของและดูแลรักษาฮาร์ดแวร์ทางกายภาพและเครือข่าย ในขณะที่ลูกค้ามีหน้าที่จัดสรร (provision) และปรับแต่งทรัพยากรที่ตนต้องการใช้งาน"
+    },
+    {
+      "q": "[Module 1] ข้อใดต่อไปนี้ไม่ใช่ประโยชน์ของ cloud computing เมื่อเทียบกับการใช้งานแบบ on-premises",
+      "choices": [
+        "เพิ่มความเร็วและความคล่องตัว (Increase speed and agility)",
+        "ต้องจ่ายเงินค่าติดตั้ง จัดวางตู้แร็ค และจ่ายไฟให้เซิร์ฟเวอร์ (Pay for racking, stacking, and powering servers)",
+        "ขจัดความจำเป็นในการคาดเดาความจุของโครงสร้างพื้นฐาน (Eliminate guessing on infrastructure capacity needs)",
+        "เปลี่ยนค่าใช้จ่ายลงทุนก้อนใหญ่เป็นค่าใช้จ่ายผันแปรตามจริง (Trade capital expense for variable expense)"
+      ],
+      "answer": 1,
+      "explain": "การที่ต้องจ่ายค่าติดตั้ง จัดวาง และจ่ายไฟให้เซิร์ฟเวอร์ (racking, stacking, and powering servers) เป็นภาระของ on-premises ไม่ใช่ประโยชน์ของ cloud"
+    },
+    {
+      "q": "[Module 1] ข้อใดต่อไปนี้ไม่ใช่ประโยชน์ของ AWS Cloud computing?",
+      "choices": [
+        "High availability และ Fault tolerance",
+        "Multiple procurement cycles และ High latency",
+        "Temporary capacity และ High availability",
+        "Fault tolerance และ Temporary capacity"
+      ],
+      "answer": 1,
+      "explain": "High latency (ความหน่วงสูง) และ multiple procurement cycles (รอบการจัดซื้อหลายขั้นตอน) ไม่ใช่ประโยชน์ของ AWS Cloud"
+    },
+    {
+      "q": "[Module 1] ข้อใดต่อไปนี้เป็น compute service",
+      "choices": [
+        "Amazon VPC",
+        "Amazon S3",
+        "Amazon EC2",
+        "Amazon CloudFront"
+      ],
+      "answer": 2,
+      "explain": "Amazon EC2 (Elastic Compute Cloud) เป็นบริการประเภท Compute Service"
+    },
+    {
+      "q": "[Module 1] จริงหรือเท็จ? Cloud computing เป็นวิธีที่ง่ายในการเข้าถึงเซิร์ฟเวอร์ พื้นที่จัดเก็บข้อมูล ฐานข้อมูล และชุดบริการแอปพลิเคชันที่หลากหลายผ่านทางอินเทอร์เน็ต โดยคุณเป็นเจ้าของฮาร์ดแวร์ที่เชื่อมต่อเครือข่ายซึ่งจำเป็นสำหรับบริการเหล่านี้ และ Amazon Web Services เป็นผู้จัดสรรสิ่งที่คุณต้องการ",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง หากใช้บริการแบบ On-Demand",
+        "จริง หากสมัครแบบ Enterprise Support"
+      ],
+      "answer": 1,
+      "explain": "ข้อความนี้เป็นเท็จ เนื่องจากลูกค้าไม่ได้เป็นเจ้าของฮาร์ดแวร์ AWS ต่างหากที่เป็นเจ้าของและดูแลรักษาฮาร์ดแวร์ทั้งหมด"
+    },
+    {
+      "q": "[Module 1] Economies of scale เกิดจากปัจจัยใด",
+      "choices": [
+        "การมีผู้ให้บริการคลาวด์หลากหลายเจ้าในตลาด",
+        "การมีลูกค้านับแสนรายรวมกันอยู่บนระบบคลาวด์ (having hundreds of thousands of customers aggregated in the cloud)",
+        "การมีบริการคลาวด์นับร้อยบริการให้เลือกใช้งานผ่านอินเทอร์เน็ต",
+        "การต้องลงทุนมหาศาลใน data centers และเซิร์ฟเวอร์ของตนเอง"
+      ],
+      "answer": 1,
+      "explain": "Economies of scale ใน AWS เกิดจากการรวบรวมลูกค้านับแสนนับล้านราย ทำให้ AWS สามารถจัดซื้อทรัพยากรได้ในราคาถูกลงและส่งต่อส่วนลดให้ลูกค้า"
+    },
+    {
+      "q": "[Module 1] ข้อใดต่อไปนี้เป็นวิธีการเข้าถึง AWS core services?",
+      "choices": [
+        "Technical support calls, AWS Marketplace และ AWS CLI",
+        "AWS Management Console, AWS Command Line Interface (AWS CLI) และ Software Development Kits (SDKs)",
+        "AWS Marketplace, Technical support calls และ SDKs",
+        "AWS CLI, Technical support calls และ AWS Management Console"
+      ],
+      "answer": 1,
+      "explain": "3 ช่องทางหลักในการเข้าถึงและจัดการ AWS core services คือ AWS Management Console (GUI), AWS CLI (Command Line) และ SDKs (โค้ดโปรแกรม)"
+    },
+    {
+      "q": "[Module 2] สำหรับบริการเช่น Amazon EC2 และ Amazon RDS คุณสามารถลงทุนใน reserved capacity ได้ มีตัวเลือกการชำระเงินแบบใดบ้างสำหรับ Reserved Instances?",
+      "choices": [
+        "AURI, MURI และ DURI",
+        "AURI (All Upfront), NURI (No Upfront) และ PURI (Partial Upfront)",
+        "NURI, PURI และ DURI",
+        "MURI, PURI และ AURI"
+      ],
+      "answer": 1,
+      "explain": "ตัวเลือกการชำระเงินของ Reserved Instances มี 3 รูปแบบคือ All Upfront (AURI), Partial Upfront (PURI) และ No Upfront (NURI)"
+    },
+    {
+      "q": "[Module 2] ลูกค้าจะไปดูรายละเอียดเพิ่มเติมเกี่ยวกับกิจกรรมการเรียกเก็บเงิน (billing) ของ Amazon EC2 ที่เกิดขึ้นเมื่อ 3 เดือนก่อนได้ที่ไหน?",
+      "choices": [
+        "Amazon EC2 dashboard",
+        "AWS Cost Explorer",
+        "AWS Trusted Advisor dashboard",
+        "AWS CloudTrail logs ที่เก็บไว้ใน Amazon S3"
+      ],
+      "answer": 1,
+      "explain": "AWS Cost Explorer ช่วยให้สามารถดู วิเคราะห์ และตรวจสอบข้อมูลค่าใช้จ่ายย้อนหลังได้สูงสุดถึง 12 เดือน"
+    },
+    {
+      "q": "[Module 2] จริงหรือเท็จ? เพื่อที่จะได้รับอัตราส่วนลดที่เกี่ยวข้องกับ Reserved Instances คุณต้องชำระเงินล่วงหน้าเต็มจำนวนสำหรับระยะเวลาของข้อตกลง",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะสัญญาแบบ 3 ปีเท่านั้น",
+        "จริง เฉพาะ instance ขนาดใหญ่เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "ไม่จำเป็นต้องจ่ายเต็มจำนวน เพราะมีตัวเลือก No Upfront (NURI) ที่ไม่ต้องจ่ายล่วงหน้า หรือ Partial Upfront (PURI) ที่จ่ายเพียงบางส่วน"
+    },
+    {
+      "q": "[Module 2] ข้อความใดต่อไปนี้เป็นจริงเกี่ยวกับรูปแบบการกำหนดราคาบน AWS?",
+      "choices": [
+        "โดยส่วนใหญ่ มีการคิดค่าบริการถ่ายโอนข้อมูลขาเข้า (inbound data transfer) ต่อกิกะไบต์",
+        "พื้นที่จัดเก็บข้อมูล (Storage) มักจะถูกเรียกเก็บเงินตามจำนวนกิกะไบต์ (charged per gigabyte)",
+        "Compute มักจะถูกคิดเป็นค่าบริการรายเดือนคงที่ตามประเภท instance",
+        "การถ่ายโอนข้อมูลขาออก (outbound) ฟรีไม่จำกัดตามขีดจำกัดของแต่ละบัญชี"
+      ],
+      "answer": 1,
+      "explain": "บริการ Storage ส่วนใหญ่จะคิดค่าบริการตามขนาดข้อมูลจริงต่อ GB-month และ Inbound data transfer โดยทั่วไปจะฟรี"
+    },
+    {
+      "q": "[Module 2] แผนการสนับสนุน (support plans) ทั้งสี่แบบที่เสนอโดย AWS Support มีอะไรบ้าง?",
+      "choices": [
+        "Basic, Developer, Business, Enterprise",
+        "Basic, Startup, Business, Enterprise",
+        "Free, Bronze, Silver, Gold",
+        "Standard, Professional, Premium, Enterprise"
+      ],
+      "answer": 0,
+      "explain": "ระดับของ AWS Support Plan ประกอบด้วย 4 ระดับ: Basic (ฟรี), Developer, Business และ Enterprise"
+    },
+    {
+      "q": "[Module 2] เครื่องมือใดของ AWS ที่ช่วยให้คุณสำรวจบริการต่าง ๆ และสร้างการประมาณการค่าใช้จ่าย (cost estimates) สำหรับกรณีการใช้งานของคุณบน AWS?",
+      "choices": [
+        "AWS Pricing Calculator",
+        "AWS Budgets",
+        "AWS Cost and Usage Report",
+        "AWS Billing Dashboard"
+      ],
+      "answer": 0,
+      "explain": "AWS Pricing Calculator เป็นเครื่องมือจำลองและคำนวณประมาณการค่าใช้จ่ายก่อนที่จะเริ่มสร้างและใช้งานบริการจริงบน AWS"
+    },
+    {
+      "q": "[Module 2] เมื่อ AWS เติบโตขึ้น ต้นทุนในการดำเนินธุรกิจจะลดลงและการประหยัดจะถูกส่งต่อกลับไปยังลูกค้าด้วยราคาที่ต่ำลง การปรับให้เหมาะสมนี้เรียกว่าอะไร?",
+      "choices": [
+        "Expenditure awareness",
+        "Economies of scale",
+        "Matching supply and demand",
+        "EC2 Right Sizing"
+      ],
+      "answer": 1,
+      "explain": "Economies of scale (การประหยัดต่อขนาด) ช่วยลดต้นทุนเฉลี่ยเมื่อปริมาณการดำเนินงานเพิ่มขึ้น และ AWS ส่งต่อผลประโยชน์นี้ให้ลูกค้าในรูปของการปรับลดราคา"
+    },
+    {
+      "q": "[Module 2] จริงหรือเท็จ? AWS เสนอบริการบางอย่างโดยไม่มีค่าใช้จ่าย เช่น Amazon VPC, AWS IAM, Consolidated Billing, AWS Elastic Beanstalk, Auto Scaling, AWS OpsWorks และ AWS CloudFormation อย่างไรก็ตาม คุณอาจถูกเรียกเก็บเงินสำหรับทรัพยากรอื่นของ AWS ที่สร้างขึ้นผ่านบริการเหล่านี้",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะผู้ใช้ระดับ Free Tier 12 เดือนแรกเท่านั้น",
+        "เท็จ บริการเหล่านี้มีค่าลิขสิทธิ์รายเดือนทั้งหมด"
+      ],
+      "answer": 0,
+      "explain": "บริการจัดการเหล่านี้ใช้งานได้ฟรี แต่ทรัพยากรพื้นฐานที่ถูกสร้างขึ้น (เช่น EC2 instances, EBS volumes หรือ Elastic IP) จะถูกคิดค่าบริการตามปกติ"
+    },
+    {
+      "q": "[Module 2] อะไรคือประโยชน์ของการใช้ AWS Organizations?",
+      "choices": [
+        "แทนที่ IAM policies เดิมด้วย Service Control Policies (SCPs) ทั้งหมด และป้องกันการจำกัดสิทธิ์ของ Root user",
+        "ให้ความสามารถในการจัดกลุ่มบัญชี (groups of accounts) และแนบนโยบายเข้ากับกลุ่ม รวมถึงทำให้การสร้างและจัดการบัญชีเป็นอัตโนมัติผ่าน APIs",
+        "สร้าง nested organizational units (OUs) ได้ไม่จำกัดจำนวน และแทนที่ IAM policies ทั้งหมด",
+        "ป้องกันไม่ให้มีข้อจำกัดใดๆ บนบัญชี Root user และสร้าง OUs ได้ไม่จำกัดจำนวน"
+      ],
+      "answer": 1,
+      "explain": "AWS Organizations ช่วยจัดกลุ่มบัญชี (Accounts/OUs) เพื่อบังคับใช้นโยบายแบบรวมศูนย์ และสามารถใช้ API ในการสร้างและควบคุมบัญชีโดยอัตโนมัติ"
+    },
+    {
+      "q": "[Module 2] จริงหรือเท็จ? บริการแบบไม่จำกัด (Unlimited services) พร้อมใช้งานบน AWS Free Tier สำหรับลูกค้า AWS ใหม่เป็นเวลา 12 เดือนหลังจากวันที่สมัครใช้งาน AWS",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง หากผูกบัตรเครดิตที่ยืนยันตัวตนแล้ว",
+        "จริง สำหรับทุกบริการที่ไม่ใช่ Enterprise"
+      ],
+      "answer": 1,
+      "explain": "AWS Free Tier มีการจำกัดขอบเขตและปริมาณการใช้งานในแต่ละบริการ (เช่น EC2 750 ชั่วโมง/เดือน, S3 5GB) ไม่ได้ให้ใช้งานแบบไม่จำกัด (Unlimited)"
+    },
+    {
+      "q": "[Module 3] องค์ประกอบใดของ AWS Global Infrastructure ที่ Amazon CloudFront ใช้เพื่อให้มั่นใจว่าการส่งข้อมูลมีความหน่วงต่ำ (low latency)?",
+      "choices": [
+        "AWS Regions",
+        "AWS Edge Locations",
+        "AWS Availability Zones",
+        "Amazon VPC"
+      ],
+      "answer": 1,
+      "explain": "Amazon CloudFront เป็นบริการ CDN ที่ใช้ประโยชน์จากเครือข่าย Edge Locations ทั่วโลกเพื่อแคชและส่งมอบข้อมูลด้วย Latency ที่ต่ำที่สุด"
+    },
+    {
+      "q": "[Module 3] คุณสามารถรันแอปพลิเคชันและ workload จาก Region ที่อยู่ใกล้ผู้ใช้ปลายทางมากขึ้นเพื่อ _______ ความหน่วง (latency)",
+      "choices": [
+        "เพิ่มขึ้น (increase)",
+        "ลดลง (decrease)",
+        "คงที่ (maintain)",
+        "สลับไปมา (fluctuate)"
+      ],
+      "answer": 1,
+      "explain": "การเลือกรันแอปพลิเคชันใน Region ที่ใกล้ชิดกับผู้ใช้ปลายทางที่สุดจะช่วยลดระยะทางเครือข่าย ทำให้ Latency ลดลง (decrease latency)"
+    },
+    {
+      "q": "[Module 3] จริงหรือเท็จ Networking, storage, compute และ databases เป็นตัวอย่างของหมวดหมู่บริการที่ AWS นำเสนอ",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง ยกเว้น databases ที่เป็น 3rd party ทั้งหมด",
+        "เท็จ หมวดหมู่เหล่านี้เป็นของ on-premises เท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "บริการหลักของ AWS ถูกจัดกลุ่มตามหมวดหมู่การใช้งาน เช่น Compute, Storage, Database และ Networking & Content Delivery"
+    },
+    {
+      "q": "[Module 3] ข้อใดต่อไปนี้คือพื้นที่ทางภูมิศาสตร์ที่มี Availability Zones ตั้งแต่สองแห่งขึ้นไป?",
+      "choices": [
+        "AWS Origins",
+        "AWS Regions",
+        "Compute zones",
+        "Edge locations"
+      ],
+      "answer": 1,
+      "explain": "AWS Region คือพื้นที่ทางภูมิศาสตร์ที่แยกจากกัน โดยแต่ละ Region จะประกอบด้วย Availability Zones ที่เป็นอิสระต่อกันตั้งแต่ 2 หรือ 3 แห่งขึ้นไป"
+    },
+    {
+      "q": "[Module 3] _______ หมายถึงโครงสร้างพื้นฐานมีความซ้ำซ้อนของส่วนประกอบในตัว และ _______ หมายถึงทรัพยากรจะปรับตัวโดยอัตโนมัติตามความต้องการที่เพิ่มขึ้นหรือลดลง",
+      "choices": [
+        "No human intervention, Fault tolerant",
+        "Elastic and scalable, No human intervention",
+        "Fault tolerant, Elastic and scalable",
+        "Fault tolerant, No human intervention"
+      ],
+      "answer": 2,
+      "explain": "Fault tolerance คือความสามารถของระบบในการทำงานต่อได้แม้มีชิ้นส่วนล้มเหลวเนื่องจากมีความซ้ำซ้อน (redundancy) และ Elasticity/Scalability คือการปรับขยายหรือลดขนาดทรัพยากรตามโหลดงาน"
+    },
+    {
+      "q": "[Module 3] จริงหรือเท็จ Availability Zones ภายใน Region เดียวกันเชื่อมต่อกันผ่านลิงก์ที่มีความหน่วงต่ำ (low-latency links)",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะผ่าน Public Internet เท่านั้น",
+        "เท็จ AZs ไม่มีการเชื่อมต่อถึงกัน"
+      ],
+      "answer": 0,
+      "explain": "Availability Zones ภายใน Region เดียวกันเชื่อมต่อถึงกันด้วยเครือข่ายไฟเบอร์ส่วนตัวความเร็วสูงที่มีค่า latency ต่ำมากและมี bandwidth สูง"
+    },
+    {
+      "q": "[Module 3] ข้อความใดต่อไปนี้เกี่ยวกับ Availability Zones ที่ไม่เป็นความจริง?",
+      "choices": [
+        "Availability Zones ถูกออกแบบมาเพื่อการแยกโซนความเสียหาย (fault isolation)",
+        "Availability Zones ประกอบด้วยศูนย์ข้อมูล (data centers) หนึ่งแห่งหรือมากกว่า",
+        "ศูนย์ข้อมูล (data center) หนึ่งแห่งสามารถนำไปใช้งานร่วมกันได้มากกว่าหนึ่ง Availability Zone",
+        "Availability Zones เชื่อมต่อถึงกันด้วยเครือข่ายส่วนตัวความเร็วสูง"
+      ],
+      "answer": 2,
+      "explain": "Data Center แต่ละแห่งจะสังกัดอยู่ใน Availability Zone เดียวเท่านั้น ไม่มีการแชร์ data center ร่วมกันข้าม AZ"
+    },
+    {
+      "q": "[Module 3] ข้อใดเป็นความจริงเกี่ยวกับ AWS Regions?",
+      "choices": [
+        "Region ทั้งหมดตั้งอยู่ในพื้นที่ภูมิศาสตร์เดียวกัน และเป็นที่ตั้งของลูกค้า",
+        "Region เป็นสถานที่ตั้งทางกายภาพที่มีหลาย Availability Zones และแต่ละ Region ตั้งอยู่ในพื้นที่ทางภูมิศาสตร์ที่แยกจากกัน",
+        "Region ไม่มี Availability Zones และตั้งอยู่ใน data center แห่งเดียว",
+        "Region เชื่อมต่อกันแบบ Local Area Network เสมอและมีค่า latency เท่ากับ 0"
+      ],
+      "answer": 1,
+      "explain": "แต่ละ Region เป็นพื้นที่ทางภูมิศาสตร์ที่แยกขาดจากกัน และภายในประกอบไปด้วยหลาย Availability Zones"
+    },
+    {
+      "q": "[Module 3] AWS แนะนำอย่างยิ่งให้จัดสรรทรัพยากรด้านการประมวลผล (compute) ของคุณกระจายไปยัง Availability Zones _______",
+      "choices": [
+        "หลายแห่ง (multiple)",
+        "ทั้งหมดทั่วโลก (all)",
+        "แห่งเดียว (single)",
+        "ไม่ต้องระบุ (no)"
+      ],
+      "answer": 0,
+      "explain": "แนวปฏิบัติที่ดีที่สุดของ AWS เพื่อสร้างความพร้อมใช้งานสูง (High Availability) คือการกระจายทรัพยากรไปทั่วหลาย Availability Zones (Multi-AZ)"
+    },
+    {
+      "q": "[Module 3] จริงหรือเท็จ Edge locations ตั้งอยู่เฉพาะในพื้นที่ทั่วไปเดียวกันกับ Regions เท่านั้น",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง สำหรับ Region ในทวีปอเมริกาเหนือเท่านั้น",
+        "จริง หากใช้บริการ Route 53"
+      ],
+      "answer": 1,
+      "explain": "Edge locations ตั้งอยู่กระจายอยู่ทั่วโลกในเมืองใหญ่หลายร้อยแห่ง ไม่ได้จำกัดอยู่เฉพาะพื้นที่เดียวกับ Region"
+    },
+    {
+      "q": "[Module 4] ในโมเดลความรับผิดชอบร่วมกัน (shared responsibility model) AWS มีหน้าที่รับผิดชอบในการจัดหาสิ่งใด?",
+      "choices": [
+        "Security of the cloud",
+        "Security to the cloud",
+        "Security for the cloud",
+        "Security in the cloud"
+      ],
+      "answer": 0,
+      "explain": "AWS รับผิดชอบ Security of the Cloud (ความปลอดภัยของโครงสร้างพื้นฐานคลาวด์) ในขณะที่ลูกค้ารับผิดชอบ Security in the Cloud (ความปลอดภัยในคลาวด์ เช่น ข้อมูล, ระบบปฏิบัติการ, IAM)"
+    },
+    {
+      "q": "[Module 4] ในโมเดลความรับผิดชอบร่วมกัน ข้อใดต่อไปนี้เป็นตัวอย่างของ 'Security in the cloud'?",
+      "choices": [
+        "การปฏิบัติตามมาตรฐานฮาร์ดแวร์ และการดูแลความปลอดภัยทางกายภาพของ data centers",
+        "การตั้งค่า Security Groups และการเข้ารหัสข้อมูลทั้งขณะจัดเก็บ (at rest) และระหว่างส่ง (in transit)",
+        "การปกป้อง Global Infrastructure และการจัดการฮาร์ดแวร์ใน data centers",
+        "การดูแลระบบระบายความร้อนของเซิร์ฟเวอร์ และการตั้งค่า Security Groups"
+      ],
+      "answer": 1,
+      "explain": "การตั้งค่า Security Groups และการเข้ารหัสข้อมูล (Encryption) เป็นสิ่งที่ลูกค้าต้องเป็นผู้กำหนดและจัดการเอง จึงถือเป็น Security in the Cloud"
+    },
+    {
+      "q": "[Module 4] ข้อใดต่อไปนี้เป็นความรับผิดชอบของ AWS ภายใต้โมเดลความรับผิดชอบร่วมกัน?",
+      "choices": [
+        "การกำหนดค่าแอปพลิเคชัน 3rd-party (Configuring third-party applications)",
+        "การบำรุงรักษาฮาร์ดแวร์ทางกายภาพ (Maintaining physical hardware)",
+        "การรักษาความปลอดภัยการเข้าถึงแอปพลิเคชันและข้อมูล (Security application access and data)",
+        "การจัดการ custom Amazon Machine Images (AMIs)"
+      ],
+      "answer": 1,
+      "explain": "การบำรุงรักษาฮาร์ดแวร์ ศูนย์ข้อมูล และอุปกรณ์เครือข่ายทางกายภาพเป็นหน้าที่ของ AWS โดยตรง"
+    },
+    {
+      "q": "[Module 4] เมื่อสร้างผู้ใช้ใน AWS Identity and Access Management (IAM) การเข้าถึงสองประเภทใดที่สามารถมอบให้กับผู้ใช้ได้?",
+      "choices": [
+        "Institutional access และ Authorized access",
+        "Programmatic access และ AWS Management Console access",
+        "Administrative root access และ Institutional access",
+        "Authorized access และ Administrative root access"
+      ],
+      "answer": 1,
+      "explain": "การเข้าถึงของผู้ใช้ IAM มี 2 รูปแบบหลักคือ: Programmatic access (ผ่าน Access Key ID / Secret Key สำหรับ CLI/SDK) และ AWS Management Console access (ผ่าน Password/MFA)"
+    },
+    {
+      "q": "[Module 4] จริงหรือเท็จ? AWS Organizations ช่วยให้คุณสามารถรวมบัญชี AWS หลายบัญชีเข้าด้วยกันเพื่อจัดการแบบรวมศูนย์",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะบัญชีที่อยู่ใน Region เดียวกันเท่านั้น",
+        "เท็จ Organizations ใช้สำหรับดูบิลค่าใช้จ่ายได้อย่างเดียว"
+      ],
+      "answer": 0,
+      "explain": "AWS Organizations ช่วยในการบริหารจัดการและกำกับดูแลบัญชี AWS หลายบัญชีได้จากศูนย์กลาง ทั้งด้านการเงิน (Consolidated Billing) และนโยบายความปลอดภัย (SCPs)"
+    },
+    {
+      "q": "[Module 4] ข้อใดต่อไปนี้เป็นแนวทางปฏิบัติที่ดีที่สุดในการรักษาความปลอดภัยบัญชีโดยใช้ AWS Identity and Access Management (IAM)?",
+      "choices": [
+        "ให้สิทธิ์ Admin แก่ผู้ใช้ทุกคนเป็นค่าเริ่มต้น และหลีกเลี่ยงการใช้ IAM groups",
+        "จัดการการเข้าถึงทรัพยากร AWS (Manage access to AWS resources) และกำหนดสิทธิ์การเข้าถึงแบบละเอียดเจาะจง (Define fine-grained access rights)",
+        "คงผู้ใช้และ credentials ที่ไม่ได้ใช้งานทิ้งไว้ในระบบ และให้สิทธิ์ Admin เป็นค่าเริ่มต้น",
+        "หลีกเลี่ยงการใช้ IAM groups และคง credentials ที่ไม่ใช้ไว้ในระบบ"
+      ],
+      "answer": 1,
+      "explain": "แนวปฏิบัติที่ดีคือการควบคุมการเข้าถึงอย่างรัดกุม และใช้หลักการสิทธิ์ขั้นต่ำที่จำเป็น (Principle of Least Privilege) โดยกำหนดสิทธิ์แบบละเอียด (Fine-grained)"
+    },
+    {
+      "q": "[Module 4] ข้อใดต่อไปนี้ควรทำโดยผู้ใช้ root ของบัญชี AWS เท่านั้น?",
+      "choices": [
+        "การตั้งค่าสิทธิ์เข้าถึงที่ปลอดภัยสำหรับแอปพลิเคชัน",
+        "การเชื่อมต่อบริการ AWS อื่นๆ เข้าด้วยกัน",
+        "การเปลี่ยนสิทธิ์แบบละเอียด (granular permissions)",
+        "การเปลี่ยนแผนการสนับสนุนของ AWS (Change the AWS support plan)"
+      ],
+      "answer": 3,
+      "explain": "งานบางประเภท เช่น การเปลี่ยน Support Plan, การปิดบัญชี AWS หรือการเปลี่ยนการตั้งค่า Root Account จำเป็นต้องใช้ Root user เท่านั้น"
+    },
+    {
+      "q": "[Module 4] หลังจากล็อกอินครั้งแรก AWS แนะนำแนวทางปฏิบัติที่ดีที่สุดใดสำหรับผู้ใช้ root ของบัญชี AWS?",
+      "choices": [
+        "ลบบัญชี AWS account root user ทิ้งทันที",
+        "เพิกถอนสิทธิ์ทั้งหมดบนบัญชี root user",
+        "จำกัดสิทธิ์บน root user ให้อยู่ระดับ Read-only",
+        "ลบ access keys ของบัญชี root user ออก (Delete the access keys of the root user)"
+      ],
+      "answer": 3,
+      "explain": "เพื่อความปลอดภัยสูงสุด ควรลบ Access Keys ของ Root User ทิ้งเพื่อป้องกันการเข้าถึงแบบ Programmatic และเปิดใช้งาน MFA บน Root Account"
+    },
+    {
+      "q": "[Module 4] ผู้ดูแลระบบจะเพิ่มชั้นความปลอดภัยในการล็อกอินให้กับ AWS Management Console ของผู้ใช้ได้อย่างไร?",
+      "choices": [
+        "ใช้ Amazon Cloud Directory",
+        "ตรวจสอบ IAM roles audit log",
+        "เปิดใช้งาน Multi-Factor Authentication (MFA)",
+        "เปิดใช้งาน AWS CloudTrail"
+      ],
+      "answer": 2,
+      "explain": "การเปิดใช้ MFA (Multi-Factor Authentication) เพิ่มการตรวจสอบสิทธิ์อีกชั้นหนึ่งนอกเหนือจากรหัสผ่าน ช่วยปกป้องการเข้าสู่ระบบคอนโซลได้อย่างมีประสิทธิภาพ"
+    },
+    {
+      "q": "[Module 4] จริงหรือเท็จ? AWS Key Management Service (AWS KMS) ช่วยให้คุณสามารถประเมิน ตรวจสอบ และประเมินผลการตั้งค่าของทรัพยากร AWS ของคุณ",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง หากใช้ร่วมกับ CloudTrail",
+        "จริง หากเปิดใช้งาน FIPS mode"
+      ],
+      "answer": 1,
+      "explain": "ข้อความนี้เป็นเท็จ บริการที่ทำหน้าที่ประเมินและตรวจสอบการตั้งค่าทรัพยากรคือ AWS Config ส่วน AWS KMS มีหน้าที่สร้างและจัดการคีย์เข้ารหัส (Encryption Keys)"
+    },
+    {
+      "q": "[Module 5] บน Amazon Virtual Private Cloud (Amazon VPC) ขนาด subnet ที่เล็กที่สุดที่คุณสามารถกำหนดใน VPC ได้คือขนาดใด?",
+      "choices": [
+        "/26",
+        "/28",
+        "/30",
+        "/24"
+      ],
+      "answer": 1,
+      "explain": "ขนาด Subnet ที่เล็กที่สุดใน AWS VPC คือ /28 (มี 16 IP addresses โดยใช้งานได้จริง 11 IP เนื่องจากถูก AWS สงวนไว้ 5 IP)"
+    },
+    {
+      "q": "[Module 5] บน Amazon Virtual Private Cloud (Amazon VPC) ช่วง IP address ขนาดใหญ่ที่สุดที่คุณสามารถกำหนดใน VPC ได้คือขนาดใด?",
+      "choices": [
+        "/28",
+        "/30",
+        "/16",
+        "/24"
+      ],
+      "answer": 2,
+      "explain": "ขนาดบล็อก CIDR ที่ใหญ่ที่สุดที่ VPC รองรับคือ /16 (มี 65,536 IP addresses)"
+    },
+    {
+      "q": "[Module 5] คุณต้องการอนุญาตให้ทรัพยากรใน private subnet สามารถออกไปยังอินเทอร์เน็ตได้ ข้อใดต่อไปนี้จำเป็นต้องมีเพื่อให้สามารถเข้าถึงได้?",
+      "choices": [
+        "NAT Gateway",
+        "Network Access Control Lists (NACLs)",
+        "Route Tables",
+        "Security Groups"
+      ],
+      "answer": 0,
+      "explain": "NAT Gateway ช่วยให้อินสแตนซ์ใน Private Subnet สามารถเชื่อมต่อไปยังอินเทอร์เน็ตภายนอกได้ (เช่น เพื่อดาวน์โหลดแพตช์) แต่ป้องกันไม่ให้อินเทอร์เน็ตภายนอกเชื่อมต่อเข้ามายังอินสแตนซ์ได้โดยตรง"
+    },
+    {
+      "q": "[Module 5] บริการเครือข่ายใดของ AWS ที่ช่วยให้บริษัทสามารถสร้างเครือข่ายเสมือน (virtual network) ภายใน AWS ได้?",
+      "choices": [
+        "Amazon Route 53",
+        "Amazon Virtual Private Cloud (Amazon VPC)",
+        "AWS Config",
+        "AWS Direct Connect"
+      ],
+      "answer": 1,
+      "explain": "Amazon VPC ให้คุณจัดสรรส่วนเครือข่ายเสมือนที่ถูกแยกออกทางตรรกะบนคลาวด์ของ AWS ได้อย่างอิสระ"
+    },
+    {
+      "q": "[Module 5] จริงหรือเท็จ? Private subnet สามารถเข้าถึงอินเทอร์เน็ตได้โดยตรงโดยไม่ต้องผ่านเกตเวย์ตัวกลาง",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง หากเปิดใช้ IPv6",
+        "จริง หากแนบ Security Group แบบ Any"
+      ],
+      "answer": 1,
+      "explain": "Private Subnet ไม่สามารถเข้าถึงอินเทอร์เน็ตได้โดยตรง ต้องเชื่อมต่อผ่าน NAT Gateway/NAT Instance หรือใช้ VPC Endpoints"
+    },
+    {
+      "q": "[Module 5] ส่วนประกอบใดของ AWS Global Infrastructure ที่ Amazon CloudFront ใช้เพื่อให้มั่นใจว่าจะส่งข้อมูลด้วยเวลาแฝงต่ำ (low latency)?",
+      "choices": [
+        "AWS Regions",
+        "AWS Edge Locations",
+        "AWS Availability Zones",
+        "Amazon VPC"
+      ],
+      "answer": 1,
+      "explain": "CloudFront ใช้ Edge Locations เพื่อแคชข้อมูลไว้ใกล้ผู้ใช้ปลายทางที่สุดเพื่อลดเวลาแฝง"
+    },
+    {
+      "q": "[Module 5] ข้อใดต่อไปนี้เป็นการควบคุมความปลอดภัยแบบเสริม (optional) ที่สามารถนำไปใช้ในระดับ subnet ของ VPC ได้?",
+      "choices": [
+        "Network ACL (NACL)",
+        "Host Firewall",
+        "Web Application Firewall (WAF)",
+        "Security Group"
+      ],
+      "answer": 0,
+      "explain": "Network ACL (NACL) ทำหน้าที่เป็นไฟร์วอลล์ระดับ Subnet ในขณะที่ Security Group ทำหน้าที่ระดับ Instance"
+    },
+    {
+      "q": "[Module 5] จะเกิดอะไรขึ้นโดยอัตโนมัติเมื่อคุณสร้าง VPC ใหม่ขึ้นมา?",
+      "choices": [
+        "มีการสร้าง Internet Gateway ให้เป็นค่าเริ่มต้น",
+        "มีการสร้าง Main Route Table ให้เป็นค่าเริ่มต้น (A main route table is created by default)",
+        "มีการสร้าง 3 Subnets ให้โดยอัตโนมัติใน 1 Availability Zone",
+        "มีการสร้าง Subnets ให้ครบทุก Availability Zone โดยอัตโนมัติ"
+      ],
+      "answer": 1,
+      "explain": "เมื่อสร้าง VPC ระบบจะสร้าง Main Route Table, Default Network ACL และ Default Security Group ให้โดยอัตโนมัติ แต่ Subnet และ Internet Gateway ต้องสร้างและผูกเอง"
+    },
+    {
+      "q": "[Module 5] ข้อใดต่อไปนี้สามารถใช้เพื่อปกป้อง instance ของ Amazon EC2 ที่โฮสต์อยู่ใน AWS ได้?",
+      "choices": [
+        "Security Group",
+        "Amazon Machine Image (AMI)",
+        "Internet Gateway",
+        "AWS Direct Connect"
+      ],
+      "answer": 0,
+      "explain": "Security Group ทำหน้าที่เป็น Virtual Firewall ควบคุมทราฟฟิกขาเข้า (Inbound) และขาออก (Outbound) ในระดับ Instance"
+    },
+    {
+      "q": "[Module 5] เมื่อคุณสร้าง Custom VPC และกำหนดบล็อก IPv4 CIDR เป็น 10.0.1.0/24 (มี IP ทั้งหมด 256 ที่อยู่) จะมี IP address ที่ใช้งานได้จริงกี่ที่อยู่?",
+      "choices": [
+        "250 ที่อยู่",
+        "246 ที่อยู่",
+        "251 ที่อยู่",
+        "256 ที่อยู่"
+      ],
+      "answer": 2,
+      "explain": "ในทุก Subnet ของ AWS จะมี 5 IP addresses ที่ถูกสงวนไว้สำหรับระบบเครือข่ายของ AWS เสมอ (Network, Router, DNS, Future use, Broadcast) ทำให้ 256 - 5 = 251 ที่อยู่ที่สามารถนำไปใช้งานได้จริง"
+    },
+    {
+      "q": "[Module 6] เหตุใด AWS จึงประหยัดกว่าศูนย์ข้อมูลแบบดั้งเดิมสำหรับแอปพลิเคชันที่มีปริมาณงานประมวลผลผันแปร?",
+      "choices": [
+        "ค่าใช้จ่าย Amazon EC2 คิดแบบเหมาจ่ายรายเดือนคงที่",
+        "ลูกค้ายังคงสิทธิ์การดูแลระบบแบบเต็มรูปแบบบน EC2",
+        "ลูกค้าสามารถรัน instance จำนวนมากตลอดเวลาเพื่อรองรับช่วง peak",
+        "Amazon EC2 instances สามารถเปิดใช้งานแบบ On-Demand ได้เมื่อจำเป็น (launched on-demand when needed)"
+      ],
+      "answer": 3,
+      "explain": "ความยืดหยุ่นในการเปิด-ปิด EC2 instance ตามความต้องการ (On-Demand) ทำให้ไม่ต้องจ่ายเงินเผื่อความจุที่ไม่ได้ใช้งานในช่วงเวลาปกติ"
+    },
+    {
+      "q": "[Module 6] หากโปรเจกต์ของคุณต้องการรายงานรายเดือนที่ประมวลผลข้อมูลจำนวนมากซ้ำๆ ตามเวลาที่แน่นอน ควรเลือกตัวเลือกการซื้อ Amazon EC2 แบบใด?",
+      "choices": [
+        "Spot Instances",
+        "Scheduled Reserved Instances",
+        "Dedicated Hosts",
+        "On-Demand Instances"
+      ],
+      "answer": 1,
+      "explain": "Scheduled Reserved Instances ช่วยให้คุณจองความจุการประมวลผลล่วงหน้าตามตารางเวลาประจำ (เช่น ทุกวันจันทร์ หรือ ทุกสิ้นเดือน) ในราคาประหยัด"
+    },
+    {
+      "q": "[Module 6] อะไรบ้างที่รวมอยู่ใน Amazon Machine Image (AMI)?",
+      "choices": [
+        "Root volume template สำหรับ instance",
+        "Launch permissions ควบคุมว่าบัญชี AWS ใดสามารถใช้ AMI นี้ได้",
+        "Block device mapping กำหนด volumes ที่จะแนบกับ instance เมื่อ launch",
+        "ถูกทุกข้อที่กล่าวมา (All of the above)"
+      ],
+      "answer": 3,
+      "explain": "AMI ประกอบด้วย Template ของระบบปฏิบัติการและซอฟต์แวร์ (Root volume), สิทธิ์ในการเรียกใช้งาน (Launch permissions) และการแมปพื้นที่จัดเก็บข้อมูล (Block device mapping)"
+    },
+    {
+      "q": "[Module 6] ฟีเจอร์ใดของ Amazon EC2 ที่รับประกันว่า instance ของคุณจะไม่ใช้ physical host ร่วมกับ instance ของลูกค้ารายอื่น?",
+      "choices": [
+        "Amazon VPC",
+        "Placement Groups",
+        "Dedicated Instances",
+        "Reserved Instances"
+      ],
+      "answer": 2,
+      "explain": "Dedicated Instances ทำงานบนฮาร์ดแวร์ทางกายภาพที่จัดไว้สำหรับลูกค้ารายเดียวโดยเฉพาะ โดยไม่ใช้ร่วมกับบัญชีลูกค้ารายอื่น"
+    },
+    {
+      "q": "[Module 6] บริการใดต่อไปนี้เป็น Serverless compute service ใน AWS?",
+      "choices": [
+        "AWS Config",
+        "AWS Lambda",
+        "AWS OpsWorks",
+        "Amazon EC2"
+      ],
+      "answer": 1,
+      "explain": "AWS Lambda ให้คุณรันโค้ดได้โดยไม่ต้องจัดเตรียมหรือจัดการเซิร์ฟเวอร์ โดยคิดค่าบริการตามเวลาการประมวลผลที่โค้ดทำงานจริง"
+    },
+    {
+      "q": "[Module 6] บริการใดของ AWS ที่ช่วยให้นักพัฒนาสามารถ deploy และจัดการแอปพลิเคชันบนคลาวด์ได้อย่างรวดเร็วและง่ายดายแบบ PaaS?",
+      "choices": [
+        "Amazon Elastic Container Service (Amazon ECS)",
+        "AWS Elastic Beanstalk",
+        "AWS OpsWorks",
+        "AWS CloudFormation"
+      ],
+      "answer": 1,
+      "explain": "AWS Elastic Beanstalk เป็นบริการ Platform as a Service (PaaS) ที่จัดการ deployment, scaling และ load balancing ให้อัตโนมัติ เพียงแค่อัปโหลดโค้ด"
+    },
+    {
+      "q": "[Module 6] เว็บแอปพลิเคชันต้องการ 4 instances เพื่อรองรับทราฟฟิกคงที่ตลอดเวลา และในวันสุดท้ายของเดือนทราฟฟิกจะเพิ่มขึ้น 3 เท่า วิธีใดคุ้มค่าที่สุดในการรับมือกับรูปแบบนี้?",
+      "choices": [
+        "รัน 12 Reserved Instances ตลอดเวลา",
+        "รัน 4 On-Demand Instances ตลอดเวลา และเพิ่มอีก 8 On-Demand Instances ในวันสุดท้ายของเดือน",
+        "รัน 4 Reserved Instances ตลอดเวลา และเพิ่มอีก 8 On-Demand Instances ในวันสุดท้ายของเดือน",
+        "รัน 4 On-Demand Instances ตลอดเวลา และเพิ่มอีก 8 Reserved Instances ในวันสุดท้ายของเดือน"
+      ],
+      "answer": 2,
+      "explain": "ใช้ Reserved Instances สำหรับเวิร์กโหลดฐานที่ทำงานต่อเนื่องตลอดเวลา (Baseline load 4 เครื่อง) และใช้ On-Demand Instances สำหรับช่วงที่มีการใช้งานพุ่งสูงชั่วคราว (Spike 8 เครื่อง)"
+    },
+    {
+      "q": "[Module 6] จริงหรือเท็จ? Container มีระบบปฏิบัติการทั้งหมด (Full OS) อยู่ภายในตัวเองเหมือนกับ Virtual Machine",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะ Docker Container เท่านั้น",
+        "จริง เมื่อรันบน AWS ECS"
+      ],
+      "answer": 1,
+      "explain": "Container ใช้ระบบปฏิบัติการหลัก (Host OS Kernel) ร่วมกัน และบรรจุเฉพาะแอปพลิเคชันพร้อม dependencies จึงมีขนาดเล็กและเบากว่า Virtual Machine"
+    },
+    {
+      "q": "[Module 6] ตัวเลือก Amazon EC2 แบบใดเหมาะที่สุดสำหรับปริมาณงานระยะยาวที่มีรูปแบบการใช้งานที่คาดการณ์ได้?",
+      "choices": [
+        "Spot Instances",
+        "On-Demand Instances",
+        "Reserved Instances",
+        "Dedicated Hosts"
+      ],
+      "answer": 2,
+      "explain": "Reserved Instances ให้ส่วนลดสูงสุดถึง 72% เมื่อเทียบกับ On-Demand สำหรับเวิร์กโหลดที่มีสถานะคงที่และใช้งานต่อเนื่องระยะยาว (1 หรือ 3 ปี)"
+    },
+    {
+      "q": "[Module 7] จริงหรือเท็จ? เมื่อคุณสร้าง bucket ใน Amazon S3 จะต้องมีการเชื่อมโยงกับ AWS Region ที่เฉพาะเจาะจง",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะ bucket ที่ตั้งค่าเป็น Private",
+        "เท็จ S3 เป็น Global Service โดยไม่มีการเก็บใน Region"
+      ],
+      "answer": 0,
+      "explain": "แม้ชื่อของ S3 Bucket จะต้องไม่ซ้ำกันทั่วโลก (Globally Unique) แต่ทุก Bucket จะถูกสร้างและจัดเก็บข้อมูลไว้ใน AWS Region ที่เจาะจง"
+    },
+    {
+      "q": "[Module 7] ข้อใดต่อไปนี้เป็นคุณสมบัติของ Amazon Elastic Block Store (Amazon EBS)?",
+      "choices": [
+        "ข้อมูล EBS จะสูญหายเมื่อหยุด instance และสำรองข้อมูลลงเทปอัตโนมัติ",
+        "EBS volumes สามารถเข้ารหัสแบบโปร่งใสต่อเวิร์กโหลดบน instance ได้ และข้อมูลบน EBS จะถูก replicate ภายใน Availability Zone โดยอัตโนมัติ",
+        "ข้อมูล EBS จะสำรองลงเทปอัตโนมัติ และสูญหายเมื่อหยุด instance",
+        "ข้อมูล EBS ไม่สามารถเข้ารหัสได้ และจะสูญหายเมื่อ instance restart"
+      ],
+      "answer": 1,
+      "explain": "EBS volume รองรับการเข้ารหัสข้อมูล (Encryption) แบบโปร่งใสโดยไม่กระทบประสิทธิภาพ และข้อมูลจะถูก Replicate ภายใน AZ เดียวกันอัตโนมัติเพื่อป้องกันความล้มเหลวของฮาร์ดแวร์"
+    },
+    {
+      "q": "[Module 8] คุณกำลังออกแบบเว็บแอปพลิเคชันอีคอมเมิร์ซที่ต้องรองรับผู้ใช้งานพร้อมกันหลายแสนคน เทคโนโลยีฐานข้อมูลใดเหมาะสมที่สุดสำหรับเก็บ session state ในกรณีนี้?",
+      "choices": [
+        "Amazon Relational Database Service (Amazon RDS)",
+        "Amazon DynamoDB",
+        "Amazon Redshift",
+        "Amazon Simple Storage Service (Amazon S3)"
+      ],
+      "answer": 1,
+      "explain": "Amazon DynamoDB เป็นฐานข้อมูล NoSQL แบบ Key-Value ที่มีความเร็วระดับ Single-digit millisecond และรองรับการสเกลแบบอัตโนมัติ เหมาะมากสำหรับ Session State ของผู้ใช้จำนวนมหาศาล"
+    },
+    {
+      "q": "[Module 8] คุณต้องการค้นหารายการในตาราง Amazon DynamoDB โดยใช้แอตทริบิวต์อื่นที่ไม่ใช่ primary key ของรายการนั้น ควรใช้การดำเนินการใดต่อไปนี้?",
+      "choices": [
+        "PutItem",
+        "Scan",
+        "Query",
+        "GetItem"
+      ],
+      "answer": 1,
+      "explain": "การดำเนินการ Scan จะตรวจสอบทุกไอเทมในตาราง และสามารถกรองตาม attributes ใดๆ ก็ได้ ในขณะที่ Query ต้องใช้ Partition Key เป็นหลัก"
+    },
+    {
+      "q": "[Module 8] ใน Amazon DynamoDB การดำเนินการ query ช่วยให้คุณทำสิ่งใดได้บ้าง?",
+      "choices": [
+        "Query ตารางโดยใช้ partition key และ sort key filter เสริม",
+        "Query บน secondary indexes ที่มีอยู่ในตาราง",
+        "ดึงข้อมูลจากตารางหรือ secondary index ได้อย่างมีประสิทธิภาพ",
+        "ถูกทุกข้อที่กล่าวมา (All of the above)"
+      ],
+      "answer": 3,
+      "explain": "การทำ Query บน DynamoDB ทำได้ทั้งบน Primary Key (Partition + Sort key) และ Secondary Indexes (LSI/GSI) ช่วยค้นหาข้อมูลได้อย่างรวดเร็วและมีประสิทธิภาพสูง"
+    },
+    {
+      "q": "[Module 8] บริการ AWS Cloud ใดเหมาะสมที่สุดสำหรับการวิเคราะห์ข้อมูลขนาดใหญ่ (Data Warehousing) โดยใช้ standard SQL และเครื่องมือ Business Intelligence (BI) ที่มีอยู่?",
+      "choices": [
+        "Amazon Relational Database Service (Amazon RDS)",
+        "Amazon S3 Glacier",
+        "Amazon DynamoDB",
+        "Amazon Redshift"
+      ],
+      "answer": 3,
+      "explain": "Amazon Redshift เป็นบริการ Cloud Data Warehouse ระดับเพตาไบต์ที่ออกแบบมาเพื่อการวิเคราะห์ข้อมูลเชิงลึก (OLAP) ผ่าน SQL และเครื่องมือ BI ต่างๆ"
+    },
+    {
+      "q": "[Module 8] ใน Amazon DynamoDB แอตทริบิวต์ (attribute) คือสิ่งใด?",
+      "choices": [
+        "องค์ประกอบข้อมูลพื้นฐาน (A fundamental data element)",
+        "กลุ่มของไอเทมทั้งหมดในตาราง (A collection of items)",
+        "กลุ่มของตารางข้อมูล (A collection of tables)",
+        "คีย์หลักในการจัดเก็บข้อมูล (A primary cluster)"
+      ],
+      "answer": 0,
+      "explain": "ใน DynamoDB: Table คือกลุ่มของ Items, Item คือกลุ่มของ Attributes และ Attribute คือหน่วยข้อมูลพื้นฐานย่อยที่สุด (เปรียบได้กับ Field ในฐานข้อมูลทั่วไป)"
+    },
+    {
+      "q": "[Module 8] หากคุณกำลังพัฒนาแอปพลิเคชันที่ต้องการฐานข้อมูลที่มีประสิทธิภาพรวดเร็วมาก ปรับขนาดได้อย่างรวดเร็ว และมีความยืดหยุ่นของ schema ข้อมูล คุณควรพิจารณาบริการใด?",
+      "choices": [
+        "Amazon Relational Database Service (Amazon RDS)",
+        "Amazon ElastiCache",
+        "Amazon DynamoDB",
+        "Amazon Redshift"
+      ],
+      "answer": 2,
+      "explain": "Amazon DynamoDB เป็น NoSQL Database ที่ไม่มีโครงสร้างตายตัว (Schema-less/Flexible Schema) และให้ประสิทธิภาพการตอบสนองที่รวดเร็วและสม่ำเสมอ"
+    },
+    {
+      "q": "[Module 8] กรณีใช้งานใดต่อไปนี้เหมาะสมที่สุดสำหรับการเลือกใช้ Amazon Relational Database Service (Amazon RDS)?",
+      "choices": [
+        "อัตราการอ่าน/เขียนข้อมูลมหาศาลแบบ Key-Value",
+        "การเรียกคำขอแบบง่ายๆ เช่น GET หรือ PUT",
+        "ธุรกรรมและคิวรีที่มีความซับซ้อนและการทำ Relational Joins (Complex transactions)",
+        "การเก็บไฟล์รูปภาพและวิดีโอขนาดใหญ่"
+      ],
+      "answer": 2,
+      "explain": "Amazon RDS เหมาะกับแอปพลิเคชันที่ต้องการความสมบูรณ์ของข้อมูลตามมาตรฐาน ACID และการทำ Complex Queries / Joins ข้ามหลายตาราง"
+    },
+    {
+      "q": "[Module 8] บริษัทแห่งหนึ่งมีแอปพลิเคชัน .NET ที่เชื่อมต่อกับฐานข้อมูล MySQL ต้องการย้ายไปยัง AWS และใช้ฟีเจอร์ High Availability กับ Automated Backups ฐานข้อมูลใดเหมาะสมที่สุด?",
+      "choices": [
+        "Amazon DynamoDB",
+        "Amazon Aurora",
+        "Amazon Redshift",
+        "Amazon DocumentDB"
+      ],
+      "answer": 1,
+      "explain": "Amazon Aurora รองรับการทำงานร่วมกับ MySQL และ PostgreSQL ได้อย่างสมบูรณ์ พร้อมทั้งให้ประสิทธิภาพสูงกว่า MySQL ดั้งเดิมถึง 5 เท่า และมี High Availability ในตัว"
+    },
+    {
+      "q": "[Module 8] จริงหรือเท็จ? Amazon RDS ทำการแพตช์ซอฟต์แวร์ฐานข้อมูลโดยอัตโนมัติ และสำรองข้อมูลฐานข้อมูลของคุณ โดยเก็บข้อมูลสำรองไว้ตามระยะเวลาที่กำหนด พร้อมทั้งเปิดใช้งาน Point-in-Time Recovery",
+      "choices": [
+        "จริง (True)",
+        "เท็จ (False)",
+        "จริง เฉพาะ Aurora เท่านั้น ไม่รวมเอนจินอื่น",
+        "เท็จ ลูกค้าต้องเป็นผู้ทำ manual backup เสมอ"
+      ],
+      "answer": 0,
+      "explain": "Amazon RDS เป็นบริการ Managed Database ที่จัดการ Automated Backups, Software Patching และ Point-in-Time Recovery ให้โดยอัตโนมัติ"
+    },
+    {
+      "q": "[Module 8] คุณควรพิจารณาปัจจัยใดบ้างเมื่อเลือกประเภทของฐานข้อมูลสำหรับแอปพลิเคชัน?",
+      "choices": [
+        "ขนาดของข้อมูล (Data size)",
+        "ระยะเวลาและความถี่ในการเข้าถึงข้อมูล (Data access period & frequency)",
+        "ข้อกำหนดด้านความพร้อมใช้งานสูง (High availability requirements)",
+        "ถูกทุกข้อที่กล่าวมา (All of the above)"
+      ],
+      "answer": 3,
+      "explain": "การเลือกเอนจินและประเภทของฐานข้อมูลต้องพิจารณาทั้งขนาดข้อมูล, รูปแบบการคิวรี, ความถี่ในการเข้าถึง, ข้อกำหนด latency และความพร้อมใช้งานสูง (HA)"
+    }
+  ]
+}

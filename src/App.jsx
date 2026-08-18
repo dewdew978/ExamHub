@@ -22,6 +22,7 @@ function App() {
   const [subjects, setSubjects] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [authRequiredMessage, setAuthRequiredMessage] = useState('');
   
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -50,7 +51,16 @@ function App() {
           .select('*');
           
         if (examsError) throw examsError;
-        setSubjects(examsData || []);
+        
+        const localIndex = await import('./data/index.json');
+        const mergedSubjects = (examsData || []).map(exam => {
+          const local = localIndex.default.find(l => l.id === exam.id);
+          return {
+            ...exam,
+            requiresAuth: local?.requiresAuth || exam.requiresAuth || false
+          };
+        });
+        setSubjects(mergedSubjects);
 
         // 2. Check auth status
         const { data: { session } } = await supabase.auth.getSession();
@@ -63,6 +73,12 @@ function App() {
         }
       } catch (err) {
         console.error("Error fetching data:", err);
+        try {
+          const localIndex = await import('./data/index.json');
+          setSubjects(localIndex.default);
+        } catch (localErr) {
+          console.error("Failed to load fallback local index:", localErr);
+        }
       } finally {
         setLoading(false);
       }
@@ -122,13 +138,21 @@ function App() {
 
   const startExam = async (subjectId) => {
     try {
-      const mod = await import(`./data/${subjectId}.json`);
       const subjectMeta = subjects.find(s => s.id === subjectId);
+      const mod = await import(`./data/${subjectId}.json`);
       
-      setSelectedSubject({
+      const fullSubject = {
         ...subjectMeta,
         ...mod.default
-      });
+      };
+
+      if (fullSubject.requiresAuth && !user) {
+        setAuthRequiredMessage(`กรุณาเข้าสู่ระบบก่อนเพื่อทำข้อสอบชุด "${fullSubject.name}"`);
+        setCurrentView('login');
+        return;
+      }
+      
+      setSelectedSubject(fullSubject);
       setCurrentView('examIntro');
     } catch (err) {
       console.error("Failed to load exam data:", err);
@@ -198,11 +222,16 @@ function App() {
       <div className="app-container">
         <main className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Login 
+            authRequiredMessage={authRequiredMessage}
             onLogin={(user) => {
               setUser(user);
+              setAuthRequiredMessage('');
               setCurrentView('home');
             }} 
-            onClose={() => setCurrentView('home')} // Guest mode
+            onClose={() => {
+              setAuthRequiredMessage('');
+              setCurrentView('home');
+            }} // Guest mode
           />
         </main>
       </div>
@@ -354,7 +383,15 @@ function App() {
 
       <main className="main-content">
         {currentView === 'home' && (
-          <Home subjects={subjects} onSelectSubject={startExam} />
+          <Home 
+            subjects={subjects} 
+            onSelectSubject={startExam} 
+            user={user}
+            onRequireLogin={(subject) => {
+              setAuthRequiredMessage(`กรุณาเข้าสู่ระบบก่อนเพื่อทำข้อสอบชุด "${subject?.name || ''}"`);
+              setCurrentView('login');
+            }}
+          />
         )}
         {currentView === 'examIntro' && selectedSubject && (
           <ExamIntro 

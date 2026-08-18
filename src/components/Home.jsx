@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { FileText, Folder, ArrowLeft, Clock, GraduationCap } from 'lucide-react';
+import { FileText, Folder, ArrowLeft, Clock, GraduationCap, Lock } from 'lucide-react';
 
-export default function Home({ subjects, onSelectSubject }) {
+export default function Home({ subjects, onSelectSubject, user, onRequireLogin }) {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedExamType, setSelectedExamType] = useState('All');
@@ -237,61 +237,87 @@ export default function Home({ subjects, onSelectSubject }) {
           </div>
         ) : (
           <div className="card-grid">
-            {filteredSubjects.map(sub => (
-              <div 
-                key={sub.id} 
-                className="card"
-                onClick={() => onSelectSubject(sub.id)}
-                style={{
-                  padding: '1.5rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                  borderRadius: '12px',
-                  position: 'relative'
-                }}
-              >
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontSize: '1rem', letterSpacing: '-0.25px', fontWeight: 600, paddingRight: '1rem' }}>{sub.name}</h3>
-                    {sub.type && (
-                      <span style={{ 
-                        fontSize: '0.65rem', 
-                        fontWeight: 600, 
-                        padding: '0.125rem 0.375rem', 
-                        borderRadius: '4px',
-                        background: sub.type === 'Midterm' ? 'rgba(245, 166, 35, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                        color: sub.type === 'Midterm' ? 'var(--warning)' : 'var(--success)',
-                        textTransform: 'uppercase',
-                        flexShrink: 0
-                      }}>
-                        {sub.type}
-                      </span>
-                    )}
+            {filteredSubjects.map(sub => {
+              const isLocked = sub.requiresAuth && !user;
+              return (
+                <div 
+                  key={sub.id} 
+                  className="card"
+                  onClick={() => {
+                    if (isLocked && onRequireLogin) {
+                      onRequireLogin(sub);
+                    } else {
+                      onSelectSubject(sub.id);
+                    }
+                  }}
+                  style={{
+                    padding: '1.5rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.75rem',
+                    borderRadius: '12px',
+                    position: 'relative',
+                    border: isLocked ? '1px dashed var(--border-color)' : undefined
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', letterSpacing: '-0.25px', fontWeight: 600 }}>{sub.name}</h3>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', flexShrink: 0 }}>
+                        {sub.requiresAuth && (
+                          <span style={{ 
+                            fontSize: '0.65rem', 
+                            fontWeight: 600, 
+                            padding: '0.125rem 0.375rem', 
+                            borderRadius: '4px',
+                            background: isLocked ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                            color: isLocked ? 'var(--error)' : 'var(--success)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem'
+                          }}>
+                            <Lock size={10} /> {isLocked ? 'ต้อง Login' : 'ปลดล็อกแล้ว'}
+                          </span>
+                        )}
+                        {sub.type && (
+                          <span style={{ 
+                            fontSize: '0.65rem', 
+                            fontWeight: 600, 
+                            padding: '0.125rem 0.375rem', 
+                            borderRadius: '4px',
+                            background: sub.type === 'Midterm' ? 'rgba(245, 166, 35, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                            color: sub.type === 'Midterm' ? 'var(--warning)' : 'var(--success)',
+                            textTransform: 'uppercase'
+                          }}>
+                            {sub.type}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{sub.desc}</p>
                   </div>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{sub.desc}</p>
-                </div>
 
-                <div style={{ 
-                  marginTop: 'auto', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '0.375rem',
-                  fontSize: '0.75rem',
-                  color: 'var(--text-muted)',
-                  background: 'var(--surface-hover)',
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '4px',
-                  width: 'fit-content',
-                  fontWeight: 500,
-                  boxShadow: 'var(--shadow-border)'
-                }}>
-                  <FileText size={12} />
-                  {sub.questionCount} ข้อ
+                  <div style={{ 
+                    marginTop: 'auto', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.375rem',
+                    fontSize: '0.75rem',
+                    color: 'var(--text-muted)',
+                    background: 'var(--surface-hover)',
+                    padding: '0.25rem 0.5rem',
+                    borderRadius: '4px',
+                    width: 'fit-content',
+                    fontWeight: 500,
+                    boxShadow: 'var(--shadow-border)'
+                  }}>
+                    <FileText size={12} />
+                    {sub.questionCount} ข้อ
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -1,0 +1,562 @@
+{
+  "id": "aws_aca_modules_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "AWS Academy Cloud Architecting (ACA) — Module 2-6 (50 Questions)",
+  "icon": "☁️",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 2-6) จาก AWS Academy Cloud Architecting (ACA) จำนวน 50 ข้อ ครอบคลุม Architecture, Security, Storage, Compute และ Databases by lnwfilmSynthesis.md",
+  "requiresAuth": true,
+  "questions": [
+    {
+      "q": "[Module 2] อะไรคือคำจำกัดความที่ดีที่สุดของ cloud architecture?",
+      "choices": [
+        "การรวมซอฟต์แวร์และคอมโพเนนต์ frontend และ backend เพื่อสร้าง web services ที่พร้อมใช้งานสูงและปรับขนาดได้ตามความต้องการขององค์กร",
+        "การออกแบบแอปพลิเคชันบนโครงสร้างพื้นฐานไอทีแบบแชร์บน cloud โดยใช้ virtual machines และ data stores ที่ทนทานต่อความล้มเหลว (fault-tolerant)",
+        "การนำคุณลักษณะของ cloud ไปประยุกต์ใช้กับโซลูชันที่ใช้บริการและฟีเจอร์ของ cloud เพื่อตอบสนองความต้องการทางเทคนิคและธุรกิจ",
+        "การย้าย data centers แบบดั้งเดิมที่เป็น on-premises ไปยัง data centers ที่เข้าถึงได้ผ่านอินเทอร์เน็ตซึ่งผู้ให้บริการเป็นผู้ดูแลจัดการ"
+      ],
+      "answer": 2,
+      "explain": "Cloud architecture คือแนวปฏิบัติในการนำคุณลักษณะของ cloud ไปประยุกต์ใช้กับโซลูชันที่ใช้บริการและฟีเจอร์ของ cloud เพื่อตอบสนองความต้องการทางเทคนิคและกรณีการใช้งานทางธุรกิจขององค์กร"
+    },
+    {
+      "q": "[Module 2] AWS Well-Architected Framework มีเสาหลัก 6 ประการ สามในนั้นคือ security, operational excellence และ sustainability เสาหลักอีกสองข้อที่เหลือของ Well-Architected Framework คืออะไร?",
+      "choices": [
+        "Governance และ Privacy",
+        "Cost optimization และ Reliability",
+        "Risk management และ Governance",
+        "Reliability และ Privacy"
+      ],
+      "answer": 1,
+      "explain": "Reliability มุ่งเน้นที่ความสามารถในการป้องกันและกู้คืนจากความล้มเหลวได้อย่างรวดเร็วเพื่อตอบสนองความต้องการทางธุรกิจและลูกค้า ส่วน Cost optimization มุ่งเน้นการหลีกเลี่ยงค่าใช้จ่ายที่ไม่จำเป็น"
+    },
+    {
+      "q": "[Module 2] การกระทำใดสอดคล้องกับเสาหลัก operational excellence ของ AWS Well-Architected Framework?",
+      "choices": [
+        "วางแผนและจัดการ lifecycle ทั้งหมดของฮาร์ดแวร์ และให้ทีมงานฝ่ายปฏิบัติการบันทึกการเปลี่ยนแปลงโครงสร้างพื้นฐานเป็นเอกสาร",
+        "นำหลักการและระเบียบวิธีทางวิศวกรรมซอฟต์แวร์มาใช้กับ infrastructure as code และทบทวนปรับปรุงกระบวนการและขั้นตอนการทำงานอย่างต่อเนื่อง",
+        "ประเมินโครงสร้างองค์กรและบทบาทหน้าที่เพื่อหาช่องว่างด้านทักษะ และให้ทีมงานฝ่ายปฏิบัติการบันทึกการเปลี่ยนแปลงโครงสร้างพื้นฐาน",
+        "วางแผนและจัดการ lifecycle ทั้งหมดของฮาร์ดแวร์ และทบทวนปรับปรุงกระบวนการและขั้นตอนการทำงานอย่างต่อเนื่อง"
+      ],
+      "answer": 1,
+      "explain": "Operational excellence มุ่งเน้นที่การดำเนินงานของระบบที่สร้างคุณค่าทางธุรกิจและการปรับปรุงกระบวนการและขั้นตอนอย่างต่อเนื่อง หลักการออกแบบสำคัญคือการดำเนินงานในรูปแบบโค้ด (operations as code) และนำวินัยทางวิศวกรรมแบบเดียวกับที่ใช้กับโค้ดแอปพลิเคชันมาใช้"
+    },
+    {
+      "q": "[Module 2] แอปพลิเคชันหนึ่งต้องการ frontend web tier ที่มีเซิร์ฟเวอร์หลายตัวสื่อสารกับ backend application tier ที่มีเซิร์ฟเวอร์หลายตัวเช่นกัน การออกแบบใดสอดคล้องกับแนวปฏิบัติที่ดีที่สุดของ AWS มากที่สุด?",
+      "choices": [
+        "กำหนด application server และ dedicated connection แยกเฉพาะให้กับแต่ละ web server",
+        "สร้างหลาย instance โดยให้แต่ละ instance รวมทั้ง web frontend และ application backend ไว้ด้วยกันในเครื่องเดียว",
+        "สร้างเครือข่ายแบบ full mesh ระหว่าง web tier และ application tier เพื่อให้ทุก web server สื่อสารกับทุก application server ได้โดยตรง",
+        "ออกแบบให้ web tier สื่อสารกับ application tier ผ่านบริการ Elastic Load Balancing (ELB)"
+      ],
+      "answer": 3,
+      "explain": "แม้ ELB จะดูเหมือนเป็นจุดเดียวที่ล้มเหลวได้ (single point of failure) ในไดอะแกรม แต่จริงๆ แล้วบริการนี้มีความพร้อมใช้งานสูงและไม่ได้เป็นจุดเดียวที่ล้มเหลว ในสถาปัตยกรรมนี้ ELB จะทำหน้าที่แยก (decouple) สองชั้นนี้ออกจากกัน"
+    },
+    {
+      "q": "[Module 2] สถาปนิกโซลูชันกำลังพัฒนากระบวนการสำหรับจัดการความล้มเหลวของเซิร์ฟเวอร์ กระบวนการใดสอดคล้องกับแนวปฏิบัติที่ดีที่สุดของ AWS มากที่สุด?",
+      "choices": [
+        "ทีมปฏิบัติการตรวจพบระบบล้มเหลว จากนั้นแจ้ง systems administrator ให้มา provision เซิร์ฟเวอร์ใหม่ผ่าน AWS Management Console",
+        "Amazon CloudWatch ตรวจพบระบบล้มเหลว และสั่งการ automation ให้ provision เซิร์ฟเวอร์ใหม่โดยอัตโนมัติ",
+        "Amazon CloudWatch ตรวจพบระบบล้มเหลว และแจ้งเตือน systems administrator ให้มา provision เซิร์ฟเวอร์ใหม่ผ่าน AWS Management Console",
+        "ทีมปฏิบัติการตรวจพบระบบล้มเหลว จากนั้นสั่งการ automation ให้ provision เซิร์ฟเวอร์ใหม่"
+      ],
+      "answer": 1,
+      "explain": "โซลูชันนี้ใช้ระบบอัตโนมัติให้เกิดประโยชน์สูงสุดทั้งในการเฝ้าติดตามระบบและการจัดเตรียมเซิร์ฟเวอร์ การใช้ระบบอัตโนมัติเป็นแนวปฏิบัติที่ดีที่สุดของ AWS"
+    },
+    {
+      "q": "[Module 2] บริษัทหนึ่งกำลังพิจารณาย้าย on-premises data center ของตนไปยัง cloud โดยมีแรงจูงใจหลักคือการเพิ่มประสิทธิภาพด้านต้นทุน แนวทางใดสอดคล้องกับแนวปฏิบัติที่ดีที่สุดของ AWS มากที่สุด?",
+      "choices": [
+        "จำลอง (replicate) รูปแบบ on-premises data center เดิมทั้งหมดขึ้นไปบน cloud",
+        "คงสภาพการใช้งาน on-premises data center ต่อไปให้นานที่สุดเท่าที่จะเป็นไปได้",
+        "ทำการ provision เซิร์ฟเวอร์บางส่วนบน cloud และดูแลให้เซิร์ฟเวอร์เปิดทำงานตลอด 24/7",
+        "ทำการ provision เฉพาะเซิร์ฟเวอร์ที่จำเป็นต้องใช้งาน และหยุดการทำงานของบริการเมื่อไม่มีการใช้งาน"
+      ],
+      "answer": 3,
+      "explain": "วิธีที่ดีที่สุดในการสร้างโครงสร้างพื้นฐานในมุมมองด้านต้นทุน คือการจัดเตรียมเฉพาะทรัพยากรที่จำเป็นเท่านั้น และหยุดบริการเมื่อไม่ได้ใช้งาน"
+    },
+    {
+      "q": "[Module 2] บริษัทหนึ่งจัดเก็บข้อมูลแบบ read-only ไว้ใน Amazon S3 ผู้ใช้ส่วนใหญ่อยู่ในประเทศเดียวกับสำนักงานใหญ่ของบริษัท ผู้ใช้บางส่วนอยู่กระจายทั่วโลก การตัดสินใจออกแบบใดสอดคล้องกับแนวปฏิบัติที่ดีที่สุดของ AWS มากที่สุด?",
+      "choices": [
+        "ใช้ bucket ใน AWS Region ที่ใกล้สำนักงานใหญ่ที่สุด และให้ผู้ใช้ทุกคนเข้าถึงข้อมูลผ่าน Amazon CloudFront",
+        "ใช้ bucket ใน AWS Region ที่ใกล้สำนักงานใหญ่ที่สุด และให้ผู้ใช้เข้าถึง bucket โดยตรง",
+        "ใช้ bucket ใน Region ที่มีค่า average latency ต่ำที่สุดสำหรับผู้ใช้ทุกคนรวมกัน",
+        "ทำ replicate ข้อมูลออบเจ็กต์ข้าม bucket ในหลาย AWS Region ทั่วโลก และให้ผู้ใช้เข้าถึง bucket ใน Region ที่ใกล้ตนเองที่สุด"
+      ],
+      "answer": 0,
+      "explain": "โซลูชันนี้ใช้การแคช (caching) ซึ่งเป็นแนวปฏิบัติที่ดีที่สุดของ AWS การแคชช่วยลดการดึงข้อมูลซ้ำซ้อน ทำให้ประสิทธิภาพและต้นทุนดีขึ้น"
+    },
+    {
+      "q": "[Module 2] ที่ปรึกษาคนหนึ่งต้องเข้าถึงอ็อบเจ็กต์ขนาดใหญ่ใน S3 bucket โดยต้องการเข้าถึงไฟล์นั้นเป็นเวลาหนึ่งวัน วิธีการให้สิทธิ์เข้าถึงใดสอดคล้องกับแนวปฏิบัติที่ดีที่สุดของ AWS มากที่สุด?",
+      "choices": [
+        "เปิดการเข้าถึงแบบสาธารณะ (public access) บน S3 bucket แล้วส่ง object URL ให้กับที่ปรึกษา",
+        "สร้าง user account ให้ที่ปรึกษา และให้สิทธิ์เข้าถึง S3 bucket ผ่าน AWS Management Console",
+        "คัดลอกออบเจ็กต์ไปยัง S3 bucket ใหม่ เปิด public access แล้วส่ง URL ของออบเจ็กต์จาก bucket ใหม่ให้ที่ปรึกษา",
+        "สร้าง presigned URL ของออบเจ็กต์ที่กำหนดหมดอายุภายใน 24 ชั่วโมง แล้วส่งให้ที่ปรึกษา"
+      ],
+      "answer": 3,
+      "explain": "โซลูชันนี้เป็นตัวอย่างของการควบคุมการเข้าถึงแบบละเอียด (granular access control) และหลักการสิทธิ์ขั้นต่ำที่จำเป็น (least privilege)"
+    },
+    {
+      "q": "[Module 2] อะไรคือปัจจัยหลักที่มีผลต่อการเลือกใช้ AWS Region?",
+      "choices": [
+        "การลด latency สำหรับผู้ใช้งานปลายทาง และการปฏิบัติตามกฎหมายและข้อบังคับ (compliance)",
+        "การป้องกันความเสียหายจากภัยธรรมชาติเฉพาะพื้นที่ และการฟื้นตัวของแอปพลิเคชันเมื่อระบบล้มเหลว (resiliency)",
+        "การควบคุมความปลอดภัยและการเข้าถึง (security & access control) และการปฏิบัติตามกฎหมายและข้อบังคับ",
+        "การลด latency สำหรับผู้ใช้งานปลายทาง และการป้องกันความเสียหายจากภัยธรรมชาติเฉพาะพื้นที่"
+      ],
+      "answer": 0,
+      "explain": "ผู้ใช้ที่อยู่ใกล้กับ AWS Region โดยทั่วไปจะได้รับ latency ที่ต่ำกว่าผู้ใช้ที่อยู่ไกลออกไป กฎหมายและข้อบังคับในท้องถิ่นอาจกำหนดความแตกต่างในระดับ Region เช่น สถานที่จัดเก็บข้อมูลจริงและผู้ดำเนินการ data center"
+    },
+    {
+      "q": "[Module 2] อะไรคือปัจจัยหลักที่มีผลต่อการเลือกใช้ Availability Zone?",
+      "choices": [
+        "การลด latency สำหรับผู้ใช้งานปลายทาง และการปฏิบัติตามกฎหมายและข้อบังคับ",
+        "การป้องกันความเสียหายจากภัยธรรมชาติเฉพาะพื้นที่ และความสามารถในการฟื้นตัวของแอปพลิเคชันเมื่อระบบล้มเหลว (resiliency)",
+        "การควบคุมความปลอดภัยและการเข้าถึง และการป้องกันความเสียหายจากภัยธรรมชาติเฉพาะพื้นที่",
+        "ความสามารถในการฟื้นตัวของแอปพลิเคชันเมื่อระบบล้มเหลว และการปฏิบัติตามกฎหมายและข้อบังคับ"
+      ],
+      "answer": 1,
+      "explain": "Availability Zone แต่ละแห่งถูกออกแบบให้เป็นโซนความล้มเหลวที่เป็นอิสระจากกัน การใช้ Availability Zone หลายแห่งช่วยปกป้องระบบงานจากภัยพิบัติทางธรรมชาติในพื้นที่เฉพาะ และเพิ่มความสามารถในการฟื้นตัวของแอปพลิเคชันหากระบบล้มเหลว"
+    },
+    {
+      "q": "[Module 3] ข้อความใดสะท้อนหลักการออกแบบของเสาหลักด้านความปลอดภัย (security pillar) ใน Well-Architected Framework?",
+      "choices": [
+        "ให้ทีมงานเฝ้าติดตามความเสี่ยงที่อาจเกิดขึ้นด้วยตนเองแบบ manual ตลอดเวลา",
+        "กระจายอำนาจการจัดการสิทธิ์การใช้งาน (decentralize privilege management)",
+        "ห้าม deploy ระบบขึ้น production จนกว่าจะมั่นใจได้อย่างแน่นอนว่าจะไม่มีความเสี่ยงด้านความปลอดภัยใดๆ หลงเหลืออยู่",
+        "ใช้มาตรการความปลอดภัยในทุกเลเยอร์ของสถาปัตยกรรม (apply security at all layers)"
+      ],
+      "answer": 3,
+      "explain": "การใช้แนวคิดการป้องกันเชิงลึก (defense in-depth) หมายถึงการใช้มาตรการความปลอดภัยในทุกชั้นของสถาปัตยกรรมของคุณ"
+    },
+    {
+      "q": "[Module 3] ข้อความใดเกี่ยวกับความรับผิดชอบที่ถูกต้องตามโมเดลความรับผิดชอบร่วม (shared responsibility model) ของ AWS?",
+      "choices": [
+        "AWS รับผิดชอบการตั้งค่า security groups และลูกค้ารับผิดชอบการติดตั้งฮาร์ดแวร์ใน data center",
+        "ลูกค้ารับผิดชอบในการจัดการข้อมูลผู้ใช้ (user data) และ AWS รับผิดชอบความปลอดภัยทางกายภาพของ data centers",
+        "AWS รับผิดชอบการตั้งค่า host-based firewall และลูกค้ารับผิดชอบความปลอดภัยทางกายภาพของศูนย์ข้อมูล",
+        "AWS รับผิดชอบการจัดการข้อมูลผู้ใช้ และลูกค้ารับผิดชอบการดูแลความปลอดภัยทางกายภาพของศูนย์ข้อมูล"
+      ],
+      "answer": 1,
+      "explain": "AWS รับผิดชอบด้านความปลอดภัยทางกายภาพของศูนย์ข้อมูล ส่วนลูกค้ารับผิดชอบข้อมูลผู้ใช้และข้อมูลแอปพลิเคชันของตนเอง"
+    },
+    {
+      "q": "[Module 3] ข้อใดคือคุณลักษณะของหลักการสิทธิ์ขั้นต่ำที่จำเป็น (principle of least privilege)?",
+      "choices": [
+        "เฝ้าติดตามการกระทำและการเปลี่ยนแปลง และเปิดใช้งานการเข้ารหัส (encryption)",
+        "สร้าง security policies ที่จำกัดสิทธิ์เฉพาะงานที่ต้องทำ และให้สิทธิ์เข้าถึงเท่าที่จำเป็นเท่านั้น (grant access only as needed)",
+        "บังคับใช้งาน groups เสมอ และเฝ้าติดตามการกระทำและการเปลี่ยนแปลง",
+        "ให้สิทธิ์เข้าถึงเท่าที่จำเป็นเท่านั้น และบังคับใช้งาน groups เสมอ"
+      ],
+      "answer": 1,
+      "explain": "การปฏิบัติตามหลักการสิทธิ์ขั้นต่ำที่จำเป็น คือการให้สิทธิ์เข้าถึงข้อมูลและทรัพยากรอื่นๆ เฉพาะกับผู้ใช้หรือทรัพยากรที่จำเป็นต้องใช้เท่านั้น นอกจากนี้ยังต้องบังคับใช้การแบ่งแยกหน้าที่ (separation of duties) โดยใช้นโยบายที่กำหนดขอบเขตตามงานที่ผู้ใช้แต่ละคนต้องปฏิบัติ"
+    },
+    {
+      "q": "[Module 3] ข้อความใดเกี่ยวกับ AWS Identity and Access Management (IAM) เป็นความจริง?",
+      "choices": [
+        "IAM มอบความปลอดภัยอีกชั้นด้วยการตรวจจับความผิดปกติ (anomaly detection) บนทรัพยากรต่างๆ",
+        "ด้วย IAM คุณสามารถจัดการ encryption สำหรับข้อมูลที่ต้องการเข้ารหัสแบบ at rest",
+        "IAM มอบ audit trail ที่บันทึกว่าใครทำอะไร เมื่อไหร่ และทำที่ไหน",
+        "ด้วย IAM คุณสามารถให้สิทธิ์เข้าถึงทรัพยากรแก่ principals แบบละเอียดเจาะจง (granular access)"
+      ],
+      "answer": 3,
+      "explain": "คุณสามารถใช้ IAM เพื่อให้สิทธิ์เข้าถึงแบบละเอียด (granular access) แก่ principal ทั้งสำหรับคอนโซลและสำหรับ API ของบริการ AWS"
+    },
+    {
+      "q": "[Module 3] ข้อความใดอธิบายเกี่ยวกับ AWS Identity and Access Management (IAM) roles ได้ถูกต้อง?",
+      "choices": [
+        "IAM roles ให้ credentials แบบถาวร และใช้งานได้เฉพาะบัญชีที่เชื่อมโยงกับผู้สร้าง role เท่านั้น",
+        "IAM roles ให้ temporary security credentials และบุคคล, แอปพลิเคชัน หรือบริการต่างๆ สามารถเข้ามา assume role ได้",
+        "IAM roles ผูกติดกับบุคคลคนเดียวโดยเฉพาะ และมอบ permanent credentials",
+        "IAM roles ให้ permanent credentials และบุคคลสามารถเข้ามา assume role ได้"
+      ],
+      "answer": 1,
+      "explain": "IAM roles ให้ข้อมูลรับรองชั่วคราว (temporary credentials) แก่บุคคล แอปพลิเคชัน หรือบริการ เมื่อมีการรับบทบาท (assume the role) นั้น"
+    },
+    {
+      "q": "[Module 3] ข้อความใดสะท้อนแนวปฏิบัติที่ดีที่สุดสำหรับผู้ใช้ root (root user) ในบัญชี AWS?",
+      "choices": [
+        "สร้าง admin user ขึ้นมาและใช้ทำงานด้านการดูแลระบบส่วนใหญ่แทนการใช้ root user",
+        "เพื่อป้องกันการถูกล็อกจากบัญชี ห้ามเปิดใช้งาน multi-factor authentication (MFA) บน root account",
+        "ลบสิทธิ์ที่ไม่จำเป็นทั้งหมดออกจาก root user account",
+        "สร้าง root users สองบัญชีที่มี credentials แยกกันและแจกจ่ายให้คนสองคนดูแล"
+      ],
+      "answer": 0,
+      "explain": "แนวปฏิบัติที่ดีคือการจำกัดการใช้งานผู้ใช้ root กิจกรรมประจำวันควรดำเนินการโดยบัญชีผู้ดูแลระบบ (admin account) ที่สร้างขึ้นโดยผู้ใช้ root"
+    },
+    {
+      "q": "[Module 3] AWS Identity and Access Management (IAM) ประเมินนโยบาย (policy) อย่างไร?",
+      "choices": [
+        "หาก policy ไม่มีทั้ง explicit deny หรือ explicit allow ผู้ใช้จะได้รับสิทธิ์เข้าถึงโดยปริยาย (allow by default)",
+        "ระบบจะตรวจสอบคำสั่งปฏิเสธแบบชัดเจน (explicit deny) ก่อนที่จะตรวจสอบคำสั่งอนุญาต (explicit allow)",
+        "คำสั่ง explicit deny จะไม่มีผลหักล้างคำสั่ง explicit allow",
+        "ระบบจะตรวจสอบคำสั่ง explicit allow ก่อนที่จะตรวจสอบคำสั่ง explicit deny"
+      ],
+      "answer": 1,
+      "explain": "IAM จะตรวจสอบคำสั่งปฏิเสธแบบชัดเจน (explicit deny statements) ก่อนที่จะตรวจสอบคำสั่งอนุญาตแบบชัดเจน (explicit allow statements) โดยคำสั่งปฏิเสธจะมีผลเหนือกว่าคำสั่งอนุญาตใดๆ"
+    },
+    {
+      "q": "[Module 3] ข้อความใดเกี่ยวกับนโยบาย (policies) ของ AWS Identity and Access Management (IAM) ถูกต้อง?",
+      "choices": [
+        "Resource-based policies จะอนุญาตการเข้าถึงเป็นค่าเริ่มต้น (allow by default)",
+        "Resource-based policies จะถูกแนบเข้ากับ user, group หรือ role",
+        "Identity-based policies สามารถแนบได้กับ entity เพียงรายการเดียวเท่านั้น",
+        "Identity-based policies จะถูกแนบเข้ากับ user, group หรือ role"
+      ],
+      "answer": 3,
+      "explain": "นโยบายแบบอิงตัวตน (identity-based policies) จะถูกแนบไปกับ identity ซึ่งรวมถึงผู้ใช้ (users) กลุ่ม (groups) หรือบทบาท (roles)"
+    },
+    {
+      "q": "[Module 3] องค์ประกอบใดของนโยบาย AWS Identity and Access Management (IAM) ที่ระบุข้อมูลว่าจะอนุญาตหรือปฏิเสธคำขอ?",
+      "choices": [
+        "Action",
+        "Condition",
+        "Principal",
+        "Effect"
+      ],
+      "answer": 3,
+      "explain": "องค์ประกอบ effect คือส่วนที่ใช้กำหนดว่าการกระทำ (action) ที่ตามมานั้นได้รับอนุญาตหรือถูกปฏิเสธ"
+    },
+    {
+      "q": "[Module 3] ตัวเลือกใดอธิบายองค์ประกอบ statement ในนโยบาย AWS Identity and Access Management (IAM) ได้อย่างถูกต้อง?",
+      "choices": [
+        "Statement เป็นองค์ประกอบหลักที่บรรจุ elements ย่อยอื่นๆ ที่ร่วมกันกำหนดว่าคำขอใดได้รับอนุญาตหรือถูกปฏิเสธ",
+        "Statement เป็นส่วนประกอบทางเลือก (optional) ของ IAM policy",
+        "Statement ไม่สามารถนำไปใช้กับ identity-based policies ได้",
+        "Policy หนึ่งฉบับสามารถมี statement ได้เพียงรายการเดียวเท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "องค์ประกอบ statement ในนโยบาย IAM กำหนดสิทธิ์ต่างๆ โดยระบุว่าการกระทำ (actions) ใดได้รับอนุญาตหรือถูกปฏิเสธ บนทรัพยากรใด ภายใต้เงื่อนไขที่กำหนด"
+    },
+    {
+      "q": "[Module 4] เนื่องจากการควบรวมบริษัท วิศวกรข้อมูลจำเป็นต้องเพิ่มความจุพื้นที่จัดเก็บข้อมูลแบบออบเจ็กต์ แต่ไม่แน่ใจว่าจะต้องใช้พื้นที่เท่าใด ต้องการบริการที่ปรับขนาดได้สูงและสามารถจัดเก็บข้อมูลแบบไม่มีโครงสร้าง กึ่งมีโครงสร้าง และมีโครงสร้างได้ บริการใดจะคุ้มค่าที่สุดสำหรับงานนี้",
+      "choices": [
+        "Amazon S3",
+        "AWS Storage Gateway",
+        "Amazon Elastic Block Store (Amazon EBS)",
+        "Amazon RDS"
+      ],
+      "answer": 0,
+      "explain": "Amazon S3 มอบโซลูชันจัดเก็บข้อมูลที่ปลอดภัย ปรับขนาดได้ ทนทาน และต้นทุนต่ำ สำหรับข้อมูลปริมาณแทบไม่จำกัด"
+    },
+    {
+      "q": "[Module 4] Amazon S3 เป็นโซลูชันที่ดีสำหรับกรณีการใช้งานใด",
+      "choices": [
+        "ข้อมูลประเภท Ledger ที่มีการอัปเดตและเข้าถึงบ่อยครั้ง",
+        "พื้นที่จัดเก็บไฟล์วิดีโอบนอินเทอร์เน็ตที่เว็บไซต์ภายนอกสามารถเข้ามาเข้าถึงได้",
+        "ระบบ Data Warehouse สำหรับงาน Business Intelligence",
+        "การจัดเก็บไฟล์ชั่วคราวที่มีการเข้าถึงบ่อยครั้งในระดับรายชั่วโมง"
+      ],
+      "answer": 1,
+      "explain": "นักพัฒนาเว็บสามารถใช้ Amazon S3 เพื่อจัดเก็บวิดีโอ HTML โดยไม่ต้องจัดสรรพื้นที่จัดเก็บ เว็บไซต์ภายนอกสามารถเข้าถึงไฟล์เหล่านี้ได้โดยใช้ cross-origin resource sharing (CORS)"
+    },
+    {
+      "q": "[Module 4] บริษัทแห่งหนึ่งสนใจใช้ Amazon S3 เพื่อโฮสต์เว็บไซต์ของตนแทนเว็บเซิร์ฟเวอร์แบบดั้งเดิม Amazon S3 รองรับเนื้อหาประเภทใดสำหรับการทำ static web hosting?",
+      "choices": [
+        "ไฟล์ Dynamic HTML, Server-side scripts และ Database engine",
+        "Client-side scripts, ไฟล์วิดีโอและเสียง และไฟล์ HTML กับรูปภาพ",
+        "Server-side scripts, Database engine และไฟล์ HTML กับรูปภาพ",
+        "ไฟล์ Dynamic HTML, Client-side scripts และ Server-side scripts"
+      ],
+      "answer": 1,
+      "explain": "HTML files and image files เป็นเนื้อหาแบบ static ที่สามารถโฮสต์ได้โดยใช้ Amazon S3 static web hosting ส่วน client-side scripts, video และ sound files สร้างการนำเสนอแบบไดนามิก แต่ยังถือเป็นเนื้อหา static เนื่องจากไฟล์ของสิ่งเหล่านี้ไม่มีการเปลี่ยนแปลงบนเว็บเซิร์ฟเวอร์"
+    },
+    {
+      "q": "[Module 4] บริษัทแห่งหนึ่งต้องการใช้ S3 bucket เพื่อจัดเก็บข้อมูลที่มีความอ่อนไหว มีวิธีใดบ้างที่พวกเขาสามารถทำเพื่อปกป้องข้อมูลของตน?",
+      "choices": [
+        "ใช้ Client-side encryption เพื่อป้องกันข้อมูลระหว่างการส่ง (in transit) และเปิดใช้ Server-side encryption บน S3 bucket ก่อนอัปโหลดข้อมูลสำคัญ",
+        "เปิดใช้งาน Server-side encryption บน S3 bucket หลังจากอัปโหลดข้อมูลแล้ว และอัปโหลดไฟล์ที่ไม่ได้เข้ารหัส",
+        "ใช้ Secure File Transfer Protocol (SFTP) เชื่อมต่อตรง และอัปโหลดไฟล์ที่ไม่ได้เข้ารหัส",
+        "อัปโหลดไฟล์ที่ไม่ได้เข้ารหัสขึ้น S3 และเปิด Server-side encryption ก่อนอัปโหลด"
+      ],
+      "answer": 0,
+      "explain": "ต้องเปิดใช้งาน Amazon S3 server-side encryption บน bucket ก่อนที่จะอัปโหลดออบเจ็กต์ ออบเจ็กต์ที่มีอยู่เดิมต้องอัปโหลดใหม่จึงจะถูกเข้ารหัสแบบ at rest ส่วน server-side encryption ไม่ได้เข้ารหัสข้อมูลระหว่างการส่ง (in transit) ให้ใช้ client-side encryption แทน"
+    },
+    {
+      "q": "[Module 4] บริษัทแห่งหนึ่งต้องสร้างพื้นที่ส่วนกลางสำหรับจัดเก็บไฟล์ที่ใช้ร่วมกัน Amazon S3 รองรับความต้องการใดบ้าง?",
+      "choices": [
+        "ล็อกไฟล์เพื่อให้แก้ไขได้ทีละคน และเก็บรักษาไฟล์ได้หลายเวอร์ชัน (versioning)",
+        "เก็บรักษาไฟล์ได้หลายเวอร์ชัน (versioning) และกู้คืนไฟล์ที่ถูกลบไปแล้วได้",
+        "เปรียบเทียบเนื้อหาความแตกต่างระหว่างไฟล์ และแนบคอมเมนต์ลงในไฟล์",
+        "ล็อกไฟล์เพื่อให้แก้ไขได้ทีละคน และกู้คืนไฟล์ที่ถูกลบไปแล้วได้"
+      ],
+      "answer": 1,
+      "explain": "Amazon S3 object versioning ช่วยให้สามารถเก็บรักษาไฟล์หลายเวอร์ชันและกู้คืนไฟล์ที่ถูกลบได้ ฟีเจอร์นี้ไม่ได้เปิดใช้งานเป็นค่าเริ่มต้น และต้องเปิดใช้งานบน bucket"
+    },
+    {
+      "q": "[Module 4] ทีมบริการลูกค้าเข้าถึงข้อมูลเคสทุกวันเป็นเวลาสูงสุด 30 วัน เคสสามารถถูกเปิดใหม่ได้และต้องเข้าถึงได้ทันทีเป็นเวลา 1 ปีหลังจากปิดเคสแล้ว เคสที่เปิดใหม่ต้องใช้เวลา 2 วันในการประมวลผล โซลูชันใดตอบโจทย์ความต้องการนี้และคุ้มค่าที่สุด",
+      "choices": [
+        "จัดเก็บข้อมูลเคสใน S3 Standard และใช้ lifecycle policy ย้ายข้อมูลไปยัง S3 Standard-Infrequent Access (S3 Standard-IA) หลังจาก 30 วัน",
+        "จัดเก็บข้อมูลเคสทั้งหมดไว้ใน S3 Standard ตลอดเวลาเพื่อให้พร้อมใช้งานได้ทันที",
+        "จัดเก็บข้อมูลใน S3 Intelligent-Tiering เพื่อให้ระบบย้าย tier ตามความถี่ในการเข้าถึงโดยอัตโนมัติ",
+        "จัดเก็บข้อมูลใน S3 Standard และใช้ lifecycle policy ย้ายไปยัง Amazon S3 Glacier Flexible Retrieval หลังจาก 30 วัน"
+      ],
+      "answer": 0,
+      "explain": "S3 Standard-IA มีต้นทุนต่ำกว่า S3 Standard สำหรับข้อมูลที่ไม่ค่อยถูกเข้าถึง"
+    },
+    {
+      "q": "[Module 4] ตัวเลือกใดใช้ประโยชน์จาก edge locations ของ Amazon CloudFront ในการโอนไฟล์ในระยะทางไกลไปยัง S3 bucket",
+      "choices": [
+        "AWS SDKs",
+        "Amazon S3 Transfer Acceleration",
+        "Amazon S3 REST API",
+        "AWS Transfer Family"
+      ],
+      "answer": 1,
+      "explain": "Amazon S3 Transfer Acceleration เป็นฟีเจอร์ระดับ bucket ที่ใช้สำหรับโอนไฟล์ในระยะทางไกลระหว่างไคลเอนต์ของคุณกับ S3 bucket Transfer Acceleration ใช้ประโยชน์จาก edge locations ที่กระจายอยู่ทั่วโลกของ Amazon CloudFront"
+    },
+    {
+      "q": "[Module 4] ผู้ผลิตวิดีโอต้องโอนไฟล์วิดีโอหลายไฟล์ไปยัง Amazon S3 เป็นประจำ ไฟล์มีขนาดตั้งแต่ 100-700 MB การเชื่อมต่ออินเทอร์เน็ตไม่เสถียร ทำให้การอัปโหลดบางครั้งล้มเหลว โซลูชันใดให้วิธีการโอนไฟล์เหล่านี้ไปยัง Amazon S3 ที่เร็วที่สุด เชื่อถือได้มากที่สุด และคุ้มค่าที่สุด",
+      "choices": [
+        "AWS Management Console",
+        "Amazon S3 Transfer Acceleration",
+        "AWS Transfer Family",
+        "Amazon S3 multipart uploads"
+      ],
+      "answer": 3,
+      "explain": "เมื่อใช้ multipart uploads หากการอัปโหลดล้มเหลว จะต้องเริ่มใหม่เฉพาะส่วน (part) ที่อัปโหลดล้มเหลวเท่านั้น แทนที่จะต้องเริ่มอัปโหลดไฟล์ทั้งหมดใหม่ วิธีนี้ให้โซลูชันที่ดีกว่าสำหรับการเชื่อมต่อที่ไม่เสถียร"
+    },
+    {
+      "q": "[Module 4] S3 storage class ใดออกแบบมาสำหรับสำเนาข้อมูลสำรอง (backup) ของข้อมูล on-premises หรือข้อมูลที่สามารถสร้างใหม่ได้ง่าย",
+      "choices": [
+        "S3 Glacier Instant Retrieval",
+        "S3 Standard-Infrequent Access (S3 Standard-IA)",
+        "S3 One Zone-Infrequent Access (S3 One Zone-IA)",
+        "S3 Intelligent-Tiering"
+      ],
+      "answer": 2,
+      "explain": "S3 One Zone-IA จัดเก็บข้อมูลใน Availability Zone เดียว เหมาะสำหรับลูกค้าที่ต้องการตัวเลือกต้นทุนต่ำกว่า และไม่ต้องการความพร้อมใช้งานและความทนทานระดับเดียวกับ S3 Standard หรือ S3 Standard-IA"
+    },
+    {
+      "q": "[Module 4] บริษัทแห่งหนึ่งต้องเก็บรักษาบันทึกข้อมูลเพื่อวัตถุประสงค์ด้านกฎระเบียบเป็นระยะเวลา 7 ปี บันทึกเหล่านี้แทบไม่ค่อยถูกเข้าถึง (หนึ่งหรือสองครั้งต่อปี) S3 storage class ใดมีต้นทุนต่ำที่สุดสำหรับ Amazon S3",
+      "choices": [
+        "S3 Standard-Infrequent Access (S3 Standard-IA)",
+        "S3 Intelligent-Tiering",
+        "S3 One Zone-Infrequent Access (S3 One Zone-IA)",
+        "S3 Glacier Deep Archive"
+      ],
+      "answer": 3,
+      "explain": "S3 Glacier Deep Archive เป็น storage class ที่มีต้นทุนต่ำที่สุดสำหรับ Amazon S3 และรองรับการเก็บรักษาระยะยาวและการอนุรักษ์ข้อมูลดิจิทัลสำหรับข้อมูลที่อาจถูกเข้าถึงเพียงหนึ่งหรือสองครั้งต่อปี"
+    },
+    {
+      "q": "[Module 5] คุณสมบัติใดเป็นเหตุผลที่ควรเลือกใช้ Amazon EC2?",
+      "choices": [
+        "AWS ดูแลจัดการ OS patches และความสามารถในการรัน serverless applications",
+        "ความสามารถในการรันเวิร์กโหลดได้ทุกประเภท และการควบคุมทรัพยากรการประมวลผลได้อย่างสมบูรณ์ (complete control)",
+        "AWS ดูแลจัดการ OS security และความสามารถในการรัน serverless applications",
+        "การควบคุมทรัพยากรการประมวลผลได้อย่างสมบูรณ์ และ AWS ดูแลจัดการ OS patches"
+      ],
+      "answer": 1,
+      "explain": "ใช้ Amazon EC2 เมื่อต้องการควบคุมทุกอย่างลงไปถึงระดับ OS อย่างสมบูรณ์ Amazon EC2 สามารถรันเวิร์กโหลดได้ทุกประเภท รวมถึงเว็บเซิร์ฟเวอร์ แอปพลิเคชันเซิร์ฟเวอร์ ฐานข้อมูล และมีเดียเซิร์ฟเวอร์ EC2 instance สามารถรันเวิร์กโหลดใดก็ได้ที่ physical server สามารถรันได้"
+    },
+    {
+      "q": "[Module 5] ประโยชน์ของการใช้ Amazon Machine Image (AMI) คืออะไร?",
+      "choices": [
+        "การย้ายข้อมูลจาก on-premises, การอัปเดตระบบด้วยการแพตช์ AMI และการตั้งค่า security groups อัตโนมัติ",
+        "การใช้ AMI เป็น server backup สำหรับ EC2 instances, การขายหรือแชร์โซลูชันซอฟต์แวร์ที่แพ็กเป็น AMI และการ launch instances ด้วย configuration เดียวกัน",
+        "การอัปเดตระบบด้วยการแพตช์ AMI, การขายโซลูชันซอฟต์แวร์ และการตั้งค่า security groups อัตโนมัติ",
+        "การย้ายข้อมูลจาก on-premises, การ launch instances ด้วย configuration เดียวกัน และการตั้งค่า security groups อัตโนมัติ"
+      ],
+      "answer": 1,
+      "explain": "AMI มีข้อมูลการกำหนดค่าของ EC2 instance ดังนั้น instance ที่ถูก launch จาก AMI เดียวกันจะมีการกำหนดค่าเหมือนกัน AMI คืออิมเมจของ EC2 instance ดังนั้นลูกค้าจึงสามารถใช้ AMI เป็นแบ็คอัพได้ ผู้จำหน่ายสามารถขายซอฟต์แวร์โซลูชันที่ถูกแพ็กเป็น AMI ผ่านทาง AWS Marketplace ได้"
+    },
+    {
+      "q": "[Module 5] ผู้ดูแลระบบต้องเปลี่ยน instance type ของ Amazon EC2 instance ที่กำลังทำงานอยู่หลายตัว โดย instance เหล่านั้นถูก launch ด้วยการผสมกันระหว่าง AMI ที่ใช้ Amazon Elastic Block Store (Amazon EBS) และ AMI แบบ instance-store-backed วิธีใดเป็นวิธีที่ถูกต้องในการเปลี่ยน instance type?",
+      "choices": [
+        "เปลี่ยน instance type ของ instance ที่ใช้ Amazon EBS backed ได้ทันทีโดยไม่ต้องหยุดการทำงานของเครื่อง",
+        "สั่งหยุด (stop) instance-store-backed instance แล้วเปลี่ยน instance type จากนั้นสั่ง start instance",
+        "สั่งหยุด (stop) Amazon EBS backed instance แล้วเปลี่ยน instance type จากนั้นสั่ง start instance",
+        "เปลี่ยน instance type ของ instance-store-backed instance ได้ทันทีโดยไม่ต้องหยุดการทำงานของเครื่อง"
+      ],
+      "answer": 2,
+      "explain": "เปลี่ยน instance type ของ instance ที่ใช้ Amazon EBS backed ได้โดยการหยุด (stop) instance นั้นก่อน"
+    },
+    {
+      "q": "[Module 5] เวิร์กโหลดหนึ่งต้องการการเข้าถึงข้อมูลชุดใหญ่ในเครื่อง (local datasets) แบบอ่าน/เขียนสูง instance type ใดจะให้ประสิทธิภาพดีที่สุดสำหรับเวิร์กโหลดนี้?",
+      "choices": [
+        "Compute optimized และ Accelerated computing",
+        "Memory optimized และ Storage optimized",
+        "General purpose และ Compute optimized",
+        "Storage optimized และ General purpose"
+      ],
+      "answer": 1,
+      "explain": "Memory optimized instances ถูกออกแบบมาสำหรับการประมวลผลชุดข้อมูลขนาดใหญ่ในหน่วยความจำ ส่วน Storage optimized instances ถูกออกแบบมาสำหรับเวิร์กโหลดที่ต้องการการอ่าน/เขียนแบบต่อเนื่อง (sequential) ด้วยความเร็วสูงบนสตอเรจภายในเครื่อง"
+    },
+    {
+      "q": "[Module 5] แอปพลิเคชันหนึ่งต้องการที่อยู่ media access control (MAC) ของโฮสต์ Amazon EC2 instance สถาปัตยกรรมนี้ใช้ AWS Auto Scaling group เพื่อ launch และ terminate instance แบบไดนามิก วิธีใดคือวิธีที่ดีที่สุดสำหรับแอปพลิเคชันในการรับที่อยู่ MAC?",
+      "choices": [
+        "ระบุ MAC address รวมไว้ใน Amazon Machine Image (AMI) ที่ใช้สำหรับ launch ทุก instance ใน Auto Scaling group",
+        "เขียนระบุ MAC address ไว้ใน application configuration file ของแต่ละ instance",
+        "ระบุ MAC address รวมไว้ใน custom AMI แยกเฉพาะของแต่ละ instance ใน Auto Scaling group",
+        "ใช้ user data ของแต่ละ instance เพื่อเข้าถึง MAC address ผ่านทาง instance metadata"
+      ],
+      "answer": 3,
+      "explain": "เนื่องจาก AWS Auto Scaling group เป็นผู้ launch instance เอง ที่อยู่ MAC ของแต่ละ instance จึงไม่สามารถคาดเดาได้ล่วงหน้า user data script สามารถเข้าถึงที่อยู่ MAC จาก instance metadata ได้เมื่อ instance เริ่มทำงาน แล้วจึงแจ้งให้แอปพลิเคชันทราบ"
+    },
+    {
+      "q": "[Module 5] ข้อความใดเกี่ยวกับ user data ถูกต้อง?",
+      "choices": [
+        "โดยเริ่มต้น user data จะรันหลังการ restart ทุกครั้ง และ user data ไม่สามารถสั่งรันขณะเครื่อง stopped ได้",
+        "โดยเริ่มต้น user data จะรันเพียงครั้งเดียวเมื่อ instance ถูก launch และ cloud architect สามารถรันคำสั่ง /var/lib/cloud/instance/scripts/part-001 เพื่อสั่งให้ user data script รันซ้ำได้",
+        "Cloud architect ต้องลบไฟล์ config_user_scripts ออก และ user data จะรันหลังการ restart ทุกครั้ง",
+        "User data ไม่สามารถสั่งรันขณะเครื่อง stopped ได้ และ cloud architect ต้องลบไฟล์ config_user_scripts"
+      ],
+      "answer": 1,
+      "explain": "เมื่อ instance ถูก launch user data script จะรันโดยอัตโนมัติ หาก cloud architect ต้องการรัน user data script ในขณะที่ instance หยุดทำงานอยู่ สามารถใช้คำสั่ง /var/lib/cloud/instance/scripts/part-001 ได้"
+    },
+    {
+      "q": "[Module 5] เวิร์กโหลดแบบ transactional บน Amazon EC2 instance มีการอ่านและเขียนข้อมูลบ่อยครั้งในปริมาณสูง Amazon Elastic Block Store (Amazon EBS) volume type ใดดีที่สุดสำหรับเวิร์กโหลดนี้?",
+      "choices": [
+        "Provisioned IOPS solid state drive (SSD)",
+        "Throughput Optimized hard disk drive (HDD)",
+        "General Purpose solid state drive (SSD)",
+        "Cold hard disk drive (HDD)"
+      ],
+      "answer": 0,
+      "explain": "Provisioned IOPS SSD EBS volume ถูกปรับให้เหมาะสมสำหรับเวิร์กโหลดที่มีการทำ I/O อย่างเข้มข้น"
+    },
+    {
+      "q": "[Module 5] สามารถสร้าง NFS share บน Amazon Elastic Block Store (Amazon EBS) backed Linux instance ได้โดยการติดตั้งและกำหนดค่า NFS server บน instance นั้น ด้วยวิธีนี้ ระบบ Linux หลายเครื่องสามารถแชร์ระบบไฟล์ของ instance นั้นร่วมกันได้ Amazon Elastic File System (Amazon EFS) มีข้อได้เปรียบใดเมื่อเทียบกับวิธีนี้?",
+      "choices": [
+        "ไม่ต้องสำรองข้อมูล (no backups needed) และมีความสอดคล้องของข้อมูลระดับสูง (strong consistency)",
+        "การปรับขนาดความจุอัตโนมัติ (Automatic scaling) และความพร้อมใช้งานสูง (High availability)",
+        "ความสอดคล้องของข้อมูลระดับสูง (strong consistency) และการทำ file locking",
+        "ความพร้อมใช้งานสูง (High availability) และไม่ต้องสำรองข้อมูล (no backups needed)"
+      ],
+      "answer": 1,
+      "explain": "เนื่องจากเป็นบริการที่ถูกจัดการให้อย่างเต็มรูปแบบ (fully managed) Amazon EFS จึงมีความพร้อมใช้งานสูง (high availability) ส่วน NFS server บน instance เดียวถือเป็นจุดล้มเหลวเดียว (single point of failure) ซึ่งอาจถูกใช้งานหนักเกินไปได้ นอกจากนี้ Amazon EFS ยังสามารถขยายขนาดได้โดยอัตโนมัติ และลูกค้าจ่ายเงินเฉพาะเท่าที่ใช้งานจริง ในขณะที่ Amazon EBS ไม่สามารถขยายขนาดได้โดยอัตโนมัติ"
+    },
+    {
+      "q": "[Module 5] Amazon FSx for Windows File Server มีฟีเจอร์ใดให้ใช้งาน?",
+      "choices": [
+        "Microsoft Active Directory server สำหรับ Windows file servers",
+        "โซลูชัน Backup สำหรับ on-premises Windows file servers",
+        "Amazon management agent สำหรับ Windows file servers",
+        "บริการ Windows file servers ที่ได้รับการดูแลจัดการอย่างเต็มรูปแบบ (Fully managed Windows file servers)"
+      ],
+      "answer": 3,
+      "explain": "FSx for Windows File Server มอบ Windows file server ที่ถูกจัดการให้อย่างเต็มรูปแบบ (fully managed) ซึ่งสร้างขึ้นบน Microsoft Windows Server"
+    },
+    {
+      "q": "[Module 5] คำอธิบายใดเกี่ยวกับตัวเลือกด้านราคาของ Amazon EC2 ถูกต้อง?",
+      "choices": [
+        "Reserved Instances คือ physical servers ที่สงวนไว้ใช้งานเฉพาะลูกค้า และ Savings Plans คือเครื่องมือจัดทำงบประมาณ",
+        "On-Demand Instances จ่ายค่า compute ตามเวลาใช้งานจริงโดยไม่มีข้อผูกมัดระยะยาว และ Spot Instances ให้ส่วนลดสูงจาก compute capacity ที่เหลืออยู่แต่สามารถถูกขัดจังหวะ (interrupted) ได้",
+        "Dedicated Hosts คือเซิร์ฟเวอร์ที่สร้างขึ้นเพื่อวัตถุประสงค์เดียว เช่น ไฟร์วอลล์ และ Reserved Instances คือ physical servers สำหรับลูกค้าคนเดียว",
+        "Savings Plans คือเครื่องมือจัดทำงบประมาณ และ Dedicated Hosts คือเซิร์ฟเวอร์สำหรับงานเฉพาะอย่าง"
+      ],
+      "answer": 1,
+      "explain": "On-Demand instance ให้บริการแบบจ่ายตามการใช้งานจริง (pay-as-you-go) โดยไม่มีข้อผูกมัดระยะยาว ส่วน Spot instance ให้ส่วนลดที่มีนัยสำคัญแต่สามารถถูกขัดจังหวะ (interrupted) ได้"
+    },
+    {
+      "q": "[Module 6] ข้อความใดที่เปรียบเทียบระหว่างบริการฐานข้อมูลที่ AWS จัดการกับฐานข้อมูลบน Amazon EC2 instance นั้นถูกต้อง?",
+      "choices": [
+        "AWS ดูแลจัดการ OS patches ให้กับฐานข้อมูลที่ติดตั้งบน EC2 instance",
+        "AWS ดูแลจัดการ database patches ให้กับฐานข้อมูลที่รันบน managed database service",
+        "การตั้งค่าการสำรองข้อมูล (backups) ไม่จำเป็นต้องทำบนบริการ managed database service",
+        "การตั้งค่าการสำรองข้อมูล (backups) ไม่จำเป็นต้องทำเมื่อรันฐานข้อมูลบน EC2 instance"
+      ],
+      "answer": 1,
+      "explain": "AWS จะแพตช์ระบบฐานข้อมูลให้ในฐานะส่วนหนึ่งของบริการฐานข้อมูลที่มีการจัดการ ซึ่งช่วยให้ลูกค้าสามารถโฟกัสไปที่แอปพลิเคชันของตนได้ บริการฐานข้อมูลที่มีการจัดการยังมอบความพร้อมใช้งานสูง ความสามารถในการปรับขนาด และการสำรองข้อมูลเป็นตัวเลือกในตัวที่ลูกค้าสามารถกำหนดค่าได้"
+    },
+    {
+      "q": "[Module 6] บริษัทสตาร์ทอัพขนาดเล็กแห่งหนึ่งกำลังตัดสินใจเลือกบริการฐานข้อมูลสำหรับระบบลงทะเบียนของเว็บไซต์ฝึกอบรมออนไลน์ ข้อกำหนดใดที่อาจทำให้พวกเขาเลือกใช้ Amazon RDS แทน Amazon DynamoDB?",
+      "choices": [
+        "ระบบลงทะเบียนต้องมีความพร้อมใช้งานสูง (high availability) และข้อมูลต้องสำรองได้ในกรณีเกิดภัยพิบัติ",
+        "ข้อมูลนักศึกษา, คอร์สเรียน และการลงทะเบียนถูกจัดเก็บแยกในหลายตาราง (multiple tables) และข้อมูลมีโครงสร้างสูง (highly structured)",
+        "ข้อมูลและธุรกรรมต้องเข้ารหัสเพื่อปกป้องข้อมูลส่วนบุคคล และระบบลงทะเบียนต้องมีความพร้อมใช้งานสูง",
+        "ข้อมูลมีโครงสร้างสูง (highly structured) และข้อมูลต้องสำรองได้ในกรณีเกิดภัยพิบัติ"
+      ],
+      "answer": 1,
+      "explain": "Amazon RDS เป็นตัวเลือกที่ดีกว่าสำหรับกรณีการใช้งานที่ต้องการการ join ข้อมูลที่ซับซ้อนจากตารางหลายๆ ตาราง และยังเหมาะกว่าเมื่อข้อมูลมีโครงสร้างสูง (ฐานข้อมูลใช้ schema ที่เข้มงวด)"
+    },
+    {
+      "q": "[Module 6] บริษัทสตาร์ทอัพแห่งหนึ่งกำลังสร้างระบบสินค้าคงคลังสำหรับคำสั่งซื้อที่มีส่วนหน้าเว็บ (web frontend) และกำลังมองหาฐานข้อมูลธุรกรรมแบบเรียลไทม์ บริการใดจะตอบโจทย์ความต้องการของพวกเขาได้ดีที่สุด?",
+      "choices": [
+        "Amazon Redshift",
+        "Amazon DocumentDB (with MongoDB compatibility)",
+        "Amazon DynamoDB",
+        "Amazon Neptune"
+      ],
+      "answer": 2,
+      "explain": "Amazon DynamoDB เป็นฐานข้อมูลแบบ nonrelational ที่มีการจัดการอย่างเต็มรูปแบบ ซึ่งให้ประสิทธิภาพที่รวดเร็วและสม่ำเสมอ สามารถรองรับ workload ประเภท online transaction processing (OLTP) ได้แทบทุกแบบแบบเรียลไทม์"
+    },
+    {
+      "q": "[Module 6] บริษัทเกมขนาดเล็กแห่งหนึ่งกำลังออกแบบเกมออนไลน์ ที่ผู้เล่นหลายพันคนสามารถสร้างวัตถุในเกมของตนเองได้ การออกแบบปัจจุบันใช้ฐานข้อมูล MySQL ใน Amazon RDS เพื่อจัดเก็บข้อมูลสำหรับวัตถุที่ผู้เล่นสร้างขึ้น คุณลักษณะที่เสนอสำหรับวัตถุในเกมออนไลน์ข้อใดที่อาจทำให้ Amazon DynamoDB เป็นทางออกที่ดีกว่า?",
+      "choices": [
+        "ไอเทมเกมสามารถแก้ไขได้โดยใช้ข้อมูลจากตารางอื่น และข้อมูลเกมเป็นแบบ binary ที่มีขนาดเกิน 700 MB",
+        "มีปริมาณการอ่าน (read activity) บนวัตถุที่ผู้เล่นสร้างสูงมากและการเขียนต่ำ และแอตทริบิวต์ของวัตถุมีความไม่แน่นอนคาดเดาไม่ได้ (unpredictable attributes)",
+        "มีชุดแอตทริบิวต์ทั่วไปร่วมกันสำหรับทุกวัตถุ และไอเทมเกมแก้ไขได้โดยใช้ข้อมูลจากตารางอื่น",
+        "ข้อมูลเกมมีขนาดเกิน 700 MB และมีปริมาณการอ่านสูงมากบนวัตถุที่ผู้เล่นสร้าง"
+      ],
+      "answer": 1,
+      "explain": "เนื่องจากผู้เล่นสร้างวัตถุของตนเอง คุณลักษณะของวัตถุจึงคาดเดาไม่ได้และไม่สามารถกำหนด schema ของฐานข้อมูลไว้ล่วงหน้าได้ กิจกรรมการอ่านข้อมูลจำนวนมากต้องการเวลาตอบสนองที่รวดเร็ว ซึ่ง DynamoDB รองรับได้ และจะมีค่าใช้จ่ายสูงหากใช้ Amazon RDS"
+    },
+    {
+      "q": "[Module 6] องค์กรแห่งหนึ่งกังวลเกี่ยวกับการเพิ่มขึ้นของการฉ้อโกง บริการใดสามารถช่วยในการสร้างการสืบค้นฐานข้อมูลกราฟแบบเรียลไทม์เพื่อตรวจจับการฉ้อโกงได้?",
+      "choices": [
+        "Amazon Redshift",
+        "Amazon DynamoDB",
+        "Amazon RDS",
+        "Amazon Neptune"
+      ],
+      "answer": 3,
+      "explain": "Amazon Neptune เป็นบริการฐานข้อมูลกราฟที่มีการจัดการอย่างเต็มรูปแบบ สร้างขึ้นสำหรับคลาวด์ ซึ่งช่วยในการสร้างและรันแอปพลิเคชันกราฟที่ทำงานกับชุดข้อมูลที่เชื่อมโยงกันอย่างสูง"
+    },
+    {
+      "q": "[Module 6] วิศวกรข้อมูลต้องโฮสต์ฐานข้อมูล Microsoft SQL Server ใหม่ใน AWS สำหรับโปรเจกต์หนึ่ง พวกเขาสามารถใช้บริการใดเพื่อทำงานนี้ให้สำเร็จ?",
+      "choices": [
+        "Amazon Neptune",
+        "Amazon DocumentDB (with MongoDB compatibility)",
+        "Amazon Aurora",
+        "Amazon DynamoDB"
+      ],
+      "answer": 2,
+      "explain": "Aurora คือระบบจัดการฐานข้อมูลเชิงสัมพันธ์ที่สร้างขึ้นสำหรับคลาวด์โดยมีความเข้ากันได้อย่างเต็มรูปแบบกับ MySQL และ PostgreSQL"
+    },
+    {
+      "q": "[Module 6] ควรใช้เทคนิคใดในการรักษาความปลอดภัยฐานข้อมูล Amazon RDS?",
+      "choices": [
+        "ใช้ Amazon VPC gateway endpoint, AWS IAM table-level policies และ Virtual Private Gateway (VGW)",
+        "การเข้ารหัสทั้ง at rest และ in transit, การใช้ Amazon VPC เพื่อแยก instance (isolation) และการใช้ Security Groups เพื่อควบคุมการเข้าถึงระดับเครือข่าย",
+        "การกำหนด AWS IAM policies ระดับคอลัมน์, Virtual Private Gateway (VGW) และ Amazon VPC gateway endpoint",
+        "การใช้ Amazon VPC, Amazon VPC gateway endpoint และ AWS IAM table-level policies"
+      ],
+      "answer": 1,
+      "explain": "เนื่องจาก Amazon RDS ใช้ server instances การ deploy จึงอยู่ใน Amazon VPC และสถาปนิกคลาวด์ควบคุมการเข้าถึงเครือข่ายโดยใช้ security groups การใช้การเข้ารหัสเพื่อปกป้องข้อมูลที่ละเอียดอ่อนใน Amazon RDS ทั้งขณะจัดเก็บและระหว่างส่งข้อมูลถือเป็นแนวทางที่ดีเสมอ"
+    },
+    {
+      "q": "[Module 6] ควรใช้เทคนิคใดในการรักษาความปลอดภัย Amazon DynamoDB?",
+      "choices": [
+        "การใช้ Amazon VPC เพื่อทำ instance isolation, การใช้ Security Groups และ Virtual Private Gateway (VGW)",
+        "การเข้ารหัสข้อมูล (Encryption), การใช้ AWS IAM policies กำหนดสิทธิ์ระดับ table/item/attribute และการใช้ Amazon VPC gateway endpoint เพื่อป้องกันไม่ให้ทราฟฟิกวิ่งผ่านอินเทอร์เน็ต",
+        "การใช้ Security Groups ควบคุมการเข้าถึง, Virtual Private Gateway (VGW) และการเข้ารหัสข้อมูล",
+        "การใช้ Amazon VPC เพื่อแยก instance, การใช้ AWS IAM policies และ Security Groups"
+      ],
+      "answer": 1,
+      "explain": "IAM ควบคุมการเข้าถึงตารางและข้อมูลใน DynamoDB VPC gateway endpoint จะให้เส้นทางไปยัง DynamoDB ที่ไม่ต้องผ่านอินเทอร์เน็ต ข้อมูลใน DynamoDB จะถูกเข้ารหัสโดยค่าเริ่มต้น และควรใช้การเข้ารหัสฝั่งไคลเอนต์เพื่อเข้ารหัสข้อมูลที่ละเอียดอ่อนระหว่างการส่งข้อมูลด้วย"
+    },
+    {
+      "q": "[Module 6] บริษัทแห่งหนึ่งต้องการย้ายฐานข้อมูล Oracle แบบ on-premises ของตนไปยัง Amazon Aurora MySQL กระบวนการใดอธิบายขั้นตอนระดับสูงได้ถูกต้องที่สุด?",
+      "choices": [
+        "ใช้ AWS Database Migration Service (AWS DMS) เพื่อย้ายข้อมูลก่อน จากนั้นจึงใช้ AWS Schema Conversion Tool (AWS SCT) เพื่อแปลง schema",
+        "ใช้ AWS Database Migration Service (AWS DMS) เพื่อย้ายข้อมูลจากฐานข้อมูล Oracle ไปยัง Amazon Aurora MySQL โดยตรง",
+        "ใช้ AWS Schema Conversion Tool (AWS SCT) เพื่อแปลง schema และย้ายข้อมูลไปพร้อมกันแบบ synchronous",
+        "ใช้ AWS Schema Conversion Tool (AWS SCT) เพื่อแปลง schema ก่อน จากนั้นจึงใช้ AWS Database Migration Service (AWS DMS) เพื่อย้ายข้อมูล"
+      ],
+      "answer": 3,
+      "explain": "AWS SCT จะวิเคราะห์ schema ของฐานข้อมูลต้นทาง ทำการแปลง จากนั้นสร้าง schema ในฐานข้อมูลปลายทาง จากนั้น AWS DMS จะคัดลอกข้อมูลไปยังฐานข้อมูลปลายทาง"
+    },
+    {
+      "q": "[Module 6] สถาปนิกคลาวด์กำลังตั้งค่าแอปพลิเคชันให้ใช้ Amazon RDS MySQL DB instance ฐานข้อมูลต้องได้รับการออกแบบให้มีความพร้อมใช้งานสูงข้าม Availability Zones และ AWS Regions โดยมี downtime น้อยที่สุด พวกเขาควรทำอย่างไรเพื่อให้เป็นไปตามข้อกำหนดนี้?",
+      "choices": [
+        "ตั้งค่า RDS MySQL Multi-AZ DB instance และกำหนด backup window ที่เหมาะสม",
+        "ตั้งค่า RDS MySQL Multi-AZ DB instance และสร้าง Read Replica ไว้ใน AWS Region อื่น",
+        "ตั้งค่า RDS MySQL Single-AZ DB instance และสร้าง Read Replica ไว้ใน AWS Region อื่น",
+        "ตั้งค่า RDS MySQL Single-AZ DB instance และคัดลอก automated snapshots ไปยัง AWS Region อื่น"
+      ],
+      "answer": 1,
+      "explain": "สถาปัตยกรรมนี้ช่วยให้มั่นใจถึงความพร้อมใช้งานสูงข้าม Availability Zones และ AWS Regions โดยมอบความยืดหยุ่นและลด downtime ให้เหลือน้อยที่สุด"
+    }
+  ]
+}

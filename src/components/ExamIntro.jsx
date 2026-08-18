@@ -26,6 +26,11 @@ export default function ExamIntro({ subject, onStart, onBack }) {
           </div>
           <h1 style={{ fontSize: '2rem', fontWeight: 600, letterSpacing: '-1px', marginBottom: '0.5rem' }}>รายละเอียดการสอบ</h1>
           <h2 style={{ fontSize: '1.25rem', color: 'var(--text-muted)', fontWeight: 500 }}>{subject.name}</h2>
+          {subject.desc && (
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '650px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.5 }}>
+              {subject.desc}
+            </p>
+          )}
         </div>
 
         <div style={{ 
