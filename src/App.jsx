@@ -266,6 +266,7 @@ function App() {
                 >
                   <button 
                     style={{
+                      fontFamily: 'inherit',
                       padding: '0.75rem 1rem',
                       background: currentView === 'schedule' ? 'rgba(0,112,243,0.1)' : 'transparent',
                       color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
@@ -291,6 +292,7 @@ function App() {
                   </button>
                   <button 
                     style={{
+                      fontFamily: 'inherit',
                       padding: '0.75rem 1rem',
                       background: currentView === 'history' ? 'rgba(0,112,243,0.1)' : 'transparent',
                       color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
