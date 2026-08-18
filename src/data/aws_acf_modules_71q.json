@@ -5,7 +5,7 @@
   "icon": "☁️",
   "color": "#FF9900",
   "iconBg": "rgba(255,153,0,0.15)",
-  "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 1-8) จาก AWS Academy Cloud Foundations (ACF) จำนวน 71 ข้อ ช้อยส์ภาษาไทยพร้อมศัพท์เทคนิคภาษาอังกฤษ by lnwfilmSynthesis.md",
+  "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 1-8) จาก AWS Academy Cloud Foundations (ACF) จำนวน 71 ข้อ by lnwfilmSynthesis.md",
   "requiresAuth": true,
   "questions": [
     {
