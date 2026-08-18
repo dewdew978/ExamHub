@@ -1,0 +1,671 @@
+{
+  "id": "aws_cloud_foundations_60_items",
+  "category": "Cloud Technology Infrastructure",
+  "name": "AWS Cloud Foundations Mock Exam (60 Questions)",
+  "icon": "☁️",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "แนวข้อสอบ AWS Cloud Foundations จำนวน 60 ข้อ ครอบคลุม Security, CloudFront, Shared Responsibility, Architecture และ Elastic Beanstalk",
+  "questions": [
+    {
+      "q": "เครื่องมือใดที่ช่วยประเมินว่าการกำหนดค่าทรัพยากร (Resource configurations) ของคุณสอดคล้องกับแนวทางปฏิบัติภายในหรือกฎระเบียบต่างๆ หรือไม่?",
+      "choices": [
+        "AWS Security Hub",
+        "AWS Config",
+        "AWS IAM",
+        "Amazon CloudFront"
+      ],
+      "answer": 1,
+      "explain": "AWS Config สามารถใช้ประเมินว่าการตั้งค่าทรัพยากรของคุณสอดคล้องกับแนวทางปฏิบัติภายในและกฎระเบียบของอุตสาหกรรมมากน้อยเพียงใด[cite: 1]"
+    },
+    {
+      "q": "บริการใดที่ให้ภาพรวมที่ครอบคลุมเกี่ยวกับสถานะความปลอดภัยของคุณใน AWS และช่วยตรวจสอบการปฏิบัติตามมาตรฐานความปลอดภัย?",
+      "choices": [
+        "AWS Security Hub",
+        "AWS Config",
+        "Amazon Cognito",
+        "AWS Trusted Advisor"
+      ],
+      "answer": 0,
+      "explain": "AWS Security Hub ให้ภาพรวมที่ครอบคลุมเกี่ยวกับสถานะความปลอดภัยภายใน AWS และช่วยตรวจสอบว่าปฏิบัติตามมาตรฐานความปลอดภัยหรือไม่[cite: 1]"
+    },
+    {
+      "q": "ฟีเจอร์ใดของ Amazon S3 ที่ช่วยให้คุณปฏิบัติตามข้อกำหนดที่ต้องจัดเก็บข้อมูลแบบ 'เขียนครั้งเดียว อ่านหลายครั้ง' (WORM)?",
+      "choices": [
+        "S3 Versioning",
+        "S3 Infrequent Access",
+        "S3 Object Lock",
+        "S3 Glacier"
+      ],
+      "answer": 2,
+      "explain": "S3 Object Lock ช่วยตอบสนองข้อกำหนดทางเทคนิคที่ต้องการการจัดเก็บข้อมูลแบบเขียนครั้งเดียว อ่านหลายครั้ง (WORM) สำหรับข้อมูลประเภทบันทึก[cite: 1]"
+    },
+    {
+      "q": "หากบริษัทต้องการศึกษาแนวทางการใช้ AWS เพื่อให้เป็นไปตามข้อกำหนดทางสาธารณสุข HIPAA ควรดูเอกสารใด?",
+      "choices": [
+        "Security and Compliance Quick Start Guides",
+        "Architecting for HIPAA Security and Compliance",
+        "AWS Compliance Resources",
+        "AWS Shared Responsibility Model"
+      ],
+      "answer": 1,
+      "explain": "Architecting for HIPAA Security and Compliance เป็นเอกสารที่แสดงโครงร่างว่าบริษัทสามารถใช้ AWS เพื่อช่วยให้ปฏิบัติตามข้อกำหนด HIPAA ได้อย่างไร[cite: 1]"
+    },
+    {
+      "q": "กฎระเบียบของ SEC, FINRA และ CFTC ต้องการการจัดเก็บข้อมูลประเภทใด?",
+      "choices": [
+        "Read once, write many",
+        "Write once, read many (WORM)",
+        "Write multiple, read multiple",
+        "Delete after read"
+      ],
+      "answer": 1,
+      "explain": "หน่วยงานกำกับดูแลบริการทางการเงิน เช่น SEC, FINRA บังคับให้ต้องจัดเก็บข้อมูลแบบเขียนครั้งเดียว อ่านหลายครั้ง (WORM)[cite: 1]"
+    },
+    {
+      "q": "ข้อใดอธิบายเกี่ยวกับ Amazon CloudFront ได้ถูกต้องที่สุด?",
+      "choices": [
+        "บริการจัดการฐานข้อมูลเชิงสัมพันธ์",
+        "ระบบเครือข่ายส่งมอบเนื้อหา (CDN) ที่รวดเร็วและปลอดภัยทั่วโลก",
+        "บริการประมวลผลเซิร์ฟเวอร์เสมือน",
+        "บริการจัดเก็บข้อมูลอ็อบเจ็กต์"
+      ],
+      "answer": 1,
+      "explain": "Amazon CloudFront เป็นบริการ CDN (Content Delivery Network) ที่มีความรวดเร็ว ครอบคลุมทั่วโลก และปลอดภัย[cite: 2]"
+    },
+    {
+      "q": "Amazon CloudFront ใช้เครือข่ายส่วนใดเพื่อให้บริการเนื้อหาที่เป็นที่นิยมแก่ลูกค้าอย่างรวดเร็ว?",
+      "choices": [
+        "Availability Zones",
+        "Regional edge caches",
+        "Edge locations",
+        "VPC Subnets"
+      ],
+      "answer": 2,
+      "explain": "Edge locations คือเครือข่ายของศูนย์ข้อมูลที่ CloudFront ใช้เพื่อให้บริการเนื้อหาที่เป็นที่นิยมแก่ลูกค้าอย่างรวดเร็ว[cite: 2]"
+    },
+    {
+      "q": "Regional edge cache ในระบบ CloudFront มีหน้าที่อย่างไร?",
+      "choices": [
+        "เก็บข้อมูลถาวรราคาถูก",
+        "แคชเนื้อหาที่ไม่ได้รับความนิยมมากพอที่จะอยู่ใน edge location",
+        "เป็นฐานข้อมูล NoSQL สำหรับ CloudFront",
+        "ป้องกันการโจมตี DDoS"
+      ],
+      "answer": 1,
+      "explain": "Regional edge cache เป็นตำแหน่งที่แคชเนื้อหาที่ไม่ได้รับความนิยมมากพอที่จะคงอยู่ใน edge location โดยตั้งอยู่ระหว่าง origin server และ global edge location[cite: 2]"
+    },
+    {
+      "q": "Regional edge cache ตั้งอยู่ระหว่างจุดใด?",
+      "choices": [
+        "ระหว่างผู้ใช้บริการและ Edge location",
+        "ระหว่าง VPC และ Internet Gateway",
+        "ระหว่าง Origin server และ Global edge location",
+        "ระหว่าง Availability Zone และ Region"
+      ],
+      "answer": 2,
+      "explain": "Regional edge cache ตั้งอยู่ระหว่าง origin server และ global edge location[cite: 2]"
+    },
+    {
+      "q": "รูปแบบการคิดราคาของ Amazon CloudFront เป็นแบบใด?",
+      "choices": [
+        "จ่ายเหมาจ่ายรายปี",
+        "Pay-as-you-go pricing (จ่ายตามการใช้งานจริง)",
+        "ใช้ฟรีทั้งหมดไม่มีค่าใช้จ่าย",
+        "คิดราคาตามจำนวนผู้เข้าชมเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "Amazon CloudFront มีรูปแบบการคิดราคาแบบ Pay-as-you-go[cite: 2]"
+    },
+    {
+      "q": "ประโยชน์หลักของ CDN คืออะไร?",
+      "choices": [
+        "เพิ่มความหน่วง (Latency)",
+        "ส่งมอบสำเนาเนื้อหาจาก edge ที่อยู่ใกล้ผู้ใช้เพื่อลดความหน่วง",
+        "ลดความเร็วของ Dynamic content",
+        "ใช้สำหรับจัดเก็บโค้ดแอปพลิเคชัน"
+      ],
+      "answer": 1,
+      "explain": "CDN จะส่งมอบสำเนาเนื้อหาที่ถูกร้องขอจาก cache edge หรือ Point of Presence ที่อยู่ใกล้เคียง เพื่อปรับปรุงประสิทธิภาพ[cite: 2]"
+    },
+    {
+      "q": "ภายใต้โมเดลความรับผิดชอบร่วมกัน (Shared Responsibility Model) ข้อใดคือความรับผิดชอบของลูกค้า (Customer)?",
+      "choices": [
+        "ความปลอดภัยทางกายภาพของศูนย์ข้อมูล",
+        "โครงสร้างพื้นฐานระบบเสมือน (Virtualization)",
+        "แพลตฟอร์ม, แอปพลิเคชัน, และการจัดการข้อมูลประจำตัว (IAM)",
+        "โครงสร้างพื้นฐานด้านฮาร์ดแวร์"
+      ],
+      "answer": 2,
+      "explain": "ลูกค้ามีความรับผิดชอบต่อ 'Security IN the cloud' ซึ่งรวมถึงข้อมูลลูกค้า แพลตฟอร์ม แอปพลิเคชัน และระบบ IAM[cite: 3]"
+    },
+    {
+      "q": "ใครเป็นผู้รับผิดชอบการกำหนดค่าระบบปฏิบัติการ (Operating System) เครือข่าย และไฟร์วอลล์ ภายใต้ Shared Responsibility Model?",
+      "choices": [
+        "AWS",
+        "Customer (ลูกค้า)",
+        "ผู้ให้บริการอินเทอร์เน็ต (ISP)",
+        "Auditor ภายนอก"
+      ],
+      "answer": 1,
+      "explain": "การกำหนดค่า Operating System, Network & Firewall ถือเป็นความรับผิดชอบของฝั่งลูกค้า (Customer)[cite: 3]"
+    },
+    {
+      "q": "การรักษาความปลอดภัย 'ของ' คลาวด์ (Security OF the cloud) เป็นหน้าที่ของใคร?",
+      "choices": [
+        "ผู้ใช้ (User)",
+        "ผู้ดูแลระบบไอทีของลูกค้า",
+        "AWS",
+        "รัฐบาล"
+      ],
+      "answer": 2,
+      "explain": "AWS รับผิดชอบ 'Security OF the cloud' ซึ่งรวมถึงฮาร์ดแวร์ ซอฟต์แวร์ และโครงสร้างพื้นฐานระดับโลก[cite: 3]"
+    },
+    {
+      "q": "ข้อใดจัดอยู่ในความรับผิดชอบของ AWS?",
+      "choices": [
+        "การเข้ารหัสข้อมูลฝั่งเซิร์ฟเวอร์ (Server-side encryption data)",
+        "ข้อมูลลูกค้า (Customer data)",
+        "การตรวจจับการบุกรุก (Intrusion detection) ระดับโครงสร้างพื้นฐาน",
+        "การจัดการรหัสผ่านผู้ใช้ IAM"
+      ],
+      "answer": 2,
+      "explain": "การตรวจจับการบุกรุก (Intrusion detection) และโครงสร้างเครือข่ายเป็นความรับผิดชอบของ AWS[cite: 3]"
+    },
+    {
+      "q": "การจัดการและปลดระวางพื้นที่จัดเก็บข้อมูล (Storage decommissioning) เป็นหน้าที่ของใคร?",
+      "choices": [
+        "Customer",
+        "AWS",
+        "Third-party vendor",
+        "IAM User"
+      ],
+      "answer": 1,
+      "explain": "Storage decommissioning และการบันทึกการเข้าถึงโฮสต์ OS เป็นความรับผิดชอบของ AWS[cite: 3]"
+    },
+    {
+      "q": "ข้อใดไม่ใช่ความรับผิดชอบของ AWS ในโมเดลความรับผิดชอบร่วมกัน?",
+      "choices": [
+        "Physical security of data centers",
+        "Customer data",
+        "Instance isolation",
+        "Virtualization infrastructure"
+      ],
+      "answer": 1,
+      "explain": "Customer data (ข้อมูลลูกค้า) เป็นความรับผิดชอบของลูกค้าแต่เพียงผู้เดียว (Security IN the cloud)[cite: 3]"
+    },
+    {
+      "q": "ในการออกแบบสถาปัตยกรรม บริการใดเหมาะสำหรับเป็น Frontend Hosting มากที่สุด?",
+      "choices": [
+        "Amazon DynamoDB",
+        "Amazon S3",
+        "Amazon Cognito",
+        "Amazon API Gateway"
+      ],
+      "answer": 1,
+      "explain": "Amazon S3 สามารถใช้เพื่อโฮสต์หน้าเว็บ (Frontend Hosting) ได้[cite: 4]"
+    },
+    {
+      "q": "บริการใดใช้สำหรับจัดการระบบสมาชิกและการเข้าสู่ระบบ (Login)?",
+      "choices": [
+        "Amazon API Gateway",
+        "Amazon S3",
+        "Amazon Cognito",
+        "EventBridge"
+      ],
+      "answer": 2,
+      "explain": "Amazon Cognito ใช้ในการจัดการระบบสมาชิกและการ Login[cite: 4]"
+    },
+    {
+      "q": "บริการใดที่ทำหน้าที่เป็น 'ประตูรับ Request' จากผู้ใช้งานเข้าสู่ระบบ?",
+      "choices": [
+        "Amazon SQS",
+        "Amazon Cognito",
+        "Amazon API Gateway",
+        "AWS Config"
+      ],
+      "answer": 2,
+      "explain": "Amazon API Gateway ทำหน้าที่เป็นประตูสำหรับรับ Request[cite: 4]"
+    },
+    {
+      "q": "บริการฐานข้อมูลใดที่เป็นแบบ NoSQL และเหมาะกับการเก็บ Metadata โดยที่ AWS เป็นผู้จัดการ Network ให้?",
+      "choices": [
+        "Amazon S3",
+        "Amazon DynamoDB",
+        "Amazon RDS",
+        "Amazon CloudFront"
+      ],
+      "answer": 1,
+      "explain": "Amazon DynamoDB เป็นฐานข้อมูล NoSQL ที่เก็บ Metadata โดยที่ AWS จัดการ Network ให้ และผู้ใช้เรียกใช้ผ่าน Endpoint[cite: 4]"
+    },
+    {
+      "q": "ข้อใดคือบริการสำหรับระบบเฝ้าระวังและคิวงาน?",
+      "choices": [
+        "CloudWatch / EventBridge / SQS",
+        "S3 / Cognito / IAM",
+        "VPC / Subnet / IGW",
+        "DynamoDB / RDS / Aurora"
+      ],
+      "answer": 0,
+      "explain": "CloudWatch, EventBridge, และ SQS ถูกใช้สำหรับระบบเฝ้าระวังและจัดการคิวงาน[cite: 4]"
+    },
+    {
+      "q": "AWS Managed Services ที่อยู่ 'นอก VPC' หมายความว่าอย่างไร?",
+      "choices": [
+        "บริการนั้นต้องตั้งค่าเซิร์ฟเวอร์ด้วยตนเองใน VPC",
+        "บริการนั้นเป็นสาธารณะของ AWS ที่ไม่ต้องขังไว้ในวง LAN (VPC)",
+        "บริการนั้นไม่ปลอดภัย",
+        "บริการนั้นถูกตัดขาดจากอินเทอร์เน็ต"
+      ],
+      "answer": 1,
+      "explain": "บริการกลุ่มนี้เป็นบริการสาธารณะของ AWS ที่ทำงานบนคลาวด์แบบไม่ต้องขังไว้ในวง LAN หรือ VPC ของลูกค้า[cite: 4]"
+    },
+    {
+      "q": "Public Subnet ใน VPC มีลักษณะสำคัญอย่างไร?",
+      "choices": [
+        "ไม่สามารถเข้าถึงอินเทอร์เน็ตได้",
+        "เชื่อมต่อกับอินเทอร์เน็ตโดยตรงผ่าน Internet Gateway (IGW)",
+        "อนุญาตเฉพาะการเชื่อมต่อจากฐานข้อมูลภายใน",
+        "ใช้เฉพาะสำหรับการเก็บข้อมูลลับ (Secret Data)"
+      ],
+      "answer": 1,
+      "explain": "Public Subnet เป็นพื้นที่สาธารณะที่เชื่อมต่อกับอินเทอร์เน็ตโดยตรงผ่าน Internet Gateway (IGW)[cite: 4]"
+    },
+    {
+      "q": "ในการออกแบบเพื่อเก็บคะแนนส่วนการนำมาใช้งานจริง การให้เหตุผลควรเน้นที่สิ่งใดเป็นหลัก?",
+      "choices": [
+        "How (ระบบทำงานอย่างไร)",
+        "When (ใช้เวลาสร้างนานเท่าใด)",
+        "Why (ทำไมถึงเลือกใช้เทคโนโลยีนี้)",
+        "Who (ใครเป็นคนสร้าง)"
+      ],
+      "answer": 2,
+      "explain": "การอธิบายในเชิงเทคนิคที่สมเหตุสมผลควรเน้นตอบคำถามว่า 'ทำไมถึงเลือกใช้เทคโนโลยีนี้' (Why) มากกว่าแค่ทำงานอย่างไร[cite: 4]"
+    },
+    {
+      "q": "รูปแบบการคิดเงินแบบ On-Demand Mode ของ Amazon DynamoDB มีลักษณะอย่างไร?",
+      "choices": [
+        "จ่ายเหมาล่วงหน้ารายเดือน",
+        "จ่ายตามการเรียกอ่าน/เขียนจริง ไม่ต้องจองเผื่อล่วงหน้า",
+        "ต้องจองความจุล่วงหน้าขั้นต่ำ 1 ปี",
+        "ใช้งานฟรีไม่จำกัดจำนวนครั้ง"
+      ],
+      "answer": 1,
+      "explain": "รูปแบบ On-Demand Mode คือการจ่ายตามการเรียกอ่าน/เขียนจริงโดยไม่ต้องจองเผื่อล่วงหน้า เหมาะกับระบบที่มีช่วงพีคและช่วงเงียบสลับกัน[cite: 4]"
+    },
+    {
+      "q": "ค่าพื้นที่จัดเก็บ (Storage) ของ Amazon DynamoDB มีเรทราคาโดยประมาณเท่าใด?",
+      "choices": [
+        "$1.25 ต่อ GB-month",
+        "$0.25 ต่อ 1 ล้านครั้ง",
+        "$0.25 ต่อ GB-month",
+        "ฟรีทั้งหมดไม่จำกัด"
+      ],
+      "answer": 2,
+      "explain": "ค่าพื้นที่จัดเก็บ (Storage) อยู่ที่ประมาณ $0.25 ต่อ GB-month โดยมี Free Tier ให้ฟรี 25 GB แรก[cite: 4]"
+    },
+    {
+      "q": "ค่าเขียนข้อมูล (Write Request Units - WRU) ของ DynamoDB มีราคาประมาณเท่าใด?",
+      "choices": [
+        "$1.25 ต่อ 1 ล้านครั้ง",
+        "$0.25 ต่อ 1 ล้านครั้ง",
+        "$1.25 ต่อ GB",
+        "$0.25 ต่อเดือน"
+      ],
+      "answer": 0,
+      "explain": "ค่าเขียนข้อมูล (WRU) อยู่ที่ประมาณ $1.25 ต่อ 1 ล้านครั้ง[cite: 4]"
+    },
+    {
+      "q": "Amazon Elastic Beanstalk ถูกออกแบบมาเพื่ออะไร?",
+      "choices": [
+        "เพื่อบริหารจัดการเครือข่าย VPC เท่านั้น",
+        "เพื่อรองรับเว็บแอปพลิเคชันและจัดการการปรับใช้ (Deployment) โดยอัตโนมัติ",
+        "เพื่อเก็บข้อมูลแบบ WORM",
+        "เพื่อเป็น CDN เร่งความเร็วเว็บไซต์"
+      ],
+      "answer": 1,
+      "explain": "Elastic Beanstalk รองรับเว็บแอปพลิเคชันและจัดการเรื่องการปรับใช้ (deployment) ให้โดยอัตโนมัติเมื่ออัปโหลดโค้ด[cite: 5]"
+    },
+    {
+      "q": "ภาษาใดต่อไปนี้ **ไม่รองรับ** โดยตรงบน AWS Elastic Beanstalk (ตามเอกสารอ้างอิง)?",
+      "choices": [
+        "Java",
+        "Python",
+        "C++",
+        "Node.js"
+      ],
+      "answer": 2,
+      "explain": "Elastic Beanstalk รองรับ Java, .NET, PHP, Node.js, Python, Ruby, Go, และ Docker (ไม่กล่าวถึง C++)[cite: 5]"
+    },
+    {
+      "q": "เมื่อใช้งาน AWS Elastic Beanstalk ผู้ใช้งานต้องทำอะไรเป็นหลัก?",
+      "choices": [
+        "สร้างตารางเส้นทางและ VPC",
+        "อัปโหลดโค้ดแอปพลิเคชัน",
+        "อัปเดตระบบปฏิบัติการ (OS)",
+        "ติดตั้ง HTTP Server ด้วยตนเอง"
+      ],
+      "answer": 1,
+      "explain": "ผู้ใช้งานเพียงแค่อัปโหลดโค้ด (You upload your code) และ Elastic Beanstalk จะจัดการการปรับใช้ให้โดยอัตโนมัติ[cite: 5]"
+    },
+    {
+      "q": "เว็บเซิร์ฟเวอร์ใดต่อไปนี้ที่ AWS Elastic Beanstalk สามารถใช้งานเป็นพื้นฐานได้?",
+      "choices": [
+        "Apache, NGINX, และ Microsoft IIS",
+        "Oracle WebLogic เท่านั้น",
+        "Red Hat JBoss",
+        "Amazon CloudFront"
+      ],
+      "answer": 0,
+      "explain": "Elastic Beanstalk สามารถปรับใช้บนเซิร์ฟเวอร์ เช่น Apache, NGINX, Passenger, Puma และ Microsoft IIS[cite: 5]"
+    },
+    {
+      "q": "ในการใช้ AWS Elastic Beanstalk ส่วนใดที่เป็น 'ความรับผิดชอบที่คุณจัดการ (You manage)'?",
+      "choices": [
+        "Operating system (ระบบปฏิบัติการ)",
+        "Your code (โค้ดของคุณ)",
+        "Host (โฮสต์)",
+        "HTTP server (เซิร์ฟเวอร์ HTTP)"
+      ],
+      "answer": 1,
+      "explain": "ใน Elastic Beanstalk 'You manage' คือ Your code ส่วน AWS จัดการ HTTP server, OS และ Host[cite: 5]"
+    },
+    {
+      "q": "ในการใช้ AWS Elastic Beanstalk ส่วนใดที่ AWS เป็นผู้จัดการ (AWS manages)?",
+      "choices": [
+        "Application logic",
+        "Your code",
+        "Language interpreter และ Operating system",
+        "Customer Database Queries"
+      ],
+      "answer": 2,
+      "explain": "AWS เป็นผู้จัดการส่วนของ HTTP server, Application server, Language interpreter, Operating system และ Host[cite: 5]"
+    },
+    {
+      "q": "ข้อใดไม่ใช่แพลตฟอร์มที่ AWS Elastic Beanstalk รองรับ?",
+      "choices": [
+        "Go",
+        "Docker",
+        "Ruby",
+        "Swift"
+      ],
+      "answer": 3,
+      "explain": "Elastic Beanstalk รองรับ Java, .NET, PHP, Node.js, Python, Ruby, Go และ Docker ไม่ได้ระบุถึง Swift[cite: 5]"
+    },
+    {
+      "q": "AWS Global Infrastructure ประกอบด้วยอะไรบ้างที่ระบุใน Shared Responsibility Model?",
+      "choices": [
+        "VPC, Subnet, Internet Gateway",
+        "Regions, Availability Zones, Edge locations",
+        "EC2, S3, RDS",
+        "IAM, Cognito, Security Hub"
+      ],
+      "answer": 1,
+      "explain": "โครงสร้างพื้นฐานระดับโลก (Global Infrastructure) ของ AWS ประกอบด้วย Regions, Availability Zones และ Edge locations[cite: 3]"
+    },
+    {
+      "q": "โมเดลความรับผิดชอบร่วมกัน (Shared Responsibility Model) แบ่งตามแนวคิดใด?",
+      "choices": [
+        "Security FOR the cloud และ Security FROM the cloud",
+        "Security IN the cloud และ Security OF the cloud",
+        "Security BY the customer และ Security BY the partner",
+        "Physical Security และ Logical Security"
+      ],
+      "answer": 1,
+      "explain": "แนวคิดถูกแบ่งเป็น Security 'IN' the cloud (ความรับผิดชอบของลูกค้า) และ Security 'OF' the cloud (ความรับผิดชอบของ AWS)[cite: 3]"
+    },
+    {
+      "q": "การควบคุมการเข้าถึงแบบ Need-based access สำหรับโครงสร้างพื้นฐานทางกายภาพ เป็นความรับผิดชอบของใคร?",
+      "choices": [
+        "Customer",
+        "AWS",
+        "ทั้ง Customer และ AWS คนละครึ่ง",
+        "พนักงานรปภ. ของลูกค้า"
+      ],
+      "answer": 1,
+      "explain": "Controlled, need-based access ของศูนย์ข้อมูลและโครงสร้างพื้นฐานเป็นความรับผิดชอบของ AWS[cite: 3]"
+    },
+    {
+      "q": "การเข้ารหัสข้อมูลเครือข่าย (Networking traffic protection) เป็นความรับผิดชอบของใคร?",
+      "choices": [
+        "AWS ทั้งหมด",
+        "ลูกค้า (Customer)",
+        "CloudFront",
+        "IAM"
+      ],
+      "answer": 1,
+      "explain": "Networking traffic protection (Encryption, Integrity, Identity) อยู่ในระดับที่ลูกค้า (Customer) ต้องรับผิดชอบ[cite: 3]"
+    },
+    {
+      "q": "การแยกอินสแตนซ์ให้อิสระจากกัน (Instance isolation) เป็นความรับผิดชอบของส่วนใด?",
+      "choices": [
+        "Security in the cloud (Customer)",
+        "Security of the cloud (AWS)",
+        "S3 Bucket Policy",
+        "VPC Route Table"
+      ],
+      "answer": 1,
+      "explain": "Instance isolation และ Virtualization infrastructure เป็นความรับผิดชอบระดับโครงสร้างพื้นฐานของ AWS (Security of the cloud)[cite: 3]"
+    },
+    {
+      "q": "โครงสร้างเครือข่ายสำหรับระบบ CloudFront ช่วยเรื่องใด?",
+      "choices": [
+        "เพิ่มความหน่วงให้กับผู้ใช้",
+        "จำกัดพื้นที่ให้คนเข้าถึงได้เฉพาะประเทศสหรัฐอเมริกา",
+        "แจกจ่ายเนื้อหาแบบกระจายทั่วโลกเพื่อลด Content delivery latency",
+        "ใช้เพื่ออัปเดตระบบปฏิบัติการส่วนตัว"
+      ],
+      "answer": 2,
+      "explain": "CloudFront เป็นเครือข่ายกระจายเนื้อหาแบบทั่วโลก (Globally distributed system) ที่แคชเนื้อหาเพื่อให้ผู้ใช้เข้าถึงได้ใกล้ที่สุด จึงช่วยลด latency (ความหน่วง)[cite: 2]"
+    },
+    {
+      "q": "ในแผนภาพ Content delivery and network latency การร้องขอเนื้อหาจาก Origin Server โดยไม่ผ่าน CDN จะเกิดอะไรขึ้น?",
+      "choices": [
+        "ใช้การข้าม (Hop) ผ่านเราเตอร์จำนวนมาก ทำให้เกิดความหน่วง",
+        "เร็วกว่าการผ่าน CDN มาก",
+        "ฟรีไม่มีค่าใช้จ่าย",
+        "ข้อมูลถูกเข้ารหัสเสมอโดยค่าเริ่มต้น"
+      ],
+      "answer": 0,
+      "explain": "แผนภาพแสดงให้เห็นว่าการเดินทางไป Origin server โดยตรงต้องผ่านการ Hop หลายจุด (Router -> Router -> Hop Hop) ทำให้เกิดความหน่วงเมื่อเทียบกับการรับข้อมูลจากแคชที่อยู่ใกล้[cite: 2]"
+    },
+    {
+      "q": "อะไรคือหน้าที่หลักของ CDN?",
+      "choices": [
+        "สำรองฐานข้อมูลรายวัน",
+        "แคชสำเนาไฟล์ที่ถูกร้องขอบ่อย (Static content)",
+        "รันโค้ด Python ในเบื้องหลัง",
+        "ประมวลผลวิดีโอ 3D"
+      ],
+      "answer": 1,
+      "explain": "CDN จะแคชสำเนาของไฟล์ที่มักจะถูกร้องขอ (Caches copies of commonly requested files / static content)[cite: 2]"
+    },
+    {
+      "q": "นอกจากแคชเนื้อหาแบบสถิต (Static content) แล้ว CloudFront ทำอะไรได้อีกบ้าง?",
+      "choices": [
+        "ช่วยเร่งการส่งมอบเนื้อหาแบบไดนามิก (Accelerates delivery of dynamic content)",
+        "บริหารจัดการรหัสผ่านผู้ใช้",
+        "เขียนไฟล์ลงฐานข้อมูล NoSQL โดยตรง",
+        "สร้าง Virtual Private Cloud"
+      ],
+      "answer": 0,
+      "explain": "CloudFront ยังช่วยเร่งความเร็วในการส่งมอบเนื้อหาแบบไดนามิกได้อีกด้วย (Accelerates delivery of dynamic content)[cite: 2]"
+    },
+    {
+      "q": "ข้อใดไม่ใช่ลักษณะของบริการ Amazon CloudFront?",
+      "choices": [
+        "รวดเร็ว (Fast)",
+        "ระดับโลก (Global)",
+        "ปลอดภัย (Secure)",
+        "ต้องการพนักงาน AWS มาช่วยตั้งค่าให้เท่านั้น (Manual deployment by AWS)"
+      ],
+      "answer": 3,
+      "explain": "Amazon CloudFront เป็นบริการแบบ Self-service model ที่รวดเร็ว ระดับโลก และปลอดภัย[cite: 2]"
+    },
+    {
+      "q": "การปฏิบัติตามมาตรฐานความปลอดภัย (Compliance) ในระบบ AWS สามารถใช้เครื่องมือใดตรวจสอบภาพรวมได้?",
+      "choices": [
+        "AWS CloudFormation",
+        "AWS Security Hub",
+        "Amazon API Gateway",
+        "Amazon Cognito"
+      ],
+      "answer": 1,
+      "explain": "AWS Security Hub ช่วยให้คุณเห็นภาพรวมและตรวจสอบความสอดคล้องกับมาตรฐานความปลอดภัยในอุตสาหกรรม[cite: 1]"
+    },
+    {
+      "q": "ข้อมูลประจำตัว และการจัดการการเข้าถึง (Identity & Access Management) ตกเป็นความรับผิดชอบของใคร?",
+      "choices": [
+        "Customer Data Center",
+        "AWS Global Infrastructure",
+        "Customer (ความปลอดภัยในคลาวด์)",
+        "Third-party provider"
+      ],
+      "answer": 2,
+      "explain": "ในฝั่งแพลตฟอร์ม แอปพลิเคชัน และ Identity & Access Management จัดอยู่ในฝั่งความรับผิดชอบของลูกค้า (Customer)[cite: 3]"
+    },
+    {
+      "q": "AWS รับผิดชอบ Software ใดตามเอกสาร Shared Responsibility Model?",
+      "choices": [
+        "Application Software ของลูกค้า",
+        "Compute, Storage, Database, Networking",
+        "PHP, Node.js Interpreter",
+        "Antivirus บนระบบปฏิบัติการของลูกค้า"
+      ],
+      "answer": 1,
+      "explain": "AWS รับผิดชอบระดับ Software สำหรับ Compute, Storage, Database และ Networking[cite: 3]"
+    },
+    {
+      "q": "คุณมีฐานข้อมูล DynamoDB เพื่อเก็บประวัติในระบบการศึกษาโดยมีช่วงพีคและช่วงเงียบสลับกัน คุณควรเลือกระบบคิดเงินแบบใด?",
+      "choices": [
+        "Provisioned Mode (จองความจุล่วงหน้า)",
+        "On-Demand Mode",
+        "Reserved Instances",
+        "Spot Instances"
+      ],
+      "answer": 1,
+      "explain": "On-Demand Mode เป็นแบบจ่ายตามการเรียกอ่านเขียนจริง ไม่ต้องจองล่วงหน้า เหมาะกับระบบการศึกษาที่มีช่วงพีคและช่วงเงียบ[cite: 4]"
+    },
+    {
+      "q": "หากคุณเก็บไฟล์อัปโหลดหรือ Dataset บน AWS ควรใช้บริการใด?",
+      "choices": [
+        "Amazon EC2",
+        "Amazon EBS",
+        "Amazon S3 (Dataset Bucket)",
+        "Amazon DynamoDB"
+      ],
+      "answer": 2,
+      "explain": "Amazon S3 (Dataset Bucket) ใช้สำหรับเก็บไฟล์อัปโหลดหรือชุดข้อมูลในสถาปัตยกรรมคลาวด์[cite: 4]"
+    },
+    {
+      "q": "Amazon API Gateway เหมาะสำหรับสิ่งใด?",
+      "choices": [
+        "วิเคราะห์ข้อมูลขนาดใหญ่ (Big Data Analytics)",
+        "โฮสต์เว็บไซต์แบบ Static",
+        "ทำหน้าที่เป็นประตูรับ Request สำหรับ API",
+        "เก็บข้อมูลการเข้าระบบระยะยาวแบบ WORM"
+      ],
+      "answer": 2,
+      "explain": "Amazon API Gateway ทำหน้าที่เป็นประตูสำหรับรับ Request ก่อนส่งต่อให้ระบบหลังบ้านจัดการ[cite: 4]"
+    },
+    {
+      "q": "ระบบเฝ้าระวังและจัดการเหตุการณ์ภายในระบบ (Monitoring and Events) ควรใช้เครื่องมือใด?",
+      "choices": [
+        "VPC",
+        "Cognito",
+        "CloudWatch / EventBridge",
+        "S3 Object Lock"
+      ],
+      "answer": 2,
+      "explain": "CloudWatch และ EventBridge ใช้สำหรับการเฝ้าระวังและรับมือกับเหตุการณ์ในระบบ[cite: 4]"
+    },
+    {
+      "q": "ข้อใดอธิบาย Free Tier ของการเก็บข้อมูลใน Amazon DynamoDB ได้ถูกต้อง?",
+      "choices": [
+        "ฟรี 1 GB แรก",
+        "ฟรี 5 GB แรก",
+        "ฟรี 25 GB แรก",
+        "ฟรี 100 GB แรก"
+      ],
+      "answer": 2,
+      "explain": "การจัดเก็บข้อมูล (Storage) ใน DynamoDB มี Free Tier ให้ฟรี 25 GB แรก[cite: 4]"
+    },
+    {
+      "q": "บริการใดจัดอยู่ในโซน 'นอก VPC' (AWS Managed Services) ตามที่ระบุในการออกแบบสถาปัตยกรรม?",
+      "choices": [
+        "EC2 Instances ใน Private Subnet",
+        "NAT Gateway",
+        "Amazon DynamoDB",
+        "Application Load Balancer"
+      ],
+      "answer": 2,
+      "explain": "Amazon DynamoDB จัดเป็นบริการกลุ่มสาธารณะที่ทำงานลอยๆ อยู่ใน Region แบบไม่ต้องเอาไปขังใน VPC[cite: 4]"
+    },
+    {
+      "q": "คำใดที่มีความหมายอธิบายถึงการกระจายเซิร์ฟเวอร์ทั่วโลกเพื่อช่วยแคชเนื้อหาของ CloudFront?",
+      "choices": [
+        "Regional Edge Caches",
+        "Globally distributed system of caching servers",
+        "Instance Isolation",
+        "Compute Software"
+      ],
+      "answer": 1,
+      "explain": "CDN ของ CloudFront คือ Globally distributed system of caching servers[cite: 2]"
+    },
+    {
+      "q": "ในแผนผัง Elastic Beanstalk (AWS Elastic Beanstalk deployments) สิ่งที่ลูกค้า **ไม่ต้องบริหารจัดการ (AWS manages)** คือสิ่งใด?",
+      "choices": [
+        "Your code",
+        "IAM Roles สำหรับ User",
+        "HTTP server, Application server, Language interpreter",
+        "Customer Data Encryption"
+      ],
+      "answer": 2,
+      "explain": "AWS manages ในส่วนของ HTTP server, Application server, Language interpreter, OS และ Host[cite: 5]"
+    },
+    {
+      "q": "เหตุใดสถาปัตยกรรมของ CloudFront จึงช่วยปรับปรุงประสิทธิภาพและการขยายระบบ (Improves application performance and scaling)?",
+      "choices": [
+        "เพราะลดการทำงานของเครือข่ายภายนอกอินเทอร์เน็ตทั้งหมด",
+        "เพราะดึงข้อมูลจากแคชในพื้นที่ใกล้เคียง ช่วยลดโหลดที่ฝั่ง Origin server",
+        "เพราะมีระบบสร้างฐานข้อมูลอัตโนมัติในทุกจุด",
+        "เพราะใช้ภาษา Python แทนภาษา Java เสมอ"
+      ],
+      "answer": 1,
+      "explain": "CDN ช่วยแคชและส่งมอบเนื้อหาจาก edge ที่อยู่ใกล้ผู้ใช้ ทำให้ลดเวลาและโหลดที่ฝั่ง Origin server ได้[cite: 2]"
+    },
+    {
+      "q": "บริการใดเหมาะสำหรับนักพัฒนาที่เขียนแอปด้วย Java, PHP หรือ Node.js แล้วต้องการปรับใช้ขึ้น AWS โดยอัตโนมัติที่สุด?",
+      "choices": [
+        "Amazon EC2",
+        "AWS Elastic Beanstalk",
+        "AWS Lambda",
+        "Amazon VPC"
+      ],
+      "answer": 1,
+      "explain": "AWS Elastic Beanstalk รองรับแอปพลิเคชันที่เขียนด้วยภาษาเหล่านี้และจัดการเรื่อง deployment ให้โดยอัตโนมัติ[cite: 5]"
+    },
+    {
+      "q": "Puma และ Passenger คืออะไรในบริบทของ AWS Elastic Beanstalk?",
+      "choices": [
+        "ผู้ให้บริการข้อมูลประจำตัว",
+        "ซอฟต์แวร์ตรวจจับการบุกรุก",
+        "ตัวเลือกการกำหนดค่าไฟร์วอลล์",
+        "เซิร์ฟเวอร์เว็บ/แอปพลิเคชัน (HTTP/App servers) ที่ Elastic Beanstalk นำมาปรับใช้ให้"
+      ],
+      "answer": 3,
+      "explain": "Elastic Beanstalk ทำการ Deploy โค้ดบนเซิร์ฟเวอร์ เช่น Apache, NGINX, Passenger, Puma และ IIS[cite: 5]"
+    },
+    {
+      "q": "หากมีโจทย์ว่า 'คุณต้องการสร้างพื้นที่แยกเครือข่ายเสมือนเพื่อติดตั้งทรัพยากร' คุณจะสร้างสิ่งใด?",
+      "choices": [
+        "VPC (Virtual Private Cloud)",
+        "Edge location",
+        "Amazon API Gateway",
+        "AWS Security Hub"
+      ],
+      "answer": 0,
+      "explain": "VPC คือเครือข่ายส่วนตัวบนคลาวด์ที่คุณสามารถใช้แยกทรัพยากรของระบบเพื่อความปลอดภัย (Network Security)[cite: 4]"
+    }
+  ]
+}

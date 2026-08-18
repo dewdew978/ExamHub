@@ -190,5 +190,17 @@
     "questionCount": 30,
     "year": 3,
     "type": "Midterm"
+  },
+  {
+    "id": "aws_cloud_foundations_60_items",
+    "category": "Cloud Technology Infrastructure",
+    "name": "AWS Cloud Foundations Mock Exam (60 Questions)",
+    "icon": "☁️",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "แนวข้อสอบ AWS Cloud Foundations จำนวน 60 ข้อ ครอบคลุม Security, CloudFront, Shared Responsibility, Architecture และ Elastic Beanstalk",
+    "questionCount": 60,
+    "year": 3,
+    "type": "Midterm"
   }
 ]
