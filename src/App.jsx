@@ -7,13 +7,14 @@ import Schedule from './components/Schedule';
 import Login from './components/Login';
 import ScoreHistory from './components/ScoreHistory';
 import Report from './components/Report';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon, ChevronDown, AlertTriangle } from 'lucide-react';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import './index.css';
 
 function App() {
   const [currentView, setCurrentView] = useState('login');
   const [showMenu, setShowMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [reportInitialData, setReportInitialData] = useState(null);
@@ -165,12 +166,14 @@ function App() {
     setCurrentView('home');
     setSelectedSubject(null);
     setReportInitialData(null);
+    setShowMobileMenu(false);
   };
 
   const openReport = (data = null) => {
     setReportInitialData(data);
     setCurrentView('report');
     setShowMenu(false);
+    setShowMobileMenu(false);
   };
 
   const addScore = async (score) => {
@@ -261,7 +264,8 @@ function App() {
           <span className="logo-text">ExamHub</span>
         </a>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        {/* Desktop / Laptop / iPad Navigation (screens > 768px) */}
+        <div className="nav-desktop">
           <button 
             className="btn btn-outline" 
             onClick={toggleTheme}
@@ -409,6 +413,273 @@ function App() {
               <LogIn size={16} />
               <span>Login</span>
             </button>
+          )}
+        </div>
+
+        {/* Mobile Navigation (<= 768px): All options in a Single Dropdown */}
+        <div className="nav-mobile" style={{ position: 'relative' }}>
+          <button 
+            className={`btn ${showMobileMenu ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.45rem 0.75rem' }}
+            aria-label="เปิดเมนู"
+          >
+            {showMobileMenu ? <X size={18} /> : <Menu size={18} />}
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>เมนู</span>
+          </button>
+
+          {showMobileMenu && (
+            <>
+              <div 
+                style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 60 }} 
+                onClick={() => setShowMobileMenu(false)} 
+              />
+              <div 
+                className="card animate-fade-in"
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '0.5rem',
+                  background: 'var(--bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '12px',
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.18)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  zIndex: 70,
+                  minWidth: '240px',
+                  maxWidth: 'calc(100vw - 2rem)'
+                }}
+              >
+                {/* 1. หน้าหลัก */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: currentView === 'home' ? 'var(--surface-hover)' : 'transparent',
+                    color: currentView === 'home' ? 'var(--accent)' : 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    width: '100%',
+                    fontWeight: currentView === 'home' ? 600 : 400
+                  }}
+                  onClick={() => {
+                    goHome();
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <BookOpen size={16} />
+                  <span>หน้าหลัก (Home)</span>
+                </button>
+
+                {/* 2. ตารางสอบ */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: currentView === 'schedule' ? 'var(--surface-hover)' : 'transparent',
+                    color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    width: '100%',
+                    fontWeight: currentView === 'schedule' ? 600 : 400
+                  }}
+                  onClick={() => {
+                    setCurrentView('schedule');
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <CalendarDays size={16} />
+                  <span>ตารางสอบ</span>
+                </button>
+
+                {/* 3. ประวัติคะแนน */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: currentView === 'history' ? 'var(--surface-hover)' : 'transparent',
+                    color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    width: '100%',
+                    fontWeight: currentView === 'history' ? 600 : 400
+                  }}
+                  onClick={() => {
+                    setCurrentView('history');
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <HistoryIcon size={16} />
+                  <span>ประวัติคะแนน</span>
+                </button>
+
+                {/* 4. คะแนนสะสม & เรดาร์ทักษะ */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: 'transparent',
+                    color: 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
+                  onClick={() => {
+                    setShowChart(true);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <Star size={16} color="var(--accent)" />
+                    <span>คะแนนสะสม & ทักษะ</span>
+                  </div>
+                  <span style={{ 
+                    fontSize: '0.75rem', 
+                    padding: '0.125rem 0.5rem', 
+                    borderRadius: '999px', 
+                    background: 'rgba(0,112,243,0.1)', 
+                    color: 'var(--accent)', 
+                    fontWeight: 600 
+                  }}>
+                    {totalScore}
+                  </span>
+                </button>
+
+                {/* 5. รายงานข้อสอบผิด */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: currentView === 'report' ? 'var(--surface-hover)' : 'transparent',
+                    color: currentView === 'report' ? 'var(--accent)' : 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    width: '100%',
+                    fontWeight: currentView === 'report' ? 600 : 400
+                  }}
+                  onClick={() => {
+                    openReport();
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <AlertTriangle size={16} />
+                  <span>รายงานข้อสอบผิด / ปัญหา</span>
+                </button>
+
+                <div style={{ height: '1px', background: 'var(--border-divider)', margin: '0.25rem 0' }} />
+
+                {/* 6. สลับธีม */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: 'transparent',
+                    color: 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
+                  onClick={() => {
+                    toggleTheme();
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                    <span>ธีม (Theme)</span>
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    {theme === 'dark' ? 'มืด (Dark)' : 'สว่าง (Light)'}
+                  </span>
+                </button>
+
+                <div style={{ height: '1px', background: 'var(--border-divider)', margin: '0.25rem 0' }} />
+
+                {/* 7. Login / Logout */}
+                {user ? (
+                  <button 
+                    style={{
+                      fontFamily: 'inherit',
+                      padding: '0.875rem 1rem',
+                      background: 'transparent',
+                      color: 'var(--error)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      width: '100%'
+                    }}
+                    onClick={() => {
+                      setShowMobileMenu(false);
+                      setShowLogoutConfirm(true);
+                    }}
+                  >
+                    <LogOut size={16} />
+                    <span>ออกจากระบบ ({user.email?.split('@')[0]})</span>
+                  </button>
+                ) : (
+                  <button 
+                    style={{
+                      fontFamily: 'inherit',
+                      padding: '0.875rem 1rem',
+                      background: 'var(--surface-hover)',
+                      color: 'var(--accent)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      width: '100%',
+                      fontWeight: 600
+                    }}
+                    onClick={() => {
+                      setShowMobileMenu(false);
+                      setCurrentView('login');
+                    }}
+                  >
+                    <LogIn size={16} />
+                    <span>เข้าสู่ระบบ (Login)</span>
+                  </button>
+                )}
+              </div>
+            </>
           )}
         </div>
       </header>
