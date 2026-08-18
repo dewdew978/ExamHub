@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Home from './components/Home';
 import Exam from './components/Exam';
+import ExamIntro from './components/ExamIntro';
 import { Pattern } from './components/Pattern';
 import Schedule from './components/Schedule';
 import Login from './components/Login';
@@ -128,7 +129,7 @@ function App() {
         ...subjectMeta,
         ...mod.default
       });
-      setCurrentView('exam');
+      setCurrentView('examIntro');
     } catch (err) {
       console.error("Failed to load exam data:", err);
     }
@@ -354,6 +355,13 @@ function App() {
       <main className="main-content">
         {currentView === 'home' && (
           <Home subjects={subjects} onSelectSubject={startExam} />
+        )}
+        {currentView === 'examIntro' && selectedSubject && (
+          <ExamIntro 
+            subject={selectedSubject} 
+            onBack={goHome} 
+            onStart={() => setCurrentView('exam')} 
+          />
         )}
         {currentView === 'exam' && selectedSubject && (
           <Exam 
