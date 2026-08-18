@@ -5,12 +5,13 @@ import { Pattern } from './components/Pattern';
 import Schedule from './components/Schedule';
 import Login from './components/Login';
 import ScoreHistory from './components/ScoreHistory';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon } from 'lucide-react';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon, ChevronDown } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import './index.css';
 
 function App() {
   const [currentView, setCurrentView] = useState('login');
+  const [showMenu, setShowMenu] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [categoryScores, setCategoryScores] = useState({});
@@ -230,13 +231,92 @@ function App() {
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
           
-          <button className={`btn ${currentView === 'schedule' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setCurrentView('schedule')}>
-            <span>ตารางสอบ</span>
-          </button>
-
-          <button className={`btn ${currentView === 'history' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setCurrentView('history')}>
-            <span>ประวัติคะแนน</span>
-          </button>
+          <div style={{ position: 'relative' }}>
+            <button 
+              className={`btn ${['schedule', 'history'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
+              onClick={() => setShowMenu(!showMenu)}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+            >
+              <span>เมนู</span>
+              <ChevronDown size={14} />
+            </button>
+            
+            {showMenu && (
+              <>
+                <div 
+                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 40 }} 
+                  onClick={() => setShowMenu(false)} 
+                />
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: 0,
+                    marginTop: '0.5rem',
+                    background: 'var(--bg)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                    zIndex: 50,
+                    minWidth: '130px'
+                  }}
+                >
+                  <button 
+                    style={{
+                      padding: '0.75rem 1rem',
+                      background: currentView === 'schedule' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                      color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      borderBottom: '1px solid var(--border)',
+                      width: '100%'
+                    }}
+                    onClick={() => {
+                      setCurrentView('schedule');
+                      setShowMenu(false);
+                    }}
+                    onMouseOver={(e) => {
+                      if (currentView !== 'schedule') e.currentTarget.style.background = 'var(--card)';
+                    }}
+                    onMouseOut={(e) => {
+                      if (currentView !== 'schedule') e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    ตารางสอบ
+                  </button>
+                  <button 
+                    style={{
+                      padding: '0.75rem 1rem',
+                      background: currentView === 'history' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                      color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      width: '100%'
+                    }}
+                    onClick={() => {
+                      setCurrentView('history');
+                      setShowMenu(false);
+                    }}
+                    onMouseOver={(e) => {
+                      if (currentView !== 'history') e.currentTarget.style.background = 'var(--card)';
+                    }}
+                    onMouseOut={(e) => {
+                      if (currentView !== 'history') e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    ประวัติคะแนน
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
           
           <button className={`btn ${currentView === 'home' ? 'btn-primary' : 'btn-outline'}`} onClick={goHome}>
             <span>หน้าหลัก</span>
