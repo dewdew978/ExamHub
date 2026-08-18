@@ -1,0 +1,726 @@
+{
+  "id": "aws_cloud_analysis_60_items",
+  "category": "Cloud Technology",
+  "name": "AWS Cloud Architecture & Analytics Mock Exam",
+  "icon": "☁️",
+  "color": "#ff9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "แนวข้อสอบ 60 ข้อ วัดการวิเคราะห์และการออกแบบสถาปัตยกรรมระบบคลาวด์บน AWS (VPC, EC2, S3, DynamoDB, Backup Strategy)",
+  "questions": [
+    {
+      "q": "คุณมีฐานข้อมูล DynamoDB เพื่อเก็บประวัติในระบบการศึกษาโดยมีช่วงพีคและช่วงเงียบสลับกันแบบคาดเดาไม่ได้ คุณควรเลือกระบบคิดเงินแบบใดเพื่อให้คุ้มค่าที่สุด?",
+      "choices": [
+        "Provisioned Capacity Mode พร้อม Auto Scaling",
+        "On-Demand Mode",
+        "Reserved Capacity",
+        "DynamoDB Standard-IA"
+      ],
+      "answer": 1,
+      "explain": "การเลือกใช้แบบ On-Demand Mode เหมาะกับเวิร์กโหลดที่คาดเดาไม่ได้ มีช่วงพีคและช่วงเงียบสลับกันไป เพราะจ่ายตามการเรียกอ่าน/เขียนจริง (Pay-per-request) โดยไม่ต้องตั้งค่าความจุล่วงหน้า[cite: 3]."
+    },
+    {
+      "q": "หากคุณได้รับโจทย์ว่า 'คุณต้องการสร้างพื้นที่เครือข่ายเสมือนที่ถูกแยกส่วนทางตรรกะ เพื่อติดตั้งทรัพยากรส่วนตัวและควบคุมการเชื่อมต่ออินเทอร์เน็ต' บริการใดตอบโจทย์นี้?",
+      "choices": [
+        "AWS Direct Connect",
+        "Amazon EC2 Dedicated Hosts",
+        "Amazon VPC",
+        "AWS Transit Gateway"
+      ],
+      "answer": 2,
+      "explain": "Amazon VPC (Virtual Private Cloud) ช่วยให้คุณสามารถจัดเตรียมพื้นที่ที่ถูกแยกออกทางตรรกะบนคลาวด์ เพื่อเปิดใช้งานทรัพยากรในเครือข่ายเสมือนที่คุณกำหนดเอง รวมถึงควบคุมเส้นทางเครือข่ายได้เต็มรูปแบบ[cite: 4]."
+    },
+    {
+      "q": "สถาปนิกโซลูชันต้องการแยกส่วนข้อมูลโจทย์ดิบ (เช่น ไฟล์ CSV ขนาดใหญ่) ออกจากการเก็บสถานะการทำงานของระบบเพื่อลดภาระของฐานข้อมูลหลัก ควรออกแบบอย่างไร?",
+      "choices": [
+        "เก็บข้อมูลทั้งหมดลงใน Amazon EBS Volume ที่แนบกับ EC2",
+        "เก็บไฟล์ดิบใน S3 และเก็บสถานะใน DynamoDB",
+        "เก็บไฟล์ใน Amazon EFS และแชร์ให้ EC2 ทุกตัว",
+        "ใช้ Amazon RDS เก็บทั้งไฟล์ CSV และสถานะการทำงาน"
+      ],
+      "answer": 1,
+      "explain": "ควรออกแบบระบบให้แยกส่วนข้อมูล (Decoupled) โดยใช้ Amazon S3 สำหรับจัดเก็บไฟล์ Object ขนาดใหญ่ (Raw Dataset) และใช้ DynamoDB เพื่อเก็บสถานะและประวัติการทำงานที่ต้องการการอ่านเขียนอย่างรวดเร็ว[cite: 3]."
+    },
+    {
+      "q": "แอปพลิเคชันของคุณมีการเขียนและอ่านไฟล์บน S3 อย่างต่อเนื่อง สถาปนิกกังวลว่าผู้ใช้จะเผลอลบหรือบันทึกทับเอกสารสำคัญ ฟีเจอร์ใดและแนวทางปฏิบัติใดเหมาะสมที่สุด?",
+      "choices": [
+        "เปิดใช้ S3 Transfer Acceleration",
+        "เปิดใช้ S3 Versioning ร่วมกับ MFA Delete",
+        "ใช้ S3 Standard-IA เพื่อจำกัดการเข้าถึง",
+        "สร้าง Bucket Policy ห้ามใช้คำสั่ง PUT"
+      ],
+      "answer": 1,
+      "explain": "S3 Versioning ช่วยเก็บรักษาเอกสารทุกเวอร์ชันเมื่อมีการเขียนทับหรือลบ และการใช้ร่วมกับ MFA Delete จะเพิ่มความปลอดภัยอีกชั้นเพื่อป้องกันการลบโดยไม่ตั้งใจหรือเจตนาร้าย[cite: 5, 6]."
+    },
+    {
+      "q": "คุณต้องการประมวลผลวิดีโอ (Video Rendering) แบบ Batch Processing ซึ่งงานเหล่านี้มีความยืดหยุ่น สามารถหยุดและเริ่มใหม่ได้โดยไม่กระทบผลลัพธ์ ตัวเลือก EC2 แบบใดคุ้มค่าที่สุด?",
+      "choices": [
+        "On-Demand Instances",
+        "Spot Instances",
+        "Reserved Instances",
+        "Compute Savings Plans"
+      ],
+      "answer": 1,
+      "explain": "Spot Instances เหมาะสำหรับเวิร์กโหลดที่ทนทานต่อความผิดพลาด (Fault-tolerant) และมีความยืดหยุ่น เช่น Batch processing หรือ Video rendering เนื่องจากให้ส่วนลดสูงสุดถึง 90% แต่เครื่องอาจถูกเรียกคืนได้[cite: 5]."
+    },
+    {
+      "q": "แอปพลิเคชันฐานข้อมูลของบริษัทมีการใช้งานที่คงที่ (Steady-state) ตลอด 24 ชั่วโมง และทราบปริมาณการใช้ล่วงหน้าอย่างชัดเจน ควรเลือกรุ่นการกำหนดราคา EC2 ใด?",
+      "choices": [
+        "Spot Instances",
+        "On-Demand Instances",
+        "Reserved Instances",
+        "Per-second Billing"
+      ],
+      "answer": 2,
+      "explain": "Reserved Instances หรือ Savings Plans ได้รับการแนะนำสำหรับเวิร์กโหลดที่มีสถานะคงที่ (Steady-state workloads) และทราบปริมาณล่วงหน้า[cite: 5]."
+    },
+    {
+      "q": "สถาบันการเงินต้องการติดตั้งเซิร์ฟเวอร์บนฮาร์ดแวร์ที่ไม่ใช้ร่วมกับลูกค้ารายอื่นเลย เพื่อให้เป็นไปตามกฎระเบียบ (Compliance) ของอุตสาหกรรม ควรเลือกใช้โมเดลใด?",
+      "choices": [
+        "Dedicated Models",
+        "Spot Instances",
+        "On-Demand Instances",
+        "Savings Plans"
+      ],
+      "answer": 0,
+      "explain": "Dedicated Models ถูกออกแบบมาเพื่อตอบโจทย์การใช้ฮาร์ดแวร์เฉพาะ เพื่อช่วยให้เป็นไปตามข้อกำหนดและกฎระเบียบต่างๆ (Compliance and regulation requirements)[cite: 5]."
+    },
+    {
+      "q": "บริษัทเปิดตัวแอปพลิเคชันใหม่ซึ่งไม่สามารถคาดเดาปริมาณผู้ใช้งานได้ (Spiky workloads) และข้อมูลมีสถานะ (Stateful) ควรเลือกการซื้อ EC2 แบบใดในระยะแรก?",
+      "choices": [
+        "Spot Instances",
+        "Dedicated Hosts",
+        "Reserved Instances",
+        "On-Demand Instances"
+      ],
+      "answer": 3,
+      "explain": "On-Demand Instances ได้รับการแนะนำสำหรับเวิร์กโหลดใหม่ หรือเวิร์กโหลดที่มียอดการใช้งานพุ่งสูง (Spiky) และมีสถานะ (Stateful)[cite: 5]."
+    },
+    {
+      "q": "ทีมพัฒนาระบบการศึกษาคำนวณค่าใช้จ่ายในการเขียนข้อมูลลง DynamoDB 1 ล้านครั้ง พวกเขาจะต้องจ่ายในราคาประมาณเท่าใดตามเรทที่อ้างอิง?",
+      "choices": [
+        "$0.25",
+        "$1.25",
+        "$2.50",
+        "$12.50"
+      ],
+      "answer": 1,
+      "explain": "ค่าเขียนข้อมูล (Write Request Units - WRU) สำหรับ Amazon DynamoDB มีเรทราคาโดยประมาณที่ $1.25 ต่อ 1 ล้านครั้ง[cite: 3]."
+    },
+    {
+      "q": "ข้อใดอธิบายขีดจำกัดขนาดของบล็อก CIDR ของ IPv4 ที่อนุญาตให้ใช้ในการสร้าง Amazon VPC ได้ถูกต้องที่สุด?",
+      "choices": [
+        "ใหญ่ที่สุด /8 และเล็กที่สุด /24",
+        "ใหญ่ที่สุด /16 และเล็กที่สุด /28",
+        "กำหนดเป็นขนาดใดก็ได้ไม่จำกัด",
+        "ใหญ่ที่สุด /16 และเล็กที่สุด /32"
+      ],
+      "answer": 1,
+      "explain": "ขนาดบล็อก IPv4 CIDR ที่ใหญ่ที่สุดคือ /16 และขนาดบล็อกที่เล็กที่สุดคือ /28[cite: 4]."
+    },
+    {
+      "q": "แอดมินเครือข่ายตั้งค่า Amazon VPC ด้วยช่วง IP หนึ่ง แต่ในภายหลังต้องการเปลี่ยนช่วงที่อยู่ IP เดิมให้ใหญ่ขึ้น แอดมินสามารถทำได้หรือไม่?",
+      "choices": [
+        "ทำได้ โดยเปลี่ยนใน Route Table",
+        "ทำได้ โดยติดต่อ AWS Support",
+        "ไม่ได้ ไม่สามารถเปลี่ยนช่วง IP ได้หลังจากสร้าง VPC แล้ว",
+        "ทำได้ หากเป็น IPv6 เท่านั้น"
+      ],
+      "answer": 2,
+      "explain": "คุณไม่สามารถเปลี่ยนแปลงช่วงที่อยู่ IP (Address range) ได้หลังจากที่คุณได้สร้าง VPC ไปแล้ว[cite: 4]."
+    },
+    {
+      "q": "คุณต้องการสร้าง Subnet สองแห่งใน VPC โดยแห่งแรกใช้ 10.0.1.0/24 และแห่งที่สองต้องการใช้ 10.0.1.128/25 ระบบจะยอมรับการสร้างนี้หรือไม่?",
+      "choices": [
+        "ยอมรับ เพราะเป็นการออกแบบที่ถูกต้อง",
+        "ยอมรับ หากอยู่ต่าง Availability Zone",
+        "ไม่ยอมรับ เพราะ CIDR blocks ของ Subnets ซ้อนทับกันไม่ได้",
+        "ไม่ยอมรับ เพราะขนาดเล็กกว่า /28"
+      ],
+      "answer": 2,
+      "explain": "CIDR blocks ของ Subnets ไม่สามารถซ้อนทับกันได้ (cannot overlap)[cite: 4]."
+    },
+    {
+      "q": "วิศวกรระบบออกแบบเครือข่ายและระบุว่า Subnet หนึ่งแห่งสามารถครอบคลุมหลาย Availability Zones ได้ แนวคิดนี้ถูกต้องหรือไม่?",
+      "choices": [
+        "ถูกต้อง Subnet กระจายได้ทั่ว Region",
+        "ไม่ถูกต้อง Subnet ต้องอยู่ใน Availability Zone เดียวเท่านั้น",
+        "ถูกต้อง หากใช้ Route table กำหนด",
+        "ไม่ถูกต้อง Subnet ใช้งานได้เฉพาะใน On-premise"
+      ],
+      "answer": 1,
+      "explain": "Subnets จะถูกกำหนดให้อยู่ใน Availability Zone เพียงแห่งเดียวเท่านั้น (Belong to a single Availability Zone)[cite: 4]."
+    },
+    {
+      "q": "สถาปนิกต้องการกำหนดเส้นทางการสื่อสารภายใน VPC เดียวกัน (Internal Communication) เขาต้องตั้งค่า Route Table ใหม่อย่างไร?",
+      "choices": [
+        "เพิ่ม Local route แบบแมนวลด้วย Internet Gateway",
+        "ไม่ต้องทำอะไร Route Table มี Local route ให้โดยค่าเริ่มต้น",
+        "ใช้ Elastic network interface แทน Route table",
+        "สร้าง Subnet ใหม่ให้เป็นแบบ Private"
+      ],
+      "answer": 1,
+      "explain": "โดยค่าเริ่มต้น (By default) ทุกๆ Route table จะมี Local route สำหรับการสื่อสารภายใน VPC อยู่แล้ว[cite: 4]."
+    },
+    {
+      "q": "หากคุณมี 5 Subnets ใน VPC คุณสามารถนำทุก Subnet ไปผูกกับหลายๆ Route table พร้อมกันเพื่อกระจายโหลดได้หรือไม่?",
+      "choices": [
+        "ทำได้ เพื่อให้ระบบมีความทนทาน (Fault tolerant)",
+        "ไม่ได้ แต่ละ Subnet ต้องเชื่อมโยงกับ Route table เพียง 1 แห่งเท่านั้น",
+        "ทำได้ แต่จำกัดสูงสุดที่ 3 Route tables ต่อ 1 Subnet",
+        "ไม่ได้ เพราะ 1 Route table รับได้แค่ 1 Subnet"
+      ],
+      "answer": 1,
+      "explain": "แต่ละ Subnet จะต้องถูกเชื่อมโยง (Associated) กับ Route table อย่างมากที่สุดเพียง 1 แห่งเท่านั้น (at most one)[cite: 4]."
+    },
+    {
+      "q": "ในกรณีที่ EC2 Instance มีปัญหาและหยุดทำงาน คุณสามารถดึงเครือข่าย (Network Traffic) ไปยัง Instance เครื่องใหม่ได้ทันทีผ่านคุณสมบัติใด?",
+      "choices": [
+        "Amazon DynamoDB Streams",
+        "Route Table Modification",
+        "Elastic Network Interface (ENI)",
+        "Amazon S3 Transfer Acceleration"
+      ],
+      "answer": 2,
+      "explain": "Elastic network interface (ENI) เป็นอินเทอร์เฟซเครือข่ายเสมือนที่คุณสามารถแยกส่วน (Detach) ออกจากอินสแตนซ์ และนำไปแนบกับอีกอินสแตนซ์หนึ่งเพื่อเปลี่ยนเส้นทางเครือข่าย (Redirect network traffic) ได้[cite: 4]."
+    },
+    {
+      "q": "การใช้คุณสมบัติการคิดเงินระดับวินาที (Per-second billing) สำหรับ Amazon EC2 สามารถใช้ได้กับระบบปฏิบัติการใดบ้างตามข้อมูลที่กำหนด?",
+      "choices": [
+        "Windows Server และ Amazon Linux",
+        "Amazon Linux หรือ Ubuntu",
+        "Red Hat Enterprise Linux เท่านั้น",
+        "รองรับทุกระบบปฏิบัติการโดยไม่มีเงื่อนไข"
+      ],
+      "answer": 1,
+      "explain": "Per-second billing จะมีให้ใช้งานเฉพาะกับ On-Demand, Reserved, และ Spot Instances ที่รันบน Amazon Linux หรือ Ubuntu เท่านั้น[cite: 6]."
+    },
+    {
+      "q": "แอปพลิเคชันของคุณต้องการฐานข้อมูลเชิงสัมพันธ์แบบทนทานสูง ต้องการความจุเริ่มต้น 8 TB และสร้าง Read Replicas จำนวน 8 ชุดเพื่อรับโหลด ระบบใดตอบโจทย์?",
+      "choices": [
+        "Amazon S3",
+        "Amazon DynamoDB",
+        "Amazon EC2",
+        "Highly Available Relational Database (Amazon RDS/Aurora)"
+      ],
+      "answer": 3,
+      "explain": "แอปพลิเคชันที่ต้องการฐานข้อมูลเชิงสัมพันธ์แบบความพร้อมใช้งานสูง (Highly available relational database) ที่มีความจุระดับ Terabytes และ Read replicas จำเป็นต้องใช้บริการกลุ่ม Relational Database ตามกรณีศึกษา[cite: 8]."
+    },
+    {
+      "q": "แนวคิดเรื่องการสำรองข้อมูล (Data Backup) สำหรับระบบการศึกษาในโปรเจกต์ Playground ควรยึดหลักการใดเพื่อประหยัดและปลอดภัย?",
+      "choices": [
+        "สำรองข้อมูลทุกอย่างในระบบทุก 5 นาที",
+        "สำรองข้อมูลชั่วคราวของนักเรียนเพื่อวิเคราะห์พฤติกรรม",
+        "สำรองเฉพาะระบบส่วนกลาง ข้อมูลโจทย์ และคะแนน ปล่อยผ่านข้อมูลชั่วคราว",
+        "ไม่สำรองข้อมูลเลยเพื่อประหยัดต้นทุนสูงสุด"
+      ],
+      "answer": 2,
+      "explain": "คอนเซปต์หลักคือการสำรองข้อมูลเฉพาะระบบส่วนกลาง ข้อมูลโจทย์ และคะแนน (สำรองสิ่งที่จำเป็น) และปล่อยข้อมูลส่วนตัวที่เป็นชั่วคราวให้ลบทิ้ง (Auto-Cleanup) เพื่อความปลอดภัยและประหยัด[cite: 7]."
+    },
+    {
+      "q": "ในการออกแบบสถาปัตยกรรมคลาวด์ การทำความเข้าใจโครงสร้าง OSI Model ชั้นที่ 1 (Physical) ในบริบทเครือข่ายเกี่ยวข้องกับสิ่งใด?",
+      "choices": [
+        "MAC addresses",
+        "การส่งและรับข้อมูลแบบ raw bitstreams ผ่านสื่อทางกายภาพ (1s and 0s)",
+        "การโอนถ่ายข้อมูลในเครือข่าย LAN",
+        "VPC Route tables"
+      ],
+      "answer": 1,
+      "explain": "Physical Layer (ชั้นที่ 1) คือการส่งและรับกระแสข้อมูลบิตดิบ (raw bitstreams) ในรูปแบบสัญญาณ (1s and 0s) ผ่านสื่อทางกายภาพ[cite: 4]."
+    },
+    {
+      "q": "ในมุมมองของ OSI Model ฮับ (Hubs) และสวิตช์ (Switches) เครือข่าย LAN ทำงานอยู่ในเลเยอร์ใด?",
+      "choices": [
+        "Physical Layer (Layer 1)",
+        "Data Link Layer (Layer 2)",
+        "Network Layer (Layer 3)",
+        "Transport Layer (Layer 4)"
+      ],
+      "answer": 1,
+      "explain": "Data link (Layer 2) จัดการเกี่ยวกับการโอนถ่ายข้อมูลภายในเครือข่าย LAN เดียวกัน (hubs and switches) รวมถึงการใช้ MAC[cite: 4]."
+    },
+    {
+      "q": "ทำไมบริการคลาวด์ของ AWS จึงมีความคุ้มค่าเชิงเศรษฐศาสตร์มากกว่าการใช้ศูนย์ข้อมูลแบบเดิม (Traditional data centers) สำหรับเวิร์กโหลดที่ผันผวน?",
+      "choices": [
+        "เพราะมี Amazon EC2 instances แบบจ่ายเหมาขาดรายปี",
+        "เพราะมีสิทธิ์การควบคุมระดับ Administrative แบบเต็มรูปแบบ",
+        "เพราะรูปแบบการคิดราคาจ่ายตามการใช้งานจริง (Pay-as-you-go) โดยไม่มีสัญญาระยะยาว",
+        "เพราะต้องซื้อเซิร์ฟเวอร์ฮาร์ดแวร์ล่วงหน้าเพื่อให้ได้ส่วนลด"
+      ],
+      "answer": 2,
+      "explain": "ความคุ้มค่าเกิดจาก On-Demand Models ที่จ่ายเฉพาะความจุประมวลผลที่ใช้งานจริง (by the second or by the hour) โดยไม่ต้องมีสัญญาระยะยาว (no long-term commitments)[cite: 5]."
+    },
+    {
+      "q": "เมื่อสร้าง VPC เสร็จสิ้น เครือข่ายอินเทอร์เฟซเริ่มต้นของแต่ละ Instance ใน VPC จะได้รับที่อยู่ IP แบบใดจาก CIDR block ของ VPC?",
+      "choices": [
+        "Public IPv4 address ทุกเครื่อง",
+        "Private IPv4 address",
+        "Elastic IP (EIP)",
+        "IPv6 address เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "แต่ละอินสแตนซ์ใน VPC จะมีอินเทอร์เฟซเครือข่ายเริ่มต้น ซึ่งจะได้รับที่อยู่แบบ Private IPv4 address จากช่วง IP ของ VPC[cite: 4]."
+    },
+    {
+      "q": "แอตทริบิวต์ (Attributes) ของ Elastic Network Interface จะเป็นอย่างไรเมื่อมันถูกถอดและนำไปแนบกับ Instance ตัวใหม่?",
+      "choices": [
+        "แอตทริบิวต์เดิมจะหายไป ต้องตั้งค่าใหม่",
+        "แอตทริบิวต์เดิมจะติดตามอินเทอร์เฟซไปเชื่อมต่อกับอินสแตนซ์ใหม่ด้วย",
+        "IP Address จะเปลี่ยนตาม Subnet ใหม่เสมอ",
+        "จะถูกเปลี่ยนเป็น IPv6 อัตโนมัติ"
+      ],
+      "answer": 1,
+      "explain": "คุณลักษณะ (Attributes) ของ Elastic network interface จะติดตาม (follow) ไปด้วยเมื่อมันถูกแนบใหม่เข้ากับอินสแตนซ์ใหม่[cite: 4]."
+    },
+    {
+      "q": "ค่าพื้นที่จัดเก็บ (Storage) สำหรับ DynamoDB มีราคาประมาณเท่าใดตามเรทที่อ้างอิง?",
+      "choices": [
+        "$1.25 ต่อ GB-month",
+        "$0.25 ต่อ 1 ล้านครั้ง",
+        "$0.25 ต่อ GB-month",
+        "$0.00 ฟรีไม่จำกัด"
+      ],
+      "answer": 2,
+      "explain": "ค่าพื้นที่จัดเก็บ (Storage) ของ Amazon DynamoDB อยู่ที่ประมาณ $0.25 ต่อ GB-month โดยมี Free Tier ให้ฟรี 25 GB แรก[cite: 3]."
+    },
+    {
+      "q": "หากคุณมีทีมพัฒนาที่ต้องทำงานกับข้อมูลและมีการเข้าออกของบุคลากรบ่อย คุณควรให้สิทธิ์การเข้าถึงผ่านเทคนิคใดใน AWS เพื่อรักษาความปลอดภัย?",
+      "choices": [
+        "ให้ทุกคนใช้รหัสผ่านเดียว (Shared Account)",
+        "เปิดช่องทาง FTP ให้ทุกคนอัปโหลด",
+        "ใช้การจัดกลุ่มสิทธิ์การใช้งานของทีมตามหลักความปลอดภัย (Security Principles)",
+        "เขียนสคริปต์ข้าม VPC ដោយไม่ใช้ Route Table"
+      ],
+      "answer": 2,
+      "explain": "การเปลี่ยนแปลกทีมบ่อยครั้ง ต้องจัดการให้ตรงตามหลักการรักษาความปลอดภัย โดยให้สิทธิ์การเข้าถึงทรัพยากรผ่านนโยบายการจัดกลุ่ม (Security principles related to access)[cite: 8]."
+    },
+    {
+      "q": "Amazon EC2 On-Demand เหมาะสมกับสถานการณ์ใดมากที่สุด?",
+      "choices": [
+        "การคำนวณบิ๊กดาต้าขนาดใหญ่ที่สามารถหยุดและทำต่อได้ตลอดเวลา",
+        "ฐานข้อมูลที่มีโหลดการใช้งานคงที่ต่อเนื่องเป็นปี",
+        "การทดลองระบบใหม่ๆ (Experimentation) ที่การใช้งานพุ่งขึ้นลง",
+        "การรันเซิร์ฟเวอร์เพื่อให้ผ่านประเมินมาตรฐานองค์กรเฉพาะด้านฮาร์ดแวร์"
+      ],
+      "answer": 2,
+      "explain": "On-Demand Instances ได้รับการแนะนำสำหรับการใช้งานที่พุ่งสูง (Spiky workloads) และการทดลองระบบ (Experimentation)[cite: 5]."
+    },
+    {
+      "q": "การปรับลดต้นทุนสูงสุดในการใช้ Amazon EC2 ในระยะยาวสำหรับโหลดงานที่คาดเดาปริมาณล่วงหน้าได้ ควรทำอย่างไร?",
+      "choices": [
+        "เปลี่ยนไปใช้งาน Spot Instances ทั้งหมด",
+        "ใช้งานร่วมกันโดยเลือก Reserved Instances หรือ Savings Plans",
+        "ใช้ On-Demand Instances แต่เปิดๆ ปิดๆ เอง",
+        "นำข้อมูลทั้งหมดไปเก็บใน S3 แทน"
+      ],
+      "answer": 1,
+      "explain": "ใช้การผสมผสานระหว่าง Reserved Instances, Savings Plans สำหรับเวิร์กโหลดที่ทราบข้อมูลแบบคงที่ เพื่อปรับต้นทุนให้เหมาะสมที่สุด[cite: 5, 6]."
+    },
+    {
+      "q": "สถานะการเก็บข้อมูลชั่วคราว (Playground) ของนักศึกษาในโปรเจกต์มีการดำเนินการทำความสะอาดทุกๆ กี่นาทีตามแผนการจัดการข้อมูล?",
+      "choices": [
+        "ทุกๆ 15 นาที",
+        "ทุกๆ 30 นาที",
+        "ทุกๆ 60 นาที",
+        "วันละ 1 ครั้ง"
+      ],
+      "answer": 1,
+      "explain": "ข้อมูลชั่วคราวจะถูกลบทิ้ง (Auto-Cleanup) โดยอัตโนมัติทุกๆ 30 นาที เพื่อไม่เปลืองพื้นที่และประหยัดค่าสำรองข้อมูล[cite: 7]."
+    },
+    {
+      "q": "ในการออกแบบสถาปัตยกรรมแบบ Decoupled เมื่ออาจารย์อัปโหลดโจทย์ ระบบจะตอบสนองในแง่ของโครงสร้าง Cloud Architecture อย่างไร?",
+      "choices": [
+        "ต้องหยุดระบบและแก้ไขโค้ดใหม่ทุกครั้ง",
+        "อาจารย์สามารถเพิ่มโจทย์หรือชุดข้อมูลใหม่ได้อิสระ โดยที่โครงสร้างด้านหลังไม่ต้องแก้โค้ดใหม่เลย",
+        "ต้องสร้าง VPC ใหม่ทุกครั้งที่อัปโหลดโจทย์",
+        "เปลี่ยนตระกูล EC2 Instance เพื่อรองรับโหลดที่ใหญ่ขึ้นทันที"
+      ],
+      "answer": 1,
+      "explain": "ระบบที่ถูก Decoupled ด้วย S3 และ DynamoDB ทำให้อาจารย์เพิ่มโจทย์หรือข้อมูลใหม่ผ่านระบบได้อิสระ โดยไม่ต้องแก้โค้ดที่โครงสร้าง Architecture ด้านหลังเลย[cite: 3]."
+    },
+    {
+      "q": "สถาปนิกใช้บริการใดในการตั้งค่ากำหนดเส้นทาง (Routing) ข้าม Subnet ภายใน AWS Cloud?",
+      "choices": [
+        "Security Groups",
+        "Route Tables",
+        "Physical Hubs",
+        "Amazon DynamoDB"
+      ],
+      "answer": 1,
+      "explain": "Route tables ประกอบด้วยกลุ่มของกฎต่างๆ (Routes) เพื่อใช้กำหนดและควบคุมทิศทางการไหลของเครือข่ายทราฟฟิกเข้า/ออกจาก Subnet ของคุณ[cite: 4]."
+    },
+    {
+      "q": "ฟีเจอร์ใดของ Amazon S3 ช่วยเร่งความเร็วในการนำเข้าข้อมูลขนาดใหญ่ลงสู่ Bucket จากจุดต่างๆ ทั่วโลก?",
+      "choices": [
+        "S3 Transfer Acceleration",
+        "S3 Versioning",
+        "S3 Lifecycles",
+        "S3 Decoupling"
+      ],
+      "answer": 0,
+      "explain": "Amazon S3 Transfer Acceleration เป็นหัวข้อฟีเจอร์สำหรับการย้ายข้อมูลเข้า/ออก Amazon S3 ให้รวดเร็วขึ้น[cite: 5]."
+    },
+    {
+      "q": "หากคุณต้องการจัดการข้อมูลอัตโนมัติ โดยย้ายข้อมูลที่ไม่ค่อยได้ใช้ไปยังพื้นที่ราคาถูกเมื่อเวลาผ่านไป คุณควรใช้ฟีเจอร์ใดของ S3?",
+      "choices": [
+        "S3 Transfer Acceleration",
+        "Managing Lifecycles in Amazon S3",
+        "S3 Object Lock",
+        "Amazon EC2 Auto Scaling"
+      ],
+      "answer": 1,
+      "explain": "การจัดการวงจรชีวิต (Managing Lifecycles) ใน Amazon S3 ช่วยให้สามารถย้ายหรือจัดการข้อมูลตามเวลาหรือเงื่อนไขที่กำหนดได้โดยอัตโนมัติ[cite: 5]."
+    },
+    {
+      "q": "ในการแบ่งเขตภูมิศาสตร์ของ AWS ส่วนใดที่เป็นโครงสร้างหลักในการรองรับการวาง Subnets ต่างๆ ให้อยู่แยกจากกันใน Region เดียว?",
+      "choices": [
+        "Availability Zones",
+        "Edge Locations",
+        "Local Zones",
+        "Internet Gateways"
+      ],
+      "answer": 0,
+      "explain": "Region หนึ่งจะมีหลาย Availability Zones และ Subnets จะถูกจัดให้อยู่ภายใน Availability Zone เดียว[cite: 4]."
+    },
+    {
+      "q": "ข้อมูลใน Data Link Layer (Layer 2) ใช้หน่วยใดในการส่งข้อมูลหากเทียบกับฮาร์ดแวร์ที่ใช้ตามทฤษฎีในตาราง OSI?",
+      "choices": [
+        "IP Addresses",
+        "MAC (Media Access Control)",
+        "Raw Bitstreams",
+        "Segments"
+      ],
+      "answer": 1,
+      "explain": "Data Link Layer (Layer 2) ดำเนินการผ่านเครือข่าย LAN เดียวกัน และใช้ที่อยู่ MAC (Media Access Control)[cite: 4]."
+    },
+    {
+      "q": "วิศวกรซอฟต์แวร์ต้องการดึงรายชื่อแบบฝึกหัด (Assignments) ทั้งหมดจาก DynamoDB ระบบหน้าบ้าน (Frontend) ควรส่ง API Request แบบใด?",
+      "choices": [
+        "POST /assignments",
+        "GET /assignments",
+        "PUT /dataset",
+        "DELETE /playground"
+      ],
+      "answer": 1,
+      "explain": "เพื่อให้ระบบสามารถดึงข้อมูลโจทย์มาแสดงผล ให้นักศึกษาเลือกทำได้ผ่าน API รูปแบบ GET /assignments[cite: 3]."
+    },
+    {
+      "q": "ในการออกแบบระบบ AWS VPC สามารถกำหนดให้มีหลายระดับการรักษาความปลอดภัย (Layers of security) ได้หรือไม่?",
+      "choices": [
+        "ไม่ได้ VPC มีแค่ระดับเดียว",
+        "ได้ VPC เปิดโอกาสให้ผู้ใช้กำหนดระดับชั้นของความปลอดภัยที่หลากหลายได้",
+        "ได้เฉพาะผู้ดูแลระดับ Root Account เท่านั้น",
+        "ได้ แต่ต้องใช้ร่วมกับ Dedicated Hardware เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "VPC ช่วยเปิดโอกาสให้คุณใช้งานระบบรักษาความปลอดภัยหลายระดับ (Enables you to use multiple layers of security) ภายในเครือข่ายของคุณ[cite: 4]."
+    },
+    {
+      "q": "เมื่อสร้าง EC2 แบบ Spot Instances ควรระวังเรื่องใดมากที่สุด?",
+      "choices": [
+        "มีราคาแพงที่สุด",
+        "เครื่องอาจถูกปิดหรือเรียกคืนได้ตลอดเวลา จึงต้องออกแบบเป็น Fault-tolerant",
+        "ต้องจองสัญญาล่วงหน้า 1-3 ปี",
+        "ไม่รองรับระบบปฏิบัติการ Linux"
+      ],
+      "answer": 1,
+      "explain": "Spot Instances ใช้เพื่อขยายขีดความสามารถเฉพาะกับเวิร์กโหลดที่มีความยืดหยุ่นและทนทานต่อข้อผิดพลาด (Fault-tolerant, flexible) เนื่องจากสามารถถูกขัดจังหวะได้[cite: 5]."
+    },
+    {
+      "q": "หากคุณรันเซิร์ฟเวอร์ Windows Server บน EC2 On-Demand คุณจะได้รับการคิดเงินระดับวินาที (Per-second) หรือไม่?",
+      "choices": [
+        "ใช่ เพราะ On-Demand รองรับทุก OS",
+        "ไม่ใช่ การคิดเงินระดับวินาทีใช้ได้เฉพาะกับ Amazon Linux หรือ Ubuntu เท่านั้น",
+        "ใช่ หากใช้ผ่าน Reserved Instances",
+        "ไม่ใช่ คิดเฉพาะรายเดือนเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "การคิดเงินต่อวินาที (Per-second billing) มีให้ใช้เฉพาะกับ On-Demand, Reserved, Spot ที่รันบน Amazon Linux หรือ Ubuntu เท่านั้น[cite: 6]."
+    },
+    {
+      "q": "สถาปนิกคลาวด์พิจารณาใช้ Amazon S3 สำหรับ 'การจัดเก็บข้อมูลที่มีโครงสร้างและต้อง Query ถี่ๆ' แนวคิดนี้เหมาะสมหรือไม่?",
+      "choices": [
+        "เหมาะสม S3 เป็นฐานข้อมูลเชิงสัมพันธ์",
+        "ไม่เหมาะสม S3 เหมาะสำหรับเก็บไฟล์ Raw Dataset/Object มากกว่าการ Query ข้อมูลโครงสร้างถี่ๆ",
+        "เหมาะสม S3 มีระบบ Secondary Index เหมือน DynamoDB",
+        "ไม่เหมาะสม S3 ใช้เฉพาะสำหรับการส่งข้อมูลเครือข่ายเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "ในการออกแบบ (Designing with Amazon S3) ระบบ S3 ถูกใช้เพื่อทำ Raw Dataset Storage (เก็บไฟล์ CSV/Excel) ส่วนงานโครงสร้างที่ถูก Query หรือประมวลผลถูกผลักไปที่ฐานข้อมูลเช่น DynamoDB[cite: 3, 5]."
+    },
+    {
+      "q": "เมื่อพิจารณา OSI Model การใช้ 'สายทองแดงหรือสายใยแก้วนำแสง' สอดคล้องกับชั้นการสื่อสารใด?",
+      "choices": [
+        "Transport Layer",
+        "Network Layer",
+        "Data link Layer",
+        "Physical Layer"
+      ],
+      "answer": 3,
+      "explain": "Physical Layer เกี่ยวข้องกับการส่งผ่านสื่อกายภาพ (Physical medium) ในรูปแบบสัญญาณ (Signals 1s and 0s)[cite: 4]."
+    },
+    {
+      "q": "บริการใดเปรียบเสมือนฐานข้อมูลที่มีความยืดหยุ่น คิดราคาตาม On-Demand (ตามอ่าน/เขียน) และช่วยรักษาสถานะแบบฝึกหัด?",
+      "choices": [
+        "Amazon EC2",
+        "Amazon S3",
+        "Amazon DynamoDB",
+        "Amazon VPC"
+      ],
+      "answer": 2,
+      "explain": "Amazon DynamoDB มีการคิดเงินรูปแบบ On-Demand Mode จ่ายตามการอ่าน/เขียน (WRU/RRU) และใช้เก็บสถานะหรือโจทย์การบ้านของระบบ[cite: 3]."
+    },
+    {
+      "q": "หากคุณมีโหลดงานวิเคราะห์ข้อมูลขนาดมหาศาล ทุกวันจันทร์ถึงศุกร์ เวลา 9:00 - 18:00 น. อย่างคงที่ คุณควรใช้ตัวเลือก EC2 ใดลดต้นทุน?",
+      "choices": [
+        "Spot Instances",
+        "Reserved Instances / Savings Plans",
+        "Dedicated Hosts",
+        "Per-minute On-Demand"
+      ],
+      "answer": 1,
+      "explain": "การใช้ Reserved Instances หรือ Savings Plans เหมาะสมสำหรับโหลดงานที่คาดเดาได้ ทราบระยะเวลาและปริมาณการใช้งานแบบคงที่ (known, steady-state)[cite: 5]."
+    },
+    {
+      "q": "ความสัมพันธ์ของการออกแบบ VPC และ Availability Zone คืออะไร?",
+      "choices": [
+        "1 VPC = 1 Availability Zone",
+        "VPC ครอบคลุมได้หลาย Availability Zones (can span multiple Availability Zones)",
+        "Availability Zone ครอบคลุมได้หลาย Region",
+        "VPC ใช้งานได้แค่แบบ Private เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "VPC จัดอยู่ใน AWS Region เดียว แต่สามารถครอบคลุมหลาย Availability Zones ได้ (can span multiple Availability Zones)[cite: 4]."
+    },
+    {
+      "q": "การเรียกเก็บเงินของ On-Demand EC2 เป็นลักษณะใดในภาพรวม?",
+      "choices": [
+        "จ่ายล่วงหน้า 3 ปีเท่านั้น",
+        "จ่ายเพื่อความจุของคอมพิวต์ตามชั่วโมงหรือวินาที โดยไม่มีสัญญาระยะยาวผูกมัด",
+        "ราคาประมูล (Bidding price)",
+        "คิดตามจำนวนผู้เข้าชมเว็บไซต์เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "On-Demand จ่ายความจุการประมวลผลเป็นรายวินาทีหรือรายชั่วโมง โดยไม่มีข้อผูกมัดระยะยาว (no long-term commitments)[cite: 5]."
+    },
+    {
+      "q": "การใช้ 'Amazon S3 Transfer Acceleration' มีจุดประสงค์หลักเพื่อสิ่งใดในการจัดการข้อมูล?",
+      "choices": [
+        "ลดค่าใช้จ่ายการเก็บข้อมูลถาวร",
+        "เพิ่มความเร็วในการย้ายข้อมูล (Moving data to and from Amazon S3) ระยะไกล",
+        "เรนเดอร์ภาพวิดีโอ 3D ทันที",
+        "สร้าง VPC แบบไร้เซิร์ฟเวอร์"
+      ],
+      "answer": 1,
+      "explain": "Transfer Acceleration มีการนำเสนอในโมดูลเพื่อเพิ่มประสิทธิภาพในการย้ายข้อมูลไปและกลับ (Moving data to and from Amazon S3)[cite: 5]."
+    },
+    {
+      "q": "การจำแนกหมวดหมู่ย่อยสำหรับ Subnet ภายใน VPC ทำได้กี่รูปแบบหลัก?",
+      "choices": [
+        "รูปแบบเดียวคือ Private",
+        "จัดเป็น 2 รูปแบบหลักคือ Public หรือ Private",
+        "จัดเป็น 3 รูปแบบคือ Public, Private, Dedicated",
+        "จัดเป็น 4 รูปแบบตามประเภทฮาร์ดแวร์"
+      ],
+      "answer": 1,
+      "explain": "Subnets จะถูกจำแนก (Classified) ออกเป็น public (สาธารณะ) หรือ private (ส่วนตัว)[cite: 4]."
+    },
+    {
+      "q": "คำกล่าวใดอธิบายข้อจำกัดของ Route Table ได้ถูกต้อง?",
+      "choices": [
+        "Route Table ระบุปลายทาง (Destination) และเป้าหมาย (Target) เพื่อนำทางทราฟฟิก",
+        "Route Table ไม่สามารถใช้กับ Subnet ได้",
+        "Route Table เปลี่ยนแปลง IP ของ VPC ได้แบบไดนามิก",
+        "Route Table ลบการเชื่อมต่อเครือข่ายทั้งหมดหากอินสแตนซ์พัง"
+      ],
+      "answer": 0,
+      "explain": "กฎของ Route แต่ละกฎ (Each route) จะมีการระบุปลายทางและเป้าหมายเพื่อสั่งการนำทางเครือข่ายทราฟฟิก[cite: 4]."
+    },
+    {
+      "q": "แผนกทรัพยากรบุคคล (HR) ต้องการพื้นที่เพื่อรันแอปพลิเคชันจัดการเงินเดือนแยกออกจากทีมอื่นโดยเด็ดขาด ควรกำหนดพื้นที่อย่างไรบน AWS?",
+      "choices": [
+        "นำขึ้น S3 Public Bucket",
+        "สร้าง VPC ใหม่เพื่อจัดเตรียมส่วนที่แยกออกจากกันทางตรรกะสำหรับใช้งานเฉพาะ HR",
+        "ใช้ DynamoDB เพื่อป้องกันการแฮก",
+        "รันอินสแตนซ์บน Spot Request"
+      ],
+      "answer": 1,
+      "explain": "VPC ทำหน้าที่เป็นพื้นที่ที่จัดสรรให้มีการแยกทางตรรกะ (logically isolated section) ใน AWS Account เดียวกันได้ เหมาะสำหรับการสร้างสภาพแวดล้อมที่ต้องการความปลอดภัยแยกส่วน[cite: 4]."
+    },
+    {
+      "q": "AWS Cloud Architect ควรให้คำปรึกษากับร้านกาแฟ (Cafe Lab) ที่กำลังขยายระบบอย่างไรเมื่อต้องรับมือยอดผู้ใช้งานผันผวนและข้อมูลขนาดใหญ่ขึ้น?",
+      "choices": [
+        "แนะนำให้ซื้อฮาร์ดแวร์เซิร์ฟเวอร์มาตั้งไว้ในร้าน",
+        "ใช้ On-Demand Instances ผสมกับ Auto-Scaling และแยกสื่อต่างๆ ลงบน S3",
+        "รันฐานข้อมูลในอินสแตนซ์เดียวแบบ Spot เพื่อลดงบ",
+        "ลบข้อมูลธุรกรรมทิ้งทุกๆ 30 นาทีเหมือน Playground"
+      ],
+      "answer": 1,
+      "explain": "สำหรับระบบจริง ธุรกิจต้องการความยืดหยุ่นในการสเกลสำหรับ Spiky Workloads (ใช้ On-Demand/Auto-scaling) และการจัดเก็บเนื้อหา (Storing content) ด้วย Amazon S3 ตามรูปแบบการออกแบบที่ดี[cite: 5, 8]."
+    },
+    {
+      "q": "ค่าอ่านข้อมูล (Read Request Units) ของ DynamoDB มีราคาประมาณเท่าใดตามเรทที่ยกมาอธิบาย?",
+      "choices": [
+        "$1.25 ต่อ 1 ล้านครั้ง",
+        "$0.50 ต่อ 1 ล้านครั้ง",
+        "$0.25 ต่อ 1 ล้านครั้ง",
+        "$2.50 ต่อ 1 ล้านครั้ง"
+      ],
+      "answer": 2,
+      "explain": "ค่าอ่านข้อมูล (Read Request Units - RRU) ของ DynamoDB มีราคาประมาณ $0.25 ต่อ 1 ล้านครั้ง[cite: 3]."
+    },
+    {
+      "q": "แอปพลิเคชัน A ใช้ Subnet 10.0.1.0/24 หากคุณกำหนด ENI จากแอปนี้ไปผูกกับแอป B ซึ่งอยู่บน Subnet เดียวกันเพื่อทำงานแทนตอนระบบล่ม ข้อมูล IP ของมันจะเป็นอย่างไร?",
+      "choices": [
+        "IP เปลี่ยนแปลงแบบสุ่ม",
+        "คุณลักษณะเดิม (Attributes) เช่น IP ของมันจะติดตามไปตอนถูกนำไปผูกที่แอป B ด้วย",
+        "เสียการตั้งค่าไปและต้องทำ Route table ใหม่ทั้งหมด",
+        "รับ IP จาก AWS Support เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "แอตทริบิวต์ (Attributes) ของ ENI รวมถึง IP จะติดตาม (follow) เมื่อมันถูกแยกและนำไปติดกับอินสแตนซ์ใหม่ เพื่อดึงเอาทราฟฟิกเครือข่ายกลับมา[cite: 4]."
+    },
+    {
+      "q": "หากคุณใช้ VPC และพบว่าการสื่อสารระหว่างอินสแตนซ์สองเครื่องในซับเน็ตต่างๆ ของ VPC เดียวกันไม่สำเร็จ ปัญหาเบื้องต้นอาจเกิดจากจุดใดในระดับโครงสร้าง?",
+      "choices": [
+        "การไม่ได้ใช้ Amazon DynamoDB",
+        "ไม่ได้จอง Reserved Instances ไว้ล่วงหน้า",
+        "ปัญหาจากการกำหนด Route table หรือกฎซับเน็ตขาด Local Route การสื่อสาร",
+        "การเปิดใช้งาน Amazon S3 Versioning ชนกัน"
+      ],
+      "answer": 2,
+      "explain": "Route table จำเป็นต้องมีกฎ (Routes) หรือมี Local Route สำหรับเป็นเส้นทางสื่อสารภายใน VPC หากไม่ระบุให้ถูกต้องอาจเกิดปัญหาการเชื่อมต่อข้ามซับเน็ตได้[cite: 4]."
+    },
+    {
+      "q": "การใช้ AWS Cloud ช่วยแก้ไขปัญหาของสถาปนิกคลาวด์ในสถานการณ์การจัดสรรงบประมาณที่จำกัดได้อย่างไร?",
+      "choices": [
+        "จ่ายค่าล่วงหน้าทั้งหมดเพื่อส่วนลดแบบเหมาขาด",
+        "ใช้กลยุทธ์รวม (Combination) ระหว่าง Reserved, On-Demand และ Spot Instances เพื่อคุมต้นทุนให้คุ้มค่าสุด",
+        "เลือกปิดระบบในเวลากลางวัน",
+        "ลบข้อมูลส่วนกลางทิ้งสม่ำเสมอ"
+      ],
+      "answer": 1,
+      "explain": "การใช้งานแบบผสมผสาน (Use a combination) ของ Reserved Instances, Savings Plans, On-Demand Instances, และ Spot Instances เพื่อปรับโครงสร้างและคุมต้นทุนค่าใช้จ่ายด้านประมวลผล (Compute costs) ให้ดีที่สุด[cite: 6]."
+    },
+    {
+      "q": "บริษัทตั้งเป้ารันแคมเปญแจกของรางวัลที่จะมีปริมาณการทำธุรกรรมพุ่งสูงมากๆ เพียงวันเดียว ควรเลือกใช้บริการจัดเก็บสถานะข้อมูลบนเครื่องมือใดที่สเกลได้ดีโดยไม่ต้องจองเซิร์ฟเวอร์ฮาร์ดแวร์ล่วงหน้า?",
+      "choices": [
+        "Dedicated Host with SQL",
+        "DynamoDB แบบ On-Demand Mode",
+        "S3 Standard Versioning",
+        "VPC ENI Routing"
+      ],
+      "answer": 1,
+      "explain": "DynamoDB แบบ On-Demand Mode (จ่ายตามการใช้จริง) เหมาะสำหรับระบบการทำธุรกรรมแบบ Spiky ที่พุ่งเป็นครั้งคราว โดยไม่ต้องจองล่วงหน้าและประหยัดกว่า[cite: 3]."
+    },
+    {
+      "q": "หากเซิร์ฟเวอร์ต้องปิดตัว (Shut down) บ่อยครั้ง การเก็บข้อมูล (Data Backup) สำหรับฐานข้อมูลควรคำนึงถึงอะไรตามแนวคิดที่ได้รับคำแนะนำ?",
+      "choices": [
+        "โฟกัสไปที่ระบบส่วนกลาง และเก็บถาวรในบริการที่แยกอิสระ",
+        "ไม่ควรมีการ Backup เพื่อประหยัดเงิน",
+        "ให้สำรองลงแผ่นดิสก์เท่านั้น",
+        "ทำ Subnet เป็นสาธารณะเพื่อการ Backup ข้ามทวีป"
+      ],
+      "answer": 0,
+      "explain": "หลักการของการทำ Decoupled และการสำรองข้อมูลชั่วคราว คือ 'สำรองเฉพาะสิ่งที่จำเป็น (เช่น ส่วนกลาง, โจทย์, คะแนน) ปล่อยผ่านข้อมูลชั่วคราว (Playground)'[cite: 7]."
+    },
+    {
+      "q": "ตามโครงสร้าง OSI Model ฮาร์ดแวร์ที่ทำหน้าที่เพียงส่งคลื่นสัญญาณหรือ 1s กับ 0s ผ่านสายใยแก้วหรือทองแดง จัดเป็นความรับผิดชอบของ Layer ใด?",
+      "choices": [
+        "Data Link Layer",
+        "Network Layer",
+        "Physical Layer",
+        "Transport Layer"
+      ],
+      "answer": 2,
+      "explain": "การรับและส่งกระแสบิตดิบผ่านสื่อทางกายภาพจัดอยู่ใน Physical Layer[cite: 4]."
+    },
+    {
+      "q": "ข้อใดคือขีดความสามารถที่ VPC มอบให้คุณควบคุมทรัพยากรการสร้างเครือข่าย?",
+      "choices": [
+        "ควบคุมเวอร์ชันของระบบปฏิบัติการ EC2 เท่านั้น",
+        "การกำหนดช่วงของ IP Address, การสร้าง Subnet และตาราง Route Table",
+        "เปิดใช้ Spot Instances บนฐานข้อมูลอัตโนมัติ",
+        "สร้าง Read replicas บน Relational Database ได้ทันที"
+      ],
+      "answer": 1,
+      "explain": "VPC ให้การควบคุมทรัพยากรเครือข่ายของคุณ รวมถึงการเลือกช่วง IP (IP address range), การสร้าง Subnets, และการกำหนดค่า Route Tables และ Gateways[cite: 4]."
+    },
+    {
+      "q": "ในมุมมองความปลอดภัย การที่ 1 VPC จัดตั้งเครือข่ายแบบแยกอิสระจากบัญชีอื่น (Logically Isolated) มีข้อดีหลักอย่างไร?",
+      "choices": [
+        "บัญชีอื่นจะไม่สามารถลบ S3 Versioning ของคุณได้",
+        "ทรัพยากรทางเครือข่ายถูกจำกัดสิทธิ์เฉพาะบัญชี AWS ของคุณเท่านั้น ลดความเสี่ยงในการถูกรบกวน",
+        "ทำให้ Spot Instance กลายเป็น On-Demand",
+        "ทำให้การคิดเงินเป็นรายวินาทีเสมอ"
+      ],
+      "answer": 1,
+      "explain": "VPC จะถูกจัดพื้นที่ให้แยกออกทางตรรกะจาก VPC อื่นๆ (Logically isolated from other VPCs) และจะอุทิศหรือจำกัดไว้ใช้งานสำหรับบัญชี AWS ของคุณ (Dedicated to your AWS account) เท่านั้น[cite: 4]."
+    },
+    {
+      "q": "สถาปนิกคลาวด์ออกแบบการโอนถ่ายข้อมูลระหว่าง AWS Cloud ไปยัง On-premise ด้วยข้อกำหนดการโอนในเครือข่าย LAN เดียวกัน (MAC address based) ควรทำความเข้าใจ Layer ใดของ OSI Model?",
+      "choices": [
+        "Layer 1 Physical",
+        "Layer 2 Data Link",
+        "Layer 3 Network",
+        "Layer 4 Transport"
+      ],
+      "answer": 1,
+      "explain": "Data Link (Layer 2) ดำเนินการที่ระดับการถ่ายโอนข้อมูลในเครือข่าย LAN เดียวกัน และใช้ MAC addresses เพื่ออ้างอิงจุดหมายปลายทาง[cite: 4]."
+    },
+    {
+      "q": "EC2 Instance ใน Private Subnet จำเป็นต้องดาวน์โหลดแพตช์ซอฟต์แวร์จากอินเทอร์เน็ต แต่ต้องไม่ให้อินเทอร์เน็ตสามารถเริ่มต้นการเชื่อมต่อเข้ามายัง Instance ได้ สถาปัตยกรรมใดถูกต้อง?",
+      "choices": [
+        "เชื่อมต่อ Private Subnet เข้ากับ Internet Gateway",
+        "ติดตั้ง NAT Gateway ใน Public Subnet และกำหนด Route จาก Private Subnet ไปยัง NAT Gateway",
+        "ใช้ Egress-Only Internet Gateway สำหรับ IPv4",
+        "กำหนด Elastic IP (EIP) ให้กับ EC2 Instance ใน Private Subnet"
+      ],
+      "answer": 1,
+      "explain": "NAT Gateway (ติดตั้งใน Public Subnet) ช่วยให้ Instance ใน Private Subnet เชื่อมต่อกับอินเทอร์เน็ตได้ (เช่น เพื่อโหลดแพตช์) แต่ป้องกันไม่ให้อินเทอร์เน็ตเชื่อมต่อเข้ามาหา Instance ได้โดยตรง"
+    },
+    {
+      "q": "บริษัทต้องการเก็บไฟล์ Log บน Amazon S3 โดยที่ไฟล์เหล่านี้จะถูกเข้าถึงบ่อยในช่วง 30 วันแรก และแทบไม่ถูกเข้าถึงเลยหลังจากนั้น แต่มีข้อกำหนดว่าเมื่อต้องการข้อมูลต้องเรียกดูได้ทันที ควรใช้ S3 Storage Class ใด?",
+      "choices": [
+        "S3 Standard",
+        "S3 Glacier Flexible Retrieval",
+        "S3 Intelligent-Tiering",
+        "S3 One Zone-IA"
+      ],
+      "answer": 2,
+      "explain": "S3 Intelligent-Tiering จะย้ายข้อมูลที่ไม่มีการเข้าถึงบ่อยไปยัง Tier ที่ราคาถูกลงโดยอัตโนมัติ โดยไม่มีค่าธรรมเนียมในการดึงข้อมูล และสามารถเข้าถึงข้อมูลได้ทันทีในระดับมิลลิวินาที"
+    },
+    {
+      "q": "ผู้พัฒนาใช้งาน DynamoDB สำหรับระบบเกมระดับโลกที่ต้องการให้ผู้เล่นจากทั้งสหรัฐอเมริกาและเอเชียมีเวลาแฝง (Latency) ในการอ่าน/เขียนข้อมูลต่ำที่สุด ฟีเจอร์ใดของ DynamoDB ที่ควรนำมาใช้?",
+      "choices": [
+        "DynamoDB Accelerator (DAX)",
+        "DynamoDB Global Tables",
+        "DynamoDB Streams",
+        "DynamoDB Auto Scaling"
+      ],
+      "answer": 1,
+      "explain": "DynamoDB Global Tables เป็นโซลูชันแบบ Multi-Region, Multi-Active database ที่ทำจำลองข้อมูลไปยังหลายๆ ภูมิภาคอัตโนมัติ ช่วยลด Latency ให้กับผู้ใช้ที่อยู่ต่างภูมิภาคกัน"
+    },
+    {
+      "q": "เมื่อสร้าง VPC ใหม่ใน AWS โครงสร้างพื้นฐานใดที่ AWS จะสร้างให้โดยอัตโนมัติ (Default) และผูกติดกับ VPC นั้น?",
+      "choices": [
+        "Internet Gateway และ Public Subnet",
+        "Main Route Table, Default Security Group และ Network ACL",
+        "NAT Gateway และ Private Subnet",
+        "Elastic IP Address (EIP)"
+      ],
+      "answer": 1,
+      "explain": "เมื่อคุณสร้าง VPC ระบบจะสร้าง Main Route Table, Default Security Group และ Default Network ACL ให้โดยอัตโนมัติ (แต่ไม่สร้าง Subnet หรือ Internet Gateway ให้นะ)"
+    },
+    {
+      "q": "ระบบ Auto Scaling ของคุณตั้งค่า Scaling Policy ตามการใช้งาน CPU แต่พบว่าเมื่อมีทราฟฟิกพุ่งสูงกะทันหัน EC2 เครื่องใหม่จะพร้อมใช้งานช้าเกินไป ทำให้ระบบโหลดหนัก วิธีใดแก้ไขปัญหานี้ได้ดีที่สุด?",
+      "choices": [
+        "เปลี่ยนไปใช้ Application Load Balancer แทน Network Load Balancer",
+        "เพิ่มขนาดของ EC2 Instance (Scale Up) แทนการเพิ่มจำนวน (Scale Out)",
+        "ใช้ Predictive Scaling ควบคู่กับ Dynamic Scaling",
+        "ลดค่า Health Check Grace Period ลงเหลือ 0 วินาที"
+      ],
+      "answer": 2,
+      "explain": "Predictive Scaling ใช้ Machine Learning คาดการณ์ทราฟฟิกล่วงหน้าและเตรียมเพิ่ม Capacity ก่อนที่ทราฟฟิกจริงจะมาถึง ช่วยแก้ปัญหา EC2 เริ่มทำงานไม่ทันเมื่อทราฟฟิกพุ่งกะทันหัน"
+    }
+  ]
+}

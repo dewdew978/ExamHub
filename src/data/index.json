@@ -202,5 +202,17 @@
     "questionCount": 60,
     "year": 3,
     "type": "Midterm"
+  },
+  {
+    "id": "aws_cloud_analysis_60_items",
+    "category": "Cloud Technology Infrastructure",
+    "name": "AWS Cloud Architecture & Analytics Mock Exam",
+    "icon": "☁️",
+    "color": "#ff9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "แนวข้อสอบ 60 ข้อ วัดการวิเคราะห์และการออกแบบสถาปัตยกรรมระบบคลาวด์บน AWS (VPC, EC2, S3, DynamoDB, Backup Strategy)",
+    "questionCount": 65,
+    "year": 3,
+    "type": "Midterm"
   }
 ]
