@@ -1,6 +1,9 @@
 import { FileText, ArrowLeft, PlayCircle, Info } from 'lucide-react';
 
 export default function ExamIntro({ subject, onStart, onBack }) {
+  const choiceTypes = new Set(subject.questions.map(q => q.choices?.length || 4));
+  const typesArray = Array.from(choiceTypes).sort((a, b) => a - b);
+
   return (
     <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto' }}>
       <button 
@@ -37,15 +40,16 @@ export default function ExamIntro({ subject, onStart, onBack }) {
             คำชี้แจงการทำข้อสอบ
           </h3>
           <div style={{ lineHeight: 1.8, color: 'var(--text-muted)' }}>
-            <p style={{ marginBottom: '1rem' }}>ข้อสอบมี 3 รูปแบบคือ:</p>
+            <p style={{ marginBottom: '1rem' }}>ข้อสอบชุดนี้มีรายละเอียดดังนี้:</p>
             <ul style={{ paddingLeft: '1.5rem', marginBottom: '1.5rem' }}>
-              <li>1.1 ปรนัย 4 ตัวเลือก 1 คำตอบ</li>
-              <li>1.2 ปรนัย 5 ตัวเลือก 1 คำตอบ</li>
-              <li>1.3 ปรนัย 4 ตัวเลือก 1 คำตอบ (คะแนนต่างกัน)</li>
+              <li>จำนวนข้อสอบทั้งหมด <strong>{subject.questions.length} ข้อ</strong></li>
+              {typesArray.map(type => (
+                <li key={type}>รูปแบบ: ปรนัย {type} ตัวเลือก 1 คำตอบ</li>
+              ))}
+              <li>เวลาในการทำข้อสอบ <strong>{subject.questions.length} นาที</strong> (เฉลี่ยข้อละ 1 นาที)</li>
             </ul>
-            <p style={{ marginBottom: '1rem' }}>โปรแกรมนี้จะใช้เป็นกระดาษคำตอบเท่านั้น ให้ใช้โจทย์ที่ปรากฎภายในเล่ม โดยเช็คให้เลข Ref ของชุดข้อสอบให้ตรงกัน</p>
-            <p style={{ marginBottom: '1rem' }}>เวลาจะเริ่มจับหลังจากกดปุ่ม <strong>“เริ่มทำข้อสอบ”</strong></p>
-            <p>เมื่อต้องการจะส่งข้อสอบให้กดปุ่ม <strong>“ตรวจทานข้อสอบ”</strong> เพื่อตรวจทานก่อนส่งและหากต้องการแก้ไขให้กดไปที่ข้อที่ต้องการ เพื่อเลือกคำตอบใหม่ ตัวอย่าง</p>
+            <p style={{ marginBottom: '1rem' }}>ตัวจับเวลาจะเริ่มเดินหลังจากที่คุณกดปุ่ม <strong>“เริ่มทำข้อสอบ”</strong> ด้านล่าง</p>
+            <p>เมื่อทำถึงข้อสุดท้าย ให้กดปุ่ม <strong>“ดูผลคะแนน”</strong> เพื่อส่งข้อสอบและดูเฉลย <br/>หากต้องการตรวจทานหรือแก้ไขก่อนส่ง สามารถใช้ปุ่ม <strong>"ตัวนำทางข้อสอบ"</strong> (ไอคอนตารางมุมขวาบน) เพื่อกระโดดไปยังข้อที่ต้องการแก้ไขได้ทันที</p>
           </div>
         </div>
 
