@@ -34,10 +34,12 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
       return;
     }
 
+    const normalizedEmail = email.includes('@') ? email.trim() : `${email.trim()}@examhub.com`;
+
     try {
       if (isSignUp) {
         const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
+          email: normalizedEmail,
           password,
         });
         if (signUpError) throw signUpError;
@@ -49,7 +51,7 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
         }
       } else {
         const { data, error: signInError } = await supabase.auth.signInWithPassword({
-          email,
+          email: normalizedEmail,
           password,
         });
         if (signInError) throw signInError;
@@ -122,11 +124,11 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
         <form noValidate onSubmit={handleAuth} className="grid gap-6" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label htmlFor="email" style={{ fontSize: '0.875rem', fontWeight: 500 }}>Email address</label>
+              <label htmlFor="email" style={{ fontSize: '0.875rem', fontWeight: 500 }}>Email address หรือ Username</label>
               <input 
                 id="email"
-                type="email" 
-                placeholder="name@example.com"
+                type="text" 
+                placeholder="adminnaja หรือ name@example.com"
                 value={email} 
                 onChange={(e) => {
                   setEmail(e.target.value);
