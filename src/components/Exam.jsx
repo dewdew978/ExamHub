@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -21,6 +21,7 @@ export default function Exam({ subject, onBack, onComplete }) {
   const [timeLeft, setTimeLeft] = useState(subject.questions.length * 60); // 1 min per question
   const [showAlert, setShowAlert] = useState(true);
   const [isReviewMode, setIsReviewMode] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const answersRef = useRef(answers);
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function Exam({ subject, onBack, onComplete }) {
   }, [answers]);
 
   useEffect(() => {
-    if (showResult) return;
+    if (showResult || isPaused) return;
     
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -45,7 +46,7 @@ export default function Exam({ subject, onBack, onComplete }) {
     }, 1000);
     
     return () => clearInterval(timer);
-  }, [showResult, subject.questions, onComplete]);
+  }, [showResult, isPaused, subject.questions, onComplete]);
 
   const q = subject.questions[currentQ];
   const answered = answers[currentQ] !== null;
@@ -241,6 +242,32 @@ export default function Exam({ subject, onBack, onComplete }) {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '2rem auto' }}>
+      {isPaused && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(10, 10, 10, 0.8)',
+          backdropFilter: 'blur(12px)',
+          zIndex: 100,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white'
+        }}>
+          <Pause size={48} style={{ opacity: 0.5, marginBottom: '1.5rem' }} />
+          <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 600 }}>พักสอบชั่วคราว</h2>
+          <p style={{ opacity: 0.8, marginBottom: '2.5rem', fontSize: '1.125rem' }}>เวลาถูกหยุดไว้ที่ {formatTime(timeLeft)}</p>
+          <button 
+            className="btn btn-primary" 
+            onClick={() => setIsPaused(false)}
+            style={{ fontSize: '1.125rem', padding: '0.75rem 2rem', background: 'white', color: 'black' }}
+          >
+            <Play size={20} /> ดำเนินการสอบต่อ
+          </button>
+        </div>
+      )}
+
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '2.5rem', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button 
@@ -256,16 +283,25 @@ export default function Exam({ subject, onBack, onComplete }) {
           </div>
         </div>
         
-        <div style={{ 
-          display: 'flex', alignItems: 'center', gap: '0.5rem', 
-          background: timeLeft < 60 ? 'rgba(239, 68, 68, 0.1)' : 'var(--surface-hover)', 
-          color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
-          padding: '0.5rem 1rem', borderRadius: '8px', 
-          boxShadow: 'var(--shadow-border)', fontWeight: 600, fontSize: '1.125rem',
-          marginLeft: 'auto'
-        }}>
-          <Clock size={20} />
-          <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
+          <button 
+            className="btn btn-outline" 
+            onClick={() => setIsPaused(true)}
+            style={{ width: '36px', height: '36px', padding: 0 }}
+            title="พักสอบชั่วคราว"
+          >
+            <Pause size={16} />
+          </button>
+          <div style={{ 
+            display: 'flex', alignItems: 'center', gap: '0.5rem', 
+            background: timeLeft < 60 ? 'rgba(239, 68, 68, 0.1)' : 'var(--surface-hover)', 
+            color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
+            padding: '0.5rem 1rem', borderRadius: '8px', 
+            boxShadow: 'var(--shadow-border)', fontWeight: 600, fontSize: '1.125rem'
+          }}>
+            <Clock size={20} />
+            <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
+          </div>
         </div>
       </div>
 
