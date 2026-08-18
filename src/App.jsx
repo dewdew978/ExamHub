@@ -12,6 +12,7 @@ import './index.css';
 function App() {
   const [currentView, setCurrentView] = useState('login');
   const [showMenu, setShowMenu] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [categoryScores, setCategoryScores] = useState({});
@@ -338,7 +339,7 @@ function App() {
           </button>
           
           {user ? (
-            <button className="btn btn-outline" onClick={handleLogout} title={user.email}>
+            <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(true)} title={user.email}>
               <LogOut size={16} />
             </button>
           ) : (
@@ -377,6 +378,35 @@ function App() {
       
       {showChart && (
         <Pattern data={chartData} onClose={() => setShowChart(false)} />
+      )}
+
+      {showLogoutConfirm && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+          zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <div className="card animate-fade-in" style={{ padding: '2.5rem', maxWidth: '400px', width: '90%', textAlign: 'center' }}>
+            <LogOut size={48} style={{ color: 'var(--error)', margin: '0 auto 1.5rem', opacity: 0.8 }} />
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 600 }}>ยืนยันการออกจากระบบ</h3>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ ExamHub?</p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+              <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(false)}>
+                ยกเลิก
+              </button>
+              <button 
+                className="btn btn-primary" 
+                style={{ background: 'var(--error)', color: 'white', borderColor: 'var(--error)' }}
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  handleLogout();
+                }}
+              >
+                ออกจากระบบ
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
