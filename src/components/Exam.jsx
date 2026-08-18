@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark, AlertTriangle } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -14,7 +14,7 @@ const renderTextWithMath = (text) => {
   });
 };
 
-export default function Exam({ subject, onBack, onComplete }) {
+export default function Exam({ subject, onBack, onComplete, onReport }) {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState(Array(subject.questions.length).fill(null));
   const [bookmarks, setBookmarks] = useState(Array(subject.questions.length).fill(false));
@@ -467,21 +467,42 @@ export default function Exam({ subject, onBack, onComplete }) {
           <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
             Question {currentQ + 1}
           </div>
-          <button 
-            onClick={toggleBookmark}
-            style={{ 
-              background: 'transparent', border: 'none', cursor: 'pointer', 
-              color: bookmarks[currentQ] ? 'var(--warning)' : 'var(--text-muted)',
-              display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 500,
-              padding: '0.375rem 0.5rem', borderRadius: '4px',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
-            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            <Bookmark size={16} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
-            <span className="hidden sm:inline">{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาวข้อนี้'}</span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            {onReport && (
+              <button 
+                type="button"
+                onClick={() => onReport({ subjectId: subject.id, questionNumber: currentQ + 1, issueType: 'wrong_answer' })}
+                style={{ 
+                  background: 'transparent', border: 'none', cursor: 'pointer', 
+                  color: 'var(--text-muted)',
+                  display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 500,
+                  padding: '0.375rem 0.5rem', borderRadius: '4px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'var(--surface-hover)'; e.currentTarget.style.color = 'var(--error)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; }}
+                title="รายงานข้อนี้ผิด"
+              >
+                <AlertTriangle size={16} />
+                <span className="hidden sm:inline">แจ้งข้อผิด</span>
+              </button>
+            )}
+            <button 
+              onClick={toggleBookmark}
+              style={{ 
+                background: 'transparent', border: 'none', cursor: 'pointer', 
+                color: bookmarks[currentQ] ? 'var(--warning)' : 'var(--text-muted)',
+                display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 500,
+                padding: '0.375rem 0.5rem', borderRadius: '4px',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
+              onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+            >
+              <Bookmark size={16} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
+              <span className="hidden sm:inline">{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาวข้อนี้'}</span>
+            </button>
+          </div>
         </div>
         <h3 style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '2rem', fontWeight: 500 }}>
           {renderTextWithMath(q.q)}

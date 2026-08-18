@@ -6,7 +6,8 @@ import { Pattern } from './components/Pattern';
 import Schedule from './components/Schedule';
 import Login from './components/Login';
 import ScoreHistory from './components/ScoreHistory';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon, ChevronDown } from 'lucide-react';
+import Report from './components/Report';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon, ChevronDown, AlertTriangle } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import './index.css';
 
@@ -15,6 +16,7 @@ function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [reportInitialData, setReportInitialData] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [categoryScores, setCategoryScores] = useState({});
   const [showChart, setShowChart] = useState(false);
@@ -162,6 +164,13 @@ function App() {
   const goHome = () => {
     setCurrentView('home');
     setSelectedSubject(null);
+    setReportInitialData(null);
+  };
+
+  const openReport = (data = null) => {
+    setReportInitialData(data);
+    setCurrentView('report');
+    setShowMenu(false);
   };
 
   const addScore = async (score) => {
@@ -264,7 +273,7 @@ function App() {
           
           <div style={{ position: 'relative' }}>
             <button 
-              className={`btn ${['schedule', 'history'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
+              className={`btn ${['schedule', 'history', 'report'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
               onClick={() => setShowMenu(!showMenu)}
               style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
             >
@@ -292,7 +301,7 @@ function App() {
                     flexDirection: 'column',
                     overflow: 'hidden',
                     zIndex: 50,
-                    minWidth: '130px'
+                    minWidth: '160px'
                   }}
                 >
                   <button 
@@ -331,6 +340,7 @@ function App() {
                       textAlign: 'left',
                       cursor: 'pointer',
                       fontSize: '0.875rem',
+                      borderBottom: '1px solid var(--border)',
                       width: '100%'
                     }}
                     onClick={() => {
@@ -345,6 +355,28 @@ function App() {
                     }}
                   >
                     ประวัติคะแนน
+                  </button>
+                  <button 
+                    style={{
+                      fontFamily: 'inherit',
+                      padding: '0.75rem 1rem',
+                      background: currentView === 'report' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                      color: currentView === 'report' ? 'var(--accent)' : 'var(--text)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      width: '100%'
+                    }}
+                    onClick={() => openReport()}
+                    onMouseOver={(e) => {
+                      if (currentView !== 'report') e.currentTarget.style.background = 'var(--card)';
+                    }}
+                    onMouseOut={(e) => {
+                      if (currentView !== 'report') e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    รายงานข้อสอบผิด / ปัญหา
                   </button>
                 </div>
               </>
@@ -391,6 +423,7 @@ function App() {
               setAuthRequiredMessage(`กรุณาเข้าสู่ระบบก่อนเพื่อทำข้อสอบชุด "${subject?.name || ''}"`);
               setCurrentView('login');
             }}
+            onOpenReport={openReport}
           />
         )}
         {currentView === 'examIntro' && selectedSubject && (
@@ -405,6 +438,7 @@ function App() {
             subject={selectedSubject} 
             onBack={goHome} 
             onComplete={addScore} 
+            onReport={openReport}
           />
         )}
         {currentView === 'schedule' && (
@@ -418,6 +452,14 @@ function App() {
             <p>กรุณาเข้าสู่ระบบเพื่อดูประวัติคะแนน</p>
             <button className="btn btn-primary" style={{ marginTop: '1rem' }} onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
           </div>
+        )}
+        {currentView === 'report' && (
+          <Report 
+            subjects={subjects} 
+            initialData={reportInitialData} 
+            user={user} 
+            onBack={goHome} 
+          />
         )}
       </main>
       

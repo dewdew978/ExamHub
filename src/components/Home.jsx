@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { FileText, Folder, ArrowLeft, Clock, GraduationCap, Lock } from 'lucide-react';
+import { FileText, Folder, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle } from 'lucide-react';
 
-export default function Home({ subjects, onSelectSubject, user, onRequireLogin }) {
+export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport }) {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedExamType, setSelectedExamType] = useState('All');
@@ -363,6 +363,18 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin }
           ? renderCategorySelection() 
           : renderSubjectList()
       }
+
+      <div style={{ marginTop: '5rem', padding: '2.5rem 0', textAlign: 'center', borderTop: '1px solid var(--border-divider)', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+        <p style={{ margin: '0 0 0.75rem 0' }}>พบข้อสอบผิดพลาด เฉลยไม่ตรง หรือมีข้อเสนอแนะ?</p>
+        <button 
+          type="button"
+          className="btn btn-outline"
+          onClick={() => onOpenReport && onOpenReport()}
+          style={{ fontSize: '0.8125rem', padding: '0.4rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.375rem' }}
+        >
+          <AlertTriangle size={14} color="var(--error)" /> แจ้งข้อสอบผิด / รายงานปัญหา
+        </button>
+      </div>
     </div>
   );
 }
