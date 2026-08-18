@@ -4,7 +4,8 @@ import Exam from './components/Exam';
 import { Pattern } from './components/Pattern';
 import Schedule from './components/Schedule';
 import Login from './components/Login';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User } from 'lucide-react';
+import ScoreHistory from './components/ScoreHistory';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import './index.css';
 
@@ -233,6 +234,11 @@ function App() {
             <CalendarDays size={16} />
             <span className="hidden sm:inline">ตารางสอบ</span>
           </button>
+
+          <button className={`btn ${currentView === 'history' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setCurrentView('history')}>
+            <HistoryIcon size={16} />
+            <span className="hidden sm:inline">ประวัติคะแนน</span>
+          </button>
           
           <button className={`btn ${currentView === 'home' ? 'btn-primary' : 'btn-outline'}`} onClick={goHome}>
             <span>หน้าหลัก</span>
@@ -278,6 +284,15 @@ function App() {
         )}
         {currentView === 'schedule' && (
           <Schedule />
+        )}
+        {currentView === 'history' && user && (
+          <ScoreHistory user={user} />
+        )}
+        {currentView === 'history' && !user && (
+          <div style={{ textAlign: 'center', padding: '4rem' }}>
+            <p>กรุณาเข้าสู่ระบบเพื่อดูประวัติคะแนน</p>
+            <button className="btn btn-primary" style={{ marginTop: '1rem' }} onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
+          </div>
         )}
       </main>
       
