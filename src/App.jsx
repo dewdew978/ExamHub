@@ -231,13 +231,11 @@ function App() {
           </button>
           
           <button className={`btn ${currentView === 'schedule' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setCurrentView('schedule')}>
-            <CalendarDays size={16} />
-            <span className="hidden sm:inline">ตารางสอบ</span>
+            <span>ตารางสอบ</span>
           </button>
 
           <button className={`btn ${currentView === 'history' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setCurrentView('history')}>
-            <HistoryIcon size={16} />
-            <span className="hidden sm:inline">ประวัติคะแนน</span>
+            <span>ประวัติคะแนน</span>
           </button>
           
           <button className={`btn ${currentView === 'home' ? 'btn-primary' : 'btn-outline'}`} onClick={goHome}>
@@ -248,13 +246,12 @@ function App() {
             className="btn"
             onClick={() => setShowChart(true)}
             style={{ 
-              fontSize: '0.875rem', fontWeight: 500, display: 'flex', 
-              alignItems: 'center', gap: '0.375rem', color: 'var(--accent)',
+              fontSize: '0.875rem', fontWeight: 600, display: 'flex', 
+              alignItems: 'center', color: 'var(--accent)',
               boxShadow: 'var(--shadow-border)', padding: '0.5rem 0.75rem',
               borderRadius: '6px', background: 'rgba(0, 112, 243, 0.1)'
             }}
           >
-            <Star size={14} />
             <span>{totalScore} คะแนน</span>
           </button>
           
