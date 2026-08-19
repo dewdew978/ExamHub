@@ -7,8 +7,9 @@ import Schedule from './components/Schedule';
 import Login from './components/Login';
 import ScoreHistory from './components/ScoreHistory';
 import Report from './components/Report';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, User, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X } from 'lucide-react';
-import { supabase } from './lib/supabase';
+import AdminDashboard from './components/AdminDashboard';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { supabase, checkIsAdmin } from './lib/supabase';
 import './index.css';
 
 function App() {
@@ -56,13 +57,51 @@ function App() {
         if (examsError) throw examsError;
         
         const localIndex = await import('./data/index.json');
-        const mergedSubjects = (examsData || []).map(exam => {
+        let mergedSubjects = (examsData || []).map(exam => {
           const local = localIndex.default.find(l => l.id === exam.id);
+          const customKey = `examhub_custom_exam_${exam.id}`;
+          const savedCustom = localStorage.getItem(customKey);
+          let customQuestionCount = exam.questionCount;
+          if (savedCustom) {
+            try {
+              const parsed = JSON.parse(savedCustom);
+              if (parsed.questions) customQuestionCount = parsed.questions.length;
+            } catch (e) {
+              console.warn(e);
+            }
+          }
           return {
             ...exam,
+            questionCount: customQuestionCount,
             requiresAuth: local?.requiresAuth || exam.requiresAuth || false
           };
         });
+
+        // Add newly created exams from localStorage if any
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('examhub_custom_exam_')) {
+            try {
+              const customExam = JSON.parse(localStorage.getItem(key));
+              if (customExam && customExam.id && !mergedSubjects.some(s => s.id === customExam.id)) {
+                mergedSubjects.push({
+                  id: customExam.id,
+                  name: customExam.name,
+                  category: customExam.category || 'General',
+                  icon: customExam.icon || '📝',
+                  color: customExam.color || '#0070f3',
+                  iconBg: customExam.iconBg || 'rgba(0, 112, 243, 0.15)',
+                  desc: customExam.desc || '',
+                  questionCount: customExam.questions?.length || 0,
+                  year: customExam.year || 3,
+                  type: customExam.type || 'Midterm'
+                });
+              }
+            } catch (e) {
+              console.warn(e);
+            }
+          }
+        }
         setSubjects(mergedSubjects);
 
         // 2. Check auth status
@@ -141,12 +180,34 @@ function App() {
 
   const startExam = async (subjectId) => {
     try {
-      const subjectMeta = subjects.find(s => s.id === subjectId);
-      const mod = await import(`./data/${subjectId}.json`);
+      const subjectMeta = subjects.find(s => s.id === subjectId) || {};
+      let examData = null;
+
+      // 1. Check custom saved exam in localStorage first
+      const customKey = `examhub_custom_exam_${subjectId}`;
+      const savedCustom = localStorage.getItem(customKey);
+      if (savedCustom) {
+        try {
+          examData = JSON.parse(savedCustom);
+        } catch (e) {
+          console.warn("Failed to parse custom exam:", e);
+        }
+      }
+
+      // 2. Fallback to bundled JSON file
+      if (!examData) {
+        try {
+          const mod = await import(`./data/${subjectId}.json`);
+          examData = mod.default;
+        } catch (err) {
+          console.warn("Could not load local json file:", err);
+          examData = { questions: [] };
+        }
+      }
       
       const fullSubject = {
         ...subjectMeta,
-        ...mod.default
+        ...examData
       };
 
       if (fullSubject.requiresAuth && !user) {
@@ -204,6 +265,8 @@ function App() {
     await supabase.auth.signOut();
   };
 
+  const isAdmin = checkIsAdmin(user);
+
   const allCategories = [...new Set(subjects.map(s => s.category))];
   
   const chartData = allCategories.map(category => {
@@ -250,6 +313,17 @@ function App() {
     );
   }
 
+  // Full-Screen Flux-AgentOps Style Admin Dashboard
+  if (currentView === 'admin_reports' && isAdmin) {
+    return (
+      <AdminDashboard 
+        subjects={subjects} 
+        user={user} 
+        onBack={goHome} 
+      />
+    );
+  }
+
   return (
     <div className="app-container">
       <header className="header">
@@ -277,7 +351,7 @@ function App() {
           
           <div style={{ position: 'relative' }}>
             <button 
-              className={`btn ${['schedule', 'history', 'report'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
+              className={`btn ${['schedule', 'history', 'report', 'admin_reports'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
               onClick={() => setShowMenu(!showMenu)}
               style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
             >
@@ -305,7 +379,7 @@ function App() {
                     flexDirection: 'column',
                     overflow: 'hidden',
                     zIndex: 50,
-                    minWidth: '160px'
+                    minWidth: '180px'
                   }}
                 >
                   <button 
@@ -370,6 +444,7 @@ function App() {
                       textAlign: 'left',
                       cursor: 'pointer',
                       fontSize: '0.875rem',
+                      borderBottom: isAdmin ? '1px solid var(--border)' : 'none',
                       width: '100%'
                     }}
                     onClick={() => openReport()}
@@ -382,6 +457,37 @@ function App() {
                   >
                     รายงานข้อสอบผิด / ปัญหา
                   </button>
+                  {isAdmin && (
+                    <button 
+                      style={{
+                        fontFamily: 'inherit',
+                        padding: '0.75rem 1rem',
+                        background: currentView === 'admin_reports' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                        color: currentView === 'admin_reports' ? 'var(--accent)' : 'var(--text)',
+                        border: 'none',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem',
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                      onClick={() => {
+                        setCurrentView('admin_reports');
+                        setShowMenu(false);
+                      }}
+                      onMouseOver={(e) => {
+                        if (currentView !== 'admin_reports') e.currentTarget.style.background = 'var(--card)';
+                      }}
+                      onMouseOut={(e) => {
+                        if (currentView !== 'admin_reports') e.currentTarget.style.background = 'transparent';
+                      }}
+                    >
+                      <ShieldCheck size={14} color="var(--accent)" />
+                      <span>แดชบอร์ดจัดการ (Admin)</span>
+                    </button>
+                  )}
                 </div>
               </>
             )}
@@ -594,6 +700,34 @@ function App() {
                   <span>รายงานข้อสอบผิด / ปัญหา</span>
                 </button>
 
+                {/* 6. แดชบอร์ดจัดการ (Admin Hub) */}
+                {isAdmin && (
+                  <button 
+                    style={{
+                      fontFamily: 'inherit',
+                      padding: '0.875rem 1rem',
+                      background: currentView === 'admin_reports' ? 'var(--surface-hover)' : 'transparent',
+                      color: currentView === 'admin_reports' ? 'var(--accent)' : 'var(--text)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      width: '100%',
+                      fontWeight: currentView === 'admin_reports' ? 600 : 400
+                    }}
+                    onClick={() => {
+                      setCurrentView('admin_reports');
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <ShieldCheck size={16} color="var(--accent)" />
+                    <span>แดชบอร์ดจัดการ (Admin)</span>
+                  </button>
+                )}
+
                 <div style={{ height: '1px', background: 'var(--border-divider)', margin: '0.25rem 0' }} />
 
                 {/* 6. สลับธีม */}
@@ -730,7 +864,56 @@ function App() {
             initialData={reportInitialData} 
             user={user} 
             onBack={goHome} 
+            onOpenAdminReports={isAdmin ? () => setCurrentView('admin_reports') : null}
           />
+        )}
+        {currentView === 'admin_reports' && isAdmin && (
+          <AdminDashboard 
+            subjects={subjects} 
+            user={user} 
+            onBack={goHome} 
+          />
+        )}
+        {currentView === 'admin_reports' && !user && (
+          <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '3rem auto', borderRadius: '16px' }}>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(245, 158, 11, 0.15)', color: 'var(--warning)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 1.5rem'
+            }}>
+              <ShieldAlert size={36} />
+            </div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+              เฉพาะผู้ดูแลระบบ (Admin Only)
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+              หน้านี้จำกัดสิทธิ์เฉพาะผู้ดูแลระบบ กรุณาเข้าสู่ระบบด้วยบัญชี Admin เพื่อเข้าถึงข้อมูล
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button className="btn btn-outline" onClick={goHome}>กลับสู่หน้าหลัก</button>
+              <button className="btn btn-primary" onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
+            </div>
+          </div>
+        )}
+        {currentView === 'admin_reports' && user && !isAdmin && (
+          <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '3rem auto', borderRadius: '16px' }}>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(239, 68, 68, 0.15)', color: 'var(--error)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 1.5rem'
+            }}>
+              <ShieldAlert size={36} />
+            </div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+              คุณไม่มีสิทธิ์เข้าถึงหน้านี้
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+              บัญชีของคุณ ({user.email}) ไม่ใช่บัญชีผู้ดูแลระบบ (Admin) ไม่สามารถดูรายการรายงานปัญหาได้
+            </p>
+            <button className="btn btn-primary" onClick={goHome}>กลับสู่หน้าหลัก</button>
+          </div>
         )}
       </main>
       

@@ -8,9 +8,8 @@ import {
   FileText, 
   Bug, 
   Sparkles, 
-  MessageSquare,
   Clock,
-  Check
+  Inbox
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -22,7 +21,7 @@ const ISSUE_TYPES = [
   { id: 'other', label: 'อื่นๆ', icon: HelpCircle, color: 'var(--text-muted)' }
 ];
 
-export default function Report({ subjects = [], initialData = null, user = null, onBack, onSuccess }) {
+export default function Report({ subjects = [], initialData = null, user = null, onBack, onSuccess, onOpenAdminReports }) {
   const [issueType, setIssueType] = useState(initialData?.issueType || 'wrong_answer');
   const [selectedSubjectId, setSelectedSubjectId] = useState(initialData?.subjectId || (subjects[0]?.id || ''));
   const [questionNumber, setQuestionNumber] = useState(initialData?.questionNumber || '');
@@ -100,13 +99,26 @@ export default function Report({ subjects = [], initialData = null, user = null,
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
-      <button 
-        className="btn btn-outline"
-        onClick={onBack}
-        style={{ marginBottom: '1.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
-      >
-        <ArrowLeft size={16} /> ย้อนกลับ
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+        <button 
+          className="btn btn-outline"
+          onClick={onBack}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+        >
+          <ArrowLeft size={16} /> ย้อนกลับ
+        </button>
+
+        {onOpenAdminReports && (
+          <button
+            className="btn btn-outline"
+            onClick={onOpenAdminReports}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)' }}
+          >
+            <Inbox size={16} />
+            <span>กล่องรายงานปัญหา (Inbox)</span>
+          </button>
+        )}
+      </div>
 
       {submittedReport ? (
         <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', borderRadius: '16px' }}>
