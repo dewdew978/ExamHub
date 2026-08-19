@@ -11,447 +11,447 @@
   "questionCount": 60,
   "questions": [
     {
-      "q": "ข้อใดคือความแตกต่างที่แท้จริงระหว่าง OLTP และ OLAP ในบริบทของการออกแบบโครงสร้างข้อมูล",
+      "q": "ข้อใดคือความแตกต่างที่สำคัญที่สุดระหว่าง OLTP และ OLAP ในบริบทของการออกแบบโครงสร้างข้อมูล",
       "choices": [
-        "OLTP เน้นโครงสร้างแบบ Denormalized เพื่อรองรับ Throughput การเขียนสูง ส่วน OLAP ใช้ Normalized (3NF) เพื่อลดพื้นที่จัดเก็บในการทำ Ad-hoc Query",
-        "OLTP ใช้โครงสร้างแบบ Normalized (3NF) เพื่อลด Data Redundancy และรองรับการทำ ACID Transactions ส่วน OLAP ใช้โครงสร้าง Denormalized (Dimensional) เพื่อเพิ่มประสิทธิภาพการ SELECT และ Aggregate ข้อมูลย้อนหลัง",
-        "OLTP และ OLAP ใช้โครงสร้าง Star Schema เหมือนกัน แต่ OLTP จะใช้ B-Tree Index ขณะที่ OLAP ใช้ Bitmap Index ร่วมกับ Columnar Storage",
-        "OLTP ถูกออกแบบมาสำหรับ Batch Processing รายวันแบบ Denormalized ส่วน OLAP ออกแบบมาเพื่อ Real-time Event Streaming แบบ Normalized"
+        "OLTP ใช้แบบ Denormalized เพื่อเน้นเขียน ส่วน OLAP ใช้แบบ 3NF เพื่อเน้นอ่าน",
+        "OLTP ใช้แบบ Normalized เพื่อรองรับ Transaction ส่วน OLAP ใช้แบบ Denormalized เพื่อการวิเคราะห์",
+        "OLTP ใช้แบบ Star Schema สำหรับคำนวณ ส่วน OLAP ใช้แบบ Snowflake สำหรับจัดเก็บ",
+        "OLTP ใช้แบบ Columnar เพื่อประหยัดพื้นที่ ส่วน OLAP ใช้แบบ Row-oriented เพื่อความเร็ว"
       ],
       "answer": 1,
-      "explain": "OLTP (Online Transaction Processing) เน้นโครงสร้าง Normalized (3NF) เพื่อลดความซ้ำซ้อนของข้อมูลและรองรับการ INSERT/UPDATE/DELETE ที่มีความถี่สูงอย่างรวดเร็ว ส่วน OLAP (Online Analytical Processing) เน้นโครงสร้างแบบ Denormalized (Star/Snowflake) เพื่อเพิ่มความเร็วในการอ่านและประมวลผล Aggregate ข้อมูลประวัติย้อนหลังจำนวนมาก"
+      "explain": "OLTP เน้นโครงสร้าง Normalized เพื่อลดความซ้ำซ้อนและรองรับการประมวลผลธุรกรรมที่รวดเร็ว ส่วน OLAP เน้นโครงสร้าง Denormalized เพื่อเพิ่มประสิทธิภาพในการอ่านและวิเคราะห์ข้อมูลย้อนหลัง"
     },
     {
-      "q": "คุณลักษณะ 'Non-Volatile' ของ Data Warehouse ตามนิยามของ W.H. Inmon ส่งผลต่อการออกแบบและจัดการระบบข้อมูลอย่างไร",
+      "q": "คุณลักษณะ Non-Volatile ของ Data Warehouse ส่งผลต่อการออกแบบและจัดการระบบข้อมูลอย่างไร",
       "choices": [
-        "ข้อมูลที่โหลดเข้าสู่ Data Warehouse จะถูก Normalize ให้อยู่ในระดับ BCNF และห้ามมี Null Value ในทุกมิติ",
-        "ข้อมูลระดับ Transaction ใน Staging Area จะถูกอัปเดตสถานะแบบ Real-time ตามระบบ Source OLTP เสมอ",
-        "ข้อมูลใน Data Warehouse จะไม่มีการทำ Update หรือ Delete ข้อมูลเดิมทิ้ง แต่จะเป็นการ Append ข้อมูลตามลำดับเวลาเพื่อคงประวัติการวิเคราะห์",
-        "ข้อมูลจะต้องถูกเข้ารหัส (Encryption-at-Rest) เพื่อป้องกันการสูญหายเมื่อระบบหยุดทำงานกะทันหัน"
+        "ข้อมูลจะถูก Normalize ให้อยู่ในระดับ 3NF และห้ามมีค่าว่าง",
+        "ข้อมูลจะถูกอัปเดตสถานะแบบ Real-time ตลอดเวลาตามระบบต้นทาง",
+        "ข้อมูลเดิมจะไม่ถูกแก้ไขหรือลบทิ้ง แต่จะเป็นการเพิ่มข้อมูลใหม่ตามลำดับเวลา",
+        "ข้อมูลจะถูกลบและโหลดทับใหม่ทั้งหมดทุกครั้งที่มีการรันระบบ ETL"
       ],
       "answer": 2,
-      "explain": "Non-Volatile (ความไม่เปลี่ยนแปลง) หมายถึงเมื่อข้อมูลถูกแปลงและนำเข้าสู่ Data Warehouse แล้ว ข้อมูลนั้นจะถูกเก็บรักษาไว้อย่างถาวร ไม่มีการแก้ไขหรือลบทิ้งตามใจชอบ หากมีธุรกรรมใหม่จะเป็นการบันทึกเพิ่ม (Append-only) เข้าไปตามช่วงเวลา เพื่อให้สามารถตรวจสอบและวิเคราะห์ย้อนหลังได้อย่างแม่นยำ"
+      "explain": "Non-Volatile หมายถึงข้อมูลเมื่อถูกนำเข้าสู่ Data Warehouse แล้วจะถูกเก็บรักษาอย่างถาวร ไม่มีการแก้ไขหรือลบทิ้ง ข้อมูลใหม่จะถูกบันทึกเพิ่มเข้าไปตามช่วงเวลาเพื่อให้ตรวจสอบย้อนหลังได้"
     },
     {
-      "q": "หากผู้บริหารต้องการดูข้อมูลจากระดับ 'ยอดขายรวมรายประเทศ' เจาะลึกลงเป็น 'ยอดขายระดับภูมิภาค' และ 'ยอดขายระดับจังหวัด' ต้องใช้ Operation ใดใน OLAP Cube",
+      "q": "หากต้องการดูข้อมูลยอดขายจากระดับประเทศ เจาะลึกลงไปเป็นระดับภูมิภาคและจังหวัด ต้องใช้ Operation ใดใน OLAP Cube",
       "choices": [
-        "Roll-up (Aggregation ขึ้นไประดับชั้นที่สูงกว่า)",
-        "Slice (การตัดเลือกดูข้อมูลเพียงมิติเดียวในมุมมอง 2 มิติ)",
-        "Dice (การเลือกช่วงข้อมูลเฉพาะหลายมิติเป็น Sub-cube)",
-        "Drill-down (การเจาะลึกข้อมูลจากระดับสรุปภาพรวมลงไปสู่ระดับลำดับชั้นที่มีความละเอียดยิ่งขึ้น)"
+        "Roll-up",
+        "Slice",
+        "Dice",
+        "Drill-down"
       ],
       "answer": 3,
-      "explain": "Drill-down คือคำสั่งใน OLAP Cube ที่ใช้เจาะลึกลำดับชั้น (Hierarchy) จากระดับภาพรวมที่กว้าง (เช่น ประเทศ) ลงไปสู่ระดับที่ละเอียดยิ่งขึ้น (เช่น ภูมิภาค -> จังหวัด -> อำเภอ) ซึ่งเป็นทิศทางตรงกันข้ามกับ Roll-up"
+      "explain": "Drill-down คือการเจาะลึกข้อมูลจากระดับภาพรวมระดับสูงลงไปสู่ระดับที่มีความละเอียดยิ่งขึ้นตามลำดับชั้นของ Dimension"
     },
     {
-      "q": "ระบบใดต่อไปนี้ จัดว่าเป็นระบบที่ทำงานในลักษณะของ OLTP (Online Transaction Processing) ทั้งหมด",
+      "q": "ระบบใดต่อไปนี้ จัดว่าเป็นระบบที่ทำงานในลักษณะของ OLTP ทั้งหมด",
       "choices": [
-        "Shopee Checkout Service, Agoda Room Booking Engine, ตู้ ATM / Mobile Banking Core System",
-        "Tableau Executive Dashboard, Power BI Sales Report, Metabase Analytics",
-        "Apache Spark Batch Processing, Google BigQuery Data Lakehouse, Snowflake Data Mart",
-        "ระบบวิเคราะห์ Customer Churn Prediction, ระบบ Segment พฤติกรรมผู้บริโภครายไตรมาส, CRM Analytic Report"
+        "Shopee Checkout, Agoda Booking, Mobile Banking",
+        "Tableau Dashboard, Power BI Report, Metabase Analytics",
+        "Apache Spark Batch, Google BigQuery, Snowflake DW",
+        "Customer Churn Prediction, Market Basket Analysis, CRM Report"
       ],
       "answer": 0,
-      "explain": "Shopee Checkout, Agoda Booking และ Mobile Banking เป็นระบบ OLTP ที่เน้นการประมวลผลธุรกรรมทางธุรกิจแบบ Real-time ทีละรายการ (High-concurrency, Low-latency transactions) ในขณะที่ตัวเลือกอื่นเป็นเครื่องมือ BI หรือระบบ OLAP/Analytics"
+      "explain": "ระบบสั่งซื้อสินค้า จองโรงแรม และธนาคารบนมือถือ จัดเป็นระบบ OLTP ที่เน้นการทำธุรกรรมแบบ Real-time ทีละรายการ"
     },
     {
-      "q": "สถาปัตยกรรม Data Warehouse แบบ 2-tier แตกต่างจาก 3-tier ในเรื่องใดเป็นสำคัญ",
+      "q": "สถาปัตยกรรม Data Warehouse แบบ 2-tier แตกต่างจาก 3-tier ในประเด็นใดเป็นสำคัญ",
       "choices": [
-        "2-tier จะนำ BI Tools ต่อตรงเข้ากับฐานข้อมูล OLTP โดยตัด Data Warehouse ออกจากระบบ",
-        "2-tier รวมชั้น Data Layer (Data Sources, ETL/ELT และ Enterprise Data Warehouse) ไว้ด้วยกัน แล้วเชื่อมต่อกับ Presentation Layer โดยตรง โดยไม่มี OLAP Cubes / Intermediate Layer แยกเฉพาะ",
-        "3-tier ตัดชั้น Staging Area ออก และนำข้อมูลดิบเข้าสู่ Presentation Layer โดยตรง",
-        "2-tier ใช้เฉพาะสถาปัตยกรรมแบบ Cloud Lakehouse เท่านั้น ในขณะที่ 3-tier ถูกจำกัดเฉพาะระบบ On-premise แบบดั้งเดิม"
+        "2-tier ต่อ BI Tools เข้ากับฐานข้อมูล OLTP โดยตรง",
+        "2-tier รวม Data Layer ไว้ด้วยกันและต่อตรงกับ Presentation Layer",
+        "3-tier ตัดกระบวนการ Staging Area ออกจากระบบทั้งหมด",
+        "2-tier รองรับเฉพาะระบบ Cloud แต่ 3-tier รองรับเฉพาะ On-premise"
       ],
       "answer": 1,
-      "explain": "ในสถาปัตยกรรมแบบ 2-tier ระบบจะประกอบด้วย Data Layer (ที่รวม Data Source, Transformation, DW) และ Presentation Layer (BI/Analytics) ส่วนใน 3-tier จะมี Middle Tier (เช่น OLAP Server / Data Marts แยกเฉพาะ) คั่นระหว่าง DW Storage และ Presentation Layer"
+      "explain": "สถาปัตยกรรม 2-tier รวม Data Source และ Data Warehouse เข้าด้วยกันใน Tier 1 แล้วต่อตรงไปยัง Presentation Layer ใน Tier 2 โดยไม่มี Middle Tier แยกเฉพาะเหมือน 3-tier"
     },
     {
-      "q": "จุดเด่นที่สำคัญที่สุดของแนวคิดการออกแบบ Data Warehouse แบบ Kimball (Bottom-up Approach) คืออะไร",
+      "q": "จุดเด่นที่สำคัญที่สุดของแนวคิดการออกแบบ Data Warehouse แบบ Kimball คืออะไร",
       "choices": [
-        "เน้นการสร้าง Central Enterprise Data Warehouse (EDW) แบบ 3NF ที่สมบูรณ์แบบก่อน แล้วจึงกระจายข้อมูลไปยังส่วนงานต่างๆ",
-        "เน้นการสร้าง Dimensional Data Marts ที่เชื่อมโยงกันด้วย Conformed Dimensions ทำให้ระบบส่งมอบคุณค่าทางธุรกิจได้รวดเร็วและขยายตัวแบบ Modular ได้ง่าย",
-        "ตัดการใช้ Dimension Tables ออกทั้งหมด แล้วเก็บเฉพาะ Aggregated Fact Tables เพื่อประหยัดพื้นที่ดิสก์",
-        "บังคับให้สร้างฐานข้อมูลแบบ Document Database เพื่อรองรับข้อมูล Semi-structured โดยไม่ต้องกำหนด Schema"
+        "สร้าง Enterprise Data Warehouse กลางแบบ 3NF ให้สมบูรณ์ก่อน",
+        "สร้าง Data Marts ที่เชื่อมโยงกันด้วย Conformed Dimensions",
+        "ตัดการใช้งาน Dimension Tables ออกเพื่อประหยัดพื้นที่จัดเก็บ",
+        "จัดเก็บข้อมูลทั้งหมดในรูปแบบ Document Database แบบไม่มี Schema"
       ],
       "answer": 1,
-      "explain": "Ralph Kimball เสนอแนวคิด Bottom-up หรือ Dimensional Modeling ที่เริ่มสร้างจาก Data Marts ของแต่ละ Business Process โดยใช้ Conformed Dimensions (เช่น Time, Customer, Product) เป็นแกนกลางเชื่อมโยงกัน ทำให้องค์กรเห็นผลตอบแทนการลงทุนเร็ว (Fast ROI) และขยายระบบเพิ่มเติมได้สะดวก"
+      "explain": "Kimball ใช้แนวคิด Bottom-up โดยเริ่มสร้าง Data Marts ที่เชื่อมโยงกันด้วย Conformed Dimensions ทำให้เห็นผลลัพธ์ทางธุรกิจเร็วและขยายระบบได้ง่าย"
     },
     {
-      "q": "องค์กรที่มีระบบข้อมูลซับซ้อน ต้องการ Single Version of the Truth ที่มีความถูกต้องสูงสุดเพื่อทำ Data Governance และ Compliance Audit อย่างเข้มงวด ควรเลือกใช้แนวทางใดเป็นแกนหลัก",
+      "q": "องค์กรที่ต้องการ Single Version of the Truth ที่มีความสอดคล้องสูงสุดเพื่อการตรวจสอบ ควรเลือกใช้แนวทางใด",
       "choices": [
         "Kimball Dimensional Data Marts Approach",
-        "Inmon Corporate Information Factory (CIF / Top-down) Approach",
-        "Data Mesh Federated Governance Approach โดยไม่มีคลังข้อมูลกลาง",
-        "Independent Standalone Data Marts โดยไม่มี Conformed Dimensions"
+        "Inmon Corporate Information Factory Approach",
+        "Data Mesh Federated Governance Approach",
+        "Independent Standalone Data Marts Approach"
       ],
       "answer": 1,
-      "explain": "Bill Inmon นำเสนอแนวคิด Top-down (Corporate Information Factory) ที่สร้าง Enterprise Data Warehouse (EDW) กลางในรูปแบบ Normalized 3NF ซึ่งขจัด Data Redundancy ได้อย่างเด็ดขาด มีความสอดคล้องของข้อมูลสูงสุด เหมาะสำหรับองค์กรขนาดใหญ่ที่เน้น Data Governance และ Auditability"
+      "explain": "Inmon นำเสนอแนวคิด Top-down โดยสร้าง Enterprise Data Warehouse กลางแบบ 3NF เพื่อลดความซ้ำซ้อนของข้อมูลและให้ความถูกต้องสูงสุดสำหรับการ Audit"
     },
     {
-      "q": "ข้อใดอธิบายบทบาทและความสำคัญของ 'Bus Architecture' ในแนวคิดของ Kimball ได้ถูกต้องและครอบคลุมที่สุด",
+      "q": "ข้อใดอธิบายบทบาทของ Bus Architecture ในแนวคิดของ Kimball ได้ถูกต้องที่สุด",
       "choices": [
-        "เป็นโครงสร้างฮาร์ดแวร์แบบ Data Bus ที่ใช้เชื่อมต่อระหว่าง Server สองเครื่องในระบบ On-premise",
-        "เป็นแนวคิดการออกแบบ Data Warehouse แบบ Top-down ที่ใช้ 3NF ในระดับ Fact Table",
-        "เป็นกรอบการออกแบบที่เชื่อมโยง Business Processes ต่างๆ เข้าด้วยกันผ่าน Conformed Dimensions เพื่อให้สามารถทำ Cross-functional Analysis ได้อย่างสอดคล้องกัน",
-        "เป็นระบบ Queue Messaging เช่น Apache Kafka ที่ใช้กระจายข้อมูล Event ไปยัง Data Lake"
+        "ระบบเครือข่ายฮาร์ดแวร์ความเร็วสูงที่ใช้เชื่อมต่อเซิร์ฟเวอร์",
+        "โครงสร้างข้อมูลแบบ 3NF ที่บังคับใช้ในระดับ Fact Table",
+        "กรอบการเชื่อมโยงกระบวนการธุรกิจด้วย Conformed Dimensions",
+        "ระบบส่งข้อความแบบกระจายศูนย์เพื่อส่งข้อมูลเข้า Data Lake"
       ],
       "answer": 2,
-      "explain": "Kimball Data Warehouse Bus Architecture คือพิมพ์เขียวในการสร้าง Data Warehouse แบบกระจายตัว โดยกำหนดมาตรฐาน Conformed Dimensions และ Conformed Facts ร่วมกัน ทำให้แต่ละ Data Mart สามารถสื่อสารและรวมรายงานข้ามแผนกได้โดยไม่เกิดความขัดแย้งของนิยามข้อมูล"
+      "explain": "Bus Architecture คือสถาปัตยกรรมที่เชื่อมโยง Business Processes ต่างๆ เข้าด้วยกันผ่าน Conformed Dimensions ทำให้สามารถวิเคราะห์ข้อมูลข้ามส่วนงานได้อย่างสอดคล้องกัน"
     },
     {
-      "q": "ประโยชน์หลักของการจัดทำ 'Enterprise Bus Matrix' ในช่วงต้นของขั้นตอน Requirement Engineering คืออะไร",
+      "q": "ประโยชน์หลักของการจัดทำ Enterprise Bus Matrix ในขั้นตอน Requirement คืออะไร",
       "choices": [
-        "ใช้คำนวณและประเมินค่าใช้จ่าย Compute & Storage บน Cloud Platform ประจำปี",
-        "ใช้สร้างตาราง Mapping ความสัมพันธ์ระหว่าง Business Processes (Subject Areas) กับ Common Dimensions เพื่อวางแผนและหลีกเลี่ยงการสร้าง Dimension ที่ซ้ำซ้อน",
-        "ใช้สำหรับเขียน Script CI/CD Pipeline และจัดการ Automated Data Testing",
-        "ใช้กำหนดสิทธิ์การเข้าถึงข้อมูลตามบทบาท (RBAC) ในระบบ BI Dashboard"
+        "ประเมินค่าใช้จ่าย Compute และ Storage บนระบบ Cloud",
+        "จับคู่ Business Processes กับ Conformed Dimensions เพื่อลดความซ้ำซ้อน",
+        "เขียนสคริปต์สำหรับการทำ Automated Data Testing ใน CI/CD",
+        "กำหนดสิทธิ์การเข้าถึงข้อมูลตามบทบาทของผู้ใช้งานแต่ละแผนก"
       ],
       "answer": 1,
-      "explain": "Enterprise Bus Matrix เป็นตาราง 2 มิติ (Rows = Business Processes / Fact Tables, Columns = Conformed Dimensions) ที่ช่วยให้ทีม Data Architecture เห็นภาพรวมการใช้ประโยชน์จาก Dimension ร่วมกัน ป้องกันการสร้าง Dimension ซ้ำซ้อนและกำหนดลำดับความสำคัญในการพัฒนา Data Marts"
+      "explain": "Bus Matrix เป็นตาราง Mapping ระหว่าง Business Processes กับ Conformed Dimensions ช่วยวางแผนโครงสร้างข้อมูลและป้องกันการสร้าง Dimension ซ้ำซ้อน"
     },
     {
-      "q": "ใน Data Warehouse Lifecycle ขั้นตอนใดที่เน้นการทำ Business Requirement Document (BRD), การสัมภาษณ์ Stakeholders และการระบุ Business Metrics/KPIs",
+      "q": "ใน DW Lifecycle ขั้นตอนใดที่เน้นการทำ BRD การสัมภาษณ์ และการกำหนดตัวชี้วัด KPI",
       "choices": [
-        "Data Modelling & Dimensional Design",
-        "ELT / ETL Pipeline Development",
-        "Requirement Specification & Business Alignment",
-        "Physical Database Optimization & Indexing"
+        "Data Modelling and Design",
+        "ELT Pipeline Development",
+        "Requirement Specification",
+        "Physical Optimization"
       ],
       "answer": 2,
-      "explain": "Requirement Specification (Step 1) คือขั้นตอนแรกสุดของ DW Lifecycle ที่มุ่งเน้นการทำความเข้าใจเป้าหมายทางธุรกิจ สัมภาษณ์ Stakeholders รวบรวม BRD และกำหนด KPIs ที่ต้องวัดผล เพื่อนำไปเป็นโจทย์ในการออกแบบ Data Model"
+      "explain": "Requirement Specification คือขั้นตอนแรกที่เน้นการทำความเข้าใจเป้าหมายธุรกิจ รวบรวม BRD และกำหนด KPIs เพื่อใช้เป็นโจทย์ในการออกแบบ Data Model"
     },
     {
-      "q": "คำว่า 'Granularity' (Grain) ในการออกแบบ Fact Table มีความหมายและผลกระทบต่อระบบอย่างไร",
+      "q": "ความหมายของ Granularity ในการออกแบบ Fact Table คือข้อใด",
       "choices": [
-        "ระดับความละเอียดของข้อมูล ซึ่งเป็นตัวกำหนดว่าข้อมูล 1 แถวใน Fact Table หมายถึงเหตุการณ์หรือธุรกรรมอะไรอย่างเจาะจง",
-        "จำนวน Foreign Keys ทั้งหมดที่เชื่อมโยงระหว่าง Fact Table ไปยัง Dimension Tables",
-        "ขนาดความจุสูงสุดของ Table Partition ในระดับ Terabytes ก่อนที่ Performance จะลดลง",
-        "ความถี่ในการรัน ETL Batch Process เช่น การโหลดข้อมูลทุกชั่วโมงหรือรายวัน"
+        "ระดับความละเอียดของข้อมูลที่ระบุว่า 1 แถวหมายถึงสิ่งใด",
+        "จำนวน Foreign Keys ทั้งหมดที่เชื่อมไปยัง Dimension Tables",
+        "ขนาดความจุของตารางที่ระบบฐานข้อมูลสามารถจัดเก็บได้",
+        "ความถี่ในการรันกระบวนการดึงข้อมูลจากระบบต้นทาง"
       ],
       "answer": 0,
-      "explain": "Grain หรือ Granularity คือระดับความละเอียดของข้อมูลใน Fact Table เช่น '1 แถวต่อ 1 บรรทัดรายการในใบเสร็จ (Line-item)' หรือ '1 แถวต่อ 1 วันต่อสาขา (Daily aggregate)' ซึ่ง Grain จะเป็นตัวกำหนดจำนวนมิติและขนาดของ Fact Table โดยตรง"
+      "explain": "Granularity (Grain) คือระดับความละเอียดของข้อมูล เช่น 1 แถวต่อ 1 รายการสินค้าในใบเสร็จ ซึ่งเป็นตัวกำหนดโครงสร้างและขนาดของ Fact Table"
     },
     {
-      "q": "หากคุณกำหนด Granularity ของระบบสั่งซื้อเป็น '1 แถว เท่ากับ 1 รายการสินค้าในใบสั่งซื้อ (Order Line Item)' ข้อมูลกลุ่มใดเหมาะสมที่สุดที่จะเก็บใน Fact Table",
+      "q": "หากกำหนด Granularity เป็น 1 แถวต่อ 1 รายการในใบสั่งซื้อ ข้อมูลใดเหมาะสมที่จะเก็บใน Fact Table",
       "choices": [
-        "Customer_Name, Customer_Address, Customer_Segment",
-        "Product_Category_Name, Brand_Name, Supplier_Contact",
-        "Order_ID, Quantity_Sold, Unit_Price, Discount_Amount, Extended_Sales_Amount",
-        "Store_Region, Store_Manager_Name, Store_Opening_Date"
+        "ชื่อลูกค้า, ที่อยู่ลูกค้า, กลุ่มลูกค้า",
+        "ชื่อหมวดหมู่สินค้า, ชื่อแบรนด์, ข้อมูลผู้ผลิต",
+        "รหัสออเดอร์, จำนวนชิ้น, ราคาต่อหน่วย, ยอดเงินรวม",
+        "ชื่อภูมิภาค, ชื่อผู้จัดการสาขา, วันที่เปิดสาขา"
       ],
       "answer": 2,
-      "explain": "Fact Table จะเก็บ Foreign Keys เพื่อเชื่อมโยงไปยัง Dimension และเก็บค่าวัดเชิงปริมาณ (Measures / Numerical facts) เช่น Quantity, Price, Discount, Sales Amount ส่วนข้อมูลเชิงบรรยาย เช่น ชื่อลูกค้า ชื่อหมวดหมู่ หรือชื่อสาขาจะถูกแยกไปเก็บใน Dimension Tables"
+      "explain": "Fact Table จะเก็บค่าวัดเชิงตัวเลขและ Foreign Keys เช่น รหัสออเดอร์ จำนวนชิ้น ราคา และยอดเงิน ส่วนข้อมูลเชิงบรรยายจะแยกเก็บใน Dimension Tables"
     },
     {
-      "q": "กฎเกณฑ์พื้นฐานในการแยกความแตกต่างระหว่าง Fact และ Dimension ในขั้นตอนการออกแบบ Dimensional Model คืออะไร",
+      "q": "กฎเกณฑ์พื้นฐานในการแยกความแตกต่างระหว่าง Fact และ Dimension คือข้อใด",
       "choices": [
-        "ข้อมูลตัวเลขทั้งหมดต้องอยู่ใน Dimension Table ส่วนข้อมูลตัวอักษรทั้งหมดต้องอยู่ใน Fact Table",
-        "สิ่งที่เปลี่ยนแปลงบ่อยและเป็นค่าวัดที่นำมาคำนวณ Aggregate ได้จะเก็บใน Fact ส่วนสิ่งที่ใช้บรรยายบริบท (Context) และจำแนกตามมิติจะเก็บใน Dimension",
-        "ข้อมูลที่เกิดจากระบบภายนอกให้เก็บเป็น Fact ส่วนข้อมูลที่สร้างภายในองค์กรให้เก็บเป็น Dimension",
-        "ข้อมูลที่เป็นประวัติย้อนหลังเกิน 1 ปีต้องย้ายไป Dimension ส่วนข้อมูลปัจจุบันเก็บใน Fact"
+        "ข้อมูลตัวเลขทั้งหมดต้องเป็น Dimension ข้อมูลข้อความต้องเป็น Fact",
+        "สิ่งที่คำนวณได้ให้เก็บเป็น Fact สิ่งที่ใช้บรรยายบริบทให้เก็บเป็น Dimension",
+        "ข้อมูลจากภายนอกให้เก็บเป็น Fact ข้อมูลภายในองค์กรให้เก็บเป็น Dimension",
+        "ข้อมูลประวัติเก่าให้เก็บเป็น Fact ข้อมูลปัจจุบันให้เก็บเป็น Dimension"
       ],
       "answer": 1,
-      "explain": "Fact หมายถึงสิ่งที่เป็นตัววัดเชิงตัวเลข (Measurements/Metrics) ที่ตอบคำถาม 'เท่าไหร่ (How much/How many)' เช่น ยอดขาย ยอดคลิก ส่วน Dimension คือบริบทแวดล้อมที่ตอบคำถาม 'ใคร ทำอะไร ที่ไหน เมื่อไหร่ อย่างไร (Who, What, Where, When, Why)'"
+      "explain": "Fact คือค่าวัดเชิงตัวเลขที่นำมาคำนวณได้ ส่วน Dimension คือบริบทแวดล้อมเชิงคุณภาพที่ใช้ในการอธิบาย กรอง หรือจัดกลุ่มข้อมูล"
     },
     {
-      "q": "ใน Dimensional Model ของธุรกิจร้านค้าปลีก ข้อมูลชุดใดต่อไปนี้ถูกจัดเก็บอยู่ใน Dimension Table ทั้งหมด",
+      "q": "ใน Dimensional Model ของธุรกิจค้าปลีก ข้อมูลชุดใดถูกจัดเก็บใน Dimension Table ทั้งหมด",
       "choices": [
-        "Order_Item_ID, Gross_Revenue, Cost_Of_Goods_Sold",
-        "Calendar_Date, Day_Name_Of_Week, Fiscal_Quarter, Holiday_Flag",
-        "Total_Payment_Amount, VAT_Amount, Net_Profit",
-        "Transaction_Timestamp, Quantity_Returned, Refund_Amount"
+        "รหัสรายการสินค้า, รายได้รวม, ต้นทุนสินค้า",
+        "วันที่, วันในสัปดาห์, ไตรมาส, วันหยุดนักขัตฤกษ์",
+        "ยอดชำระเงิน, ภาษีมูลค่าเพิ่ม, กำไรสุทธิ",
+        "เวลาที่เกิดรายการ, จำนวนสินค้าที่คืน, ยอดเงินคืน"
       ],
       "answer": 1,
-      "explain": "Calendar_Date, Day_Name_Of_Week, Fiscal_Quarter, Holiday_Flag เป็น Attributes เชิงบรรยายของมิติเวลา (Date/Time Dimension) จึงต้องจัดเก็บใน Dimension Table ไม่ใช่ Fact Table"
+      "explain": "วันที่ วันในสัปดาห์ ไตรมาส และวันหยุด เป็น Attributes เชิงบรรยายของมิติเวลา จึงต้องจัดเก็บใน Dimension Table"
     },
     {
-      "q": "Degenerate Dimension มีคุณลักษณะเฉพาะตามข้อใดที่ทำให้แตกต่างจาก Dimension ทั่วไป",
+      "q": "Degenerate Dimension มีคุณลักษณะเฉพาะตามข้อใด",
       "choices": [
-        "เป็น Dimension Table ที่มีจำนวนมิติย่อยเชื่อมต่อเป็น Snowflake มากกว่า 5 ชั้น",
-        "เป็น Dimension Key เชิงเอกสารหรือธุรกรรม (เช่น Invoice Number, POS Ticket ID) ที่ถูกเก็บอยู่ใน Fact Table โดยตรง โดยไม่มีตาราง Dimension แยกต่างหาก",
-        "เป็นตาราง Dimension ชั่วคราวที่ถูกลบทิ้งอัตโนมัติเมื่อสิ้นสุดรอบการโหลดข้อมูลประจำวัน",
-        "เป็น Dimension ที่ใช้เฉพาะเก็บข้อมูลตัวตนลูกค้าที่ไม่ระบุชื่อ (Anonymous Users)"
+        "เป็นตาราง Dimension ที่มีโครงสร้างแบบหลายชั้น",
+        "เป็นคีย์เอกสารที่เก็บใน Fact Table โดยไม่มีตาราง Dimension แยก",
+        "เป็นตาราง Dimension ชั่วคราวที่ถูกลบหลังโหลดข้อมูลเสร็จ",
+        "เป็น Dimension ที่ใช้เฉพาะเก็บข้อมูลผู้ใช้ที่ไม่ระบุตัวตน"
       ],
       "answer": 1,
-      "explain": "Degenerate Dimension คือ Dimension attribute ที่ไม่มีคุณลักษณะเชิงบรรยายอื่นใดให้เก็บแยกตาราง จึงนำมาเก็บเป็นคอลัมน์ใน Fact Table โดยตรง มักใช้สำหรับเลขอ้างอิงเอกสาร เช่น Order Number, Invoice Number, Bill of Lading"
+      "explain": "Degenerate Dimension คือมิติที่ไม่มีข้อมูลเชิงบรรยายอื่นให้เก็บแยกตาราง จึงนำคีย์อ้างอิงเอกสาร เช่น Order Number หรือ Invoice Number มาเก็บใน Fact Table โดยตรง"
     },
     {
-      "q": "ข้อมูลใดต่อไปนี้ มักถูกออกแบบให้เป็น 'Degenerate Dimension' ในระบบงานจริง",
+      "q": "ข้อมูลใดต่อไปนี้ มักถูกออกแบบให้เป็น Degenerate Dimension ในระบบงานจริง",
       "choices": [
-        "Customer_Loyalty_Tier (เช่น Gold, Platinum)",
-        "Product_Subcategory_Code",
-        "Invoice_Tracking_Number หรือ Order_Receipt_ID",
-        "Warehouse_Geographical_Coordinates"
+        "ระดับสมาชิกของลูกค้า",
+        "รหัสหมวดหมู่สินค้าย่อย",
+        "เลขที่ใบแจ้งหนี้หรือเลขที่ใบเสร็จ",
+        "พิกัดที่ตั้งของคลังสินค้า"
       ],
       "answer": 2,
-      "explain": "Invoice_Tracking_Number หรือ Order_Receipt_ID มีความเป็นเอกลักษณ์เฉพาะระดับเอกสาร และไม่มีรายละเอียดอื่นที่ต้องสร้างตาราง Dimension แยก จึงถูกเก็บเป็น Degenerate Dimension ภายใน Fact Table โดยตรง"
+      "explain": "เลขที่ใบแจ้งหนี้หรือใบเสร็จมีความเฉพาะเจาะจงระดับเอกสารและไม่มีรายละเอียดอื่นให้แยกตาราง จึงมักเก็บเป็น Degenerate Dimension"
     },
     {
-      "q": "ความแตกต่างทางโครงสร้างที่เด่นชัดที่สุดระหว่าง Star Schema และ Snowflake Schema คืออะไร",
+      "q": "ความแตกต่างทางโครงสร้างระหว่าง Star Schema และ Snowflake Schema คือข้อใด",
       "choices": [
-        "Star Schema ไม่มี Fact Table ส่วน Snowflake Schema มี Fact Table หลายตาราง",
-        "Star Schema ออกแบบ Dimension แบบ Denormalized (ชั้นเดียว) ส่วน Snowflake Schema จะทำการ Normalize ตาราง Dimension ออกเป็นลำดับชั้นย่อยๆ (Hierarchies)",
-        "Star Schema รองรับเฉพาะ SCD Type 1 ส่วน Snowflake Schema รองรับเฉพาะ SCD Type 2",
-        "Star Schema ใช้สำหรับจัดเก็บไฟล์ Parquet ส่วน Snowflake Schema ใช้สำหรับ Relational Database เท่านั้น"
+        "Star Schema ไม่มี Fact Table แต่ Snowflake Schema มี Fact Table",
+        "Star Schema ใช้ Dimension แบบรวม แต่ Snowflake Schema ทำการ Normalize แตกเป็นหลายตาราง",
+        "Star Schema รองรับเฉพาะ SCD Type 1 แต่ Snowflake Schema รองรับเฉพาะ Type 2",
+        "Star Schema ใช้กับ Data Lake แต่ Snowflake Schema ใช้กับ Relational Database"
       ],
       "answer": 1,
-      "explain": "Star Schema จะรวม Attributes ของ Dimension ให้อยู่ในตารางเดียวแบบ Denormalized เพื่อลดการ JOIN ขณะที่ Snowflake Schema จะทำ Normalization ตาราง Dimension แตกเป็นตารางย่อยๆ ตามระดับชั้น (เช่น Product -> Subcategory -> Category) เพื่อลดความซ้ำซ้อนของข้อมูล"
+      "explain": "Star Schema รวม Attributes ไว้ในตาราง Dimension เดียวแบบ Denormalized ส่วน Snowflake Schema ทำ Normalization ตาราง Dimension แตกออกเป็นลำดับชั้นย่อยๆ"
     },
     {
-      "q": "Hierarchy รูปแบบใดที่ 'บางเส้นทางมีการข้ามลำดับชั้นตรงกลางไป' เช่น สินค้าบางชนิดไม่มี Sub-category แต่เชื่อมโยงจาก Product ไปยัง Category โดยตรง",
-      "choices": [
-        "Balanced Hierarchy (ลำดับชั้นสมดุลทุกเส้นทาง)",
-        "Recursive Hierarchy (ลำดับชั้นวนซ้ำตนเอง)",
-        "Ragged Hierarchy (ลำดับชั้นแหว่ง/ข้ามระดับชั้น)",
-        "Unbalanced Hierarchy (ลำดับชั้นลึกไม่เท่ากันจากความสัมพันธ์ทางสายงาน)"
-      ],
-      "answer": 2,
-      "explain": "Ragged Hierarchy คือโครงสร้างลำดับชั้นที่ระดับชั้น (Levels) ข้ามขั้นตอนตรงกลางไปในบางกิ่งก้าน เช่น โครงสร้างพื้นที่ทางภูมิศาสตร์ที่บางพื้นที่ไม่มีระดับอำเภอหรือตำบล แต่ข้ามไประดับจังหวัดทันที"
-    },
-    {
-      "q": "โครงสร้างสายการบังคับบัญชาของบุคลากรในองค์กร (Organizational Hierarchy / Chain of Command) มักมีลักษณะของ Hierarchy รูปแบบใด",
+      "q": "Hierarchy รูปแบบใดที่บางเส้นทางมีการข้ามระดับชั้นตรงกลางไป เช่น ข้ามจากระดับสินค้าไปหาระดับหมวดหมู่โดยตรง",
       "choices": [
         "Balanced Hierarchy",
-        "Unbalanced Hierarchy (ลำดับชั้นที่มีความลึกของแต่ละสายงานไม่เท่ากัน)",
+        "Recursive Hierarchy",
         "Ragged Hierarchy",
-        "Fixed-Depth Symmetrical Hierarchy"
-      ],
-      "answer": 1,
-      "explain": "สายการบังคับบัญชาในองค์กรจัดเป็น Unbalanced Hierarchy เนื่องจากบางแผนกอาจมีโครงสร้างลึก 5 ระดับ (CEO -> VP -> Director -> Manager -> Staff) แต่บางแผนกอาจมีเพียง 3 ระดับ (CEO -> Lead -> Specialist)"
-    },
-    {
-      "q": "ข้อเสียเปรียบสำคัญของการใช้ Snowflake Schema เมื่อเปรียบเทียบกับ Star Schema ในงาน Business Intelligence คืออะไร",
-      "choices": [
-        "ใช้พื้นที่จัดเก็บข้อมูลบนฮาร์ดดิสก์มากกว่า Star Schema อย่างมีนัยสำคัญ",
-        "การเขียน SQL Query มีความซับซ้อนขึ้น และประสิทธิภาพการ Query อาจช้าลงเนื่องจากต้องทำการ JOIN ตารางหลายชั้น",
-        "ไม่สามารถรองรับการทำ Data Indexing และ Partitioning ในระบบ RDBMS ได้",
-        "ไม่สามารถใช้งานร่วมกับเครื่องมือ BI สมัยใหม่อย่าง Tableau หรือ Power BI ได้"
-      ],
-      "answer": 1,
-      "explain": "Snowflake Schema ทำให้การเขียน Query ต้อง JOIN หลายตารางตามระดับชั้นของ Dimension ซึ่งทำให้ SQL ซับซ้อนและอาจลดความเร็วในการประมวลผล (Query Performance) เมื่อเทียบกับ Star Schema ที่มีโครงสร้างเรียบง่ายและต่อตรงกับ Fact Table"
-    },
-    {
-      "q": "การจัดการมิติข้อมูลที่มีการเปลี่ยนแปลงแบบ Slowly Changing Dimensions (SCD) Type 1 มีพฤติกรรมการทำงานอย่างไร",
-      "choices": [
-        "เพิ่มคอลัมน์ใหม่ใน Dimension Table เพื่อเก็บค่าก่อนหน้าและค่าปัจจุบัน",
-        "เพิ่มแถวใหม่ (New Row) พร้อมระบุ Effective Date และ Is_Current flag เพื่อเก็บประวัติทุกรอบ",
-        "เขียนทับ (Overwrite) ข้อมูลเดิมด้วยค่าใหม่ทันที โดยไม่มีการเก็บประวัติการเปลี่ยนแปลงย้อนหลัง",
-        "สร้างตาราง History แยกต่างหากและคงตารางหลักไว้เฉพาะค่าปัจจุบัน"
+        "Unbalanced Hierarchy"
       ],
       "answer": 2,
-      "explain": "SCD Type 1 จะทำการ Overwrite หรืออัปเดตข้อมูลเก่าด้วยข้อมูลใหม่ทับลงไปทันที ทำให้ประวัติข้อมูลเดิมหายไป นิยมใช้ในกรณีที่ต้องการแก้ไขข้อมูลที่สะกดผิด หรือข้อมูลที่ไม่ต้องการวิเคราะห์ย้อนหลัง"
+      "explain": "Ragged Hierarchy คือลำดับชั้นที่มีบางกิ่งก้านข้ามระดับชั้นตรงกลางไป เช่น ข้ามระดับหมวดหมู่ย่อย"
     },
     {
-      "q": "หากองค์กรต้องการติดตามประวัติการย้ายที่อยู่ของลูกค้าอย่างสมบูรณ์ เพื่อใช้วิเคราะห์พฤติกรรมการซื้อตามภูมิลำเนา ณ เวลาที่เกิดธุรกรรมจริง ควรเลือกใช้ SCD รูปแบบใด",
+      "q": "โครงสร้างสายการบังคับบัญชาของพนักงานในองค์กร มักมีลักษณะของ Hierarchy รูปแบบใด",
+      "choices": [
+        "Balanced Hierarchy",
+        "Unbalanced Hierarchy",
+        "Ragged Hierarchy",
+        "Symmetrical Hierarchy"
+      ],
+      "answer": 1,
+      "explain": "สายการบังคับบัญชาในองค์กรมักเป็น Unbalanced Hierarchy เนื่องจากแต่ละแผนกอาจมีจำนวนระดับชั้นความลึกของตำแหน่งงานไม่เท่ากัน"
+    },
+    {
+      "q": "ข้อเสียเปรียบสำคัญของการใช้ Snowflake Schema เมื่อเทียบกับ Star Schema คือข้อใด",
+      "choices": [
+        "ใช้พื้นที่จัดเก็บข้อมูลบนฮาร์ดดิสก์มากกว่า",
+        "การเขียน Query ซับซ้อนขึ้นและอาจประมวลผลช้าลงจากการ JOIN หลายตาราง",
+        "ไม่สามารถสร้าง Index บนตารางในฐานข้อมูลได้",
+        "ไม่สามารถใช้งานร่วมกับเครื่องมือ BI สมัยใหม่ได้"
+      ],
+      "answer": 1,
+      "explain": "Snowflake Schema มีการ Normalize ตาราง Dimension หลายชั้น ทำให้ต้องเขียน SQL JOIN หลายตาราง ส่งผลให้การ Query ซับซ้อนและอาจทำงานช้ากว่า Star Schema"
+    },
+    {
+      "q": "การจัดการมิติข้อมูลที่มีการเปลี่ยนแปลงแบบ SCD Type 1 ทำงานอย่างไร",
+      "choices": [
+        "เพิ่มคอลัมน์ใหม่เพื่อเก็บค่าก่อนหน้าและค่าปัจจุบัน",
+        "เพิ่มแถวใหม่พร้อมระบุวันที่เริ่มมีผลและสถานะการใช้งาน",
+        "เขียนทับข้อมูลเดิมด้วยค่าใหม่ทันทีโดยไม่เก็บประวัติ",
+        "สร้างตารางประวัติแยกต่างหากและคงตารางหลักไว้"
+      ],
+      "answer": 2,
+      "explain": "SCD Type 1 จะทำการเขียนทับข้อมูลเก่าด้วยข้อมูลใหม่ทันที โดยไม่มีการเก็บประวัติการเปลี่ยนแปลงย้อนหลัง"
+    },
+    {
+      "q": "หากต้องการเก็บประวัติการย้ายที่อยู่ของลูกค้าทุกครั้งเพื่อวิเคราะห์ย้อนหลัง ควรเลือกใช้ SCD รูปแบบใด",
       "choices": [
         "SCD Type 0",
-        "SCD Type 2 (Add New Row with Surrogate Key & Date Range)",
-        "SCD Type 1 (Overwrite Current Value)",
-        "SCD Type 3 (Add Previous Value Column)"
+        "SCD Type 2",
+        "SCD Type 1",
+        "SCD Type 3"
       ],
       "answer": 1,
-      "explain": "SCD Type 2 เป็นมาตรฐานในการเก็บประวัติการเปลี่ยนแปลง โดยจะสร้าง Record ใหม่ขึ้นมาพร้อมกำหนด Surrogate Key ใหม่, Valid_From, Valid_To และ Current_Flag ทำให้สามารถย้อนดูสถานะของข้อมูลลูกค้า ณ เวลาใดๆ ในอดีตได้อย่างแม่นยำ"
+      "explain": "SCD Type 2 เป็นรูปแบบที่เพิ่มแถวใหม่พร้อมสร้าง Surrogate Key และระบุช่วงเวลาที่มีผลบังคับใช้ ทำให้สามารถวิเคราะห์ข้อมูลย้อนหลังตามช่วงเวลาได้อย่างถูกต้อง"
     },
     {
-      "q": "ความแตกต่างทางสถาปัตยกรรมที่สำคัญที่สุดระหว่าง SCD Type 2 และ SCD Type 4 คืออะไร",
+      "q": "ความแตกต่างทางโครงสร้างระหว่าง SCD Type 2 และ SCD Type 4 คือข้อใด",
       "choices": [
-        "Type 2 เก็บเฉพาะข้อมูลล่าสุด ส่วน Type 4 เก็บเฉพาะข้อมูลประวัติในอดีต",
-        "Type 2 ไม่ใช้ Surrogate Key ส่วน Type 4 บังคับใช้ Natural Key เท่านั้น",
-        "Type 2 เก็บประวัติทั้งหมดรวมอยู่ในตาราง Dimension เดียวกันโดยการเพิ่มแถวใหม่ ส่วน Type 4 จะแยกตารางออกเป็น 2 ตารางชัดเจน คือ ตารางข้อมูลปัจจุบัน (Current Table) และตารางประวัติ (History Table)",
-        "Type 2 ใช้สำหรับข้อมูลตัวเลข ส่วน Type 4 ใช้สำหรับข้อมูลข้อความเท่านั้น"
+        "Type 2 เก็บเฉพาะข้อมูลล่าสุด ส่วน Type 4 เก็บเฉพาะประวัติ",
+        "Type 2 ไม่ใช้ Surrogate Key ส่วน Type 4 ใช้เฉพาะ Natural Key",
+        "Type 2 เก็บประวัติในตารางเดียวกัน ส่วน Type 4 แยกตารางปัจจุบันและตารางประวัติออกจากกัน",
+        "Type 2 ใช้กับข้อมูลตัวเลข ส่วน Type 4 ใช้กับข้อมูลข้อความ"
       ],
       "answer": 2,
-      "explain": "SCD Type 2 เก็บข้อมูลทั้งเวอร์ชันเก่าและเวอร์ชันใหม่อยู่ในตารางเดียวกัน แต่ SCD Type 4 จะแยกตารางมิติปัจจุบัน (Base/Current Dimension) สำหรับการ Query ทั่วไป และตารางประวัติ (Mini-dimension / History Table) สำหรับการวิเคราะห์ย้อนหลัง"
+      "explain": "SCD Type 2 เก็บประวัติทั้งหมดรวมในตาราง Dimension เดียวกันโดยเพิ่มแถวใหม่ ส่วน SCD Type 4 จะแยกเป็นตารางข้อมูลปัจจุบันและตารางประวัติออกจากกัน"
     },
     {
-      "q": "หากฝ่ายการตลาดต้องการเปรียบเทียบ 'ยอดขายตามที่อยู่ปัจจุบัน' กับ 'ยอดขายตามที่อยู่ก่อนหน้า 1 ลำดับ' โดยไม่ต้องการโครงสร้างประวัติแบบหลายแถว ควรเลือกใช้ SCD รูปแบบใด",
+      "q": "หากต้องการเปรียบเทียบยอดขายตามที่อยู่ปัจจุบันกับที่อยู่ก่อนหน้า 1 ค่า โดยไม่เพิ่มแถวใหม่ ควรใช้ SCD รูปแบบใด",
       "choices": [
         "SCD Type 0",
         "SCD Type 1",
-        "SCD Type 3 (Add New Attribute / Previous Value Column)",
+        "SCD Type 3",
         "SCD Type 4"
       ],
       "answer": 2,
-      "explain": "SCD Type 3 จัดการการเปลี่ยนแปลงโดยการเพิ่มคอลัมน์ใหม่ในตารางเดิม (เช่น Previous_Address คู่กับ Current_Address) ทำให้สามารถเปรียบเทียบระหว่างค่าก่อนหน้า 1 ค่ากับค่าปัจจุบันได้ในแถวเดียวกัน"
+      "explain": "SCD Type 3 ทำการเพิ่มคอลัมน์ใหม่ในตารางเดิมเพื่อเก็บค่าก่อนหน้า ทำให้สามารถเปรียบเทียบระหว่างค่าก่อนหน้ากับค่าปัจจุบันได้ในแถวเดียวกัน"
     },
     {
       "q": "แนวคิดการจัดการมิติข้อมูลแบบ SCD Type 6 มีหลักการทำงานอย่างไร",
       "choices": [
-        "การเก็บประวัติย้อนหลังสูงสุด 6 ปีแล้วจึงทำการ Archive ข้อมูลออกนอกระบบ",
-        "เป็นการผสมผสาน (Hybrid Approach) ของเทคนิค Type 1, Type 2 และ Type 3 เข้าด้วยกัน (1 + 2 + 3 = 6) เพื่อให้สามารถสืบค้นทั้งข้อมูลตามประวัติและข้อมูลตามมุมมองปัจจุบันได้อย่างยืดหยุ่น",
-        "การแยกตารางออกเป็น 6 ส่วนตามระดับ Granularity ของข้อมูล",
-        "การอัปเดตข้อมูลย้อนหลังผ่าน Batch ETL วันละ 6 รอบ"
+        "จำกัดการเก็บประวัติย้อนหลังสูงสุดไม่เกิน 6 ปี",
+        "ผสมผสานเทคนิคของ Type 1, Type 2 และ Type 3 เข้าด้วยกัน",
+        "แบ่งตารางออกเป็น 6 ส่วนตามระดับความละเอียดของข้อมูล",
+        "ตั้งรอบการอัปเดตข้อมูลย้อนหลังอัตโนมัติวันละ 6 ครั้ง"
       ],
       "answer": 1,
-      "explain": "SCD Type 6 (หรือ 1 + 2 + 3) คือการผสมผสานจุดเด่นของ Type 1 (อัปเดตค่าปัจจุบันในทุกแถวของลูกค้ารายนั้น), Type 2 (สร้างแถวใหม่เพื่อเก็บประวัติตามช่วงเวลา), และ Type 3 (มีคอลัมน์ Current/Historical) เพื่อให้ระบบ Analytics ตอบคำถามได้ทั้ง 'ยอดขายตามที่อยู่ตอนซื้อ' และ 'ยอดขายตามที่อยู่ปัจจุบัน'"
+      "explain": "SCD Type 6 (1 + 2 + 3) ผสมผสานจุดเด่นของ Type 1 (อัปเดตค่าปัจจุบัน), Type 2 (เพิ่มแถวประวัติ) และ Type 3 (มีคอลัมน์เปรียบเทียบ) เข้าด้วยกันเพื่อความยืดหยุ่นในการวิเคราะห์"
     },
     {
-      "q": "เหตุใดการใช้งาน SCD Type 2 จึงต้องใช้ 'Surrogate Key' เป็น Join Key เชื่อมโยงระหว่าง Fact Table และ Dimension Table แทนการใช้ Natural Key",
+      "q": "เหตุใดการใช้งาน SCD Type 2 จึงต้องใช้ Surrogate Key เป็นคีย์เชื่อมโยงระหว่าง Fact และ Dimension",
       "choices": [
-        "เพราะ Natural Key มีขนาดความกว้างของฟิลด์เป็น Byte ใหญ่เกินกว่าที่ Database จะทำ Index ได้",
-        "เนื่องจากลูกค้า 1 คน (Natural Key เดียวกัน) จะมีหลายแถวในตาราง Dimension ตามช่วงเวลาที่เปลี่ยนไป จึงต้องใช้ Surrogate Key เพื่อระบุเวอร์ชันของข้อมูลลูกค้าที่ถูกต้อง ณ เวลาที่เกิดธุรกรรม",
-        "เพราะมาตรฐานสากลของ Data Warehouse ห้ามนำ Primary Key จากระบบ OLTP เข้ามาจัดเก็บในระบบ",
-        "เพื่อป้องกันไม่ให้ผู้ใช้ BI ทราบรหัสประจำตัวจริงของลูกค้าตามกฎหมาย PDPA"
+        "เพื่อลดขนาดความกว้างของฟิลด์ในการทำ Index",
+        "เพื่อระบุเวอร์ชันของข้อมูล Dimension ที่ถูกต้อง ณ เวลาที่เกิด Transaction",
+        "เพราะมาตรฐาน Data Warehouse ห้ามนำ Primary Key เดิมเข้ามาใช้งาน",
+        "เพื่อปกปิดข้อมูลส่วนบุคคลของลูกค้าตามข้อกำหนดกฎหมาย"
       ],
       "answer": 1,
-      "explain": "เมื่อใช้ SCD Type 2 เอนทิตีเดิม (Natural Key เดียวกัน เช่น Citizen ID) จะมีหลาย Record ใน Dimension Table ตามแต่ละช่วงเวลา ดังนั้น Fact Table จะต้องเก็บ Surrogate Key (เช่น Customer_SK = 1042) ที่เจาะจงไปยัง Record เวอร์ชันที่ถูกต้อง ณ เวลาที่ Transaction นั้นเกิดขึ้น"
+      "explain": "ใน SCD Type 2 เอนทิตีเดิมจะมีหลายแถวตามช่วงเวลาที่เปลี่ยนแปลง จึงต้องใช้ Surrogate Key เพื่อให้ Fact Table อ้างอิงไปยังแถวเวอร์ชันที่ถูกต้อง ณ เวลาที่เกิดธุรกรรม"
     },
     {
-      "q": "หากระบบ Analytics ต้องการความเร็วสูงสุดในการ Query ข้อมูลลูกค้าสถานะล่าสุด และมีผู้ใช้บางกลุ่มเท่านั้นที่ต้องการดูประวัติย้อนหลัง การเลือกใช้ SCD รูปแบบใดให้ประสิทธิภาพสูงสุด",
+      "q": "หากต้องการให้การ Query ข้อมูลสถานะล่าสุดทำได้เร็วที่สุดโดยยังเก็บประวัติไว้ ควรเลือกใช้ SCD รูปแบบใด",
       "choices": [
         "SCD Type 1",
         "SCD Type 2",
-        "SCD Type 4 (Current Base Table + Separate History Table)",
+        "SCD Type 4",
         "SCD Type 0"
       ],
       "answer": 2,
-      "explain": "SCD Type 4 ช่วยให้ตาราง Current Dimension มีขนาดกะทัดรัด (1 แถวต่อ 1 เอนทิตี) ทำให้การ Query สถานะปัจจุบันทำได้รวดเร็วมาก โดยไม่ถูกหน่วงจากแถวประวัติเก่าๆ ซึ่งจะถูกแยกไปเก็บไว้ใน History Table ต่างหาก"
+      "explain": "SCD Type 4 แยกตารางข้อมูลปัจจุบันออกจากตารางประวัติ ทำให้ตารางปัจจุบันมีขนาดเล็กและ Query ได้รวดเร็วมาก"
     },
     {
-      "q": "ในขั้นตอน ELT Design and Development ของ Data Warehouse ข้อมูลดิบที่ถูก Extract มาจาก Data Sources หลากหลายระบบจะถูกนำมาโหลดพักไว้ที่เลเยอร์ใดเป็นจุดแรก",
+      "q": "ในขั้นตอน ELT ของ Data Warehouse ข้อมูลดิบจากระบบต้นทางจะถูกนำมาพักไว้ที่เลเยอร์ใดเป็นจุดแรก",
       "choices": [
         "Data Mart Layer",
-        "Staging Layer (Raw Storage Area)",
-        "Clean / Curated Layer",
-        "OLAP Aggregation Layer"
+        "Staging Layer",
+        "Clean Layer",
+        "OLAP Layer"
       ],
       "answer": 1,
-      "explain": "Staging Layer คือพื้นที่จัดเก็บข้อมูลขั้นแรกที่รับข้อมูลดิบ (Raw Data) จาก Source Systems โดยไม่มีการแปลงโครงสร้างที่ซับซ้อน เพื่อลดระยะเวลาการดึงข้อมูลและลดภาระบนระบบต้นทาง (Source Systems)"
+      "explain": "Staging Layer คือพื้นที่จัดเก็บข้อมูลขั้นแรกที่รับข้อมูลดิบจาก Source Systems เพื่อลดระยะเวลาการดึงข้อมูลและลดภาระบนระบบต้นทาง"
     },
     {
-      "q": "ข้อใดกล่าวถึงคุณสมบัติของ Dimension Table ได้อย่างถูกต้องและไม่คลาดเคลื่อน",
+      "q": "ข้อใดกล่าวถึงคุณสมบัติของ Dimension Table ได้ถูกต้องที่สุด",
       "choices": [
-        "Dimension Table ทำหน้าที่เก็บค่า Metrics เชิงปริมาณที่นำมาคำนวณ Sum, Avg ได้เสมอ",
-        "Dimension Table ทำหน้าที่ให้บริบทเชิงคุณภาพ (Contextual & Descriptive Attributes) เช่น มิติของเวลา สินค้า หรือลูกค้า เพื่อใช้ในการ Filter, Group by และ Slice ข้อมูล",
-        "Dimension Table มีจำนวนแถวมากกว่า Fact Table เสมอในการออกแบบระบบจริง",
-        "Dimension Table จะต้องไม่มี Primary Key หรือ Surrogate Key ใดๆ กำกับ"
+        "ทำหน้าที่เก็บค่าวัดเชิงตัวเลขที่นำมาคำนวณหาผลรวมได้",
+        "ทำหน้าที่ให้บริบทเชิงบรรยายเพื่อใช้ในการกรองและจัดกลุ่มข้อมูล",
+        "มีจำนวนแถวมากกว่า Fact Table เสมอในการออกแบบระบบจริง",
+        "จะต้องไม่มี Primary Key หรือ Surrogate Key ประจำตาราง"
       ],
       "answer": 1,
-      "explain": "Dimension Table ประกอบด้วย Attributes ที่เป็นข้อความหรือตัวจำแนกเชิงบรรยาย (Descriptive text, Categories, Hierarchies) ทำหน้าที่เป็นแกนในการจัดกลุ่ม (Group by) และการกรอง (Filter/Slice) ข้อมูลใน Fact Table"
+      "explain": "Dimension Table ทำหน้าที่เก็บข้อมูลเชิงบรรยาย (Descriptive Attributes) ที่ใช้อธิบายบริบทของเหตุการณ์ เพื่อใช้ในการ Filter, Group by หรือ Slice ข้อมูลใน Fact Table"
     },
     {
-      "q": "การออกแบบและบังคับใช้ Role-based Access Control (RBAC) และ Row-level Security เพื่อจำกัดการมองเห็นข้อมูลตามแผนก จัดเป็นประเด็นสำคัญในขั้นตอนใดของ DW Lifecycle",
-      "choices": [
-        "Requirement Specification & Business Alignment",
-        "Physical Database Hardware Sizing",
-        "UI & Consumption Layer Development (Dashboard Security & Access Policies)",
-        "Database Archival & Purging Policy"
-      ],
-      "answer": 2,
-      "explain": "ในขั้นตอน UI & Consumption Development (Step 5) นอกจากการสร้าง Dashboard และการทำ Data Visualization แล้ว จะต้องมีการกำหนดและบังคับใช้มาตรการความปลอดภัย เช่น Role-based Access Control (RBAC) เพื่อให้ผู้ใช้แต่ละกลุ่มเห็นข้อมูลตามสิทธิ์ที่ได้รับ"
-    },
-    {
-      "q": "การนำ CI/CD Pipeline, Automated Data Quality Testing และ Schema Migration Scripts มาใช้งาน จัดอยู่ในขั้นตอนใดของ Data Warehouse Lifecycle",
+      "q": "การออกแบบและกำหนดสิทธิ์แบบ Role-based Access Control จัดเป็นประเด็นสำคัญในขั้นตอนใดของ DW Lifecycle",
       "choices": [
         "Requirement Specification",
-        "Data Modelling & Architecture Design",
-        "Test and Deployment (Step 7)",
-        "Data Warehouse Maintenance & Decommissioning"
+        "Physical Storage Sizing",
+        "UI Development",
+        "Data Archival Policy"
       ],
       "answer": 2,
-      "explain": "การทำ Automated Testing (เช่น dbt test, Data Quality checks) และการวาง CI/CD Pipeline สำหรับ Deploy Data Models อยู่ในขั้นตอนที่ 7: Test and Deployment ก่อนที่จะเปิดให้ใช้งานระดับ Production"
+      "explain": "ในขั้นตอน UI Development (Step 5) นอกจากการสร้างแดชบอร์ดแล้ว จะต้องมีการกำหนดสิทธิ์การเข้าถึงข้อมูลตามบทบาท (RBAC) เพื่อความปลอดภัย"
     },
     {
-      "q": "ในการออกแบบ Enterprise Data Warehouse ตาราง 'Bus Matrix' มีโครงสร้างที่แสดงความสัมพันธ์ระหว่างสิ่งใดเป็นหลัก",
+      "q": "การนำ CI/CD Pipeline และ Automated Data Testing มาใช้งาน จัดอยู่ในขั้นตอนใดของ DW Lifecycle",
       "choices": [
-        "Data Sources ภายนอก กับ ชนิดของ Network Protocols",
-        "Business Processes / Subject Areas (แนวแถว) กับ Conformed Dimensions (แนวคอลัมน์)",
-        "ตาราง OLTP ดั้งเดิม กับ ปริมาณ Storage ที่ต้องใช้งาน",
-        "รายชื่อผู้ใช้งาน BI กับ สิทธิ์ในการเข้าถึงรายงาน"
+        "Requirement Specification",
+        "Data Modelling and Design",
+        "Test and Deployment",
+        "System Maintenance"
+      ],
+      "answer": 2,
+      "explain": "การทำ Automated Testing และการวาง CI/CD Pipeline จัดอยู่ในขั้นตอนที่ 7: Test and Deployment ก่อนนำระบบขึ้นใช้งานจริง"
+    },
+    {
+      "q": "ตาราง Enterprise Bus Matrix แสดงความสัมพันธ์ระหว่างสิ่งใดเป็นหลัก",
+      "choices": [
+        "แหล่งข้อมูลต้นทาง กับ ชนิดของโปรโตคอลเครือข่าย",
+        "Business Processes กับ Conformed Dimensions",
+        "ตารางในระบบเดิม กับ ปริมาณพื้นที่จัดเก็บบนดิสก์",
+        "รายชื่อผู้ใช้งาน กับ สิทธิ์ในการเข้าถึงแดชบอร์ด"
       ],
       "answer": 1,
-      "explain": "Enterprise Bus Matrix จะมีแถวแนวตั้งเป็นรายชื่อ Business Processes (หรือ Subject Areas เช่น Sales, Inventory, Billing) และคอลัมน์แนวนอนเป็น Conformed Dimensions (เช่น Date, Customer, Product, Store) เพื่อให้เห็นว่ากระบวนการใดใช้มิติใดร่วมกันบ้าง"
+      "explain": "Bus Matrix แสดงความสัมพันธ์ระหว่าง Business Processes (แนวแถว) กับ Conformed Dimensions (แนวคอลัมน์) เพื่อวางแผนการใช้ข้อมูลร่วมกัน"
     },
     {
-      "q": "งานด้าน Schema Drift Monitoring, Data Lineage Tracking และ Retention Policy Management จัดเป็นกิจกรรมหลักในขั้นตอนใดของ DW Lifecycle",
+      "q": "การติดตาม Schema Drift และการจัดการ Retention Policy จัดเป็นกิจกรรมหลักในขั้นตอนใดของ DW Lifecycle",
       "choices": [
         "Requirement Gathering",
-        "Dimensional Data Modelling",
-        "Maintenance & Operations (Step 6)",
+        "Dimensional Modelling",
+        "Maintenance",
         "Initial Data Staging"
       ],
       "answer": 2,
-      "explain": "ในขั้นตอน Maintenance (Step 6) หลังจากที่ระบบ Go-live แล้ว หน้าที่สำคัญคือการติดตามการเปลี่ยนแปลงของโครงสร้างข้อมูล (Schema Drift), การตรวจสอบต้นทางสู่ปลายทาง (Data Lineage) และการจัดการอายุการเก็บรักษาข้อมูล (Data Retention Policy)"
+      "explain": "ขั้นตอน Maintenance (Step 6) ครอบคลุมการติดตามการเปลี่ยนแปลงของ Schema, การตรวจสอบ Lineage และการจัดการอายุการเก็บรักษาข้อมูล"
     },
     {
-      "q": "ตาราง 'dim_time' หรือ 'dim_date' ที่เก็บข้อมูลเช่น วันที่, วันในสัปดาห์, ไตรมาส, และวันหยุดนักขัตฤกษ์ จัดเป็นตารางประเภทใดในระบบ Data Warehouse",
+      "q": "ตาราง dim_date ที่เก็บข้อมูล วันที่ วันในสัปดาห์ และวันหยุด จัดเป็นตารางประเภทใด",
       "choices": [
-        "Accumulating Snapshot Fact Table",
-        "Dimension Table (มิติข้อมูลเชิงเวลา)",
-        "Degenerate Dimension Column",
-        "Periodic Snapshot Fact Table"
+        "Accumulating Fact Table",
+        "Dimension Table",
+        "Degenerate Dimension",
+        "Periodic Fact Table"
       ],
       "answer": 1,
-      "explain": "dim_time / dim_date จัดเป็น Dimension Table ที่มีบทบาทสำคัญอย่างยิ่งในการวิเคราะห์ข้อมูลตามมิติเวลา โดยมีการสร้าง Attributes เพิ่มเติม เช่น Is_Weekend, Fiscal_Year, Holiday_Flag เพื่ออำนวยความสะดวกในการ Aggregate และ Slice ข้อมูล"
+      "explain": "dim_date จัดเป็น Dimension Table ที่ใช้เก็บรายละเอียดคุณลักษณะเชิงเวลาเพื่อใช้ในการวิเคราะห์ข้อมูล"
     },
     {
-      "q": "หากองค์กรมีการปรับเปลี่ยนโครงสร้างลำดับชั้นของพื้นที่การขายบ่อยครั้ง (เช่น เปลี่ยนจาก ภาค -> โซน เป็น สายงาน -> กลุ่มจังหวัด) เทคนิคใดช่วยให้ระบบ Dimensional Model มีความยืดหยุ่นโดยไม่ต้องแก้ไข Schema ทางกายภาพใหม่ทั้งหมด",
+      "q": "หากองค์กรปรับเปลี่ยนโครงสร้างพื้นที่การขายบ่อยครั้ง เทคนิคใดช่วยให้ Data Model มีความยืดหยุ่นโดยไม่ต้องแก้ตารางจริง",
       "choices": [
-        "การลบตาราง Dimension เดิมทิ้งและโหลดข้อมูลใหม่ทั้งหมดแบบ Full Load",
-        "การสร้าง Semantic Views หรือการใช้ Metadata Layer กำหนด Hierarchy Structure ให้กับ BI Tools แทนการ Hardcode ความสัมพันธ์ในระดับตาราง",
-        "การแปลงโครงสร้างจาก Star Schema กลับไปเป็น Normalized 3NF",
-        "การรวมตาราง Dimension ทั้งหมดเข้าสู่ Fact Table แบบ Flat Table"
+        "ลบตาราง Dimension เดิมทิ้งและโหลดข้อมูลใหม่ทั้งหมด",
+        "สร้าง Semantic Views กำหนด Hierarchy ให้ BI Tools แทน",
+        "แปลงโครงสร้างจาก Star Schema กลับไปเป็น 3NF ทั้งหมด",
+        "รวมตาราง Dimension ทั้งหมดเข้าสู่ Fact Table แบบตารางเดี่ยว"
       ],
       "answer": 1,
-      "explain": "การใช้ Semantic View หรือ Metadata Layer ในการกำหนด Hierarchy จะช่วยให้ Business Logic มีความยืดหยุ่นสูง สามารถปรับเปลี่ยนมุมมองการจัดกลุ่ม (Hierarchy) ให้แก่ผู้ใช้ BI ได้ทันทีโดยไม่ต้องทำการ Alter Table หรือ Migration ข้อมูลทางกายภาพใหม่"
+      "explain": "การสร้าง Semantic Views หรือกำหนด Metadata ใน BI Tools ช่วยให้สามารถปรับเปลี่ยนลำดับชั้นการวิเคราะห์ได้โดยไม่ต้องแก้ไขโครงสร้างตารางทางกายภาพ"
     },
     {
-      "q": "ข้อใดต่อไปนี้กล่าวถึงคุณลักษณะของ 'Conformed Dimension' ได้อย่างถูกต้อง",
+      "q": "ข้อใดกล่าวถึงคุณลักษณะของ Conformed Dimension ได้ถูกต้องที่สุด",
       "choices": [
-        "เป็นตาราง Dimension ที่ถูกสร้างขึ้นมาเฉพาะสำหรับ Fact Table ตารางใดตารางหนึ่งเท่านั้น และห้ามแชร์กับตารางอื่น",
-        "เป็นตาราง Dimension ที่มีโครงสร้างและคำนิยามเป็นมาตรฐานเดียวกัน ซึ่งถูกแชร์และใช้งานร่วมกันในหลายๆ Data Marts ทั่วทั้งองค์กร",
-        "เป็นตารางชั่วคราวที่ใช้พักข้อมูลระหว่างทำ Transformation ก่อนจะถูกทิ้งไป",
-        "เป็นตารางที่เก็บเฉพาะข้อมูล Surrogate Keys โดยไม่มี Attributes ใดๆ"
+        "เป็น Dimension ที่สร้างขึ้นมาเพื่อใช้กับ Fact Table เพียงตารางเดียว",
+        "เป็น Dimension ที่มีนิยามมาตรฐานเดียวกันและแชร์ใช้ร่วมกันได้ทั่วทั้งองค์กร",
+        "เป็นตารางชั่วคราวที่ใช้พักข้อมูลระหว่างการแปลงข้อมูลก่อนโหลดจริง",
+        "เป็นตารางที่เก็บเฉพาะ Surrogate Keys โดยไม่มีฟิลด์บรรยายข้อมูล"
       ],
       "answer": 1,
-      "explain": "Conformed Dimension คือมิติข้อมูลที่ผ่านการตกลงนิยามและโครงสร้างเป็นมาตรฐานเดียวกันทั่วทั้งองค์กร (เช่น dim_customer หรือ dim_date) ทำให้สามารถนำไป JOIN กับ Fact Table หลายชุดเพื่อเปรียบเทียบหรือวิเคราะห์ข้อมูลข้ามส่วนงานได้"
+      "explain": "Conformed Dimension คือมิติข้อมูลที่มีโครงสร้างและคำนิยามเป็นมาตรฐานเดียวกัน ซึ่งถูกแชร์ใช้งานในหลายๆ Data Marts ทั่วทั้งองค์กร"
     },
     {
-      "q": "ปัจจัยใดต่อไปนี้ที่มีอิทธิพลโดยตรงต่อ 'จำนวนแถว (Row Count)' และขนาดทางกายภาพของ Fact Table มากที่สุด",
+      "q": "ปัจจัยใดที่มีผลกระทบต่อจำนวนแถวและขนาดของ Fact Table มากที่สุด",
       "choices": [
-        "ชนิดของ Database Driver ที่ใช้เชื่อมต่อ (เช่น JDBC vs ODBC)",
-        "ระดับความละเอียดของข้อมูล (Granularity) ที่ถูกกำหนดขึ้นในการออกแบบ",
-        "รูปแบบของ Visual Components ที่เลือกใช้บน Dashboard",
+        "ชนิดของ Database Driver ที่ใช้เชื่อมต่อ",
+        "ระดับความละเอียดของ Granularity ที่กำหนด",
+        "รูปแบบของกราฟที่เลือกใช้บนหน้าแดชบอร์ด",
         "ความยาวของชื่อคอลัมน์ในตาราง Dimension"
       ],
       "answer": 1,
-      "explain": "Granularity เป็นตัวกำหนดว่า 1 แถวใน Fact Table คืออะไร หากกำหนด Grain ละเอียดระดับ Transaction Line Item ตารางจะมีจำนวนแถวมหาศาล แต่หากกำหนด Grain เป็น Monthly Summary ตารางจะมีจำนวนแถวน้อยลงอย่างมาก"
+      "explain": "Granularity เป็นตัวกำหนดว่า 1 แถวใน Fact Table เก็บข้อมูลระดับใด ซึ่งส่งผลโดยตรงต่อจำนวนแถวและขนาดของตาราง"
     },
     {
-      "q": "ในระบบข้อมูลของสถานพยาบาล รายการใดต่อไปนี้จัดว่ามีขอบเขตและลักษณะที่เหมาะสมในการกำหนดเป็น 'Subject Area' (Business Process)",
+      "q": "ในระบบข้อมูลของสถานพยาบาล รายการใดเหมาะสมที่สุดในการกำหนดเป็น Subject Area",
       "choices": [
-        "กระบวนการลงทะเบียนผู้ป่วยและการรับผู้ป่วยเข้าพักรักษาตัว (Patient Admission & Registration)",
-        "ฟิลด์ patient_national_id และ blood_pressure_systolic",
-        "การเขียนคำสั่ง SQL JOIN ระหว่างตารางแพทย์และตารางคนไข้",
-        "รายชื่อ Hard Drive ที่ติดตั้งใน Database Server"
+        "กระบวนการลงทะเบียนและรับผู้ป่วยเข้าพักรักษาตัว",
+        "ฟิลด์รหัสประจำตัวผู้ป่วยและค่าความดันโลหิต",
+        "คำสั่ง SQL สำหรับการเชื่อมตารางแพทย์กับคนไข้",
+        "รายชื่ออุปกรณ์จัดเก็บข้อมูลในเซิร์ฟเวอร์ฐานข้อมูล"
       ],
       "answer": 0,
-      "explain": "Subject Area (หรือ Business Process) คือกระบวนการทางธุรกิจหลักที่สร้างข้อมูลขึ้นมา เช่น การลงทะเบียนผู้ป่วย (Patient Admission), การจ่ายยา (Medication Dispensing) หรือการคิดค่ารักษาพยาบาล (Patient Billing)"
+      "explain": "Subject Area (Business Process) คือกระบวนการทางธุรกิจหลักที่ก่อให้เกิดข้อมูล เช่น การลงทะเบียนผู้ป่วย หรือการจ่ายยา"
     },
     {
-      "q": "ในแบบจำลองข้อมูล Financial Data Model เมทริกซ์ (Metrics) ใดต่อไปนี้มีความเหมาะสมที่สุดในการจัดเก็บเป็น Fact Measures",
+      "q": "ใน Financial Data Model เมทริกซ์ใดเหมาะสมที่สุดในการจัดเก็บเป็น Fact Measures",
       "choices": [
-        "General_Ledger_Account_Type, Chart_Of_Accounts_Category",
-        "Total_Operating_Expenses, Gross_Revenue, Net_Operating_Profit",
-        "Auditor_Name, Branch_Address, Department_Code",
-        "Fiscal_Period_Name, Currency_Symbol, Exchange_Rate_Source"
+        "ประเภทบัญชีแยกประเภท, หมวดหมู่ผังบัญชี",
+        "ค่าใช้จ่ายในการดำเนินงาน, รายได้รวม, กำไรสุทธิ",
+        "ชื่อผู้ตรวจสอบบัญชี, ที่อยู่สาขา, รหัสแผนก",
+        "ชื่อรอบระยะเวลาบัญชี, สัญลักษณ์สกุลเงิน, แหล่งที่มาของอัตราแลกเปลี่ยน"
       ],
       "answer": 1,
-      "explain": "ค่าใช้จ่ายในการดำเนินงาน (Expenses), รายได้รวม (Revenue) และกำไรสุทธิ (Net Profit) เป็นข้อมูลเชิงตัวเลขที่คำนวณและวัดผลได้ (Additive Numerical Measures) ซึ่งต้องจัดเก็บใน Financial Fact Table"
+      "explain": "ค่าใช้จ่าย รายได้ และกำไรสุทธิ เป็นข้อมูลเชิงตัวเลขที่นำมาคำนวณและวัดผลได้ จึงจัดเก็บใน Financial Fact Table"
     },
     {
-      "q": "ในแบบจำลองข้อมูล Human Resource (HR) Data Model เอนทิตีกลุ่มใดจัดเป็น Dimension Tables ทั้งหมด",
+      "q": "ในแบบจำลองข้อมูล HR เอนทิตีกลุ่มใดจัดเป็น Dimension Tables ทั้งหมด",
       "choices": [
-        "Employee_Dimension, Department_Dimension, Job_Position_Dimension, Time_Dimension",
-        "Employee_Turnover_Rate, Monthly_Salary_Paid, Training_Hours_Attended",
-        "Payroll_Fact_Table, Attendance_Fact_Table, Bonus_Fact_Table",
-        "Gross_Compensation, Tax_Deducted, Social_Security_Contribution"
+        "Employee, Department, Job Position, Time",
+        "Turnover Rate, Monthly Salary, Training Hours",
+        "Payroll Fact, Attendance Fact, Bonus Fact",
+        "Gross Compensation, Tax Deducted, Social Security"
       ],
       "answer": 0,
-      "explain": "พนักงาน (Employee), แผนก (Department), ตำแหน่ง (Job Position) และเวลา (Time) เป็นมิติแวดล้อมที่ใช้อธิบายคุณลักษณะ จึงจัดเป็น Dimension Tables ส่วนยอดเงินเดือนหรือชั่วโมงการฝึกอบรมจะเป็น Fact Measures"
+      "explain": "พนักงาน แผนก ตำแหน่ง และเวลา เป็นมิติแวดล้อมที่ใช้อธิบายคุณลักษณะ จึงจัดเป็น Dimension Tables"
     },
     {
-      "q": "คุณลักษณะ 4 ประการของ Data Warehouse ตามทฤษฎีคลาสสิกของ W.H. Inmon ประกอบด้วยอะไรบ้าง",
+      "q": "คุณลักษณะ 4 ประการของ Data Warehouse ตามทฤษฎีของ Inmon ประกอบด้วยอะไรบ้าง",
       "choices": [
         "Subject-Oriented, Integrated, Non-Volatile, Time-Variant",
         "Object-Oriented, Distributed, Real-Time, Schema-Free",
@@ -459,216 +459,216 @@
         "Federated, Transient, Graph-Based, High-Concurrency"
       ],
       "answer": 0,
-      "explain": "ทฤษฎีของ Inmon กำหนดคุณสมบัติหลัก 4 ประการของ Data Warehouse ได้แก่: 1. Subject-Oriented (เน้นตามหัวข้อธุรกิจ), 2. Integrated (รวบรวมเป็นมาตรฐานเดียว), 3. Non-Volatile (คงอยู่ถาวรไม่แก้ไขทับตามใจชอบ), 4. Time-Variant (มีมิติเวลาเพื่อดูข้อมูลย้อนหลัง)"
+      "explain": "คุณลักษณะ 4 ประการของ Data Warehouse ได้แก่ Subject-Oriented, Integrated, Non-Volatile และ Time-Variant"
     },
     {
-      "q": "โครงสร้างการจำแนกพื้นที่ในรูปแบบ 'ประเทศ (Country) -> ภูมิภาค (Region) -> จังหวัด (Province) -> อำเภอ (District)' ที่ทุกสาขามีระดับชั้นเท่ากันหมด จัดเป็น Hierarchy รูปแบบใด",
+      "q": "โครงสร้างพื้นที่ในรูปแบบ ประเทศ ไปยัง ภูมิภาค จังหวัด และอำเภอ ที่ทุกสาขามีระดับชั้นเท่ากัน จัดเป็น Hierarchy รูปแบบใด",
       "choices": [
         "Ragged Hierarchy",
-        "Balanced Hierarchy (ลำดับชั้นสมดุลที่มีความลึกของทุกเส้นทางเท่ากัน)",
+        "Balanced Hierarchy",
         "Unbalanced Hierarchy",
-        "Recursive Network Hierarchy"
+        "Network Hierarchy"
       ],
       "answer": 1,
-      "explain": "Balanced Hierarchy คือโครงสร้างลำดับชั้นที่มีความสมดุล โดยทุกเส้นทางจากจุดบนสุดไปยังจุดล่างสุดจะมีความลึกของระดับชั้น (Levels) เท่ากันอย่างสม่ำเสมอ"
+      "explain": "Balanced Hierarchy คือโครงสร้างลำดับชั้นที่มีความลึกของระดับชั้นเท่ากันในทุกเส้นทาง"
     },
     {
-      "q": "ในสถาปัตยกรรม Data Warehouse แบบ 3-tier ชั้น 'Presentation Layer' (Tier 3) ประกอบด้วยเครื่องมือและเทคโนโลยีกลุ่มใด",
+      "q": "ในสถาปัตยกรรม Data Warehouse แบบ 3-tier ชั้น Presentation Layer ประกอบด้วยเทคโนโลยีกลุ่มใด",
       "choices": [
-        "ระบบฐานข้อมูล Transactional OLTP (เช่น PostgreSQL, MySQL)",
-        "พื้นที่จัดเก็บไฟล์ดิบ Staging S3 Bucket",
-        "Business Intelligence & Visualization Tools (เช่น Power BI, Tableau, Looker, Metabase)",
-        "ETL Batch Scheduling Engines (เช่น Apache Airflow, Cron Job)"
+        "ฐานข้อมูลประมวลผลธุรกรรมแบบเดิม",
+        "พื้นที่จัดเก็บไฟล์ดิบในระบบ Cloud",
+        "เครื่องมือ Business Intelligence และแดชบอร์ด",
+        "ระบบจัดการตารางเวลาประมวลผลข้อมูล Batch"
       ],
       "answer": 2,
-      "explain": "Tier 3 หรือ Presentation Layer (Front-end Client Layer) คือชั้นที่ผู้ใช้งานระดับธุรกิจมีปฏิสัมพันธ์ด้วยโดยตรง ประกอบด้วยเครื่องมือ BI, แดชบอร์ด, การสร้างรายงาน และเครื่องมือ Data Discovery"
+      "explain": "Presentation Layer คือชั้นสำหรับผู้ใช้งานระดับธุรกิจ ประกอบด้วยเครื่องมือ BI แดชบอร์ด และรายงานต่างๆ"
     },
     {
-      "q": "ในระบบ Cloud Data Warehouse สมัยใหม่ (เช่น Snowflake, Google BigQuery) ฟังก์ชันการคำนวณแบบ In-Memory และ Massively Parallel Processing (MPP) สามารถนำมาใช้ทดแทนสิ่งใดในสถาปัตยกรรมแบบเดิมได้อย่างมีประสิทธิภาพ",
+      "q": "ใน Cloud Data Warehouse สมัยใหม่ ฟังก์ชันการประมวลผลแบบ MPP สามารถนำมาใช้ทดแทนสิ่งใดได้",
       "choices": [
-        "ทดแทนการทำ Data Governance และ Security Policies",
-        "ทดแทนการสร้าง Pre-aggregated Multi-dimensional OLAP Cubes แบบดั้งเดิม โดยสามารถประมวลผล On-the-fly Dynamic Aggregation ได้โดยตรง",
-        "ทดแทนกระบวนการรวบรวม Business Requirements",
-        "ทดแทนการใช้งาน Data Visualization Dashboards"
+        "ทดแทนการทำ Data Governance และความปลอดภัย",
+        "ทดแทนการสร้าง Multi-dimensional OLAP Cubes ล่วงหน้า",
+        "ทดแทนขั้นตอนการรวบรวม Business Requirements",
+        "ทดแทนการสร้างแดชบอร์ดสำหรับแสดงผลข้อมูล"
       ],
       "answer": 1,
-      "explain": "เนื่องจาก Cloud Data Warehouse สมัยใหม่มีพลังประมวลผลแบบ MPP และสถาปัตยกรรม Columnar ที่เร็วมาก จึงสามารถคำนวณ Aggregations ได้แบบ Real-time โดยไม่จำเป็นต้อง Pre-calculate และสร้าง OLAP Cubes ล่วงหน้าเหมือนในอดีต"
+      "explain": "Cloud Data Warehouse สมัยใหม่มีความเร็วสูงมาก จึงสามารถคำนวณ Aggregate แบบ Dynamic ได้ทันทีโดยไม่ต้องสร้าง OLAP Cubes ล่วงหน้า"
     },
     {
-      "q": "ข้อใดกล่าวถึงคุณสมบัติและการใช้งานของ 'OLAP Cube' ได้อย่างถูกต้อง",
+      "q": "ข้อใดกล่าวถึงคุณสมบัติของ OLAP Cube ได้ถูกต้องที่สุด",
       "choices": [
-        "เป็นฐานข้อมูลที่ถูกปรับแต่งมาเพื่อรองรับธุรกรรมการเงินที่มีการ INSERT/UPDATE นับหมื่นรายการต่อวินาที",
-        "เป็นโครงสร้างข้อมูลหลายมิติที่ประกอบด้วย Measures และ Dimensions ช่วยให้ผู้ใช้วิเคราะห์ข้อมูลแบบหลายมุมมองได้อย่างรวดเร็วผ่านคำสั่ง Slice, Dice, Drill-down",
-        "เป็นโครงสร้างที่ห้ามมีการ Aggregate ข้อมูลล่วงหน้า และต้องอ่านข้อมูลจาก Raw Staging เท่านั้น",
-        "เป็นรูปแบบการจัดเก็บข้อมูลแบบ Key-Value Store สำหรับแอปพลิเคชันมือถือ"
+        "ฐานข้อมูลที่ปรับแต่งมาเพื่อรองรับการเขียนข้อมูลความถี่สูง",
+        "โครงสร้างข้อมูลหลายมิติที่ช่วยให้วิเคราะห์ข้อมูลได้อย่างรวดเร็ว",
+        "โครงสร้างที่ห้ามมีการคำนวณสรุปผลข้อมูลล่วงหน้า",
+        "ระบบจัดเก็บข้อมูลแบบ Key-Value สำหรับแอปพลิเคชัน"
       ],
       "answer": 1,
-      "explain": "OLAP Cube จัดเก็บข้อมูลในรูปแบบ Multi-dimensional Array (ไฮเปอร์คิวบ์) ซึ่งมีค่าวัด (Measures) และมิติ (Dimensions) ช่วยให้ผู้ใช้สามารถ Slice (ตัดมุมมอง), Dice (เลือกช่วงย่อย), Drill-down (เจาะลึก) หรือ Roll-up (สรุปภาพรวม) ได้อย่างรวดเร็ว"
+      "explain": "OLAP Cube จัดเก็บข้อมูลในรูปแบบหลายมิติ ช่วยให้ผู้ใช้สามารถ Slice, Dice, Drill-down หรือ Roll-up ข้อมูลได้อย่างรวดเร็ว"
     },
     {
-      "q": "ในการทำ Requirement Workshop สำหรับกระบวนการ 'การปิดกะงานแคชเชียร์ (Cashier Shift Closure)' การจับคู่ข้อมูลกลุ่มใดถูกต้องตามหลัก Dimensional Modeling",
+      "q": "ในการทำ Workshop สำหรับกระบวนการปิดกะแคชเชียร์ การจับคู่ข้อมูลข้อใดถูกต้องตามหลัก Dimensional Modeling",
       "choices": [
-        "Fact: Total_Cash_Collected, Sales_Difference | Dimensions: Cashier_Employee, Shift_Time, Branch_Location, Register_Station",
-        "Fact: Cashier_Name, Branch_Address | Dimensions: Total_Sales_Amount",
-        "Fact: Register_Station_Code | Dimensions: Cash_Difference_Amount, Total_Refund",
-        "Fact: Shift_Date, Is_Weekend | Dimensions: Drawer_Starting_Cash"
+        "Fact: ยอดเงินสด, ผลต่างเงินสด | Dimensions: พนักงาน, เวลาของกะ, สาขา",
+        "Fact: ชื่อพนักงาน, ที่อยู่สาขา | Dimensions: ยอดขายรวมทั้งหมด",
+        "Fact: รหัสเครื่องคิดเงิน | Dimensions: ยอดเงินคืน, ยอดส่วนลด",
+        "Fact: วันที่ทำงาน, วันหยุด | Dimensions: เงินสดตั้งต้นในลิ้นชัก"
       ],
       "answer": 0,
-      "explain": "ค่าวัดที่เป็นตัวเลขเชิงปริมาณที่ใช้คำนวณ (เช่น ยอดเงินสดที่นับได้, ผลต่างเงินสด) ต้องเป็น Fact ส่วนบริบทของเหตุการณ์ (พนักงานแคชเชียร์, เวลาของกะ, สาขา, เครื่องคิดเงิน) ต้องเป็น Dimensions"
+      "explain": "ยอดเงินสดและผลต่างเป็นค่าวัดเชิงตัวเลขจึงเป็น Fact ส่วนพนักงาน เวลา และสาขา เป็นมิติแวดล้อมจึงเป็น Dimensions"
     },
     {
-      "q": "สถาปัตยกรรมการแบ่งคลังข้อมูลออกเป็นเลเยอร์ Staging, Clean/Silver, และ Mart/Gold จัดเป็นหัวใจสำคัญของขั้นตอนใดใน DW Lifecycle",
+      "q": "สถาปัตยกรรมที่แบ่งข้อมูลออกเป็น Staging, Clean และ Mart จัดเป็นหัวใจของขั้นตอนใดใน DW Lifecycle",
       "choices": [
-        "Requirement Specification (Step 1)",
-        "ELT / ETL Pipeline Design and Data Architecture (Step 3)",
-        "User Acceptance Testing (Step 7)",
-        "System Decommissioning (Step 8)"
+        "Requirement Specification",
+        "ELT Pipeline Design",
+        "User Acceptance Testing",
+        "System Decommissioning"
       ],
       "answer": 1,
-      "explain": "การวางสถาปัตยกรรมข้อมูลแบบ Layered Architecture (Staging -> Clean -> Mart) เพื่อทำ Data Cleansing, Transformation และการทำ Incremental Load เป็นสาระสำคัญของขั้นตอนที่ 3: ELT Design and Development"
+      "explain": "การวางสถาปัตยกรรมข้อมูลแบบแบ่งชั้นเพื่อทำ Cleansing และ Transformation จัดอยู่ในขั้นตอนที่ 3: ELT Design and Development"
     },
     {
-      "q": "หากองค์กรต้องการแนวทางการจัดการข้อมูลแบบ 'เรียบง่ายที่สุด (Simplest Approach)' โดยยอมรับได้ว่าหากข้อมูลที่อยู่ลูกค้าเปลี่ยน ข้อมูลเดิมจะถูกแทนที่ทันทีโดยไม่เก็บประวัติ ควรเลือกใช้เทคนิคใด",
+      "q": "หากต้องการวิธีจัดการข้อมูลที่เรียบง่ายที่สุดโดยยอมรับการเขียนทับข้อมูลเดิมโดยไม่เก็บประวัติ ควรเลือกใช้เทคนิคใด",
       "choices": [
         "SCD Type 0",
-        "SCD Type 1 (Direct Overwrite)",
-        "SCD Type 2 (Audit Row Versioning)",
-        "SCD Type 6 (Hybrid Multidimensional)"
+        "SCD Type 1",
+        "SCD Type 2",
+        "SCD Type 6"
       ],
       "answer": 1,
-      "explain": "SCD Type 1 เป็นวิธีที่ง่ายที่สุดและใช้พื้นที่จัดเก็บน้อยที่สุด เพราะเป็นการ Update เขียนทับข้อมูลเก่าด้วยข้อมูลใหม่โดยตรง โดยไม่เพิ่มแถวใหม่หรือคอลัมน์ใหม่ในตาราง"
+      "explain": "SCD Type 1 คือการเขียนทับข้อมูลเดิมด้วยข้อมูลใหม่ทันที เป็นวิธีที่ง่ายและประหยัดพื้นที่จัดเก็บที่สุด"
     },
     {
-      "q": "มิติข้อมูลประเภท 'SCD Type 0' (Fixed / Retain Original) มีพฤติกรรมอย่างไรเมื่อข้อมูลในระบบต้นทางมีการเปลี่ยนแปลง",
+      "q": "มิติข้อมูลประเภท SCD Type 0 มีพฤติกรรมอย่างไรเมื่อข้อมูลในระบบต้นทางเปลี่ยนแปลง",
       "choices": [
-        "ระบบจะสร้างแถวประวัติใหม่ทันทีพร้อมระบุวันที่เริ่มมีผล",
-        "ระบบจะไม่อัปเดตหรือเปลี่ยนแปลงค่าเดิมใน Data Warehouse เลย โดยถือว่าค่านั้นต้องคงสภาพเดิมตลอดไป (Immutable / Static)",
-        "ระบบจะแยกตารางออกเป็นสองตารางโดยอัตโนมัติ",
-        "ระบบจะส่ง Alert แจ้งเตือนไปยัง Data Engineer ทุกครั้งเพื่อขออนุมัติเขียนทับ"
+        "สร้างแถวประวัติใหม่ทันทีพร้อมระบุวันที่เริ่มมีผล",
+        "คงค่าเดิมไว้โดยไม่มีการแก้ไขหรือเปลี่ยนแปลงใดๆ",
+        "แยกข้อมูลออกเป็นสองตารางโดยอัตโนมัติ",
+        "ส่งการแจ้งเตือนเพื่อขออนุมัติเขียนทับข้อมูลเดิม"
       ],
       "answer": 1,
-      "explain": "SCD Type 0 ใช้สำหรับมิติข้อมูลที่ไม่ควรมีการเปลี่ยนแปลงเลยหลังจากบันทึกครั้งแรก (เช่น Original_Date_Of_Birth หรือ Initial_Credit_Score_At_Registration) แม้ระบบต้นทางจะส่งค่าใหม่มาระบบ DW ก็จะเพิกเฉยและคงค่าเดิมไว้"
+      "explain": "SCD Type 0 ใช้สำหรับข้อมูลที่ไม่ควรเปลี่ยนแปลงเลยหลังบันทึกครั้งแรก ระบบจะเพิกเฉยต่อการเปลี่ยนแปลงและคงค่าเดิมไว้"
     },
     {
-      "q": "บริษัทสตาร์ทอัปที่มีทรัพยากรจำกัด ต้องการสร้างระบบ Analytics เพื่อดูรายงานยอดขายรายวันให้เสร็จสมบูรณ์อย่างรวดเร็วและต่อเชื่อมกับ BI Tools ได้ง่าย ควรเลือกใช้สถาปัตยกรรมใด",
+      "q": "บริษัทสตาร์ทอัปที่ต้องการสร้างระบบดูยอดขายให้เสร็จอย่างรวดเร็วและต่อกับ BI Tools ได้ง่าย ควรเลือกใช้สถาปัตยกรรมใด",
       "choices": [
-        "Inmon Enterprise Data Warehouse ด้วยโมเดล 3NF เต็มรูปแบบ",
-        "Kimball Dimensional Model (Star Schema) ที่เริ่มจาก Sales Data Mart",
-        "Data Vault 2.0 สถาปัตยกรรม Hub-and-Spoke เต็มขั้น",
-        "การต่อตรงไปยัง Transactional Production Database แบบไม่มี Data Warehouse"
+        "Inmon Enterprise Data Warehouse ด้วยโมเดล 3NF",
+        "Kimball Dimensional Model ด้วย Star Schema",
+        "Data Vault 2.0 ด้วยโครงสร้าง Hubs และ Links",
+        "เชื่อมต่อกับฐานข้อมูลระบบเดิมโดยไม่มี Data Warehouse"
       ],
       "answer": 1,
-      "explain": "แนวคิด Kimball (Bottom-up) ที่ใช้ Star Schema มีความซับซ้อนน้อยกว่า ส่งมอบคุณค่าได้เร็ว (Fast Time-to-Market) เหมาะกับเครื่องมือ BI และสามารถเริ่มจาก Data Mart เล็กๆ แล้วค่อยต่อยอดขยายระบบได้ตามการเติบโตของธุรกิจ"
+      "explain": "แนวคิด Kimball ที่ใช้ Star Schema มีความซับซ้อนน้อยกว่า ส่งมอบคุณค่าได้เร็ว และเชื่อมต่อกับเครื่องมือ BI ได้ง่าย"
     },
     {
-      "q": "ในสถาปัตยกรรมแบบ Inmon ข้อมูลใน Enterprise Data Warehouse (EDW) จะถูกแปลงและกระจายออกไปสู่ระบบใดเพื่อให้ผู้ใช้งานระดับแผนกนำไปวิเคราะห์",
+      "q": "ในสถาปัตยกรรมแบบ Inmon ข้อมูลจาก Enterprise Data Warehouse จะถูกส่งต่อไปยังระบบใดเพื่อให้แผนกต่างๆ ใช้งาน",
       "choices": [
         "Staging Flat Files",
-        "Dependent Data Marts (สำหรับตอบสนองความต้องการเฉพาะของแต่ละหน่วยธุรกิจ)",
-        "OLTP Operational Databases",
+        "Dependent Data Marts",
+        "Production Databases",
         "Raw Message Queues"
       ],
       "answer": 1,
-      "explain": "ในแนวคิด Inmon (Top-down) ข้อมูลจะถูกรวบรวมไว้ที่ Enterprise Data Warehouse (EDW) ในรูปแบบ 3NF ก่อน จากนั้นจึงแปลงและคัดกรองออกเป็น Dependent Data Marts ในรูปแบบ Dimensional สำหรับให้แผนกต่างๆ ใช้งาน"
+      "explain": "Inmon ใช้แนวคิด Top-down โดยสร้าง EDW กลางในรูปแบบ 3NF แล้วจึงแตกข้อมูลออกเป็น Dependent Data Marts ให้แผนกต่างๆ นำไปใช้งาน"
     },
     {
-      "q": "กระบวนการทำ 'Data Quality Unit Testing' และ 'Source-to-Target Reconciliation' จัดเป็นกิจกรรมหลักในขั้นตอนใดของ DW Lifecycle",
+      "q": "กระบวนการทำ Data Quality Testing และ Source-to-Target Reconciliation จัดอยู่ในขั้นตอนใดของ DW Lifecycle",
       "choices": [
         "Requirement Elicitation",
-        "Conceptual Data Modelling",
-        "Test and Deployment (Step 7)",
+        "Conceptual Modelling",
+        "Test and Deployment",
         "Dashboard Wireframing"
       ],
       "answer": 2,
-      "explain": "ขั้นตอน Test and Deployment (Step 7) เน้นการตรวจสอบความถูกต้องของข้อมูล (Data Reconciliation), การทดสอบ Unit Test ของ Logic การคำนวณ และการตรวจสอบว่าข้อมูลจาก Source ถูกโหลดเข้า Target อย่างครบถ้วนสมบูรณ์"
+      "explain": "การตรวจสอบความถูกต้องและการสอบยอดข้อมูลระหว่างต้นทางกับปลายทาง จัดอยู่ในขั้นตอนที่ 7: Test and Deployment"
     },
     {
-      "q": "ฟิลด์ใดต่อไปนี้จัดว่าเป็น 'Surrogate Key' ที่แท้จริงในตาราง dim_customer",
+      "q": "ฟิลด์ใดต่อไปนี้จัดว่าเป็น Surrogate Key ในตาราง dim_customer",
       "choices": [
-        "National_Identification_Number (เลขประจำตัวประชาชน 13 หลัก)",
-        "Passport_Registration_Code (รหัสหนังสือเดินทาง)",
-        "Customer_SK (คีย์ตัวเลขจำนวนเต็มที่ระบบ Data Warehouse สร้างขึ้นมาแบบ Sequential / Auto-increment)",
-        "Primary_Email_Address (อีเมลหลักที่ลูกค้าใช้สมัครสมาชิก)"
+        "เลขประจำตัวประชาชน 13 หลัก",
+        "รหัสหนังสือเดินทางของลูกค้า",
+        "ตัวเลขลำดับจำนวนเต็มที่ระบบสร้างขึ้นอัตโนมัติ",
+        "ที่อยู่อีเมลหลักที่ใช้สมัครสมาชิก"
       ],
       "answer": 2,
-      "explain": "Surrogate Key คือคีย์จำลอง (System-generated artificial key) ที่ไม่มีความหมายในทางธุรกิจ มักเป็นตัวเลขจำนวนเต็ม (Integer) รันอัตโนมัติ สร้างขึ้นโดยระบบ Data Warehouse เพื่อใช้เป็น Primary Key ของตาราง Dimension และแยกแยะเวอร์ชันของข้อมูล"
+      "explain": "Surrogate Key คือคีย์จำลองที่ไม่มีความหมายทางธุรกิจ ระบบสร้างขึ้นมาเพื่อใช้เป็น Primary Key ของตาราง Dimension"
     },
     {
-      "q": "เหตุใดการออกแบบ Data Warehouse จึงนิยมสร้างตาราง 'dim_date' แยกออกมาโดยเฉพาะ แทนที่จะใช้ฟิลด์ Datetime จาก Fact Table ทำการ Query โดยตรง",
+      "q": "เหตุใดการออกแบบ Data Warehouse จึงนิยมสร้างตาราง dim_date แยกออกมาโดยเฉพาะ",
       "choices": [
-        "เพราะ Relational Database ไม่รองรับการจัดเก็บข้อมูลประเภท Datetime",
-        "เพราะช่วยให้สามารถเพิ่มมิติการวิเคราะห์พิเศษที่คำนวณล่วงหน้าไว้ได้ เช่น วันหยุดนักขัตฤกษ์, ไตรมาสทางบัญชี, วันทำงาน, และฤดูกาล ซึ่งช่วยเพิ่มประสิทธิภาพและลดความซับซ้อนของ SQL Query",
-        "เพื่อหลีกเลี่ยงการทำ Index บนตาราง Fact",
-        "เป็นข้อบังคับทางกฎหมายในการจัดเก็บข้อมูลธุรกรรมอิเล็กทรอนิกส์"
+        "เพราะฐานข้อมูลไม่รองรับการเก็บข้อมูลประเภทเวลา",
+        "เพื่อเพิ่มมิติการวิเคราะห์พิเศษเช่นวันหยุดหรือไตรมาส",
+        "เพื่อหลีกเลี่ยงการสร้าง Index บนตาราง Fact",
+        "เป็นข้อบังคับตามมาตรฐานความปลอดภัยของข้อมูล"
       ],
       "answer": 1,
-      "explain": "ตาราง Date Dimension ช่วยให้ระบบมี Attributes เชิงวิเคราะห์ที่หลากหลาย (เช่น Is_Public_Holiday, Fiscal_Quarter, Season, Week_Of_Year) ทำให้การวิเคราะห์พฤติกรรมยอดขายตามบริบทของเวลาทำได้ง่ายขึ้น และลดภาระการคำนวณ Date Functions ซ้ำๆ บน Fact Table ขนาดใหญ่"
+      "explain": "ตาราง Date Dimension ช่วยให้มี Attributes เชิงวิเคราะห์ที่หลากหลาย เช่น วันหยุด ไตรมาส หรือฤดูกาล ทำให้การวิเคราะห์ข้อมูลสะดวกรวดเร็วขึ้น"
     },
     {
-      "q": "สถาปัตยกรรมแบบ 'Data Vault' มีการจัดแบ่งโครงสร้างของตารางออกเป็น 3 องค์ประกอบหลักตามข้อใด",
+      "q": "สถาปัตยกรรมแบบ Data Vault มีการแบ่งโครงสร้างของตารางออกเป็น 3 องค์ประกอบหลักตามข้อใด",
       "choices": [
         "Facts, Dimensions, Hierarchies",
-        "Hubs (Business Keys), Links (Relationships / Associations), Satellites (Context / Descriptive Data & History)",
-        "Staging, Operational Data Store, Presentation",
+        "Hubs, Links, Satellites",
+        "Staging, ODS, Presentation",
         "Bronze, Silver, Gold"
       ],
       "answer": 1,
-      "explain": "Data Vault Modeling แบ่งโครงสร้างหลักเป็น: 1. Hubs (เก็บ Business Keys), 2. Links (เก็บความสัมพันธ์ระหว่าง Hubs), 3. Satellites (เก็บข้อมูลเชิงบรรยายและประวัติการเปลี่ยนแปลงตามช่วงเวลา) เพื่อให้ระบบรองรับการ Audit และขยายตัวได้อย่างรวดเร็ว"
+      "explain": "Data Vault แบ่งโครงสร้างหลักเป็น Hubs (Business Keys), Links (ความสัมพันธ์) และ Satellites (ข้อมูลเชิงบรรยายและประวัติ)"
     },
     {
-      "q": "คุณลักษณะ 'Integrated' ของ Data Warehouse หมายถึงสิ่งใดในการจัดการข้อมูลจากหลายระบบ",
+      "q": "คุณลักษณะ Integrated ของ Data Warehouse หมายถึงข้อใด",
       "choices": [
-        "การต่อเชื่อมข้อมูลผ่านสายเคเบิล Fiber Optic ความเร็วสูง",
-        "การรวบรวมข้อมูลที่มีความหลากหลายจากหลาย Source Systems มาผ่านกระบวนการแปลงให้มีโครงสร้าง, หน่วยวัด, การเข้ารหัส และคำนิยามที่เป็นมาตรฐานเดียวกันทั้งองค์กร",
-        "การอนุญาตให้ผู้ใช้ทุกคนในองค์กรสามารถแก้ไขข้อมูลในฐานข้อมูลได้โดยตรง",
-        "การจัดเก็บข้อมูลในรูปแบบไฟล์ Unstructured Data โดยไม่มีการกำหนด Schema"
+        "การเชื่อมต่อระบบด้วยสายส่งสัญญาณความเร็วสูง",
+        "การรวบรวมและแปลงข้อมูลจากหลายระบบให้อยู่ในมาตรฐานเดียวกัน",
+        "การอนุญาตให้ผู้ใช้งานทุกคนแก้ไขข้อมูลในระบบได้โดยตรง",
+        "การจัดเก็บข้อมูลโดยไม่มีการกำหนดโครงสร้างของ Schema"
       ],
       "answer": 1,
-      "explain": "Integrated (ความบูรณาการ) หมายถึงการแก้ไขความไม่สอดคล้องของข้อมูลจากหลายแหล่ง (เช่น ระบบ A ใช้ M/F, ระบบ B ใช้ 1/2 สำหรับเพศ) โดยนำมาแปลงให้อยู่ในมาตรฐานเดียวกัน (Standardization) ก่อนจัดเก็บลงใน Data Warehouse"
+      "explain": "Integrated หมายถึงการรวบรวมข้อมูลจากหลายแหล่งที่มีรูปแบบแตกต่างกัน มาปรับเปลี่ยนให้อยู่ในมาตรฐานและนิยามเดียวกันทั่วทั้งองค์กร"
     },
     {
-      "q": "ในกรณีศึกษาของธุรกิจเช่ายืมอุปกรณ์ (Rental Business) กิจกรรม 'การยืมอุปกรณ์' และ 'การคืนอุปกรณ์' ควรกำหนดบทบาทเป็นสิ่งใดในการออกแบบ Dimensional Model",
+      "q": "ในธุรกิจให้เช่าอุปกรณ์ กิจกรรม การยืม และ การคืนอุปกรณ์ ควรถูกกำหนดบทบาทเป็นสิ่งใดใน Data Model",
       "choices": [
         "Degenerate Dimensions",
-        "Slowly Changing Dimension Type 3",
-        "Business Processes ที่จะนำไปสู่การสร้าง Fact Tables (เช่น Rental Transaction Fact และ Return Transaction Fact)",
+        "Slowly Changing Dimensions",
+        "Business Processes สำหรับสร้าง Fact Tables",
         "Static Non-Conformed Dimensions"
       ],
       "answer": 2,
-      "explain": "เหตุการณ์การยืมและการคืนเป็นธุรกรรมหลักของธุรกิจ (Core Business Events) จึงต้องถูกกำหนดเป็น Business Processes บน Bus Matrix และนำไปออกแบบเป็น Fact Tables เพื่อวัดผลปริมาณและระยะเวลาการเช่า"
+      "explain": "การยืมและการคืนอุปกรณ์เป็นธุรกรรมหลักของธุรกิจ จึงควรกำหนดเป็น Business Processes เพื่อนำไปออกแบบเป็น Fact Tables"
     },
     {
-      "q": "ในตาราง Dimension ที่จัดการประวัติแบบ SCD Type 2 คอลัมน์คู่ใดต่อไปนี้ที่มักถูกใช้เพื่อระบุช่วงเวลาที่ข้อมูลนั้นมีผลบังคับใช้ (Effective Date Range)",
+      "q": "ในตาราง Dimension แบบ SCD Type 2 คอลัมน์คู่ใดมักใช้ระบุช่วงเวลาที่ข้อมูลมีผลใช้งาน",
       "choices": [
-        "Create_By และ Update_By",
-        "Valid_From (Effective Date) และ Valid_To (Expiration Date) ร่วมกับ Is_Current Flag",
+        "Created_By และ Updated_By",
+        "Valid_From และ Valid_To",
         "Min_Value และ Max_Value",
-        "Staging_Timestamp และ Clean_Timestamp"
+        "Staging_Time และ Clean_Time"
       ],
       "answer": 1,
-      "explain": "SCD Type 2 มักใช้คอลัมน์ valid_from และ valid_to (เช่น 2023-01-01 ถึง 2023-12-31) พร้อมทั้งฟิลด์ is_current (True/False) เพื่อระบุว่าข้อมูลในแถวนั้นถูกต้องและใช้งานได้ในช่วงเวลาใด"
+      "explain": "SCD Type 2 นิยมใช้คอลัมน์ valid_from และ valid_to ร่วมกับ is_current flag เพื่อระบุช่วงเวลาที่ข้อมูลในแถวนั้นมีผลบังคับใช้"
     },
     {
-      "q": "กิจกรรมใดต่อไปนี้ ไม่จัดอยู่ ภายใต้ขอบเขตงานของ 'ELT / ETL Design and Development' (Step 3)",
+      "q": "กิจกรรมใดต่อไปนี้ ไม่จัดอยู่ ในขอบเขตงานของ ELT Pipeline Development",
       "choices": [
-        "การกำหนดกลยุทธ์การโหลดข้อมูลแบบ Incremental Data Load",
-        "การออกแบบ Logic ในการแปลงข้อมูลแบบ Slowly Changing Dimensions (SCD)",
-        "การสร้าง Interactive Visual Dashboard และจัดวาง Layout บน Power BI",
-        "การทำ Data Cleansing และ Transformation ระหว่าง Staging สู่ Data Warehouse"
+        "การกำหนดกลยุทธ์การโหลดข้อมูลแบบ Incremental",
+        "การออกแบบตรรกะการแปลงข้อมูลแบบ SCD",
+        "การสร้างและจัดวาง Visual Layout บน Power BI",
+        "การทำ Data Cleansing จาก Staging สู่ Data Warehouse"
       ],
       "answer": 2,
-      "explain": "การสร้าง Visual Dashboard, การจัดวาง Widget และการออกแบบรายงานด้วย Power BI จัดอยู่ในขั้นตอน UI & Consumption Development (Step 5) ไม่ใช่งานของ Data Pipeline / ELT Development"
+      "explain": "การสร้างและจัดวาง Visual Layout บน Power BI จัดอยู่ในขั้นตอน UI Development ไม่ใช่งานของ ELT Pipeline Development"
     },
     {
-      "q": "การจัดทำ 'Data Dictionary' หรือ 'Data Catalog' มีความสำคัญและส่งผลต่อความสำเร็จในขั้นตอนใดของ DW Lifecycle มากที่สุด",
+      "q": "การจัดทำ Data Dictionary หรือ Data Catalog มีประโยชน์สูงสุดในขั้นตอนใดของ DW Lifecycle",
       "choices": [
-        "UI & Consumption Layer Development (ช่วยให้ BI Developers และ Data Analysts เข้าใจความหมายและที่มาของข้อมูลในตารางต่างๆ เพื่อสร้างรายงานได้อย่างถูกต้อง)",
-        "Network Infrastructure Setup",
-        "Physical Disk Formatting",
-        "Operating System Patching"
+        "UI Development เพื่อช่วยให้ผู้ใช้เข้าใจและสร้างรายงานได้ถูกต้อง",
+        "Network Infrastructure Setup เพื่อวางระบบเครือข่าย",
+        "Physical Disk Formatting เพื่อจัดสรรพื้นที่จัดเก็บ",
+        "Operating System Patching เพื่ออัปเดตความปลอดภัยระบบ"
       ],
       "answer": 0,
-      "explain": "Data Dictionary หรือ Data Catalog ช่วยอธิบายคำนิยาม, Business Logic, ชนิดข้อมูล และที่มาของแต่ละ Attributes ทำให้ผู้สร้าง Dashboard (BI Developers) และผู้ใช้งานทางธุรกิจ (Business Users) สามารถเลือกใช้ฟิลด์ข้อมูลในการวิเคราะห์ได้อย่างถูกต้องและไม่เข้าใจผิด"
+      "explain": "Data Dictionary ช่วยอธิบายความหมายและที่มาของข้อมูล ทำให้ผู้สร้างรายงานและผู้ใช้งานทางธุรกิจสามารถเลือกใช้ข้อมูลในการวิเคราะห์ได้อย่างถูกต้อง"
     }
   ]
 }
