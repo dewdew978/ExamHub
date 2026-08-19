@@ -5,12 +5,14 @@ import { EyeIcon, EyeOffIcon, Lock } from 'lucide-react';
 export default function Login({ onLogin, onClose, authRequiredMessage }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false); // Toggle state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -18,8 +20,13 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
     setError(null);
     setEmailError('');
     setPasswordError('');
+    setNicknameError('');
 
     let hasError = false;
+    if (isSignUp && !nickname.trim()) {
+      setNicknameError('กรุณากรอกชื่อเล่น');
+      hasError = true;
+    }
     if (!email) {
       setEmailError('กรุณากรอกอีเมล');
       hasError = true;
@@ -41,6 +48,12 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: trimmedEmail,
           password,
+          options: {
+            data: {
+              nickname: nickname.trim(),
+              avatar_emoji: '🎓'
+            }
+          }
         });
         if (signUpError) throw signUpError;
         if (data?.user) {
@@ -123,6 +136,37 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
         
         <form noValidate onSubmit={handleAuth} className="grid gap-6" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            
+            {/* Nickname Input Field for Sign Up */}
+            {isSignUp && (
+              <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label htmlFor="nickname" style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                  ชื่อเล่น (Nickname) <span style={{ color: 'var(--accent)' }}>*</span>
+                </label>
+                <input 
+                  id="nickname"
+                  type="text" 
+                  placeholder="เช่น เดว, โฟกัส, นัท"
+                  value={nickname} 
+                  maxLength={30}
+                  onChange={(e) => {
+                    setNickname(e.target.value);
+                    if (nicknameError) setNicknameError('');
+                  }}
+                  style={{ 
+                    width: '100%', padding: '0.6rem 0.75rem', borderRadius: '8px', 
+                    border: `1px solid ${nicknameError ? 'var(--error)' : 'var(--border-color)'}`, 
+                    background: 'var(--surface-hover)', color: 'var(--text)',
+                    fontSize: '0.875rem', transition: 'all 0.2s ease',
+                    outline: 'none', boxShadow: nicknameError ? '0 0 0 2px rgba(255,0,0,0.1)' : 'none'
+                  }}
+                  onFocus={(e) => !nicknameError && (e.target.style.boxShadow = 'var(--focus-ring)', e.target.style.borderColor = 'var(--accent)')}
+                  onBlur={(e) => !nicknameError && (e.target.style.boxShadow = 'none', e.target.style.borderColor = 'var(--border-color)')}
+                />
+                {nicknameError && <span className="animate-fade-in" style={{ color: 'var(--error)', fontSize: '0.75rem', marginTop: '2px' }}>{nicknameError}</span>}
+              </div>
+            )}
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label htmlFor="email" style={{ fontSize: '0.875rem', fontWeight: 500 }}>Email address</label>
               <input 
@@ -235,6 +279,9 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
             onClick={() => {
               setIsSignUp(!isSignUp);
               setError(null);
+              setEmailError('');
+              setPasswordError('');
+              setNicknameError('');
             }}
             style={{ 
               background: 'none', border: 'none', color: 'var(--accent)', 

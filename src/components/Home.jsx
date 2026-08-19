@@ -1,10 +1,29 @@
-import { useState } from 'react';
-import { FileText, Folder, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileText, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle } from 'lucide-react';
 
 export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport }) {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedExamType, setSelectedExamType] = useState('All');
+  
+  const [showGreeting, setShowGreeting] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    const fadeTimer = setTimeout(() => {
+      setIsFadingOut(true);
+    }, 4000);
+
+    const removeTimer = setTimeout(() => {
+      setShowGreeting(false);
+    }, 4600);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(removeTimer);
+    };
+  }, [user]);
 
   const totalQuestions = subjects.reduce((sum, s) => sum + s.questionCount, 0);
 
@@ -326,7 +345,32 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
 
   return (
     <div className="animate-fade-in">
-      <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', padding: '4rem 0 2rem' }}>
+      <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', padding: '4rem 0 2rem', position: 'relative' }}>
+        {user && showGreeting && (
+          <div style={{
+            position: 'absolute',
+            top: '1rem',
+            left: '50%',
+            transform: isFadingOut ? 'translate(-50%, -6px)' : 'translate(-50%, 0)',
+            opacity: isFadingOut ? 0 : 1,
+            transition: 'opacity 0.6s ease, transform 0.6s ease',
+            pointerEvents: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '0.35rem 0.9rem',
+            borderRadius: '999px',
+            background: 'var(--surface-hover)',
+            boxShadow: 'var(--shadow-border)',
+            fontSize: '0.8125rem',
+            fontWeight: 500,
+            color: 'var(--text)',
+            whiteSpace: 'nowrap',
+            zIndex: 10
+          }}>
+            <span>ยินดีต้อนรับคุณ <strong style={{ color: 'var(--accent)' }}>{user?.user_metadata?.nickname || user?.user_metadata?.full_name || user?.email?.split('@')[0]}</strong></span>
+          </div>
+        )}
+
         <h1 style={{ fontSize: '48px', fontWeight: 600, letterSpacing: '-2.4px', margin: '0 0 1rem 0', textWrap: 'balance' }}>
           ฝึกทำข้อสอบทุกวิชาในที่เดียว
         </h1>

@@ -8,7 +8,8 @@ import Login from './components/Login';
 import ScoreHistory from './components/ScoreHistory';
 import Report from './components/Report';
 import AdminDashboard from './components/AdminDashboard';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck } from 'lucide-react';
+import UserSettings from './components/UserSettings';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import './index.css';
 
@@ -351,7 +352,7 @@ function App() {
           
           <div style={{ position: 'relative' }}>
             <button 
-              className={`btn ${['schedule', 'history', 'report', 'admin_reports'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
+              className={`btn ${['schedule', 'history', 'report', 'admin_reports', 'settings'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
               onClick={() => setShowMenu(!showMenu)}
               style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
             >
@@ -379,9 +380,41 @@ function App() {
                     flexDirection: 'column',
                     overflow: 'hidden',
                     zIndex: 50,
-                    minWidth: '180px'
+                    minWidth: '200px'
                   }}
                 >
+                  {user && (
+                    <button 
+                      style={{
+                        fontFamily: 'inherit',
+                        padding: '0.75rem 1rem',
+                        background: currentView === 'settings' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                        color: currentView === 'settings' ? 'var(--accent)' : 'var(--text)',
+                        border: 'none',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem',
+                        borderBottom: '1px solid var(--border)',
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                      onClick={() => {
+                        setCurrentView('settings');
+                        setShowMenu(false);
+                      }}
+                      onMouseOver={(e) => {
+                        if (currentView !== 'settings') e.currentTarget.style.background = 'var(--card)';
+                      }}
+                      onMouseOut={(e) => {
+                        if (currentView !== 'settings') e.currentTarget.style.background = 'transparent';
+                      }}
+                    >
+                      <User size={14} color="var(--accent)" />
+                      <span>ข้อมูลส่วนตัว & ตั้งค่า</span>
+                    </button>
+                  )}
                   <button 
                     style={{
                       fontFamily: 'inherit',
@@ -511,7 +544,7 @@ function App() {
           </button>
           
           {user ? (
-            <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(true)} title={user.email}>
+            <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(true)} title={`ออกจากระบบ (${user.email})`}>
               <LogOut size={16} />
             </button>
           ) : (
@@ -559,6 +592,53 @@ function App() {
                   maxWidth: 'calc(100vw - 2rem)'
                 }}
               >
+                {/* 0. ข้อมูลผู้ใช้ & ตั้งค่าโปรไฟล์ */}
+                {user && (
+                  <button 
+                    style={{
+                      fontFamily: 'inherit',
+                      padding: '0.875rem 1rem',
+                      background: currentView === 'settings' ? 'var(--surface-hover)' : 'rgba(0, 112, 243, 0.05)',
+                      color: currentView === 'settings' ? 'var(--accent)' : 'var(--text)',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      width: '100%',
+                      borderBottom: '1px solid var(--border-divider)'
+                    }}
+                    onClick={() => {
+                      setCurrentView('settings');
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: 'var(--surface)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.1rem',
+                      boxShadow: 'var(--shadow-sm)'
+                    }}>
+                      {user?.user_metadata?.avatar_emoji || '🎓'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+                      <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {user?.user_metadata?.nickname || user?.email?.split('@')[0]}
+                      </span>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--accent)' }}>
+                        ตั้งค่าโปรไฟล์ส่วนตัว & รหัสผ่าน
+                      </span>
+                    </div>
+                  </button>
+                )}
+
                 {/* 1. หน้าหลัก */}
                 <button 
                   style={{
@@ -913,6 +993,35 @@ function App() {
               บัญชีของคุณ ({user.email}) ไม่ใช่บัญชีผู้ดูแลระบบ (Admin) ไม่สามารถดูรายการรายงานปัญหาได้
             </p>
             <button className="btn btn-primary" onClick={goHome}>กลับสู่หน้าหลัก</button>
+          </div>
+        )}
+        {currentView === 'settings' && user && (
+          <UserSettings 
+            user={user} 
+            onBack={goHome} 
+            onUserUpdated={(updatedUser) => setUser(updatedUser)} 
+            totalScore={totalScore}
+            theme={theme}
+            onToggleTheme={toggleTheme}
+          />
+        )}
+        {currentView === 'settings' && !user && (
+          <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '3rem auto', borderRadius: '16px' }}>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%',
+              background: 'rgba(0, 112, 243, 0.12)', color: 'var(--accent)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 1.5rem'
+            }}>
+              <User size={36} />
+            </div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+              กรุณาเข้าสู่ระบบ
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+              กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูลส่วนตัวและตั้งค่าการใช้งาน
+            </p>
+            <button className="btn btn-primary" onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
           </div>
         )}
       </main>
