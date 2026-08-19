@@ -14,7 +14,6 @@ import {
   Settings, 
   Palette, 
   BookOpen, 
-  Award, 
   Shuffle
 } from 'lucide-react';
 import { supabase, checkIsAdmin } from '../lib/supabase';
@@ -24,7 +23,7 @@ const AVATAR_EMOJIS = [
   '🎯', '🌟', '🐱', '🤖', '🏆', '🔥', '🧠', '☕'
 ];
 
-export default function UserSettings({ user, onBack, onUserUpdated, totalScore = 0, theme, onToggleTheme }) {
+export default function UserSettings({ user, onBack, onUserUpdated, theme, onToggleTheme }) {
   const metadata = user?.user_metadata || {};
   const isAdmin = checkIsAdmin(user);
 
@@ -136,41 +135,17 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
     }
   };
 
-  // Get user display name for live card preview
-  const displayNickname = nickname.trim() || user?.email?.split('@')[0] || 'ผู้เรียน';
-
-  const NAV_ITEMS = [
-    {
-      id: 'profile',
-      label: 'ข้อมูลโปรไฟล์ส่วนตัว',
-      sublabel: 'ชื่อเล่น, Avatar, คำคม',
-      icon: User,
-    },
-    {
-      id: 'preferences',
-      label: 'การตั้งค่าระบบ & ข้อสอบ',
-      sublabel: 'ธีม, ตัวจับเวลา, KaTeX',
-      icon: Settings,
-    },
-    {
-      id: 'security',
-      label: 'ความปลอดภัย & รหัสผ่าน',
-      sublabel: 'เปลี่ยนรหัสผ่าน, บัญชี',
-      icon: Key,
-    }
-  ];
-
   return (
-    <div className="animate-fade-in user-settings-wrapper">
+    <div className="user-settings-page animate-fade-in">
       
-      {/* Scoped Responsive CSS */}
+      {/* Scoped CSS for clean responsive layout */}
       <style>{`
-        .user-settings-wrapper {
-          max-width: 1020px;
+        .user-settings-page {
+          max-width: 960px;
           margin: 1.5rem auto 3.5rem;
           padding: 0 1rem;
         }
-        .user-settings-header {
+        .settings-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -179,100 +154,116 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
           border-bottom: 1px solid var(--border-divider);
           gap: 1rem;
         }
-        .user-settings-layout {
+        .settings-header-left {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        .settings-header-left h1 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin: 0;
+          letter-spacing: -0.3px;
+        }
+        .settings-header-left p {
+          font-size: 0.8125rem;
+          color: var(--text-muted);
+          margin: 0.15rem 0 0 0;
+        }
+        .settings-badge {
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.3rem 0.75rem;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.375rem;
+          flex-shrink: 0;
+        }
+
+        /* Desktop Layout: 2 Columns (Sidebar + Content) */
+        .settings-grid {
           display: flex;
           gap: 1.5rem;
           align-items: flex-start;
         }
-        .user-settings-sidebar {
-          width: 280px;
-          min-width: 260px;
+        .settings-nav {
+          width: 240px;
           flex-shrink: 0;
           display: flex;
           flex-direction: column;
-          gap: 1rem;
-        }
-        .user-settings-profile-card {
-          padding: 1.25rem;
-          border-radius: 14px;
-          background: linear-gradient(135deg, var(--card) 0%, var(--surface-hover) 100%);
-          border: 1px solid var(--border-color);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          gap: 0.75rem;
-        }
-        .user-settings-avatar {
-          width: 64px;
-          height: 64px;
-          border-radius: 50%;
+          gap: 0.375rem;
           background: var(--surface);
-          box-shadow: var(--shadow-md);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 2.1rem;
-          border: 2px solid var(--border-color);
-          flex-shrink: 0;
-        }
-        .user-settings-nav-card {
           padding: 0.5rem;
-          border-radius: 14px;
+          border-radius: 12px;
           border: 1px solid var(--border-color);
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
         }
-        .user-settings-nav-btn {
+        .settings-tab-btn {
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          padding: 0.75rem 0.875rem;
-          border-radius: 10px;
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
           border: none;
+          background: transparent;
+          color: var(--text);
+          font-size: 0.875rem;
+          font-weight: 500;
           cursor: pointer;
           text-align: left;
           width: 100%;
-          font-family: inherit;
           transition: all 0.15s ease;
+          font-family: inherit;
         }
-        .user-settings-main-content {
+        .settings-tab-btn:hover {
+          background: var(--surface-hover);
+        }
+        .settings-tab-btn.active {
+          background: var(--card);
+          color: var(--accent);
+          font-weight: 600;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+          border-left: 3px solid var(--accent);
+        }
+        .settings-content {
           flex: 1;
           min-width: 0;
           width: 100%;
         }
-        .user-settings-form-card {
+        .settings-card {
           padding: 2rem;
-          border-radius: 16px;
+          border-radius: 14px;
+          border: 1px solid var(--border-color);
         }
-        .user-settings-pref-row {
+        .settings-card-header {
+          border-bottom: 1px solid var(--border-divider);
+          padding-bottom: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        .settings-card-header h2 {
+          font-size: 1.15rem;
+          font-weight: 600;
+          margin: 0 0 0.25rem 0;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .settings-card-header p {
+          font-size: 0.8125rem;
+          color: var(--text-muted);
+          margin: 0;
+        }
+        .pref-row {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1.25rem;
-          border-radius: 12px;
+          padding: 1.15rem;
+          border-radius: 10px;
           background: var(--surface);
           border: 1px solid var(--border-color);
           gap: 1rem;
         }
-        .user-settings-emoji-grid {
-          display: flex;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-        }
-        .user-settings-emoji-btn {
-          width: 44px;
-          height: 44px;
-          border-radius: 10px;
-          font-size: 1.4rem;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.15s ease;
-        }
-        .user-settings-submit-btn {
+        .settings-submit-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -280,87 +271,58 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
           padding: 0.75rem 1.75rem;
         }
 
-        /* Mobile & Tablet Styles */
+        /* Mobile Responsive (< 768px) */
         @media (max-width: 768px) {
-          .user-settings-wrapper {
+          .user-settings-page {
             margin: 1rem auto 2.5rem;
             padding: 0 0.75rem;
           }
-          .user-settings-header {
+          .settings-header {
             flex-direction: column;
             align-items: stretch;
             gap: 0.75rem;
           }
-          .user-settings-header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
+          .settings-header-left {
+            gap: 0.75rem;
           }
-          .user-settings-layout {
+          .settings-grid {
             flex-direction: column;
             gap: 1rem;
           }
-          .user-settings-sidebar {
+          .settings-nav {
             width: 100%;
-            min-width: 100%;
-            gap: 0.75rem;
-          }
-          .user-settings-profile-card {
             flex-direction: row;
-            align-items: center;
-            text-align: left;
-            padding: 1rem;
-            gap: 1rem;
-          }
-          .user-settings-avatar {
-            width: 52px;
-            height: 52px;
-            font-size: 1.75rem;
-          }
-          .user-settings-profile-info {
-            flex: 1;
-            min-width: 0;
-          }
-          .user-settings-score-pill {
-            margin-top: 0 !important;
-            padding: 0.35rem 0.6rem !important;
-          }
-          .user-settings-nav-card {
-            flex-direction: row;
-            overflow-x: auto;
             padding: 0.35rem;
             gap: 0.35rem;
-            -webkit-overflow-scrolling: touch;
-            border-radius: 12px;
+            border-radius: 10px;
+            overflow-x: auto;
           }
-          .user-settings-nav-btn {
-            flex: 1 0 auto;
-            padding: 0.55rem 0.85rem;
+          .settings-tab-btn {
+            flex: 1;
+            justify-content: center;
+            padding: 0.65rem 0.5rem;
+            font-size: 0.8125rem;
             white-space: nowrap;
-            box-shadow: none !important;
-            border-radius: 8px;
-            gap: 0.5rem;
+            text-align: center;
+            border-left: none !important;
+            border-radius: 6px;
+            gap: 0.35rem;
           }
-          .user-settings-nav-sublabel {
-            display: none;
+          .settings-tab-btn.active {
+            background: var(--card);
+            border-bottom: 2px solid var(--accent);
           }
-          .user-settings-form-card {
+          .settings-card {
             padding: 1.25rem 1rem;
             border-radius: 12px;
           }
-          .user-settings-pref-row {
+          .pref-row {
             flex-direction: column;
             align-items: flex-start;
-            gap: 0.875rem;
             padding: 1rem;
+            gap: 0.75rem;
           }
-          .user-settings-emoji-btn {
-            width: 38px;
-            height: 38px;
-            font-size: 1.25rem;
-          }
-          .user-settings-submit-btn {
+          .settings-submit-btn {
             width: 100%;
           }
         }
@@ -391,168 +353,82 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
       )}
 
       {/* Top Header Bar */}
-      <div className="user-settings-header">
-        <div className="user-settings-header-top">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
-            <button 
-              className="btn btn-outline" 
-              onClick={onBack}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.45rem 0.75rem', fontSize: '0.8125rem' }}
-            >
-              <ArrowLeft size={15} /> ย้อนกลับ
-            </button>
-            <div>
-              <h1 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, letterSpacing: '-0.3px' }}>
-                การตั้งค่าบัญชี & โปรไฟล์
-              </h1>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                จัดการข้อมูลส่วนตัว การตั้งค่าระบบ และความปลอดภัย
-              </div>
-            </div>
-          </div>
-
+      <div className="settings-header">
+        <div className="settings-header-left">
+          <button 
+            className="btn btn-outline" 
+            onClick={onBack}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.45rem 0.75rem', fontSize: '0.8125rem' }}
+          >
+            <ArrowLeft size={15} /> ย้อนกลับ
+          </button>
           <div>
-            <span style={{ 
-              fontSize: '0.75rem', 
-              fontWeight: 600, 
-              padding: '0.25rem 0.625rem', 
-              borderRadius: '999px',
+            <h1>การตั้งค่าบัญชี & โปรไฟล์</h1>
+            <p>จัดการข้อมูลส่วนตัว การตั้งค่าระบบ และความปลอดภัย</p>
+          </div>
+        </div>
+
+        <div>
+          <span 
+            className="settings-badge"
+            style={{
               background: isAdmin ? 'rgba(99, 102, 241, 0.15)' : 'rgba(16, 185, 129, 0.15)',
               color: isAdmin ? '#6366f1' : 'var(--success)',
               border: isAdmin ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.375rem'
-            }}>
-              {isAdmin ? <ShieldCheck size={13} /> : <User size={13} />}
-              {isAdmin ? 'Super Admin' : 'ผู้เรียน (Student)'}
-            </span>
-          </div>
+            }}
+          >
+            {isAdmin ? <ShieldCheck size={13} /> : <User size={13} />}
+            {isAdmin ? 'Super Admin' : 'ผู้เรียน (Student)'}
+          </span>
         </div>
       </div>
 
-      {/* Main Layout Container (Sidebar + Content Area) */}
-      <div className="user-settings-layout">
+      {/* Main Grid Container (Sidebar + Content Area) */}
+      <div className="settings-grid">
         
-        {/* ========================================================================= */}
-        {/* LEFT SIDEBAR NAVIGATION RAIL                                              */}
-        {/* ========================================================================= */}
-        <div className="user-settings-sidebar">
-          {/* User Mini Profile Card */}
-          <div className="card user-settings-profile-card">
-            <div className="user-settings-avatar">
-              {avatarEmoji}
-            </div>
+        {/* Navigation Rail / Mobile Segmented Tabs */}
+        <nav className="settings-nav">
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            <User size={17} />
+            <span>ข้อมูลส่วนตัว</span>
+          </button>
 
-            <div className="user-settings-profile-info" style={{ width: '100%' }}>
-              <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.3px', wordBreak: 'break-word' }}>
-                {displayNickname}
-              </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem', wordBreak: 'break-all' }}>
-                {user?.email}
-              </div>
-              {bio && (
-                <div style={{ 
-                  fontSize: '0.75rem', 
-                  color: 'var(--text-muted)', 
-                  fontStyle: 'italic', 
-                  marginTop: '0.4rem',
-                  padding: '0.3rem 0.5rem',
-                  background: 'var(--surface)',
-                  borderRadius: '6px',
-                  border: '1px solid var(--border-divider)'
-                }}>
-                  "{bio}"
-                </div>
-              )}
-            </div>
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'preferences' ? 'active' : ''}`}
+            onClick={() => setActiveTab('preferences')}
+          >
+            <Settings size={17} />
+            <span>การตั้งค่าระบบ</span>
+          </button>
 
-            {/* Score Pill */}
-            <div className="user-settings-score-pill" style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              padding: '0.45rem 0.75rem',
-              borderRadius: '8px',
-              background: 'rgba(0, 112, 243, 0.08)',
-              border: '1px solid rgba(0, 112, 243, 0.2)',
-              marginTop: '0.25rem'
-            }}>
-              <Award size={16} color="var(--accent)" />
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>คะแนนสะสม:</span>
-              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--accent)' }}>{totalScore} คะแนน</span>
-            </div>
-          </div>
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'security' ? 'active' : ''}`}
+            onClick={() => setActiveTab('security')}
+          >
+            <Key size={17} />
+            <span>ความปลอดภัย</span>
+          </button>
+        </nav>
 
-          {/* Navigation Links Menu */}
-          <div className="card user-settings-nav-card">
-            {NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActiveTab(item.id)}
-                  className="user-settings-nav-btn"
-                  style={{
-                    background: isActive ? 'var(--surface-hover)' : 'transparent',
-                    color: isActive ? 'var(--accent)' : 'var(--text)',
-                    boxShadow: isActive ? 'inset 3px 0 0 0 var(--accent)' : 'none',
-                  }}
-                  onMouseOver={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'var(--surface)';
-                  }}
-                  onMouseOut={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'transparent';
-                  }}
-                >
-                  <div style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '8px',
-                    background: isActive ? 'rgba(0, 112, 243, 0.12)' : 'var(--surface)',
-                    color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                  }}>
-                    <Icon size={16} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: isActive ? 600 : 500 }}>
-                      {item.label}
-                    </div>
-                    <div className="user-settings-nav-sublabel" style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                      {item.sublabel}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* RIGHT MAIN CONTENT AREA                                                   */}
-        {/* ========================================================================= */}
-        <div className="user-settings-main-content">
+        {/* Content Area */}
+        <main className="settings-content">
           
           {/* TAB 1: Profile Information */}
           {activeTab === 'profile' && (
-            <form onSubmit={handleSaveProfile} className="card animate-fade-in user-settings-form-card">
+            <form onSubmit={handleSaveProfile} className="card animate-fade-in settings-card">
               
-              <div style={{ borderBottom: '1px solid var(--border-divider)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div className="settings-card-header">
+                <h2>
                   <User size={18} color="var(--accent)" />
                   ข้อมูลโปรไฟล์ส่วนตัว
-                </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                  ปรับแต่งชื่อเล่นและไอคอนประจำตัวที่ใช้แสดงผลในระบบ
-                </p>
+                </h2>
+                <p>ปรับแต่งชื่อเล่นและไอคอนประจำตัวที่ใช้แสดงผลในระบบ</p>
               </div>
 
               {/* Avatar Emoji Selector */}
@@ -560,17 +436,25 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.625rem' }}>
                   เลือกไอคอนประจำตัว (Avatar)
                 </label>
-                <div className="user-settings-emoji-grid">
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {AVATAR_EMOJIS.map(emoji => (
                     <button
                       key={emoji}
                       type="button"
                       onClick={() => setAvatarEmoji(emoji)}
-                      className="user-settings-emoji-btn"
                       style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '10px',
+                        fontSize: '1.35rem',
                         border: avatarEmoji === emoji ? '2px solid var(--accent)' : '1px solid var(--border-color)',
                         background: avatarEmoji === emoji ? 'rgba(0, 112, 243, 0.12)' : 'var(--surface)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         transform: avatarEmoji === emoji ? 'scale(1.08)' : 'none',
+                        transition: 'all 0.15s ease'
                       }}
                     >
                       {emoji}
@@ -620,7 +504,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button 
                   type="submit" 
-                  className="btn btn-primary user-settings-submit-btn"
+                  className="btn btn-primary settings-submit-btn"
                   disabled={saving}
                 >
                   <Save size={16} />
@@ -632,21 +516,19 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
 
           {/* TAB 2: System & Exam Preferences */}
           {activeTab === 'preferences' && (
-            <div className="card animate-fade-in user-settings-form-card">
-              <div style={{ borderBottom: '1px solid var(--border-divider)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="card animate-fade-in settings-card">
+              <div className="settings-card-header">
+                <h2>
                   <Settings size={18} color="var(--accent)" />
                   การตั้งค่าระบบและประสบการณ์การทำข้อสอบ
-                </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                  ปรับแต่งตัวช่วยในการสอบและการแสดงผลของเว็บไซต์
-                </p>
+                </h2>
+                <p>ปรับแต่งตัวช่วยในการสอบและการแสดงผลของเว็บไซต์</p>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
                 
                 {/* Theme Toggle */}
-                <div className="user-settings-pref-row">
+                <div className="pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Palette size={16} color="var(--accent)" /> ธีมการแสดงผล (Theme)
@@ -666,7 +548,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 </div>
 
                 {/* KaTeX Formula Toggle */}
-                <div className="user-settings-pref-row">
+                <div className="pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <BookOpen size={16} color="var(--accent)" /> แสดงสูตรคณิตศาสตร์ (KaTeX Formula Render)
@@ -684,7 +566,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 </div>
 
                 {/* Timer Toggle */}
-                <div className="user-settings-pref-row">
+                <div className="pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Calendar size={16} color="var(--accent)" /> ตัวจับเวลานับถอยหลังในการสอบ (Exam Timer)
@@ -702,7 +584,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 </div>
 
                 {/* Auto Shuffle Toggle */}
-                <div className="user-settings-pref-row">
+                <div className="pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Shuffle size={16} color="var(--accent)" /> สลับลำดับข้อสอบอัตโนมัติ (Auto Shuffle Questions)
@@ -723,7 +605,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button 
                   type="button" 
-                  className="btn btn-primary user-settings-submit-btn"
+                  className="btn btn-primary settings-submit-btn"
                   onClick={handleSavePreferences}
                 >
                   <Save size={16} /> บันทึกการตั้งค่า
@@ -734,15 +616,13 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
 
           {/* TAB 3: Security & Password */}
           {activeTab === 'security' && (
-            <div className="card animate-fade-in user-settings-form-card">
-              <div style={{ borderBottom: '1px solid var(--border-divider)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="card animate-fade-in settings-card">
+              <div className="settings-card-header">
+                <h2>
                   <Key size={18} color="var(--accent)" />
                   ความปลอดภัยและเปลี่ยนรหัสผ่าน
-                </h3>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                  จัดการความปลอดภัยของบัญชีและอัปเดตรหัสผ่านใหม่
-                </p>
+                </h2>
+                <p>จัดการความปลอดภัยของบัญชีและอัปเดตรหัสผ่านใหม่</p>
               </div>
 
               <form onSubmit={handleChangePassword} style={{ maxWidth: '480px' }}>
@@ -811,7 +691,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
 
                 <button 
                   type="submit" 
-                  className="btn btn-primary user-settings-submit-btn"
+                  className="btn btn-primary settings-submit-btn"
                   disabled={saving}
                 >
                   <Lock size={16} />
@@ -834,7 +714,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
             </div>
           )}
 
-        </div>
+        </main>
       </div>
 
     </div>
