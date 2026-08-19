@@ -187,19 +187,19 @@ export default function Schedule() {
       </div>
 
       {filteredSchedule.length === 0 ? (
-        <div className="card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <CalendarDays size={48} style={{ margin: '0 auto 1rem auto', opacity: 0.2 }} />
-          <p style={{ fontSize: '1.125rem', fontWeight: 500 }}>ยังไม่มีกำหนดการสอบ</p>
-          <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>เตรียมพบกับตารางสอบเร็วๆ นี้</p>
+        <div className="card" style={{ padding: '2.5rem 1.5rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+          <CalendarDays size={36} style={{ margin: '0 auto 0.75rem auto', opacity: 0.2 }} />
+          <p style={{ fontSize: '1rem', fontWeight: 500 }}>ยังไม่มีกำหนดการสอบ</p>
+          <p style={{ fontSize: '0.8125rem', marginTop: '0.35rem' }}>เตรียมพบกับตารางสอบเร็วๆ นี้</p>
         </div>
       ) : (
-        <div style={{ position: 'relative', paddingLeft: '2.5rem' }}>
+        <div style={{ position: 'relative', paddingLeft: '2rem' }}>
           {/* Timeline line */}
           <div style={{
             position: 'absolute',
-            left: '0.75rem',
-            top: '1rem',
-            bottom: '1rem',
+            left: '0.625rem',
+            top: '0.75rem',
+            bottom: '0.75rem',
             width: '2px',
             background: 'var(--border-divider)',
             zIndex: 0
@@ -210,28 +210,25 @@ export default function Schedule() {
             const isNext = !isPast && (index === 0 || filteredSchedule[index - 1].timestamp < currentTime);
             
             let indicatorBg = 'var(--surface)';
-            let indicatorColor = 'var(--text-muted)';
             let indicatorBorder = '2px solid var(--border-divider)';
             
             if (isPast) {
               indicatorBg = 'var(--accent)';
-              indicatorColor = '#fff';
               indicatorBorder = '2px solid var(--accent)';
             } else if (isNext) {
               indicatorBg = 'var(--surface)';
-              indicatorColor = 'var(--accent)';
               indicatorBorder = '2px solid var(--accent)';
             }
 
             return (
-              <div key={item.id} style={{ position: 'relative', marginBottom: '2rem' }}>
+              <div key={item.id} style={{ position: 'relative', marginBottom: '1.25rem' }}>
                 {/* Indicator */}
                 <div style={{
                   position: 'absolute',
-                  left: '-2.5rem',
+                  left: '-2rem',
                   top: '0.25rem',
-                  width: '1.5rem',
-                  height: '1.5rem',
+                  width: '1.25rem',
+                  height: '1.25rem',
                   borderRadius: '50%',
                   background: indicatorBg,
                   border: indicatorBorder,
@@ -239,25 +236,26 @@ export default function Schedule() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   zIndex: 1,
-                  boxShadow: isNext ? '0 0 0 4px rgba(0, 112, 243, 0.1)' : 'none'
+                  boxShadow: isNext ? '0 0 0 3px rgba(0, 112, 243, 0.15)' : 'none'
                 }}>
-                  {isPast && <Check size={12} color="#fff" strokeWidth={3} />}
-                  {isNext && <div style={{ width: '0.5rem', height: '0.5rem', borderRadius: '50%', background: 'var(--accent)' }} />}
+                  {isPast && <Check size={10} color="#fff" strokeWidth={3} />}
+                  {isNext && <div style={{ width: '0.4rem', height: '0.4rem', borderRadius: '50%', background: 'var(--accent)' }} />}
                 </div>
 
                 {/* Content Card */}
                 <div className="card" style={{ 
-                  padding: '1.5rem', 
-                  borderLeft: isNext ? '4px solid var(--accent)' : 'none',
-                  opacity: isPast ? 0.8 : 1
+                  padding: '1.15rem 1rem', 
+                  borderLeft: isNext ? '3px solid var(--accent)' : 'none',
+                  opacity: isPast ? 0.8 : 1,
+                  borderRadius: '10px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
+                    <div style={{ flex: 1, minWidth: '220px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
                         <span style={{ 
-                          fontSize: '0.75rem', 
+                          fontSize: '0.7rem', 
                           fontWeight: 600, 
-                          padding: '0.25rem 0.5rem', 
+                          padding: '0.15rem 0.4rem', 
                           borderRadius: '4px',
                           background: item.type === 'Midterm' ? 'rgba(245, 166, 35, 0.15)' : 'rgba(16, 185, 129, 0.15)',
                           color: item.type === 'Midterm' ? 'var(--warning)' : 'var(--success)',
@@ -265,23 +263,23 @@ export default function Schedule() {
                         }}>
                           {item.type}
                         </span>
-                        <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                        <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                           {item.date}
                         </span>
                       </div>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.5rem', lineHeight: 1.4 }}>
+                      <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.35rem', lineHeight: 1.35, letterSpacing: '-0.2px' }}>
                         {item.title}
                       </h3>
                     </div>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '150px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                        <Clock size={16} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flexShrink: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
+                        <Clock size={14} />
                         {item.time}
                       </div>
                       {item.location !== "-" && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                          <MapPin size={16} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
+                          <MapPin size={14} />
                           {item.location}
                         </div>
                       )}

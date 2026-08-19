@@ -24,37 +24,39 @@ export function Pattern({ data = defaultChartData, onClose }) {
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 100,
-      backdropFilter: 'blur(4px)'
+      backdropFilter: 'blur(4px)',
+      padding: '1rem'
     }} onClick={onClose}>
       <div 
         className="card animate-fade-in" 
         style={{ 
           width: '100%', 
-          maxWidth: '380px', 
-          padding: '1.5rem', 
+          maxWidth: '360px', 
+          padding: '1.25rem 1rem', 
           display: 'flex', 
           flexDirection: 'column',
-          position: 'relative'
+          position: 'relative',
+          borderRadius: '14px'
         }}
         onClick={e => e.stopPropagation()}
       >
         <button 
           onClick={onClose}
-          style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+          style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '1rem', padding: '0.25rem' }}
         >
           ✕
         </button>
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem', marginTop: '0.5rem' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-            <Star size={20} color="var(--accent)" />
+        <div style={{ textAlign: 'center', marginBottom: '1rem', marginTop: '0.25rem' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', margin: 0 }}>
+            <Star size={18} color="var(--accent)" />
             Skill Assessment
           </h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.25rem' }}>Team proficiency across key areas</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginTop: '0.2rem', margin: 0 }}>Team proficiency across key areas</p>
         </div>
         
-        <div style={{ width: '100%', height: '280px', margin: '0 auto' }}>
+        <div style={{ width: '100%', height: '260px', margin: '0 auto' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={data} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
+            <RadarChart data={data} margin={{ top: 10, right: 15, bottom: 10, left: 15 }}>
               <defs>
                 <linearGradient id="chart24-fill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.5} />

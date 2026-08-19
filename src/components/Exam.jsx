@@ -58,7 +58,6 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
 
   const q = subject.questions[currentQ];
   const answered = answers[currentQ] !== null;
-  const isCorrect = answered && answers[currentQ] === q.answer;
 
   const handleSelect = (idx) => {
     if (answered) return;
@@ -94,44 +93,44 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
   if (showResult) {
     if (isReviewMode) {
       return (
-        <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
+        <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '1.5rem auto', padding: '0 0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
             <button 
               className="btn btn-outline"
               onClick={() => setIsReviewMode(false)}
-              style={{ width: '36px', height: '36px', padding: 0 }}
+              style={{ width: '32px', height: '32px', padding: 0 }}
             >
               <ArrowLeft size={16} />
             </button>
             <div>
-              <h2 style={{ fontSize: '1.25rem', marginBottom: '0.125rem', letterSpacing: '-0.5px' }}>เฉลยข้อสอบ: {subject.name}</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>ทบทวนข้อผิดพลาดและดูคำอธิบาย</p>
+              <h2 style={{ fontSize: '1.15rem', marginBottom: '0.125rem', letterSpacing: '-0.3px' }}>เฉลยข้อสอบ: {subject.name}</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', margin: 0 }}>ทบทวนข้อผิดพลาดและดูคำอธิบาย</p>
             </div>
           </div>
   
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {subject.questions.map((q, idx) => {
               const userAnswer = answers[idx];
               const isRight = userAnswer === q.answer;
               const isSkipped = userAnswer === null;
   
               return (
-                <div key={idx} className="card" style={{ padding: '2rem', borderRadius: '12px', borderLeft: isRight ? '4px solid var(--success)' : isSkipped ? '4px solid var(--text-muted)' : '4px solid var(--error)' }}>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <div key={idx} className="card" style={{ padding: '1.25rem 1rem', borderRadius: '10px', borderLeft: isRight ? '4px solid var(--success)' : isSkipped ? '4px solid var(--text-muted)' : '4px solid var(--error)' }}>
+                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                     <div style={{
-                      width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+                      width: '26px', height: '26px', borderRadius: '50%', flexShrink: 0,
                       background: isRight ? 'rgba(16, 185, 129, 0.15)' : isSkipped ? 'var(--surface-active)' : 'rgba(238, 0, 0, 0.15)',
                       color: isRight ? 'var(--success)' : isSkipped ? 'var(--text-muted)' : 'var(--error)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.8125rem'
                     }}>
                       {idx + 1}
                     </div>
-                    <div style={{ flex: 1, minWidth: '250px' }}>
-                      <h3 style={{ fontSize: '1.0625rem', lineHeight: 1.6, marginBottom: '1.5rem', fontWeight: 500 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h3 style={{ fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '1rem', fontWeight: 500 }}>
                         {renderTextWithMath(q.q)}
                       </h3>
   
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1rem' }}>
                         {q.choices.map((choice, cIdx) => {
                           const isSelected = userAnswer === cIdx;
                           const isCorrectChoice = cIdx === q.answer;
@@ -144,36 +143,36 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
                           if (isCorrectChoice) {
                             bg = 'rgba(16, 185, 129, 0.1)';
                             boxShadow = '0px 0px 0px 1px var(--success)';
-                            icon = <CheckCircle size={16} color="var(--success)" />;
+                            icon = <CheckCircle size={15} color="var(--success)" />;
                           } else if (isSelected && !isCorrectChoice) {
                             bg = 'rgba(238, 0, 0, 0.1)';
                             boxShadow = '0px 0px 0px 1px var(--error)';
-                            icon = <XCircle size={16} color="var(--error)" />;
+                            icon = <XCircle size={15} color="var(--error)" />;
                           } else {
                             color = 'var(--text-muted)';
                           }
   
                           return (
                             <div key={cIdx} style={{
-                              padding: '0.75rem 1rem', borderRadius: '8px',
+                              padding: '0.6rem 0.8rem', borderRadius: '6px',
                               background: bg, boxShadow: boxShadow, color: color,
-                              display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9375rem'
+                              display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.875rem'
                             }}>
-                              <div style={{ width: '20px', display: 'flex', justifyContent: 'center' }}>
+                              <div style={{ width: '18px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
                                 {icon || <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{String.fromCharCode(65 + cIdx)}</span>}
                               </div>
-                              <span style={{ lineHeight: 1.5 }}>{renderTextWithMath(choice)}</span>
+                              <span style={{ lineHeight: 1.4 }}>{renderTextWithMath(choice)}</span>
                             </div>
                           );
                         })}
                       </div>
   
                       <div style={{ 
-                        padding: '1rem', background: 'var(--surface-hover)', 
-                        borderRadius: '8px', fontSize: '0.875rem' 
+                        padding: '0.875rem', background: 'var(--surface-hover)', 
+                        borderRadius: '6px', fontSize: '0.8125rem' 
                       }}>
-                        <div style={{ fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text)' }}>คำอธิบาย:</div>
-                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>{renderTextWithMath(q.explain)}</div>
+                        <div style={{ fontWeight: 600, marginBottom: '0.2rem', color: 'var(--text)' }}>คำอธิบาย:</div>
+                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{renderTextWithMath(q.explain)}</div>
                       </div>
                     </div>
                   </div>
@@ -192,39 +191,39 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
     const skipped = answers.filter(a => a === null).length;
 
     return (
-      <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '4rem auto', padding: '0 1rem' }}>
-        <div className="card" style={{ padding: '4rem 2rem', borderRadius: '12px', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', fontWeight: 600, letterSpacing: '-1.5px', marginBottom: '0.5rem' }}>
+      <div className="animate-fade-in" style={{ maxWidth: '540px', margin: '2rem auto', padding: '0 0.75rem' }}>
+        <div className="card" style={{ padding: '2.5rem 1.5rem', borderRadius: '12px', textAlign: 'center' }}>
+          <div style={{ fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-1px', marginBottom: '0.25rem' }}>
             {score}/{total}
           </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '3rem' }}>คะแนนที่คุณทำได้</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.75rem' }}>คะแนนที่คุณทำได้</p>
           
           <div style={{ 
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '1rem', 
-            padding: '1.5rem', borderRadius: '8px', boxShadow: 'var(--shadow-border)',
-            marginBottom: '3rem', background: 'var(--surface-hover)'
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', 
+            padding: '1rem', borderRadius: '8px', boxShadow: 'var(--shadow-border)',
+            marginBottom: '2rem', background: 'var(--surface-hover)'
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{score}</div>
+              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{score}</div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ถูก</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{wrong}</div>
+              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{wrong}</div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ผิด</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{skipped}</div>
+              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{skipped}</div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ข้าม</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text)' }}>{pct}%</div>
+              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{pct}%</div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>เปอร์เซ็นต์</div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="btn btn-primary" onClick={() => setIsReviewMode(true)}>
-              <FileText size={16} />
+          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn btn-primary" onClick={() => setIsReviewMode(true)} style={{ padding: '0.55rem 1.15rem' }}>
+              <FileText size={15} />
               ดูเฉลย
             </button>
             <button className="btn btn-outline" onClick={() => {
@@ -234,12 +233,12 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
               setShowAlert(true);
               setIsReviewMode(false);
               setShowResult(false);
-            }}>
-              <RotateCcw size={16} />
+            }} style={{ padding: '0.55rem 1.15rem' }}>
+              <RotateCcw size={15} />
               ลองใหม่
             </button>
-            <button className="btn btn-outline" onClick={onBack}>
-              <HomeIcon size={16} />
+            <button className="btn btn-outline" onClick={onBack} style={{ padding: '0.55rem 1.15rem' }}>
+              <HomeIcon size={15} />
               กลับหน้าหลัก
             </button>
           </div>
@@ -249,98 +248,139 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
   }
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '2rem auto' }}>
+    <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '0.5rem auto 2.5rem' }}>
+      
+      {/* Pause Modal Overlay */}
       {isPaused && (
         <div style={{
           position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(10, 10, 10, 0.8)',
-          backdropFilter: 'blur(12px)',
-          zIndex: 100,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.7)',
+          backdropFilter: 'blur(5px)',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white'
+          zIndex: 100,
+          padding: '1rem'
         }}>
-          <Pause size={48} style={{ opacity: 0.5, marginBottom: '1.5rem' }} />
-          <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 600 }}>พักสอบชั่วคราว</h2>
-          <p style={{ opacity: 0.8, marginBottom: '2.5rem', fontSize: '1.125rem' }}>เวลาถูกหยุดไว้ที่ {formatTime(timeLeft)}</p>
-          <button 
-            className="btn btn-primary" 
-            onClick={() => setIsPaused(false)}
-            style={{ fontSize: '1.125rem', padding: '0.75rem 2rem', background: 'white', color: 'black' }}
-          >
-            <Play size={20} /> ดำเนินการสอบต่อ
-          </button>
+          <div className="card animate-fade-in" style={{
+            padding: '2rem 1.5rem',
+            maxWidth: '400px',
+            width: '100%',
+            textAlign: 'center',
+            borderRadius: '14px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+          }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              background: 'rgba(0, 112, 243, 0.1)',
+              color: 'var(--accent)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem'
+            }}>
+              <Pause size={24} />
+            </div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.35rem' }}>
+              พักการทำข้อสอบ
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+              เวลาถูกหยุดชั่วคราวแล้ว คุณสามารถกด "ทำข้อสอบต่อ" เพื่อกลับไปทำข้อสอบได้ทันที
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+              <button 
+                className="btn btn-primary" 
+                onClick={() => setIsPaused(false)}
+                style={{ padding: '0.7rem 1.25rem', width: '100%', fontSize: '0.875rem' }}
+              >
+                <Play size={15} />
+                ทำข้อสอบต่อ
+              </button>
+              <button 
+                className="btn btn-outline" 
+                onClick={onBack}
+                style={{ padding: '0.65rem 1.25rem', width: '100%', fontSize: '0.875rem' }}
+              >
+                <HomeIcon size={15} />
+                ออกจากการสอบ
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '2.5rem', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      {/* Header bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button 
-            className="btn btn-outline"
+            className="btn btn-outline" 
             onClick={onBack}
-            style={{ width: '36px', height: '36px', padding: 0 }}
+            style={{ width: '32px', height: '32px', padding: 0 }}
+            title="กลับหน้าหลัก"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={15} />
           </button>
           <div>
-            <h2 style={{ fontSize: '1.25rem', marginBottom: '0.125rem', letterSpacing: '-0.5px' }}>{subject.name}</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{subject.desc}</p>
+            <h2 style={{ fontSize: '1.05rem', margin: 0, letterSpacing: '-0.3px', fontWeight: 600 }}>{subject.name}</h2>
           </div>
         </div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
           <button 
             className={`btn ${showNavigator ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setShowNavigator(!showNavigator)}
-            style={{ width: '36px', height: '36px', padding: 0 }}
-            title="นำทางข้อสอบ"
+            style={{ width: '32px', height: '32px', padding: 0 }}
+            title="ดูภาพรวมข้อสอบ"
           >
-            <LayoutGrid size={16} />
+            <LayoutGrid size={15} />
           </button>
           <button 
             className="btn btn-outline" 
             onClick={() => setIsPaused(true)}
-            style={{ width: '36px', height: '36px', padding: 0 }}
+            style={{ width: '32px', height: '32px', padding: 0 }}
             title="พักสอบชั่วคราว"
           >
-            <Pause size={16} />
+            <Pause size={15} />
           </button>
           <div style={{ 
-            display: 'flex', alignItems: 'center', gap: '0.5rem', 
+            display: 'flex', alignItems: 'center', gap: '0.35rem', 
             background: timeLeft < 60 ? 'rgba(239, 68, 68, 0.1)' : 'var(--surface-hover)', 
             color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
-            padding: '0.5rem 1rem', borderRadius: '8px', 
-            boxShadow: 'var(--shadow-border)', fontWeight: 600, fontSize: '1.125rem'
+            padding: '0.35rem 0.65rem', borderRadius: '6px', 
+            boxShadow: 'var(--shadow-border)', fontWeight: 600, fontSize: '0.9375rem'
           }}>
-            <Clock size={20} />
+            <Clock size={16} />
             <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
           </div>
         </div>
       </div>
 
       {showNavigator && (
-        <div className="card animate-fade-in" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>นำทางข้อสอบ</h3>
-            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--success)' }}></div>
+        <div className="card animate-fade-in" style={{ padding: '1rem', marginBottom: '1.25rem', borderRadius: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <h3 style={{ fontSize: '0.875rem', fontWeight: 600, margin: 0 }}>นำทางข้อสอบ</h3>
+            <div style={{ display: 'flex', gap: '0.625rem', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--success)' }}></div>
                 ทำแล้ว
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'var(--surface)', border: '1px solid var(--border-divider)' }}></div>
-                ยังไม่ได้ทำ
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'var(--surface)', border: '1px solid var(--border-divider)' }}></div>
+                ยังไม่ทำ
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <Bookmark size={12} fill="var(--warning)" color="var(--warning)" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                <Bookmark size={11} fill="var(--warning)" color="var(--warning)" />
                 ติดดาว
               </div>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '0.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(36px, 1fr))', gap: '0.35rem' }}>
             {subject.questions.map((_, idx) => {
               const isCurrent = currentQ === idx;
               const isAnswered = answers[idx] !== null;
@@ -365,7 +405,7 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
                   onClick={() => { setCurrentQ(idx); setShowNavigator(false); }}
                   style={{
                     position: 'relative',
-                    height: '40px',
+                    height: '34px',
                     borderRadius: '6px',
                     background: bg,
                     border: border,
@@ -375,21 +415,15 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '0.875rem',
-                    transition: 'all 0.2s ease',
+                    fontSize: '0.8125rem',
+                    transition: 'all 0.15s ease',
                     fontFamily: 'inherit'
-                  }}
-                  onMouseOver={(e) => {
-                    if (!isCurrent) e.currentTarget.style.opacity = '0.8';
-                  }}
-                  onMouseOut={(e) => {
-                    if (!isCurrent) e.currentTarget.style.opacity = '1';
                   }}
                 >
                   {idx + 1}
                   {bookmarks[idx] && (
-                    <div style={{ position: 'absolute', top: '-4px', right: '-4px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', borderRadius: '50%', padding: '2px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                      <Bookmark size={10} fill="var(--warning)" color="var(--warning)" />
+                    <div style={{ position: 'absolute', top: '-3px', right: '-3px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', borderRadius: '50%', padding: '1px' }}>
+                      <Bookmark size={9} fill="var(--warning)" color="var(--warning)" />
                     </div>
                   )}
                 </button>
@@ -404,31 +438,27 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
           background: 'rgba(0, 112, 243, 0.05)',
           border: '1px solid rgba(0, 112, 243, 0.2)',
           borderRadius: '8px',
-          padding: '1rem',
-          marginBottom: '2rem',
+          padding: '0.75rem 1rem',
+          marginBottom: '1.25rem',
           display: 'flex',
-          gap: '0.75rem',
+          gap: '0.625rem',
           alignItems: 'flex-start',
           position: 'relative'
         }}>
-          <div style={{ color: 'var(--accent)', marginTop: '0.125rem' }}>
-            <Info size={18} />
+          <div style={{ color: 'var(--accent)', marginTop: '0.1rem' }}>
+            <Info size={16} />
           </div>
-          <div style={{ paddingRight: '2rem' }}>
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.25rem' }}>
-              ระบบจับเวลาสอบ
-            </h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที เวลาทั้งหมดคือ {subject.questions.length} นาที 
-              ตัวจับเวลาจะเปลี่ยนเป็นสีแดงเมื่อเวลาเหลือน้อยกว่า 1 นาที และเมื่อเวลาหมดระบบจะทำการส่งข้อสอบและแสดงผลคะแนนทันที
+          <div style={{ paddingRight: '1.5rem' }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.4, margin: 0 }}>
+              ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที (รวม {subject.questions.length} นาที) เมื่อเวลาหมดจะทำการส่งข้อสอบอัตโนมัติ
             </p>
           </div>
           <button 
             onClick={() => setShowAlert(false)}
             style={{
               position: 'absolute',
-              top: '1rem',
-              right: '1rem',
+              top: '0.625rem',
+              right: '0.625rem',
               background: 'transparent',
               border: 'none',
               cursor: 'pointer',
@@ -436,34 +466,32 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0.25rem',
-              borderRadius: '4px'
+              padding: '0.2rem'
             }}
-            onMouseOver={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
-            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <X size={16} />
+            <X size={15} />
           </button>
         </div>
       )}
 
+      {/* Progress bar */}
       <div style={{ 
         background: 'var(--border-divider)', height: '4px', borderRadius: '2px', 
-        marginBottom: '0.75rem', overflow: 'hidden' 
+        marginBottom: '0.5rem', overflow: 'hidden' 
       }}>
         <div style={{ 
           height: '100%', 
           background: 'var(--text)', 
-          width: `${((currentQ) / subject.questions.length) * 100}%`,
+          width: `${((currentQ + 1) / subject.questions.length) * 100}%`,
           transition: 'width 0.3s ease'
         }}></div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '2.5rem', fontWeight: 500 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '1.25rem', fontWeight: 500 }}>
         <span>ข้อที่ {currentQ + 1} จาก {subject.questions.length}</span>
       </div>
 
-      <div className="card" style={{ padding: '2rem', borderRadius: '12px', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+      <div className="card" style={{ padding: '1.25rem 1rem', borderRadius: '12px', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
             Question {currentQ + 1}
           </div>
@@ -475,16 +503,13 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
                 style={{ 
                   background: 'transparent', border: 'none', cursor: 'pointer', 
                   color: 'var(--text-muted)',
-                  display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 500,
-                  padding: '0.375rem 0.5rem', borderRadius: '4px',
-                  transition: 'all 0.2s ease'
+                  display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', fontWeight: 500,
+                  padding: '0.25rem 0.4rem', borderRadius: '4px'
                 }}
-                onMouseOver={(e) => { e.currentTarget.style.background = 'var(--surface-hover)'; e.currentTarget.style.color = 'var(--error)'; }}
-                onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; }}
                 title="รายงานข้อนี้ผิด"
               >
-                <AlertTriangle size={16} />
-                <span className="hidden sm:inline">แจ้งข้อผิด</span>
+                <AlertTriangle size={14} />
+                <span>แจ้งข้อผิด</span>
               </button>
             )}
             <button 
@@ -492,23 +517,21 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
               style={{ 
                 background: 'transparent', border: 'none', cursor: 'pointer', 
                 color: bookmarks[currentQ] ? 'var(--warning)' : 'var(--text-muted)',
-                display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.875rem', fontWeight: 500,
-                padding: '0.375rem 0.5rem', borderRadius: '4px',
-                transition: 'all 0.2s ease'
+                display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', fontWeight: 500,
+                padding: '0.25rem 0.4rem', borderRadius: '4px'
               }}
-              onMouseOver={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
-              onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
             >
-              <Bookmark size={16} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
-              <span className="hidden sm:inline">{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาวข้อนี้'}</span>
+              <Bookmark size={14} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
+              <span>{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาว'}</span>
             </button>
           </div>
         </div>
-        <h3 style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '2rem', fontWeight: 500 }}>
+
+        <h3 style={{ fontSize: '1.05rem', lineHeight: 1.5, marginBottom: '1.25rem', fontWeight: 500 }}>
           {renderTextWithMath(q.q)}
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {q.choices.map((choice, idx) => {
             const isSelected = answers[currentQ] === idx;
             const isRight = answered && idx === q.answer;
@@ -536,21 +559,21 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
                   background: bg,
                   boxShadow: boxShadow,
                   borderRadius: '8px',
-                  padding: '1rem 1.25rem',
+                  padding: '0.75rem 0.875rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
+                  gap: '0.75rem',
                   cursor: answered ? 'default' : 'pointer',
                   textAlign: 'left',
                   color: color,
-                  fontSize: '0.9375rem',
+                  fontSize: '0.875rem',
                   width: '100%',
                   justifyContent: 'flex-start'
                 }}
                 onClick={() => handleSelect(idx)}
               >
                 <div style={{
-                  width: '24px', height: '24px', borderRadius: '4px', flexShrink: 0,
+                  width: '22px', height: '22px', borderRadius: '4px', flexShrink: 0,
                   background: isRight ? 'var(--success)' : isWrong ? 'var(--error)' : 'var(--surface-active)',
                   color: (isRight || isWrong) ? '#fff' : 'var(--text-muted)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -558,7 +581,7 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
                 }}>
                   {isRight ? <CheckCircle size={14} /> : isWrong ? <XCircle size={14} /> : String.fromCharCode(65 + idx)}
                 </div>
-                <span style={{ lineHeight: 1.5 }}>{renderTextWithMath(choice)}</span>
+                <span style={{ lineHeight: 1.45 }}>{renderTextWithMath(choice)}</span>
               </button>
             );
           })}
@@ -566,16 +589,16 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
 
         {answered && (
           <div className="animate-fade-in" style={{ 
-            marginTop: '2rem', 
-            padding: '1.25rem', 
+            marginTop: '1.25rem', 
+            padding: '1rem', 
             background: 'var(--surface-hover)', 
             boxShadow: 'var(--shadow-border)',
             borderRadius: '8px' 
           }}>
-            <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Check size={16} /> เฉลยและคำอธิบาย
+            <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.8125rem', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Check size={15} /> เฉลยและคำอธิบาย
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5, margin: 0 }}>
               {renderTextWithMath(q.explain)}
             </p>
           </div>

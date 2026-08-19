@@ -98,70 +98,91 @@ export default function Report({ subjects = [], initialData = null, user = null,
   };
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+    <div className="animate-fade-in report-page-wrapper" style={{ maxWidth: '760px', margin: '1rem auto 3rem', padding: '0 0.5rem' }}>
+      <style>{`
+        .report-card {
+          padding: 2rem;
+        }
+        .report-subject-grid {
+          display: grid;
+          grid-template-columns: 1fr 140px;
+          gap: 1rem;
+        }
+        @media (max-width: 600px) {
+          .report-card {
+            padding: 1.25rem 1rem !important;
+          }
+          .report-subject-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+          }
+        }
+      `}</style>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
         <button 
           className="btn btn-outline"
           onClick={onBack}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8125rem', padding: '0.45rem 0.85rem' }}
         >
-          <ArrowLeft size={16} /> ย้อนกลับ
+          <ArrowLeft size={15} /> ย้อนกลับ
         </button>
 
         {onOpenAdminReports && (
           <button
             className="btn btn-outline"
             onClick={onOpenAdminReports}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent)', fontSize: '0.8125rem', padding: '0.45rem 0.85rem' }}
           >
-            <Inbox size={16} />
+            <Inbox size={15} />
             <span>กล่องรายงานปัญหา (Inbox)</span>
           </button>
         )}
       </div>
 
       {submittedReport ? (
-        <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', borderRadius: '16px' }}>
+        <div className="card report-card animate-fade-in" style={{ textAlign: 'center', borderRadius: '14px' }}>
           <div style={{ 
-            width: '64px', height: '64px', borderRadius: '50%', 
+            width: '52px', height: '52px', borderRadius: '50%', 
             background: 'rgba(16, 185, 129, 0.15)', color: 'var(--success)', 
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
-            margin: '0 auto 1.5rem'
+            margin: '0 auto 1.25rem'
           }}>
-            <CheckCircle2 size={36} />
+            <CheckCircle2 size={30} />
           </div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 600, marginBottom: '0.35rem', letterSpacing: '-0.4px' }}>
             ส่งรายงานเรียบร้อยแล้ว
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '500px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
-            ขอบคุณสำหรับการแจ้งปัญหา ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว (รหัส: <code style={{ background: 'var(--surface-hover)', padding: '0.2rem 0.4rem', borderRadius: '4px' }}>{submittedReport.id}</code>) ทีมงานจะนำไปตรวจสอบและปรับปรุงให้ดียิ่งขึ้นครับ
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: '500px', margin: '0 auto 1.25rem', lineHeight: 1.5 }}>
+            ขอบคุณสำหรับการแจ้งปัญหา ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว (รหัส: <code style={{ background: 'var(--surface-hover)', padding: '0.15rem 0.35rem', borderRadius: '4px' }}>{submittedReport.id}</code>) ทีมงานจะนำไปตรวจสอบและปรับปรุงให้ดียิ่งขึ้นครับ
           </p>
 
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="btn btn-primary" onClick={handleResetForm}>
-              <Send size={16} /> แจ้งเรื่องอื่นเพิ่มเติม
+          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn btn-primary" onClick={handleResetForm} style={{ padding: '0.55rem 1.15rem' }}>
+              <Send size={15} /> แจ้งเรื่องอื่นเพิ่มเติม
             </button>
-            <button className="btn btn-outline" onClick={onBack}>
+            <button className="btn btn-outline" onClick={onBack} style={{ padding: '0.55rem 1.15rem' }}>
               กลับสู่หน้าหลัก
             </button>
           </div>
         </div>
       ) : (
-        <div className="card" style={{ padding: '2.5rem', borderRadius: '16px' }}>
-          <div style={{ marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+        <div className="card report-card" style={{ borderRadius: '14px' }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <div style={{ 
-                width: '40px', height: '40px', borderRadius: '10px', 
+                width: '36px', height: '36px', borderRadius: '8px', 
                 background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center' 
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0
               }}>
-                <AlertTriangle size={22} />
+                <AlertTriangle size={20} />
               </div>
               <div>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.5px', margin: 0 }}>
+                <h1 style={{ fontSize: '1.25rem', fontWeight: 600, letterSpacing: '-0.3px', margin: 0 }}>
                   รายงานข้อสอบผิดพลาด / แจ้งปัญหา
                 </h1>
-                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', margin: 0 }}>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
                   ช่วยเราพัฒนา ExamHub ให้ดียิ่งขึ้น หากพบข้อสอบผิด เฉลยไม่ตรง หรือบั๊กในระบบ
                 </p>
               </div>
@@ -218,7 +239,7 @@ export default function Report({ subjects = [], initialData = null, user = null,
             </div>
 
             {/* 2. Subject & Question Selection */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px', gap: '1rem' }}>
+            <div className="report-subject-grid">
               <div>
                 <label htmlFor="subject-select" style={{ fontSize: '0.875rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
                   ชุดข้อสอบที่พบปัญหา

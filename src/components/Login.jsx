@@ -88,8 +88,30 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'center', 
-      minHeight: '80vh', width: '100%', position: 'relative'
+      minHeight: '75vh', width: '100%', position: 'relative', padding: '1rem 0'
     }}>
+      <style>{`
+        .login-card {
+          padding: 2.25rem 1.75rem;
+          width: 100%;
+          max-width: 380px;
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          z-index: 1;
+          backdrop-filter: blur(10px);
+          border: 1px solid var(--border-color);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+          border-radius: 14px;
+        }
+        @media (max-width: 480px) {
+          .login-card {
+            padding: 1.5rem 1.15rem !important;
+            gap: 1rem !important;
+          }
+        }
+      `}</style>
+
       {/* Subtle background glow */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -98,24 +120,18 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
         zIndex: 0, pointerEvents: 'none'
       }}></div>
 
-      <div className="card animate-fade-in" style={{
-        padding: '2.5rem 2rem', width: '100%', maxWidth: '380px', 
-        display: 'flex', flexDirection: 'column', gap: '1.5rem',
-        zIndex: 1, backdropFilter: 'blur(10px)',
-        border: '1px solid var(--border-color)',
-        boxShadow: '0 8px 30px rgba(0,0,0,0.04)'
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', textAlign: 'center' }}>
+      <div className="card login-card animate-fade-in">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', textAlign: 'center' }}>
           <div style={{ 
-            width: '48px', height: '48px', background: 'var(--text)', color: 'var(--bg)', 
-            borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 0.5rem auto', boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
+            width: '42px', height: '42px', background: 'var(--text)', color: 'var(--bg)', 
+            borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 0.4rem auto', boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
             transform: 'scale(1)', transition: 'transform 0.2s ease'
           }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
           </div>
-          <h2 style={{ fontSize: '1.5rem', letterSpacing: '-0.5px', transition: 'all 0.3s ease' }}>{isSignUp ? 'Create an account' : 'Welcome to ExamHub'}</h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+          <h2 style={{ fontSize: '1.25rem', letterSpacing: '-0.3px', transition: 'all 0.3s ease', margin: 0, fontWeight: 600 }}>{isSignUp ? 'Create an account' : 'Welcome to ExamHub'}</h2>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
             {isSignUp ? 'Enter your email below to create your account' : 'Sign in to save your scores and track your progress'}
           </p>
         </div>
