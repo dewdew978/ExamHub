@@ -156,6 +156,18 @@
     "type": "Midterm"
   },
   {
+    "id": "dw_hard_60",
+    "category": "Data Warehousing",
+    "name": "DW Advanced Comprehensive Exam (60 Questions)",
+    "icon": "🏢",
+    "color": "#eab308",
+    "iconBg": "rgba(234,179,8,0.15)",
+    "desc": "ชุดข้อสอบจำลองขั้นสูง 60 ข้อ ครอบคลุม OLAP, Architecture, Bus Matrix, Star/Snowflake Schema และ SCD อย่างละเอียด",
+    "questionCount": 60,
+    "year": 3,
+    "type": "Midterm"
+  },
+  {
     "id": "med_img_dl_30q",
     "category": "Medical Image & Deep Learning",
     "name": "Deep Learning in Medical Image & Video Analysis Quiz",
