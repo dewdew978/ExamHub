@@ -161,7 +161,210 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
   ];
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '1020px', margin: '1.5rem auto 3.5rem', padding: '0 1rem' }}>
+    <div className="animate-fade-in user-settings-wrapper">
+      
+      {/* Scoped Responsive CSS */}
+      <style>{`
+        .user-settings-wrapper {
+          max-width: 1020px;
+          margin: 1.5rem auto 3.5rem;
+          padding: 0 1rem;
+        }
+        .user-settings-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 1.5rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid var(--border-divider);
+          gap: 1rem;
+        }
+        .user-settings-layout {
+          display: flex;
+          gap: 1.5rem;
+          align-items: flex-start;
+        }
+        .user-settings-sidebar {
+          width: 280px;
+          min-width: 260px;
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .user-settings-profile-card {
+          padding: 1.25rem;
+          border-radius: 14px;
+          background: linear-gradient(135deg, var(--card) 0%, var(--surface-hover) 100%);
+          border: 1px solid var(--border-color);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 0.75rem;
+        }
+        .user-settings-avatar {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: var(--surface);
+          box-shadow: var(--shadow-md);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2.1rem;
+          border: 2px solid var(--border-color);
+          flex-shrink: 0;
+        }
+        .user-settings-nav-card {
+          padding: 0.5rem;
+          border-radius: 14px;
+          border: 1px solid var(--border-color);
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+        .user-settings-nav-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 0.875rem;
+          border-radius: 10px;
+          border: none;
+          cursor: pointer;
+          text-align: left;
+          width: 100%;
+          font-family: inherit;
+          transition: all 0.15s ease;
+        }
+        .user-settings-main-content {
+          flex: 1;
+          min-width: 0;
+          width: 100%;
+        }
+        .user-settings-form-card {
+          padding: 2rem;
+          border-radius: 16px;
+        }
+        .user-settings-pref-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1.25rem;
+          border-radius: 12px;
+          background: var(--surface);
+          border: 1px solid var(--border-color);
+          gap: 1rem;
+        }
+        .user-settings-emoji-grid {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+        .user-settings-emoji-btn {
+          width: 44px;
+          height: 44px;
+          border-radius: 10px;
+          font-size: 1.4rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.15s ease;
+        }
+        .user-settings-submit-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.75rem;
+        }
+
+        /* Mobile & Tablet Styles */
+        @media (max-width: 768px) {
+          .user-settings-wrapper {
+            margin: 1rem auto 2.5rem;
+            padding: 0 0.75rem;
+          }
+          .user-settings-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+          }
+          .user-settings-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+          }
+          .user-settings-layout {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          .user-settings-sidebar {
+            width: 100%;
+            min-width: 100%;
+            gap: 0.75rem;
+          }
+          .user-settings-profile-card {
+            flex-direction: row;
+            align-items: center;
+            text-align: left;
+            padding: 1rem;
+            gap: 1rem;
+          }
+          .user-settings-avatar {
+            width: 52px;
+            height: 52px;
+            font-size: 1.75rem;
+          }
+          .user-settings-profile-info {
+            flex: 1;
+            min-width: 0;
+          }
+          .user-settings-score-pill {
+            margin-top: 0 !important;
+            padding: 0.35rem 0.6rem !important;
+          }
+          .user-settings-nav-card {
+            flex-direction: row;
+            overflow-x: auto;
+            padding: 0.35rem;
+            gap: 0.35rem;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+          }
+          .user-settings-nav-btn {
+            flex: 1 0 auto;
+            padding: 0.55rem 0.85rem;
+            white-space: nowrap;
+            box-shadow: none !important;
+            border-radius: 8px;
+            gap: 0.5rem;
+          }
+          .user-settings-nav-sublabel {
+            display: none;
+          }
+          .user-settings-form-card {
+            padding: 1.25rem 1rem;
+            border-radius: 12px;
+          }
+          .user-settings-pref-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.875rem;
+            padding: 1rem;
+          }
+          .user-settings-emoji-btn {
+            width: 38px;
+            height: 38px;
+            font-size: 1.25rem;
+          }
+          .user-settings-submit-btn {
+            width: 100%;
+          }
+        }
+      `}</style>
       
       {/* Toast Notification */}
       {toastMessage && (
@@ -188,99 +391,61 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
       )}
 
       {/* Top Header Bar */}
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
-        marginBottom: '1.5rem',
-        paddingBottom: '1rem',
-        borderBottom: '1px solid var(--border-divider)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button 
-            className="btn btn-outline" 
-            onClick={onBack}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.875rem', fontSize: '0.875rem' }}
-          >
-            <ArrowLeft size={16} /> ย้อนกลับ
-          </button>
-          <div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, letterSpacing: '-0.3px' }}>
-              การตั้งค่าบัญชี & โปรไฟล์
-            </h1>
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-              จัดการข้อมูลส่วนตัว การตั้งค่าระบบ และความปลอดภัย
+      <div className="user-settings-header">
+        <div className="user-settings-header-top">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+            <button 
+              className="btn btn-outline" 
+              onClick={onBack}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.45rem 0.75rem', fontSize: '0.8125rem' }}
+            >
+              <ArrowLeft size={15} /> ย้อนกลับ
+            </button>
+            <div>
+              <h1 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0, letterSpacing: '-0.3px' }}>
+                การตั้งค่าบัญชี & โปรไฟล์
+              </h1>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                จัดการข้อมูลส่วนตัว การตั้งค่าระบบ และความปลอดภัย
+              </div>
             </div>
           </div>
-        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ 
-            fontSize: '0.75rem', 
-            fontWeight: 600, 
-            padding: '0.3rem 0.75rem', 
-            borderRadius: '999px',
-            background: isAdmin ? 'rgba(99, 102, 241, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-            color: isAdmin ? '#6366f1' : 'var(--success)',
-            border: isAdmin ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.375rem'
-          }}>
-            {isAdmin ? <ShieldCheck size={13} /> : <User size={13} />}
-            {isAdmin ? 'Super Admin' : 'ผู้เรียน (Student)'}
-          </span>
+          <div>
+            <span style={{ 
+              fontSize: '0.75rem', 
+              fontWeight: 600, 
+              padding: '0.25rem 0.625rem', 
+              borderRadius: '999px',
+              background: isAdmin ? 'rgba(99, 102, 241, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+              color: isAdmin ? '#6366f1' : 'var(--success)',
+              border: isAdmin ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.375rem'
+            }}>
+              {isAdmin ? <ShieldCheck size={13} /> : <User size={13} />}
+              {isAdmin ? 'Super Admin' : 'ผู้เรียน (Student)'}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Main Layout Container (Sidebar + Content Area) */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '1.5rem',
-        alignItems: 'flex-start',
-        flexWrap: 'wrap'
-      }}>
+      <div className="user-settings-layout">
         
         {/* ========================================================================= */}
         {/* LEFT SIDEBAR NAVIGATION RAIL                                              */}
         {/* ========================================================================= */}
-        <div style={{
-          width: '280px',
-          minWidth: '260px',
-          flexShrink: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem'
-        }}>
+        <div className="user-settings-sidebar">
           {/* User Mini Profile Card */}
-          <div className="card" style={{
-            padding: '1.25rem',
-            borderRadius: '14px',
-            background: 'linear-gradient(135deg, var(--card) 0%, var(--surface-hover) 100%)',
-            border: '1px solid var(--border-color)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            gap: '0.75rem'
-          }}>
-            <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              background: 'var(--surface)',
-              boxShadow: 'var(--shadow-md)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2.1rem',
-              border: '2px solid var(--border-color)'
-            }}>
+          <div className="card user-settings-profile-card">
+            <div className="user-settings-avatar">
               {avatarEmoji}
             </div>
 
-            <div style={{ width: '100%' }}>
-              <div style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '-0.3px', wordBreak: 'break-word' }}>
+            <div className="user-settings-profile-info" style={{ width: '100%' }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.3px', wordBreak: 'break-word' }}>
                 {displayNickname}
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem', wordBreak: 'break-all' }}>
@@ -291,8 +456,8 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                   fontSize: '0.75rem', 
                   color: 'var(--text-muted)', 
                   fontStyle: 'italic', 
-                  marginTop: '0.5rem',
-                  padding: '0.35rem 0.6rem',
+                  marginTop: '0.4rem',
+                  padding: '0.3rem 0.5rem',
                   background: 'var(--surface)',
                   borderRadius: '6px',
                   border: '1px solid var(--border-divider)'
@@ -303,13 +468,13 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
             </div>
 
             {/* Score Pill */}
-            <div style={{
+            <div className="user-settings-score-pill" style={{
               width: '100%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '0.5rem',
-              padding: '0.5rem 0.75rem',
+              padding: '0.45rem 0.75rem',
               borderRadius: '8px',
               background: 'rgba(0, 112, 243, 0.08)',
               border: '1px solid rgba(0, 112, 243, 0.2)',
@@ -322,14 +487,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
           </div>
 
           {/* Navigation Links Menu */}
-          <div className="card" style={{
-            padding: '0.5rem',
-            borderRadius: '14px',
-            border: '1px solid var(--border-color)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.25rem'
-          }}>
+          <div className="card user-settings-nav-card">
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -338,21 +496,11 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                   key={item.id}
                   type="button"
                   onClick={() => setActiveTab(item.id)}
+                  className="user-settings-nav-btn"
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '0.75rem 0.875rem',
-                    borderRadius: '10px',
-                    border: 'none',
                     background: isActive ? 'var(--surface-hover)' : 'transparent',
                     color: isActive ? 'var(--accent)' : 'var(--text)',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    width: '100%',
-                    fontFamily: 'inherit',
                     boxShadow: isActive ? 'inset 3px 0 0 0 var(--accent)' : 'none',
-                    transition: 'all 0.15s ease'
                   }}
                   onMouseOver={(e) => {
                     if (!isActive) e.currentTarget.style.background = 'var(--surface)';
@@ -362,8 +510,8 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                   }}
                 >
                   <div style={{
-                    width: '32px',
-                    height: '32px',
+                    width: '30px',
+                    height: '30px',
                     borderRadius: '8px',
                     background: isActive ? 'rgba(0, 112, 243, 0.12)' : 'var(--surface)',
                     color: isActive ? 'var(--accent)' : 'var(--text-muted)',
@@ -375,10 +523,10 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                     <Icon size={16} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.875rem', fontWeight: isActive ? 600 : 500 }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: isActive ? 600 : 500 }}>
                       {item.label}
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                    <div className="user-settings-nav-sublabel" style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                       {item.sublabel}
                     </div>
                   </div>
@@ -391,14 +539,14 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
         {/* ========================================================================= */}
         {/* RIGHT MAIN CONTENT AREA                                                   */}
         {/* ========================================================================= */}
-        <div style={{ flex: 1, minWidth: '300px' }}>
+        <div className="user-settings-main-content">
           
           {/* TAB 1: Profile Information */}
           {activeTab === 'profile' && (
-            <form onSubmit={handleSaveProfile} className="card animate-fade-in" style={{ padding: '2rem', borderRadius: '16px' }}>
+            <form onSubmit={handleSaveProfile} className="card animate-fade-in user-settings-form-card">
               
               <div style={{ borderBottom: '1px solid var(--border-divider)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <User size={18} color="var(--accent)" />
                   ข้อมูลโปรไฟล์ส่วนตัว
                 </h3>
@@ -412,25 +560,17 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.625rem' }}>
                   เลือกไอคอนประจำตัว (Avatar)
                 </label>
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div className="user-settings-emoji-grid">
                   {AVATAR_EMOJIS.map(emoji => (
                     <button
                       key={emoji}
                       type="button"
                       onClick={() => setAvatarEmoji(emoji)}
+                      className="user-settings-emoji-btn"
                       style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '10px',
-                        fontSize: '1.4rem',
                         border: avatarEmoji === emoji ? '2px solid var(--accent)' : '1px solid var(--border-color)',
                         background: avatarEmoji === emoji ? 'rgba(0, 112, 243, 0.12)' : 'var(--surface)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
                         transform: avatarEmoji === emoji ? 'scale(1.08)' : 'none',
-                        transition: 'all 0.15s ease'
                       }}
                     >
                       {emoji}
@@ -477,12 +617,11 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 </span>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button 
                   type="submit" 
-                  className="btn btn-primary"
+                  className="btn btn-primary user-settings-submit-btn"
                   disabled={saving}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.75rem' }}
                 >
                   <Save size={16} />
                   <span>{saving ? 'กำลังบันทึก...' : 'บันทึกข้อมูลโปรไฟล์'}</span>
@@ -493,9 +632,9 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
 
           {/* TAB 2: System & Exam Preferences */}
           {activeTab === 'preferences' && (
-            <div className="card animate-fade-in" style={{ padding: '2rem', borderRadius: '16px' }}>
+            <div className="card animate-fade-in user-settings-form-card">
               <div style={{ borderBottom: '1px solid var(--border-divider)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Settings size={18} color="var(--accent)" />
                   การตั้งค่าระบบและประสบการณ์การทำข้อสอบ
                 </h3>
@@ -504,18 +643,10 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                 </p>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
                 
                 {/* Theme Toggle */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.25rem',
-                  borderRadius: '12px',
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border-color)'
-                }}>
+                <div className="user-settings-pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Palette size={16} color="var(--accent)" /> ธีมการแสดงผล (Theme)
@@ -528,22 +659,14 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                     type="button" 
                     className="btn btn-outline"
                     onClick={onToggleTheme}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}
                   >
                     {theme === 'dark' ? '🌙 โหมดมืด' : '☀️ โหมดสว่าง'}
                   </button>
                 </div>
 
                 {/* KaTeX Formula Toggle */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.25rem',
-                  borderRadius: '12px',
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border-color)'
-                }}>
+                <div className="user-settings-pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <BookOpen size={16} color="var(--accent)" /> แสดงสูตรคณิตศาสตร์ (KaTeX Formula Render)
@@ -556,20 +679,12 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                     type="checkbox"
                     checked={mathRendering}
                     onChange={(e) => setMathRendering(e.target.checked)}
-                    style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: 'var(--accent)' }}
+                    style={{ width: '22px', height: '22px', cursor: 'pointer', accentColor: 'var(--accent)', flexShrink: 0 }}
                   />
                 </div>
 
                 {/* Timer Toggle */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.25rem',
-                  borderRadius: '12px',
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border-color)'
-                }}>
+                <div className="user-settings-pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Calendar size={16} color="var(--accent)" /> ตัวจับเวลานับถอยหลังในการสอบ (Exam Timer)
@@ -582,20 +697,12 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                     type="checkbox"
                     checked={timerEnabled}
                     onChange={(e) => setTimerEnabled(e.target.checked)}
-                    style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: 'var(--accent)' }}
+                    style={{ width: '22px', height: '22px', cursor: 'pointer', accentColor: 'var(--accent)', flexShrink: 0 }}
                   />
                 </div>
 
                 {/* Auto Shuffle Toggle */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '1.25rem',
-                  borderRadius: '12px',
-                  background: 'var(--surface)',
-                  border: '1px solid var(--border-color)'
-                }}>
+                <div className="user-settings-pref-row">
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Shuffle size={16} color="var(--accent)" /> สลับลำดับข้อสอบอัตโนมัติ (Auto Shuffle Questions)
@@ -608,17 +715,16 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
                     type="checkbox"
                     checked={autoShuffle}
                     onChange={(e) => setAutoShuffle(e.target.checked)}
-                    style={{ width: '20px', height: '20px', cursor: 'pointer', accentColor: 'var(--accent)' }}
+                    style={{ width: '22px', height: '22px', cursor: 'pointer', accentColor: 'var(--accent)', flexShrink: 0 }}
                   />
                 </div>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button 
-                  type="button"
-                  className="btn btn-primary"
+                  type="button" 
+                  className="btn btn-primary user-settings-submit-btn"
                   onClick={handleSavePreferences}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.75rem' }}
                 >
                   <Save size={16} /> บันทึกการตั้งค่า
                 </button>
@@ -628,9 +734,9 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
 
           {/* TAB 3: Security & Password */}
           {activeTab === 'security' && (
-            <div className="card animate-fade-in" style={{ padding: '2rem', borderRadius: '16px' }}>
+            <div className="card animate-fade-in user-settings-form-card">
               <div style={{ borderBottom: '1px solid var(--border-divider)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0 0 0.25rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Key size={18} color="var(--accent)" />
                   ความปลอดภัยและเปลี่ยนรหัสผ่าน
                 </h3>
@@ -705,9 +811,8 @@ export default function UserSettings({ user, onBack, onUserUpdated, totalScore =
 
                 <button 
                   type="submit" 
-                  className="btn btn-primary"
+                  className="btn btn-primary user-settings-submit-btn"
                   disabled={saving}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.75rem' }}
                 >
                   <Lock size={16} />
                   <span>{saving ? 'กำลังดำเนินการ...' : 'อัปเดตรหัสผ่านใหม่'}</span>
