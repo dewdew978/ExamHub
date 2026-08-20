@@ -37,12 +37,16 @@ import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { supabase } from '../lib/supabase';
 
-// Issue types config matching Report.jsx
+// Issue types config matching Report.jsx & FAQ.jsx
 const ISSUE_TYPES_MAP = {
   wrong_answer: { label: 'เฉลยผิด / คำตอบไม่ถูกต้อง', icon: AlertTriangle, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' },
   wrong_translation: { label: 'คำแปล / ภาษาไทยผิดพลาด', icon: FileText, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
   bug_system: { label: 'บั๊ก / ระบบแสดงผลผิดพลาด', icon: Bug, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
   suggestion: { label: 'ข้อเสนอแนะ / ปรับปรุง', icon: Sparkles, color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)' },
+  request_exam: { label: 'ขอเพิ่มวิชา / ข้อสอบใหม่ (Needs)', icon: BookOpen, color: '#0070f3', bg: 'rgba(0, 112, 243, 0.12)' },
+  suggest_feature: { label: 'เสนอแนะฟีเจอร์ใหม่ (Needs)', icon: Sparkles, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
+  report_bug: { label: 'แจ้งปัญหา / บั๊ก (Needs)', icon: Bug, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' },
+  general_feedback: { label: 'ข้อเสนอแนะทั่วไป (Needs)', icon: HelpCircle, color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)' },
   other: { label: 'อื่นๆ', icon: HelpCircle, color: '#888888', bg: 'rgba(136, 136, 136, 0.12)' }
 };
 
@@ -179,10 +183,11 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       }
 
       const localReports = JSON.parse(localStorage.getItem('examhub_user_reports') || '[]');
+      const localNeeds = JSON.parse(localStorage.getItem('examhub_user_needs') || '[]');
       const localStatusMap = JSON.parse(localStorage.getItem('examhub_report_statuses') || '{}');
 
       const reportsMap = new Map();
-      localReports.forEach(r => {
+      [...localReports, ...localNeeds].forEach(r => {
         reportsMap.set(r.id, {
           ...r,
           status: localStatusMap[r.id] || r.status || 'pending'

@@ -1,20 +1,62 @@
 import { useState, useEffect } from 'react';
+import Landing from './components/Landing';
+import AboutUs from './components/AboutUs';
+import FAQ from './components/FAQ';
 import Home from './components/Home';
 import Exam from './components/Exam';
 import ExamIntro from './components/ExamIntro';
 import { Pattern } from './components/Pattern';
 import Schedule from './components/Schedule';
 import Login from './components/Login';
+import ResetPassword from './components/ResetPassword';
 import ScoreHistory from './components/ScoreHistory';
 import Report from './components/Report';
 import AdminDashboard from './components/AdminDashboard';
 import UserSettings from './components/UserSettings';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User } from 'lucide-react';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Info, Sparkles, HelpCircle } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import './index.css';
 
+const getViewFromPath = (pathname) => {
+  const path = (pathname || '').toLowerCase().replace(/\/$/, '') || '/';
+  if (path === '/' || path === '/landing' || path === '/landingpage') return 'landing';
+  if (path === '/home') return 'home';
+  if (path === '/about' || path === '/aboutus') return 'about';
+  if (path === '/faq' || path === '/faqs' || path === '/help') return 'faq';
+  if (path === '/login') return 'login';
+  if (path === '/reset-password' || path === '/resetpassword') return 'reset-password';
+  if (path === '/schedule') return 'schedule';
+  if (path === '/history') return 'history';
+  if (path === '/report') return 'report';
+  if (path === '/settings') return 'settings';
+  if (path === '/admin' || path === '/admin_reports') return 'admin_reports';
+  return 'landing';
+};
+
+const getPathFromView = (view) => {
+  switch (view) {
+    case 'landing': return '/landingpage';
+    case 'home': return '/home';
+    case 'about': return '/about';
+    case 'faq': return '/faq';
+    case 'login': return '/login';
+    case 'reset-password': return '/reset-password';
+    case 'schedule': return '/schedule';
+    case 'history': return '/history';
+    case 'report': return '/report';
+    case 'settings': return '/settings';
+    case 'admin_reports': return '/admin';
+    default: return null;
+  }
+};
+
 function App() {
-  const [currentView, setCurrentView] = useState('login');
+  const [currentView, setCurrentView] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return getViewFromPath(window.location.pathname);
+    }
+    return 'landing';
+  });
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -45,6 +87,24 @@ function App() {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Sync browser URL bar with current view
+  useEffect(() => {
+    const targetPath = getPathFromView(currentView);
+    if (targetPath && window.location.pathname !== targetPath) {
+      window.history.pushState({ view: currentView }, '', targetPath);
+    }
+  }, [currentView]);
+
+  // Handle browser Back / Forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const view = getViewFromPath(window.location.pathname);
+      setCurrentView(view);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Fetch initial data
   useEffect(() => {
@@ -107,12 +167,17 @@ function App() {
 
         // 2. Check auth status
         const { data: { session } } = await supabase.auth.getSession();
+        const initialView = typeof window !== 'undefined' ? getViewFromPath(window.location.pathname) : 'landing';
         if (session?.user) {
           setUser(session.user);
           await loadUserScores(session.user.id);
-          setCurrentView('home');
+          if (window.location.pathname === '/' || window.location.pathname === '') {
+            setCurrentView('home');
+          } else {
+            setCurrentView(initialView);
+          }
         } else {
-          setCurrentView('login');
+          setCurrentView(initialView);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -130,16 +195,16 @@ function App() {
     fetchInitialData();
 
     // Set up auth listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setCurrentView('reset-password');
+      } else if (session?.user) {
         setUser(session.user);
         loadUserScores(session.user.id);
-        setCurrentView('home');
       } else {
         setUser(null);
         setTotalScore(0);
         setCategoryScores({});
-        setCurrentView('login');
       }
     });
 
@@ -292,6 +357,48 @@ function App() {
     );
   }
 
+  // Standalone Landing Page before entering Home
+  if (currentView === 'landing') {
+    return (
+      <Landing 
+        subjects={subjects}
+        totalQuestions={subjects.reduce((sum, s) => sum + s.questionCount, 0)}
+        user={user}
+        onStart={() => setCurrentView('home')}
+        onLogin={() => setCurrentView('login')}
+        onNavigateAbout={() => setCurrentView('about')}
+        onNavigateFaq={() => setCurrentView('faq')}
+      />
+    );
+  }
+
+  // Standalone About Us Page
+  if (currentView === 'about') {
+    return (
+      <AboutUs 
+        subjects={subjects}
+        user={user}
+        onStart={() => setCurrentView('home')}
+        onLogin={() => setCurrentView('login')}
+        onHome={() => setCurrentView('landing')}
+        onNavigateFaq={() => setCurrentView('faq')}
+      />
+    );
+  }
+
+  // Standalone FAQ & Needs Page
+  if (currentView === 'faq') {
+    return (
+      <FAQ 
+        onHome={() => setCurrentView('home')}
+        onNavigateLanding={() => setCurrentView('landing')}
+        onNavigateAbout={() => setCurrentView('about')}
+        onLogin={() => setCurrentView('login')}
+        user={user}
+      />
+    );
+  }
+
   // Hide header on login view
   if (currentView === 'login') {
     return (
@@ -306,8 +413,25 @@ function App() {
             }} 
             onClose={() => {
               setAuthRequiredMessage('');
+              setCurrentView(user ? 'home' : 'landing');
+            }} // Guest mode / Back to Landing
+          />
+        </main>
+      </div>
+    );
+  }
+
+  // Standalone Reset Password Page
+  if (currentView === 'reset-password') {
+    return (
+      <div className="app-container">
+        <main className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <ResetPassword 
+            onSuccess={(updatedUser) => {
+              if (updatedUser) setUser(updatedUser);
               setCurrentView('home');
-            }} // Guest mode
+            }}
+            onBackToLogin={() => setCurrentView('login')}
           />
         </main>
       </div>
@@ -327,247 +451,416 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="header">
-        <a href="#" className="logo" onClick={(e) => { e.preventDefault(); goHome(); }}>
-          <div style={{ 
-            width: '24px', height: '24px', background: 'var(--text)', 
-            color: 'var(--bg)', borderRadius: '6px', display: 'flex', 
-            alignItems: 'center', justifyContent: 'center' 
-          }}>
-            <BookOpen size={14} />
-          </div>
-          <span className="logo-text">ExamHub</span>
-        </a>
-        
-        {/* Desktop / Laptop / iPad Navigation (screens > 768px) */}
-        <div className="nav-desktop">
-          <button 
-            className="btn btn-outline" 
-            onClick={toggleTheme}
-            style={{ width: '36px', height: '36px', padding: 0 }}
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-          
-          <div style={{ position: 'relative' }}>
-            <button 
-              className={`btn ${['schedule', 'history', 'report', 'admin_reports', 'settings'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
-              onClick={() => setShowMenu(!showMenu)}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-            >
-              <span>เมนู</span>
-              <ChevronDown size={14} />
-            </button>
-            
-            {showMenu && (
-              <>
-                <div 
-                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 40 }} 
-                  onClick={() => setShowMenu(false)} 
-                />
-                <div 
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    right: 0,
-                    marginTop: '0.5rem',
-                    background: 'var(--bg)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'hidden',
-                    zIndex: 50,
-                    minWidth: '200px'
+      {/* Floating / Rounded Island Navbar for App Views */}
+      <div className="app-navbar-wrapper">
+        <header className="app-navbar">
+          <div className="app-navbar-inner">
+            {/* Left: Brand Logo */}
+            <div className="app-brand-col">
+              <a href="#" className="app-brand" onClick={(e) => { e.preventDefault(); goHome(); }}>
+                <div className="app-brand-icon">
+                  <BookOpen size={19} />
+                </div>
+                <span>ExamHub</span>
+              </a>
+            </div>
+
+            {/* Center: Main Nav Links (คลังข้อสอบ, ตารางสอบ, ประวัติคะแนน, คำถามที่พบบ่อย) */}
+            <div className="app-nav-center">
+              <nav className="app-nav-links">
+                <button 
+                  className={`app-nav-link ${currentView === 'home' ? 'active' : ''}`}
+                  onClick={goHome}
+                >
+                  คลังข้อสอบ
+                </button>
+                <button 
+                  className={`app-nav-link ${currentView === 'schedule' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('schedule')}
+                >
+                  ตารางสอบ
+                </button>
+                <button 
+                  className={`app-nav-link ${currentView === 'history' ? 'active' : ''}`}
+                  onClick={() => {
+                    if (!user) {
+                      setAuthRequiredMessage('กรุณาเข้าสู่ระบบก่อนเพื่อดูประวัติคะแนน');
+                      setCurrentView('login');
+                    } else {
+                      setCurrentView('history');
+                    }
                   }}
                 >
-                  {user && (
-                    <button 
+                  ประวัติคะแนน
+                </button>
+                <button 
+                  className={`app-nav-link ${currentView === 'faq' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('faq')}
+                >
+                  คำถามที่พบบ่อย
+                </button>
+              </nav>
+            </div>
+
+            {/* Right: Actions (Theme toggle, Profile/Menu, Auth) */}
+            <div className="app-nav-actions">
+              {/* Theme Toggle */}
+              <button 
+                className="btn btn-outline app-icon-btn" 
+                onClick={toggleTheme}
+                style={{ width: '40px', height: '40px', padding: 0 }}
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+
+              {/* User Dropdown / Menu */}
+              <div style={{ position: 'relative' }}>
+                <button 
+                  className={`btn ${['settings', 'schedule', 'history', 'report', 'admin_reports'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
+                  onClick={() => setShowMenu(!showMenu)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', borderRadius: '999px', height: '40px', padding: '0 0.9rem' }}
+                >
+                  {user ? <User size={15} /> : <Menu size={15} />}
+                  <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+                    {user?.user_metadata?.nickname || (user ? 'โปรไฟล์' : 'เมนู')}
+                  </span>
+                  <ChevronDown size={13} />
+                </button>
+                
+                {showMenu && (
+                  <>
+                    <div 
+                      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 90 }} 
+                      onClick={() => setShowMenu(false)} 
+                    />
+                    <div 
+                      className="card animate-fade-in"
                       style={{
-                        fontFamily: 'inherit',
-                        padding: '0.75rem 1rem',
-                        background: currentView === 'settings' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                        color: currentView === 'settings' ? 'var(--accent)' : 'var(--text)',
-                        border: 'none',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        borderBottom: '1px solid var(--border)',
-                        width: '100%',
+                        position: 'absolute',
+                        top: 'calc(100% + 8px)',
+                        right: 0,
+                        background: 'var(--surface)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '16px',
+                        boxShadow: '0 12px 36px rgba(0,0,0,0.15)',
                         display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                      onClick={() => {
-                        setCurrentView('settings');
-                        setShowMenu(false);
-                      }}
-                      onMouseOver={(e) => {
-                        if (currentView !== 'settings') e.currentTarget.style.background = 'var(--card)';
-                      }}
-                      onMouseOut={(e) => {
-                        if (currentView !== 'settings') e.currentTarget.style.background = 'transparent';
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                        zIndex: 100,
+                        minWidth: '220px',
+                        backdropFilter: 'blur(16px)'
                       }}
                     >
-                      <User size={14} color="var(--accent)" />
-                      <span>ข้อมูลส่วนตัว & ตั้งค่า</span>
-                    </button>
-                  )}
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.75rem 1rem',
-                      background: currentView === 'schedule' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                      color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      borderBottom: '1px solid var(--border)',
-                      width: '100%'
-                    }}
-                    onClick={() => {
-                      setCurrentView('schedule');
-                      setShowMenu(false);
-                    }}
-                    onMouseOver={(e) => {
-                      if (currentView !== 'schedule') e.currentTarget.style.background = 'var(--card)';
-                    }}
-                    onMouseOut={(e) => {
-                      if (currentView !== 'schedule') e.currentTarget.style.background = 'transparent';
-                    }}
-                  >
-                    ตารางสอบ
-                  </button>
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.75rem 1rem',
-                      background: currentView === 'history' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                      color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      borderBottom: '1px solid var(--border)',
-                      width: '100%'
-                    }}
-                    onClick={() => {
-                      setCurrentView('history');
-                      setShowMenu(false);
-                    }}
-                    onMouseOver={(e) => {
-                      if (currentView !== 'history') e.currentTarget.style.background = 'var(--card)';
-                    }}
-                    onMouseOut={(e) => {
-                      if (currentView !== 'history') e.currentTarget.style.background = 'transparent';
-                    }}
-                  >
-                    ประวัติคะแนน
-                  </button>
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.75rem 1rem',
-                      background: currentView === 'report' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                      color: currentView === 'report' ? 'var(--accent)' : 'var(--text)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      borderBottom: isAdmin ? '1px solid var(--border)' : 'none',
-                      width: '100%'
-                    }}
-                    onClick={() => openReport()}
-                    onMouseOver={(e) => {
-                      if (currentView !== 'report') e.currentTarget.style.background = 'var(--card)';
-                    }}
-                    onMouseOut={(e) => {
-                      if (currentView !== 'report') e.currentTarget.style.background = 'transparent';
-                    }}
-                  >
-                    รายงานข้อสอบผิด / ปัญหา
-                  </button>
-                  {isAdmin && (
-                    <button 
-                      style={{
-                        fontFamily: 'inherit',
-                        padding: '0.75rem 1rem',
-                        background: currentView === 'admin_reports' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                        color: currentView === 'admin_reports' ? 'var(--accent)' : 'var(--text)',
-                        border: 'none',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                      onClick={() => {
-                        setCurrentView('admin_reports');
-                        setShowMenu(false);
-                      }}
-                      onMouseOver={(e) => {
-                        if (currentView !== 'admin_reports') e.currentTarget.style.background = 'var(--card)';
-                      }}
-                      onMouseOut={(e) => {
-                        if (currentView !== 'admin_reports') e.currentTarget.style.background = 'transparent';
-                      }}
-                    >
-                      <ShieldCheck size={14} color="var(--accent)" />
-                      <span>แดชบอร์ดจัดการ (Admin)</span>
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-          
-          <button className={`btn ${currentView === 'home' ? 'btn-primary' : 'btn-outline'}`} onClick={goHome}>
-            <span>หน้าหลัก</span>
-          </button>
-          
-          <button 
-            className="btn"
-            onClick={() => setShowChart(true)}
-            style={{ 
-              fontSize: '0.875rem', fontWeight: 600, display: 'flex', 
-              alignItems: 'center', color: 'var(--accent)',
-              boxShadow: 'var(--shadow-border)', padding: '0.5rem 0.75rem',
-              borderRadius: '6px', background: 'rgba(0, 112, 243, 0.1)'
-            }}
-          >
-            <span>{totalScore} คะแนน</span>
-          </button>
-          
-          {user ? (
-            <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(true)} title={`ออกจากระบบ (${user.email})`}>
-              <LogOut size={16} />
-            </button>
-          ) : (
-            <button className="btn btn-primary" onClick={() => setCurrentView('login')}>
-              <LogIn size={16} />
-              <span>Login</span>
-            </button>
-          )}
-        </div>
+                      {/* 1. หน้าหลัก (Home) */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: currentView === 'home' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                          color: currentView === 'home' ? 'var(--accent)' : 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: '1px solid var(--border)',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          fontWeight: currentView === 'home' ? 600 : 400
+                        }}
+                        onClick={() => {
+                          goHome();
+                          setShowMenu(false);
+                        }}
+                        onMouseOver={(e) => {
+                          if (currentView !== 'home') e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          if (currentView !== 'home') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <BookOpen size={14} color="var(--accent)" />
+                        <span>คลังข้อสอบ (หน้าหลัก)</span>
+                      </button>
 
-        {/* Mobile Navigation (<= 768px): All options in a Single Dropdown */}
-        <div className="nav-mobile" style={{ position: 'relative' }}>
-          <button 
-            className={`btn ${showMobileMenu ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.45rem 0.75rem' }}
-            aria-label="เปิดเมนู"
-          >
-            {showMobileMenu ? <X size={18} /> : <Menu size={18} />}
-            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>เมนู</span>
-          </button>
+                      {/* 2. หน้าแนะนำ (Landing) */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: currentView === 'landing' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                          color: currentView === 'landing' ? 'var(--accent)' : 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: '1px solid var(--border)',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
+                        }}
+                        onClick={() => {
+                          setCurrentView('landing');
+                          setShowMenu(false);
+                        }}
+                        onMouseOver={(e) => {
+                          if (currentView !== 'landing') e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          if (currentView !== 'landing') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <Sparkles size={14} color="var(--accent)" />
+                        <span>หน้าแนะนำ (Landing)</span>
+                      </button>
 
-          {showMobileMenu && (
+                      {/* 3. ข้อมูลส่วนตัว & ตั้งค่า */}
+                      {user && (
+                        <button 
+                          style={{
+                            fontFamily: 'inherit',
+                            padding: '0.75rem 1rem',
+                            background: currentView === 'settings' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                            color: currentView === 'settings' ? 'var(--accent)' : 'var(--text)',
+                            border: 'none',
+                            textAlign: 'left',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            borderBottom: '1px solid var(--border)',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                          }}
+                          onClick={() => {
+                            setCurrentView('settings');
+                            setShowMenu(false);
+                          }}
+                          onMouseOver={(e) => {
+                            if (currentView !== 'settings') e.currentTarget.style.background = 'var(--card)';
+                          }}
+                          onMouseOut={(e) => {
+                            if (currentView !== 'settings') e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
+                          <User size={14} color="var(--accent)" />
+                          <span>ข้อมูลส่วนตัว & ตั้งค่า</span>
+                        </button>
+                      )}
+
+                      {/* 4. ตารางสอบ */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: currentView === 'schedule' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                          color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: '1px solid var(--border)',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          fontWeight: currentView === 'schedule' ? 600 : 400
+                        }}
+                        onClick={() => {
+                          setCurrentView('schedule');
+                          setShowMenu(false);
+                        }}
+                        onMouseOver={(e) => {
+                          if (currentView !== 'schedule') e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          if (currentView !== 'schedule') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <CalendarDays size={14} color="var(--accent)" />
+                        <span>ตารางสอบ</span>
+                      </button>
+
+                      {/* 5. ประวัติคะแนน */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: currentView === 'history' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                          color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: '1px solid var(--border)',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          fontWeight: currentView === 'history' ? 600 : 400
+                        }}
+                        onClick={() => {
+                          setCurrentView('history');
+                          setShowMenu(false);
+                        }}
+                        onMouseOver={(e) => {
+                          if (currentView !== 'history') e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          if (currentView !== 'history') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <HistoryIcon size={14} color="var(--accent)" />
+                        <span>ประวัติคะแนน</span>
+                      </button>
+
+                      {/* 6. คะแนนสะสม & เรดาร์ทักษะ */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: 'transparent',
+                          color: 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: '1px solid var(--border)',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}
+                        onClick={() => {
+                          setShowChart(true);
+                          setShowMenu(false);
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <Star size={14} color="var(--accent)" />
+                          <span>คะแนนสะสม & ทักษะ</span>
+                        </div>
+                        <span style={{ 
+                          fontSize: '0.75rem', 
+                          padding: '0.1rem 0.5rem', 
+                          borderRadius: '999px', 
+                          background: 'rgba(0,112,243,0.1)', 
+                          color: 'var(--accent)', 
+                          fontWeight: 600 
+                        }}>
+                          {totalScore}
+                        </span>
+                      </button>
+
+                      {/* 7. รายงานข้อสอบผิด */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: currentView === 'report' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                          color: currentView === 'report' ? 'var(--accent)' : 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: isAdmin ? '1px solid var(--border)' : 'none',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          fontWeight: currentView === 'report' ? 600 : 400
+                        }}
+                        onClick={() => openReport()}
+                        onMouseOver={(e) => {
+                          if (currentView !== 'report') e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          if (currentView !== 'report') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <AlertTriangle size={14} color="var(--accent)" />
+                        <span>รายงานข้อสอบผิด / ปัญหา</span>
+                      </button>
+                      {isAdmin && (
+                        <button 
+                          style={{
+                            fontFamily: 'inherit',
+                            padding: '0.75rem 1rem',
+                            background: currentView === 'admin_reports' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                            color: currentView === 'admin_reports' ? 'var(--accent)' : 'var(--text)',
+                            border: 'none',
+                            textAlign: 'left',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                          }}
+                          onClick={() => {
+                            setCurrentView('admin_reports');
+                            setShowMenu(false);
+                          }}
+                          onMouseOver={(e) => {
+                            if (currentView !== 'admin_reports') e.currentTarget.style.background = 'var(--card)';
+                          }}
+                          onMouseOut={(e) => {
+                            if (currentView !== 'admin_reports') e.currentTarget.style.background = 'transparent';
+                          }}
+                        >
+                          <ShieldCheck size={14} color="var(--accent)" />
+                          <span>แดชบอร์ดจัดการ (Admin)</span>
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Login / Logout */}
+              {user ? (
+                <button 
+                  className="btn btn-outline app-icon-btn" 
+                  onClick={() => setShowLogoutConfirm(true)} 
+                  title={`ออกจากระบบ (${user.email})`}
+                  style={{ width: '40px', height: '40px', padding: 0 }}
+                >
+                  <LogOut size={16} />
+                </button>
+              ) : (
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => setCurrentView('login')}
+                  style={{ borderRadius: '999px', height: '40px', padding: '0 1.25rem', fontSize: '0.875rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                >
+                  <LogIn size={15} />
+                  <span>เข้าสู่ระบบ</span>
+                </button>
+              )}
+            </div>
+
+            {/* Mobile Actions: Menu Trigger */}
+            <div className="app-nav-mobile" style={{ position: 'relative' }}>
+              <button 
+                className={`btn ${showMobileMenu ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                style={{ borderRadius: '999px', height: '36px', padding: '0 0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                aria-label="เปิดเมนู"
+              >
+                {showMobileMenu ? <X size={16} /> : <Menu size={16} />}
+                <span style={{ fontSize: '0.825rem', fontWeight: 600 }}>เมนู</span>
+              </button>
+
+              {showMobileMenu && (
             <>
               <div 
                 style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 60 }} 
@@ -639,6 +932,34 @@ function App() {
                   </button>
                 )}
 
+                {/* 0.1 หน้าแนะนำ (Landing) */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: currentView === 'landing' ? 'var(--surface-hover)' : 'transparent',
+                    color: currentView === 'landing' ? 'var(--accent)' : 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    width: '100%',
+                    fontWeight: currentView === 'landing' ? 600 : 400
+                  }}
+                  onClick={() => {
+                    setCurrentView('landing');
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <Sparkles size={16} color="var(--accent)" />
+                  <span>หน้าแนะนำ (Landing)</span>
+                </button>
+
+
+
                 {/* 1. หน้าหลัก */}
                 <button 
                   style={{
@@ -662,7 +983,7 @@ function App() {
                   }}
                 >
                   <BookOpen size={16} />
-                  <span>หน้าหลัก (Home)</span>
+                  <span>คลังข้อสอบ (Home)</span>
                 </button>
 
                 {/* 2. ตารางสอบ */}
@@ -895,8 +1216,10 @@ function App() {
               </div>
             </>
           )}
-        </div>
-      </header>
+            </div>
+          </div>
+        </header>
+      </div>
 
       <main className="main-content">
         {currentView === 'home' && (
