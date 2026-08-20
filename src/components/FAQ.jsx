@@ -10,11 +10,6 @@ import {
   MessageSquare, 
   Lightbulb, 
   Bug, 
-  Layers, 
-  User, 
-  Mail, 
-  FileText, 
-  ShieldCheck, 
   Search,
   LogIn
 } from 'lucide-react';

@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   BookOpen, 
-  Sparkles, 
   ArrowRight, 
-  LogIn, 
   GraduationCap, 
   ChevronRight, 
   Layers, 
@@ -13,7 +11,7 @@ import {
 import Aurora from './Aurora';
 import BorderGlow from './BorderGlow';
 
-export default function Landing({ subjects = [], totalQuestions = 0, onStart, onLogin, onNavigateAbout, onNavigateFaq, user }) {
+export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');

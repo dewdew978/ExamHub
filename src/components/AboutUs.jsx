@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Target, Lightbulb, Zap, ShieldCheck, ArrowRight, Heart, Users, GraduationCap, Code, CheckCircle, LogIn } from 'lucide-react';
+import { BookOpen, Target, Lightbulb, Zap, ArrowRight, Heart, Users, LogIn } from 'lucide-react';
 import Aurora from './Aurora';
 
-export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user, subjects = [] }) {
+export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');

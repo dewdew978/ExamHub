@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { EyeIcon, EyeOffIcon, Lock, Mail, ArrowLeft, CheckCircle2, RotateCw, Sparkles } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Lock, Mail, ArrowLeft, CheckCircle2, RotateCw } from 'lucide-react';
 
 export default function Login({ onLogin, onClose, authRequiredMessage }) {
   const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'forgot' | 'confirm_notice' | 'reset_notice'

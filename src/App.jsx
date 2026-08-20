@@ -13,7 +13,7 @@ import ScoreHistory from './components/ScoreHistory';
 import Report from './components/Report';
 import AdminDashboard from './components/AdminDashboard';
 import UserSettings from './components/UserSettings';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Info, Sparkles, HelpCircle } from 'lucide-react';
+import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import './index.css';
 
