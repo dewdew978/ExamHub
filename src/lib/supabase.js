@@ -5,17 +5,9 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS
-  ? import.meta.env.VITE_ADMIN_EMAILS.split(',').map(e => e.trim().toLowerCase()).filter(Boolean)
-  : [];
-
+// Security: Admin role is securely checked via server-controlled app_metadata
+// (user_metadata is client-editable, but app_metadata can only be set via Supabase Admin/SQL)
 export const checkIsAdmin = (user) => {
-  if (!user || !user.email) return false;
-  const email = user.email.toLowerCase().trim();
-  if (ADMIN_EMAILS.includes(email)) return true;
-  // Security: Only check app_metadata (controlled by server/service_role), never user_metadata (client-editable)
-  if (user.app_metadata?.role === 'admin') {
-    return true;
-  }
-  return false;
+  if (!user) return false;
+  return user.app_metadata?.role === 'admin';
 };
