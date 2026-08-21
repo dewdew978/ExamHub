@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { 
-  BookOpen, 
   Sparkles, 
-  ArrowRight, 
   CheckCircle2, 
   HelpCircle, 
   ChevronDown, 
@@ -11,11 +9,12 @@ import {
   Lightbulb, 
   Bug, 
   Search,
-  LogIn
+  BookOpen
 } from 'lucide-react';
 import Aurora from './Aurora';
 import BorderGlow from './BorderGlow';
 import { supabase } from '../lib/supabase';
+import Navbar from './Navbar';
 
 const FAQ_DATA = [
   {
@@ -201,86 +200,6 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onLogi
           background-color: var(--bg);
           color: var(--text);
           overflow-x: hidden;
-        }
-
-        /* Floating Navbar */
-        .faq-navbar-wrapper {
-          position: fixed;
-          top: 1.5rem;
-          left: 0;
-          right: 0;
-          z-index: 100;
-          display: flex;
-          justify-content: center;
-          padding: 0 1.5rem;
-          pointer-events: none;
-        }
-        .faq-navbar {
-          pointer-events: auto;
-          width: 100%;
-          max-width: 1100px;
-          background: color-mix(in srgb, var(--surface) 82%, transparent);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border: 1px solid var(--border-color);
-          border-radius: 999px;
-          box-shadow: 0 16px 42px rgba(0, 0, 0, 0.09), 0 2px 10px rgba(0, 0, 0, 0.04);
-          padding: 0.55rem 0.65rem 0.55rem 1.4rem;
-        }
-        .faq-navbar-inner {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 1.25rem;
-        }
-        .faq-brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.75rem;
-          color: var(--text);
-          font-weight: 700;
-          font-size: 1.25rem;
-          letter-spacing: -0.4px;
-          cursor: pointer;
-        }
-        .faq-brand-icon {
-          width: 36px;
-          height: 36px;
-          border-radius: 10px;
-          background: var(--accent);
-          color: #ffffff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 3px 12px rgba(0, 112, 243, 0.35);
-        }
-        .faq-nav-center { display: flex; align-items: center; justify-content: center; }
-        .faq-nav-links { display: flex; align-items: center; gap: 0.35rem; }
-        .faq-nav-link {
-          color: var(--text-muted);
-          font-size: 0.925rem;
-          font-weight: 500;
-          background: transparent;
-          border: none;
-          padding: 0.5rem 1.1rem;
-          border-radius: 999px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          font-family: inherit;
-          white-space: nowrap;
-        }
-        .faq-nav-link:hover { color: var(--text); background: var(--surface-hover); }
-        .faq-nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; }
-        .faq-nav-btn {
-          height: 42px !important;
-          padding: 0 1.35rem !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 0.5rem !important;
-          font-size: 0.9rem !important;
-          font-weight: 600 !important;
-          border-radius: 999px !important;
-          cursor: pointer !important;
         }
 
         /* Hero Section */
@@ -560,63 +479,29 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onLogi
         }
 
         @media (max-width: 820px) {
-          .faq-navbar-wrapper { top: 0.75rem; padding: 0 0.75rem; }
-          .faq-navbar { padding: 0.35rem 0.6rem 0.35rem 0.85rem; }
-          .faq-nav-center { display: none; }
           .faq-hero { padding: 5.5rem 1rem 2.5rem; }
           .faq-title { font-size: clamp(1.85rem, 6.5vw, 2.75rem); letter-spacing: -1px; }
           .needs-form-card { padding: 1.5rem 1.25rem; }
           .needs-type-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 480px) {
-          .faq-navbar-wrapper { top: 0.5rem; padding: 0 0.5rem; }
-          .faq-navbar { padding: 0.3rem 0.5rem 0.3rem 0.75rem; }
-          .faq-brand { font-size: 1.1rem !important; gap: 0.5rem !important; }
-          .faq-brand-icon { width: 30px !important; height: 30px !important; border-radius: 8px !important; }
           .faq-hero { padding: 4.75rem 0.75rem 2rem; }
         }
       `}</style>
 
-      {/* 1. Floating Navbar */}
-      <div className="faq-navbar-wrapper">
-        <header className="faq-navbar">
-          <div className="faq-navbar-inner">
-            <div className="faq-brand" onClick={onHome}>
-              <div className="faq-brand-icon"><BookOpen size={19} /></div>
-              <span>ExamHub</span>
-            </div>
-
-            <div className="faq-nav-center">
-              <nav className="faq-nav-links">
-                <button className="faq-nav-link" onClick={onHome}>คลังข้อสอบ</button>
-                <button className="faq-nav-link" onClick={() => scrollToSection('faq-list')}>คำถามที่พบบ่อย</button>
-                <button className="faq-nav-link" onClick={() => scrollToSection('tell-us-needs')}>Tell Us Your Needs</button>
-                <button className="faq-nav-link" onClick={onNavigateAbout}>เกี่ยวกับเรา</button>
-              </nav>
-            </div>
-
-            <div className="faq-nav-actions">
-              {user ? (
-                <button className="btn btn-primary faq-nav-btn" onClick={onHome}>
-                  <span>เข้าสู่ห้องสอบ</span>
-                  <ArrowRight size={16} />
-                </button>
-              ) : (
-                <>
-                  <button className="btn faq-nav-btn" style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)' }} onClick={onLogin}>
-                    <LogIn size={16} />
-                    <span>เข้าสู่ระบบ</span>
-                  </button>
-                  <button className="btn btn-primary faq-nav-btn" onClick={onHome}>
-                    <span>เริ่มทำข้อสอบ</span>
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </header>
-      </div>
+      <Navbar
+        user={user}
+        onBrand={onNavigateLanding ?? onHome}
+        onStart={onHome}
+        onLogin={onLogin}
+        onStartGuest={onHome}
+        links={[
+          { label: 'หน้าแรก', onClick: onNavigateLanding ?? onHome },
+          { label: 'คำถามที่พบบ่อย', onClick: () => scrollToSection('faq-list'), active: true },
+          { label: 'Tell Us Your Needs', onClick: () => scrollToSection('tell-us-needs') },
+          { label: 'เกี่ยวกับเรา', onClick: onNavigateAbout },
+        ]}
+      />
 
       {/* 2. Hero Section */}
       <section className="faq-hero">

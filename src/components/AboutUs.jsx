@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Target, Lightbulb, Zap, ArrowRight, Heart, Users, LogIn } from 'lucide-react';
+import { Target, Lightbulb, Zap, ArrowRight, Heart, Users } from 'lucide-react';
 import Aurora from './Aurora';
+import Navbar from './Navbar';
 
 export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user }) {
   const [isDark, setIsDark] = useState(() => {
@@ -55,133 +56,6 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user 
           flex-direction: column;
           background-color: var(--bg);
           color: var(--text);
-        }
-
-        /* 1. Floating / Rounded Island Navbar */
-        .about-navbar-wrapper {
-          position: fixed;
-          top: 1.5rem;
-          left: 0;
-          right: 0;
-          z-index: 100;
-          display: flex;
-          justify-content: center;
-          padding: 0 1.5rem;
-          pointer-events: none;
-        }
-        .about-navbar {
-          pointer-events: auto;
-          width: 100%;
-          max-width: 1100px;
-          background: var(--surface);
-          background: color-mix(in srgb, var(--surface) 80%, transparent);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border: 1px solid var(--border-color);
-          border-radius: 999px;
-          box-shadow: 0 16px 42px rgba(0, 0, 0, 0.09), 0 2px 10px rgba(0, 0, 0, 0.04);
-          padding: 0.55rem 0.65rem 0.55rem 1.4rem;
-          transition: all 0.25s ease;
-        }
-        .about-navbar-inner {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 1.25rem;
-        }
-        .about-brand-col {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-        }
-        .about-brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.75rem;
-          text-decoration: none;
-          color: var(--text);
-          font-weight: 700;
-          font-size: 1.25rem;
-          letter-spacing: -0.4px;
-          cursor: pointer;
-          user-select: none;
-        }
-        .about-brand-icon {
-          width: 36px;
-          height: 36px;
-          border-radius: 10px;
-          background: var(--accent);
-          color: #ffffff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 3px 12px rgba(0, 112, 243, 0.35);
-        }
-        .about-nav-center {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .about-nav-links {
-          display: flex;
-          align-items: center;
-          gap: 0.35rem;
-        }
-        .about-nav-link {
-          color: var(--text-muted);
-          font-size: 0.925rem;
-          font-weight: 500;
-          text-decoration: none;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          background: transparent;
-          border: none;
-          padding: 0.5rem 1.1rem;
-          border-radius: 999px;
-          font-family: inherit;
-          white-space: nowrap;
-        }
-        .about-nav-link:hover {
-          color: var(--text);
-          background: var(--surface-hover);
-        }
-        .about-nav-link.active {
-          color: var(--accent);
-          background: var(--surface-hover);
-          font-weight: 600;
-        }
-        .about-nav-actions {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          gap: 0.5rem;
-        }
-        .about-nav-btn {
-          height: 42px !important;
-          padding: 0 1.35rem !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 0.5rem !important;
-          font-size: 0.9rem !important;
-          font-weight: 600 !important;
-          border-radius: 999px !important;
-          white-space: nowrap !important;
-          cursor: pointer !important;
-          transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-        }
-        .about-nav-btn:hover {
-          transform: translateY(-1.5px);
-        }
-        .about-nav-btn-ghost {
-          background: transparent !important;
-          border: none !important;
-          color: var(--text-muted) !important;
-          box-shadow: none !important;
-        }
-        .about-nav-btn-ghost:hover {
-          color: var(--text) !important;
-          background: var(--surface-hover) !important;
         }
 
         /* 2. Hero Section */
@@ -379,131 +253,35 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user 
         }
 
         @media (max-width: 820px) {
-          .about-navbar-wrapper {
-            top: 0.75rem;
-            padding: 0 0.75rem;
-          }
-          .about-navbar {
-            padding: 0.35rem 0.6rem 0.35rem 0.85rem;
-          }
-          .about-navbar-inner {
-            display: flex;
-            justify-content: space-between;
-          }
-          .about-nav-center {
-            display: none;
-          }
-          .about-hero {
-            padding: 5.5rem 1rem 3rem;
-          }
-          .about-title {
-            letter-spacing: -1px;
-            font-size: clamp(1.85rem, 6.5vw, 2.75rem);
-          }
-          .about-subtitle {
-            font-size: clamp(0.925rem, 3.5vw, 1.1rem);
-          }
-          .about-grid-2, .about-grid-4 {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-          }
-          .about-section {
-            padding: 3rem 1rem;
-          }
-          .about-bottom-cta {
-            margin: 2rem 1rem 3rem;
-            width: calc(100% - 2rem);
-            padding: 2.5rem 1.25rem;
-          }
-          .about-bottom-cta h2 {
-            font-size: 1.75rem;
-          }
+          .about-hero { padding: 5.5rem 1rem 3rem; }
+          .about-title { letter-spacing: -1px; font-size: clamp(1.85rem, 6.5vw, 2.75rem); }
+          .about-subtitle { font-size: clamp(0.925rem, 3.5vw, 1.1rem); }
+          .about-grid-2, .about-grid-4 { grid-template-columns: 1fr; gap: 1rem; }
+          .about-section { padding: 3rem 1rem; }
+          .about-bottom-cta { margin: 2rem 1rem 3rem; width: calc(100% - 2rem); padding: 2.5rem 1.25rem; }
+          .about-bottom-cta h2 { font-size: 1.75rem; }
         }
-
         @media (max-width: 480px) {
-          .about-navbar-wrapper {
-            top: 0.5rem;
-            padding: 0 0.5rem;
-          }
-          .about-navbar {
-            padding: 0.3rem 0.5rem 0.3rem 0.75rem;
-          }
-          .about-brand {
-            font-size: 1.1rem !important;
-            gap: 0.5rem !important;
-          }
-          .about-brand-icon {
-            width: 30px !important;
-            height: 30px !important;
-            border-radius: 8px !important;
-          }
-          .about-hero {
-            padding: 4.75rem 0.75rem 2.5rem;
-          }
-          .about-badge {
-            padding: 0.35rem 0.85rem;
-            font-size: 0.75rem;
-          }
-          .about-bottom-cta {
-            padding: 2rem 1rem;
-          }
-          .about-bottom-cta h2 {
-            font-size: 1.45rem;
-          }
+          .about-hero { padding: 4.75rem 0.75rem 2.5rem; }
+          .about-badge { padding: 0.35rem 0.85rem; font-size: 0.75rem; }
+          .about-bottom-cta { padding: 2rem 1rem; }
+          .about-bottom-cta h2 { font-size: 1.45rem; }
         }
       `}</style>
 
-      {/* 1. Floating / Rounded Island Navbar */}
-      <div className="about-navbar-wrapper">
-        <header className="about-navbar">
-          <div className="about-navbar-inner">
-            <div className="about-brand-col">
-              <div className="about-brand" onClick={onHome}>
-                <div className="about-brand-icon">
-                  <BookOpen size={19} />
-                </div>
-                <span>ExamHub</span>
-              </div>
-            </div>
-
-            <div className="about-nav-center">
-              <nav className="about-nav-links">
-                <button className="about-nav-link" onClick={onHome}>
-                  หน้าแรก
-                </button>
-                <button className="about-nav-link" onClick={onStart}>
-                  คลังข้อสอบ
-                </button>
-                <button className="about-nav-link" onClick={onNavigateFaq}>
-                  คำถามที่พบบ่อย
-                </button>
-                <button className="about-nav-link active">
-                  เกี่ยวกับเรา
-                </button>
-              </nav>
-            </div>
-
-            <div className="about-nav-actions">
-              {user ? (
-                <button className="btn btn-primary about-nav-btn" onClick={onStart}>
-                  <span>เข้าสู่คลังข้อสอบ</span>
-                  <ArrowRight size={16} />
-                </button>
-              ) : (
-                <>
-                  <button className="btn about-nav-btn about-nav-btn-ghost" onClick={onLogin}>
-                    <LogIn size={16} />
-                    <span>เข้าสู่ระบบ</span>
-                  </button>
-                  <button className="btn btn-primary about-nav-btn" onClick={onStart}>
-                    <span>เริ่มทำข้อสอบ</span>
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </header>
-      </div>
+      <Navbar
+        user={user}
+        onBrand={onHome}
+        onStart={onStart}
+        onLogin={onLogin}
+        onStartGuest={onStart}
+        links={[
+          { label: 'หน้าแรก', onClick: onHome },
+          { label: 'คลังข้อสอบ', onClick: onStart },
+          { label: 'คำถามที่พบบ่อย', onClick: onNavigateFaq },
+          { label: 'เกี่ยวกับเรา', active: true },
+        ]}
+      />
 
       {/* 2. Hero Section */}
       <section className="about-hero">

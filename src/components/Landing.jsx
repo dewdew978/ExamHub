@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { 
-  BookOpen, 
-  ArrowRight, 
   GraduationCap, 
   ChevronRight, 
   Layers, 
   Target,
-  FileCheck2
+  FileCheck2,
+  ArrowRight
 } from 'lucide-react';
 import Aurora from './Aurora';
 import BorderGlow from './BorderGlow';
+import Navbar from './Navbar';
 
 export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, user }) {
   const [isDark, setIsDark] = useState(() => {
@@ -64,86 +64,6 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           background-color: var(--bg);
           color: var(--text);
           overflow-x: hidden;
-        }
-        .landing-navbar-wrapper {
-          position: fixed;
-          top: 1.5rem;
-          left: 0;
-          right: 0;
-          z-index: 100;
-          display: flex;
-          justify-content: center;
-          padding: 0 1.5rem;
-          pointer-events: none;
-        }
-        .landing-navbar {
-          pointer-events: auto;
-          width: 100%;
-          max-width: 1100px;
-          background: var(--surface);
-          background: color-mix(in srgb, var(--surface) 82%, transparent);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border: 1px solid var(--border-color);
-          border-radius: 999px;
-          box-shadow: 0 16px 42px rgba(0, 0, 0, 0.09), 0 2px 10px rgba(0, 0, 0, 0.04);
-          padding: 0.55rem 0.65rem 0.55rem 1.4rem;
-          transition: all 0.25s ease;
-        }
-        .landing-navbar-inner {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 1.25rem;
-        }
-        .landing-brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.75rem;
-          text-decoration: none;
-          color: var(--text);
-          font-weight: 700;
-          font-size: 1.25rem;
-          letter-spacing: -0.4px;
-          cursor: pointer;
-        }
-        .landing-brand-icon {
-          width: 36px;
-          height: 36px;
-          border-radius: 10px;
-          background: var(--accent);
-          color: #ffffff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .landing-nav-center { display: flex; align-items: center; justify-content: center; }
-        .landing-nav-links { display: flex; align-items: center; gap: 0.35rem; }
-        .landing-nav-link {
-          color: var(--text-muted);
-          font-size: 0.925rem;
-          font-weight: 500;
-          background: transparent;
-          border: none;
-          padding: 0.5rem 1.1rem;
-          border-radius: 999px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        .landing-nav-link:hover { color: var(--text); background: var(--surface-hover); }
-        .landing-nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; }
-        .landing-nav-btn {
-          height: 42px !important;
-          padding: 0 1.35rem !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 0.5rem !important;
-          font-size: 0.9rem !important;
-          font-weight: 600 !important;
-          border-radius: 999px !important;
-          cursor: pointer !important;
-          transition: transform 0.2s ease !important;
         }
         .landing-hero {
           position: relative;
@@ -219,38 +139,25 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         .landing-footer { border-top: 1px solid var(--border-divider); padding: 2.5rem 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; }
 
         @media (max-width: 820px) {
-          .landing-nav-center { display: none; }
           .landing-steps-grid { grid-template-columns: 1fr; }
           .landing-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
-      <div className="landing-navbar-wrapper">
-        <header className="landing-navbar">
-          <div className="landing-navbar-inner">
-            <div className="landing-brand" onClick={() => scrollToSection('top')}>
-              <div className="landing-brand-icon"><BookOpen size={19} /></div>
-              <span>ExamHub</span>
-            </div>
-            <div className="landing-nav-center">
-              <nav className="landing-nav-links">
-                <button className="landing-nav-link" onClick={() => scrollToSection('landing-steps')}>ขั้นตอน</button>
-                <button className="landing-nav-link" onClick={() => scrollToSection('landing-features')}>ฟีเจอร์เด่น</button>
-                <button className="landing-nav-link" onClick={() => scrollToSection('landing-preview')}>รายวิชาทั้งหมด</button>
-                <button className="landing-nav-link" onClick={onNavigateFaq}>คำถามที่พบบ่อย</button>
-                <button className="landing-nav-link" onClick={onNavigateAbout}>เกี่ยวกับเรา</button>
-              </nav>
-            </div>
-            <div className="landing-nav-actions">
-              {user ? (
-                <button className="btn btn-primary landing-nav-btn" onClick={onStart}><span>เข้าคลังข้อสอบ</span></button>
-              ) : (
-                <button className="btn btn-primary landing-nav-btn" onClick={onStart}><span>เริ่มทำข้อสอบ</span></button>
-              )}
-            </div>
-          </div>
-        </header>
-      </div>
+      <Navbar
+        user={user}
+        onBrand={() => scrollToSection('top')}
+        onStart={() => scrollToSection('top')}
+        onStartGuest={onStart}
+        showLogin={false}
+        links={[
+          { label: 'ขั้นตอน', onClick: () => scrollToSection('landing-steps') },
+          { label: 'ฟีเจอร์เด่น', onClick: () => scrollToSection('landing-features') },
+          { label: 'รายวิชาทั้งหมด', onClick: () => scrollToSection('landing-preview') },
+          { label: 'คำถามที่พบบ่อย', onClick: onNavigateFaq },
+          { label: 'เกี่ยวกับเรา', onClick: onNavigateAbout },
+        ]}
+      />
 
       <section className="landing-hero" id="top">
         <Aurora colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} blend={0.5} amplitude={1.0} speed={0.6} />
