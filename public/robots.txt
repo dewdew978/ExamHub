@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://exam-hub-seven.vercel.app/sitemap.xml
+
