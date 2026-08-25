@@ -13,6 +13,7 @@ import ScoreHistory from './components/ScoreHistory';
 import Report from './components/Report';
 import AdminDashboard from './components/AdminDashboard';
 import UserSettings from './components/UserSettings';
+import TermsOfService from './components/TermsOfService';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import './index.css';
@@ -23,6 +24,7 @@ const getViewFromPath = (pathname) => {
   if (path === '/home') return 'home';
   if (path === '/about' || path === '/aboutus') return 'about';
   if (path === '/faq' || path === '/faqs' || path === '/help') return 'faq';
+  if (path === '/terms' || path === '/termsofservice' || path === '/privacy') return 'terms';
   if (path === '/login') return 'login';
   if (path === '/reset-password' || path === '/resetpassword') return 'reset-password';
   if (path === '/schedule') return 'schedule';
@@ -39,6 +41,7 @@ const getPathFromView = (view) => {
     case 'home': return '/home';
     case 'about': return '/about';
     case 'faq': return '/faq';
+    case 'terms': return '/terms';
     case 'login': return '/login';
     case 'reset-password': return '/reset-password';
     case 'schedule': return '/schedule';
@@ -368,6 +371,7 @@ function App() {
         onLogin={() => setCurrentView('login')}
         onNavigateAbout={() => setCurrentView('about')}
         onNavigateFaq={() => setCurrentView('faq')}
+        onNavigateTerms={() => setCurrentView('terms')}
       />
     );
   }
@@ -382,6 +386,7 @@ function App() {
         onLogin={() => setCurrentView('login')}
         onHome={() => setCurrentView('landing')}
         onNavigateFaq={() => setCurrentView('faq')}
+        onNavigateTerms={() => setCurrentView('terms')}
       />
     );
   }
@@ -393,8 +398,23 @@ function App() {
         onHome={() => setCurrentView('home')}
         onNavigateLanding={() => setCurrentView('landing')}
         onNavigateAbout={() => setCurrentView('about')}
+        onNavigateTerms={() => setCurrentView('terms')}
         onLogin={() => setCurrentView('login')}
         user={user}
+      />
+    );
+  }
+
+  // Standalone Terms of Service & Privacy Policy Page
+  if (currentView === 'terms') {
+    return (
+      <TermsOfService 
+        user={user}
+        onStart={() => setCurrentView('home')}
+        onLogin={() => setCurrentView('login')}
+        onHome={() => setCurrentView('landing')}
+        onNavigateAbout={() => setCurrentView('about')}
+        onNavigateFaq={() => setCurrentView('faq')}
       />
     );
   }

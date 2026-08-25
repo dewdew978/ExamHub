@@ -3,7 +3,7 @@ import { Target, Lightbulb, Zap, ArrowRight, Heart, Users } from 'lucide-react';
 import Aurora from './Aurora';
 import Navbar from './Navbar';
 
-export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user }) {
+export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNavigateTerms, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -378,6 +378,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, user 
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '0.75rem', fontSize: '0.875rem', flexWrap: 'wrap' }}>
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onHome}>หน้าแรก</span>
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateFaq}>คำถามที่พบบ่อย (FAQ)</span>
+          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
         </div>
         <p style={{ margin: '0 0 0.5rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>

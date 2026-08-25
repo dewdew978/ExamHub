@@ -80,7 +80,7 @@ const NEED_TYPES = [
   { id: 'general_feedback', label: 'ข้อเสนอแนะทั่วไป / อื่นๆ', icon: MessageSquare, color: 'var(--success)' }
 ];
 
-export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onLogin, user }) {
+export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavigateTerms, onLogin, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -788,6 +788,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onLogi
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => scrollToSection('faq-list')}>คำถามที่พบบ่อย</span>
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => scrollToSection('tell-us-needs')}>Tell Us Your Needs</span>
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateAbout}>เกี่ยวกับเรา</span>
+          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onHome}>เริ่มทำข้อสอบ</span>
         </div>
         <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>

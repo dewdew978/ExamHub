@@ -11,7 +11,7 @@ import Aurora from './Aurora';
 import BorderGlow from './BorderGlow';
 import Navbar from './Navbar';
 
-export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, user }) {
+export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -278,6 +278,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => scrollToSection('landing-features')}>ฟีเจอร์เด่น</span>
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateFaq}>คำถามที่พบบ่อย (FAQ)</span>
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateAbout}>เกี่ยวกับเรา</span>
+          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
         </div>
         <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>

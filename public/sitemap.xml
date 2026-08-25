@@ -55,4 +55,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+
+  <!-- Terms of Service & Privacy Policy -->
+  <url>
+    <loc>https://exam-hub-seven.vercel.app/terms</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
