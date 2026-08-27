@@ -852,17 +852,17 @@ function App() {
                   className="btn btn-outline app-icon-btn" 
                   onClick={() => setShowLogoutConfirm(true)} 
                   title={`ออกจากระบบ (${user.email})`}
-                  style={{ width: '40px', height: '40px', padding: 0 }}
+                  style={{ width: '44px', height: '44px', padding: 0 }}
                 >
-                  <LogOut size={16} />
+                  <LogOut size={18} />
                 </button>
               ) : (
                 <button 
                   className="btn btn-primary" 
                   onClick={() => setCurrentView('login')}
-                  style={{ borderRadius: '999px', height: '40px', padding: '0 1.25rem', fontSize: '0.875rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                  style={{ borderRadius: '999px', height: '44px', padding: '0 1.5rem', fontSize: '0.95rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
                 >
-                  <LogIn size={15} />
+                  <LogIn size={17} />
                   <span>เข้าสู่ระบบ</span>
                 </button>
               )}
