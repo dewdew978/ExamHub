@@ -14,6 +14,7 @@ import Report from './components/Report';
 import AdminDashboard from './components/AdminDashboard';
 import UserSettings from './components/UserSettings';
 import TermsOfService from './components/TermsOfService';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import './index.css';
@@ -64,6 +65,7 @@ function App() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [examProgressData, setExamProgressData] = useState(null);
   const [reportInitialData, setReportInitialData] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [categoryScores, setCategoryScores] = useState({});
@@ -247,7 +249,7 @@ function App() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  const startExam = async (subjectId) => {
+  const startExam = async (subjectId, resumeData = null) => {
     try {
       const subjectMeta = subjects.find(s => s.id === subjectId) || {};
       let examData = null;
@@ -286,7 +288,13 @@ function App() {
       }
       
       setSelectedSubject(fullSubject);
-      setCurrentView('examIntro');
+      if (resumeData) {
+        setExamProgressData(resumeData);
+        setCurrentView('exam');
+      } else {
+        setExamProgressData(null);
+        setCurrentView('examIntro');
+      }
     } catch (err) {
       console.error("Failed to load exam data:", err);
     }
@@ -295,6 +303,7 @@ function App() {
   const goHome = () => {
     setCurrentView('home');
     setSelectedSubject(null);
+    setExamProgressData(null);
     setReportInitialData(null);
     setShowMobileMenu(false);
   };
@@ -1246,6 +1255,7 @@ function App() {
           <Home 
             subjects={subjects} 
             onSelectSubject={startExam} 
+            onResumeExam={(progress) => startExam(progress.subjectId, progress)}
             user={user}
             onRequireLogin={(subject) => {
               setAuthRequiredMessage(`กรุณาเข้าสู่ระบบก่อนเพื่อทำข้อสอบชุด "${subject?.name || ''}"`);
@@ -1258,7 +1268,14 @@ function App() {
           <ExamIntro 
             subject={selectedSubject} 
             onBack={goHome} 
-            onStart={() => setCurrentView('exam')} 
+            onStart={() => {
+              setExamProgressData(null);
+              setCurrentView('exam');
+            }}
+            onResume={(resumeData) => {
+              setExamProgressData(resumeData);
+              setCurrentView('exam');
+            }}
           />
         )}
         {currentView === 'exam' && selectedSubject && (
@@ -1267,6 +1284,7 @@ function App() {
             onBack={goHome} 
             onComplete={addScore} 
             onReport={openReport}
+            initialProgress={examProgressData}
           />
         )}
         {currentView === 'schedule' && (
@@ -1346,6 +1364,22 @@ function App() {
             totalScore={totalScore}
             theme={theme}
             onToggleTheme={toggleTheme}
+            onSignOut={() => {
+              setUser(null);
+              setTotalScore(0);
+              setCategoryScores({});
+              goHome();
+            }}
+            onResetScores={() => {
+              setTotalScore(0);
+              setCategoryScores({});
+            }}
+            onAccountDeleted={() => {
+              setUser(null);
+              setTotalScore(0);
+              setCategoryScores({});
+              goHome();
+            }}
           />
         )}
         {currentView === 'settings' && !user && (
@@ -1401,6 +1435,8 @@ function App() {
           </div>
         </div>
       )}
+
+      <PWAInstallPrompt />
     </div>
   );
 }

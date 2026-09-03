@@ -282,6 +282,9 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
         </div>
         <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
+          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
+        </p>
         <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 ExamHub. All rights reserved.</p>
       </footer>
     </div>

@@ -14,7 +14,12 @@ import {
   Settings, 
   Palette, 
   BookOpen, 
-  Shuffle
+  Shuffle,
+  LogOut,
+  RotateCcw,
+  Trash2,
+  AlertTriangle,
+  X
 } from 'lucide-react';
 import { supabase, checkIsAdmin } from '../lib/supabase';
 
@@ -23,11 +28,27 @@ const AVATAR_EMOJIS = [
   '🎯', '🌟', '🐱', '🤖', '🏆', '🔥', '🧠', '☕'
 ];
 
-export default function UserSettings({ user, onBack, onUserUpdated, theme, onToggleTheme }) {
+export default function UserSettings({ 
+  user, 
+  onBack, 
+  onUserUpdated, 
+  theme, 
+  onToggleTheme,
+  onSignOut,
+  onResetScores,
+  onAccountDeleted
+}) {
   const metadata = user?.user_metadata || {};
   const isAdmin = checkIsAdmin(user);
 
   const [activeTab, setActiveTab] = useState('profile'); // 'profile' | 'preferences' | 'security'
+  
+  // Security Actions Modals
+  const [showGlobalSignOutModal, setShowGlobalSignOutModal] = useState(false);
+  const [showResetScoresModal, setShowResetScoresModal] = useState(false);
+  const [confirmResetText, setConfirmResetText] = useState('');
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [confirmDeleteEmail, setConfirmDeleteEmail] = useState('');
   
   // Profile Form States (Only Avatar, Nickname, and Bio)
   const [nickname, setNickname] = useState(metadata.nickname || '');
@@ -130,6 +151,120 @@ export default function UserSettings({ user, onBack, onUserUpdated, theme, onTog
     } catch (err) {
       console.error('Error changing password:', err);
       setPasswordError(err.message || 'เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleGlobalSignOut = async () => {
+    setSaving(true);
+    try {
+      await supabase.auth.signOut({ scope: 'global' });
+      showToast('ออกจากระบบทุกอุปกรณ์เรียบร้อยแล้ว');
+      setShowGlobalSignOutModal(false);
+      if (onSignOut) {
+        onSignOut();
+      } else if (onBack) {
+        onBack();
+      }
+    } catch (err) {
+      console.error('Error in global sign out:', err);
+      showToast(err.message || 'เกิดข้อผิดพลาดในการออกจากระบบ', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleResetAllScores = async () => {
+    if (confirmResetText.trim().toUpperCase() !== 'RESET') {
+      showToast('กรุณาพิมพ์คำว่า RESET เพื่อยืนยัน', 'error');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('user_scores')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      try {
+        localStorage.removeItem('examhub_in_progress_exam');
+      } catch (e) {
+        console.warn(e);
+      }
+
+      if (onResetScores) {
+        onResetScores();
+      }
+
+      showToast('รีเซ็ตประวัติคะแนนทั้งหมดเรียบร้อยแล้ว!');
+      setShowResetScoresModal(false);
+      setConfirmResetText('');
+    } catch (err) {
+      console.error('Error resetting scores:', err);
+      showToast(err.message || 'เกิดข้อผิดพลาดในการรีเซ็ตคะแนน', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (confirmDeleteEmail.trim().toLowerCase() !== user?.email?.toLowerCase()) {
+      showToast('อีเมลที่กรอกไม่ตรงกับบัญชีของคุณ', 'error');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      // 1. Delete user scores
+      await supabase
+        .from('user_scores')
+        .delete()
+        .eq('user_id', user.id);
+
+      // 2. Clear in-progress exam
+      try {
+        localStorage.removeItem('examhub_in_progress_exam');
+      } catch (e) {
+        console.warn(e);
+      }
+
+      // 3. Mark user metadata as deleted
+      await supabase.auth.updateUser({
+        data: {
+          nickname: 'ผู้ใช้งานที่ถูกลบ',
+          bio: '',
+          avatar_emoji: '👤',
+          is_deleted: true,
+          deleted_at: new Date().toISOString()
+        }
+      });
+
+      // 4. Try optional RPC delete_user_account if available
+      try {
+        await supabase.rpc('delete_user_account');
+      } catch (rpcErr) {
+        console.warn('Optional delete_user_account RPC not available:', rpcErr);
+      }
+
+      // 5. Global sign out
+      await supabase.auth.signOut({ scope: 'global' });
+
+      showToast('ลบบัญชีและออกจากระบบเรียบร้อยแล้ว');
+      setShowDeleteAccountModal(false);
+      setConfirmDeleteEmail('');
+
+      if (onAccountDeleted) {
+        onAccountDeleted();
+      } else if (onBack) {
+        onBack();
+      }
+    } catch (err) {
+      console.error('Error deleting account:', err);
+      showToast(err.message || 'เกิดข้อผิดพลาดในการลบบัญชี', 'error');
     } finally {
       setSaving(false);
     }
@@ -701,7 +836,7 @@ export default function UserSettings({ user, onBack, onUserUpdated, theme, onTog
 
               {/* Account Details Box */}
               <div style={{
-                marginTop: '2.5rem',
+                marginTop: '2rem',
                 paddingTop: '1.5rem',
                 borderTop: '1px solid var(--border-divider)',
                 color: 'var(--text-muted)',
@@ -711,12 +846,471 @@ export default function UserSettings({ user, onBack, onUserUpdated, theme, onTog
                 <div>• บัญชีอีเมล: <span style={{ color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{user?.email}</span></div>
                 <div>• เข้าสู่ระบบล่าสุด: <span style={{ color: 'var(--text)' }}>{new Date(user?.last_sign_in_at || user?.created_at).toLocaleString('th-TH')}</span></div>
               </div>
+
+              {/* Session Management Section */}
+              <div style={{
+                marginTop: '2rem',
+                paddingTop: '1.5rem',
+                borderTop: '1px solid var(--border-divider)'
+              }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 0 0.35rem' }}>
+                  <LogOut size={17} color="var(--accent)" />
+                  การจัดการเซสชันและอุปกรณ์ (Session Management)
+                </h3>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: '0 0 1rem', lineHeight: 1.5 }}>
+                  ตัดการเชื่อมต่อบัญชีนี้ออกจากทุกเบราว์เซอร์และอุปกรณ์ทั้งหมดที่คุณเคยเข้าสู่ระบบไว้ (แนะนำเมื่อใช้งานบนคอมพิวเตอร์สาธารณะ)
+                </p>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={() => setShowGlobalSignOutModal(true)}
+                  disabled={saving}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.85rem' }}
+                >
+                  <LogOut size={15} />
+                  ออกจากระบบทุกอุปกรณ์ (Global Sign Out)
+                </button>
+              </div>
+
+              {/* Danger Zone Section */}
+              <div style={{
+                marginTop: '2.5rem',
+                padding: '1.25rem',
+                borderRadius: '14px',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                background: 'rgba(239, 68, 68, 0.03)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--error)', fontWeight: 700, fontSize: '1rem', marginBottom: '0.35rem' }}>
+                  <AlertTriangle size={18} />
+                  Danger Zone (โซนการจัดการข้อมูลสำคัญ)
+                </div>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: '0 0 1.25rem 0', lineHeight: 1.5 }}>
+                  การดำเนินการในส่วนนี้จะมีผลต่อข้อมูลคะแนนหรือบัญชีของคุณโดยตรงอย่างถาวร กรุณาตรวจสอบอย่างรอบคอบก่อนทำรายการ
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  
+                  {/* Reset All Scores Card */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem',
+                    borderRadius: '10px',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border-divider)',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
+                  }}>
+                    <div style={{ flex: '1 1 280px' }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text)', marginBottom: '0.2rem' }}>
+                        รีเซ็ตประวัติคะแนนทั้งหมด (Reset All Scores)
+                      </div>
+                      <div style={{ fontSize: '0.78125rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
+                        ลบประวัติการสอบ คะแนนรวม และกราฟสถิติทักษะทั้งหมดในฐานข้อมูล เพื่อเริ่มต้นเก็บสถิติใหม่ตั้งแต่ 0
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-outline"
+                      onClick={() => {
+                        setConfirmResetText('');
+                        setShowResetScoresModal(true);
+                      }}
+                      disabled={saving}
+                      style={{
+                        borderColor: 'rgba(239, 68, 68, 0.4)',
+                        color: 'var(--error)',
+                        fontSize: '0.825rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        flexShrink: 0
+                      }}
+                    >
+                      <RotateCcw size={14} />
+                      รีเซ็ตคะแนนทั้งหมด
+                    </button>
+                  </div>
+
+                  {/* Delete Account Card */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem',
+                    borderRadius: '10px',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border-divider)',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
+                  }}>
+                    <div style={{ flex: '1 1 280px' }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--error)', marginBottom: '0.2rem' }}>
+                        ลบบัญชีผู้ใช้งานถาวร (Delete Account)
+                      </div>
+                      <div style={{ fontSize: '0.78125rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
+                        ลบข้อมูลโปรไฟล์ ประวัติการทำข้อสอบทั้งหมด และยกเลิกการเข้าถึงบัญชีนี้อย่างถาวร (ไม่สามารถย้อนกลับได้)
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        setConfirmDeleteEmail('');
+                        setShowDeleteAccountModal(true);
+                      }}
+                      disabled={saving}
+                      style={{
+                        background: 'var(--error)',
+                        borderColor: 'var(--error)',
+                        color: '#ffffff',
+                        fontSize: '0.825rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        flexShrink: 0,
+                        boxShadow: '0 4px 12px rgba(239, 68, 68, 0.25)'
+                      }}
+                    >
+                      <Trash2 size={14} />
+                      ลบบัญชีผู้ใช้
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
           )}
 
         </main>
       </div>
 
+      {/* 🛑 MODAL 1: Confirm Global Sign Out */}
+      {showGlobalSignOutModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.25rem'
+          }}
+          onClick={() => setShowGlobalSignOutModal(false)}
+        >
+          <div 
+            className="card animate-fade-in"
+            style={{
+              maxWidth: '420px',
+              width: '100%',
+              padding: '2rem 1.75rem',
+              borderRadius: '20px',
+              textAlign: 'center',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowGlobalSignOutModal(false)}
+              aria-label="ปิด"
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                padding: '0.35rem',
+                borderRadius: '8px'
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            <div style={{
+              width: '58px',
+              height: '58px',
+              borderRadius: '16px',
+              background: 'rgba(99, 102, 241, 0.15)',
+              color: '#6366f1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem'
+            }}>
+              <LogOut size={28} />
+            </div>
+
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+              ออกจากระบบทุกอุปกรณ์?
+            </h3>
+
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.55, margin: '0 0 1.5rem' }}>
+              ระบบจะทำการตัดการเชื่อมต่อและยกเลิกเซสชันจากทุกเครื่องที่คุณเคยเข้าสู่ระบบไว้ (คุณจะต้องเข้าสู่ระบบใหม่ในครั้งถัดไป)
+            </p>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={() => setShowGlobalSignOutModal(false)}
+                style={{ flex: 1, padding: '0.65rem 1rem', borderRadius: '10px' }}
+              >
+                ยกเลิก
+              </button>
+              <button 
+                type="button"
+                className="btn btn-primary" 
+                onClick={handleGlobalSignOut}
+                disabled={saving}
+                style={{ flex: 1, padding: '0.65rem 1rem', borderRadius: '10px' }}
+              >
+                {saving ? 'กำลังดำเนินการ...' : 'ยืนยันออกจากระบบ'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🛑 MODAL 2: Confirm Reset All Scores */}
+      {showResetScoresModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.25rem'
+          }}
+          onClick={() => setShowResetScoresModal(false)}
+        >
+          <div 
+            className="card animate-fade-in"
+            style={{
+              maxWidth: '420px',
+              width: '100%',
+              padding: '2rem 1.75rem',
+              borderRadius: '20px',
+              textAlign: 'center',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(239, 68, 68, 0.2)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowResetScoresModal(false)}
+              aria-label="ปิด"
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                padding: '0.35rem',
+                borderRadius: '8px'
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            <div style={{
+              width: '58px',
+              height: '58px',
+              borderRadius: '16px',
+              background: 'rgba(239, 68, 68, 0.12)',
+              color: 'var(--error)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem'
+            }}>
+              <RotateCcw size={28} />
+            </div>
+
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text)' }}>
+              รีเซ็ตประวัติคะแนนทั้งหมด?
+            </h3>
+
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.55, margin: '0 0 1.25rem' }}>
+              การกระทำนี้จะลบสถิติคะแนนสอบและกราฟความเชี่ยวชาญทั้งหมดของคุณในระบบอย่างถาวร <strong>ไม่สามารถกู้คืนได้</strong>
+            </p>
+
+            <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+                พิมพ์คำว่า <strong style={{ color: 'var(--error)' }}>RESET</strong> เพื่อยืนยันการรีเซ็ต:
+              </label>
+              <input 
+                type="text"
+                className="input"
+                value={confirmResetText}
+                onChange={(e) => setConfirmResetText(e.target.value)}
+                placeholder="RESET"
+                style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: '8px', textAlign: 'center', fontWeight: 600, letterSpacing: '1px' }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={() => setShowResetScoresModal(false)}
+                style={{ flex: 1, padding: '0.65rem 1rem', borderRadius: '10px' }}
+              >
+                ยกเลิก
+              </button>
+              <button 
+                type="button"
+                className="btn btn-primary" 
+                onClick={handleResetAllScores}
+                disabled={saving || confirmResetText.trim().toUpperCase() !== 'RESET'}
+                style={{
+                  flex: 1,
+                  padding: '0.65rem 1rem',
+                  borderRadius: '10px',
+                  background: 'var(--error)',
+                  borderColor: 'var(--error)',
+                  color: '#ffffff',
+                  opacity: confirmResetText.trim().toUpperCase() !== 'RESET' ? 0.5 : 1
+                }}
+              >
+                {saving ? 'กำลังรีเซ็ต...' : 'ยืนยันการรีเซ็ต'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🛑 MODAL 3: Confirm Delete Account */}
+      {showDeleteAccountModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.25rem'
+          }}
+          onClick={() => setShowDeleteAccountModal(false)}
+        >
+          <div 
+            className="card animate-fade-in"
+            style={{
+              maxWidth: '420px',
+              width: '100%',
+              padding: '2rem 1.75rem',
+              borderRadius: '20px',
+              textAlign: 'center',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(239, 68, 68, 0.2)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowDeleteAccountModal(false)}
+              aria-label="ปิด"
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                padding: '0.35rem',
+                borderRadius: '8px'
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            <div style={{
+              width: '58px',
+              height: '58px',
+              borderRadius: '16px',
+              background: 'rgba(239, 68, 68, 0.15)',
+              color: 'var(--error)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem',
+              boxShadow: '0 4px 14px rgba(239, 68, 68, 0.2)'
+            }}>
+              <Trash2 size={28} />
+            </div>
+
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--error)' }}>
+              ลบบัญชีผู้ใช้งานถาวร?
+            </h3>
+
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.55, margin: '0 0 1.25rem' }}>
+              การดำเนินการนี้จะลบข้อมูลโปรไฟล์ ประวัติการทำข้อสอบทั้งหมด และปิดการใช้งานบัญชีของคุณทันที <strong>ไม่สามารถกู้คืนได้</strong>
+            </p>
+
+            <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+                พิมพ์อีเมลของคุณ <strong style={{ color: 'var(--text)' }}>{user?.email}</strong> เพื่อยืนยัน:
+              </label>
+              <input 
+                type="text"
+                className="input"
+                value={confirmDeleteEmail}
+                onChange={(e) => setConfirmDeleteEmail(e.target.value)}
+                placeholder={user?.email || 'กรอกอีเมลของคุณ'}
+                style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: '8px', fontSize: '0.875rem' }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={() => setShowDeleteAccountModal(false)}
+                style={{ flex: 1, padding: '0.65rem 1rem', borderRadius: '10px' }}
+              >
+                ยกเลิก
+              </button>
+              <button 
+                type="button"
+                className="btn btn-primary" 
+                onClick={handleDeleteAccount}
+                disabled={saving || confirmDeleteEmail.trim().toLowerCase() !== user?.email?.toLowerCase()}
+                style={{
+                  flex: 1,
+                  padding: '0.65rem 1rem',
+                  borderRadius: '10px',
+                  background: 'var(--error)',
+                  borderColor: 'var(--error)',
+                  color: '#ffffff',
+                  opacity: confirmDeleteEmail.trim().toLowerCase() !== user?.email?.toLowerCase() ? 0.5 : 1,
+                  boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)'
+                }}
+              >
+                {saving ? 'กำลังลบบัญชี...' : 'ลบบัญชีของฉัน'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

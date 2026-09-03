@@ -1,6 +1,23 @@
-import { FileText, ArrowLeft, PlayCircle, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileText, ArrowLeft, PlayCircle, Info, Sparkles, RotateCcw } from 'lucide-react';
 
-export default function ExamIntro({ subject, onStart, onBack }) {
+export default function ExamIntro({ subject, onStart, onResume, onBack }) {
+  const [inProgress, setInProgress] = useState(null);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('examhub_in_progress_exam');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.subjectId === subject.id) {
+          setInProgress(parsed);
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to check in-progress exam:", e);
+    }
+  }, [subject.id]);
+
   const choiceTypes = new Set(subject.questions.map(q => q.choices?.length || 4));
   const typesArray = Array.from(choiceTypes).sort((a, b) => a - b);
 
@@ -33,6 +50,52 @@ export default function ExamIntro({ subject, onStart, onBack }) {
           )}
         </div>
 
+        {inProgress && (
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(134, 59, 255, 0.12) 0%, rgba(0, 112, 243, 0.08) 100%)',
+            border: '1px solid var(--accent)',
+            padding: '1.25rem',
+            borderRadius: '12px',
+            marginBottom: '1.75rem',
+            textAlign: 'left',
+            boxShadow: '0 4px 20px rgba(134, 59, 255, 0.12)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '0.35rem' }}>
+              <Sparkles size={16} />
+              <span>คุณมีข้อสอบชุดนี้ที่ทำค้างไว้</span>
+            </div>
+            <p style={{ margin: '0 0 1rem', fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              ตอบไปแล้ว <strong>{inProgress.answeredCount}</strong> จาก {subject.questions.length} ข้อ (ข้อล่าสุด: ข้อที่ {inProgress.currentQ + 1}) • เวลาคงเหลือ <strong>{Math.floor(inProgress.timeLeft / 60)}:{(inProgress.timeLeft % 60).toString().padStart(2, '0')} นาที</strong>
+            </p>
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <button 
+                className="btn btn-primary"
+                onClick={() => onResume && onResume(inProgress)}
+                style={{ fontSize: '0.9rem', padding: '0.6rem 1.35rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+              >
+                <PlayCircle size={16} />
+                ทำต่อจากข้อที่ {inProgress.currentQ + 1}
+              </button>
+              <button 
+                className="btn btn-outline"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem('examhub_in_progress_exam');
+                  } catch (e) {
+                    console.warn(e);
+                  }
+                  setInProgress(null);
+                  onStart();
+                }}
+                style={{ fontSize: '0.9rem', padding: '0.6rem 1.15rem', display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+              >
+                <RotateCcw size={15} />
+                เริ่มทำใหม่ตั้งแต่ต้น
+              </button>
+            </div>
+          </div>
+        )}
+
         <div style={{ 
           background: 'var(--surface-hover)', 
           padding: '1.25rem', 
@@ -58,16 +121,18 @@ export default function ExamIntro({ subject, onStart, onBack }) {
           </div>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
-          <button 
-            className="btn btn-primary"
-            onClick={onStart}
-            style={{ fontSize: '1rem', padding: '0.75rem 2.25rem' }}
-          >
-            <PlayCircle size={18} />
-            เริ่มทำข้อสอบ
-          </button>
-        </div>
+        {!inProgress && (
+          <div style={{ textAlign: 'center' }}>
+            <button 
+              className="btn btn-primary"
+              onClick={onStart}
+              style={{ fontSize: '1rem', padding: '0.75rem 2.25rem' }}
+            >
+              <PlayCircle size={18} />
+              เริ่มทำข้อสอบ
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

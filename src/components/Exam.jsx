@@ -14,12 +14,32 @@ const renderTextWithMath = (text) => {
   });
 };
 
-export default function Exam({ subject, onBack, onComplete, onReport }) {
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState(Array(subject.questions.length).fill(null));
-  const [bookmarks, setBookmarks] = useState(Array(subject.questions.length).fill(false));
+export default function Exam({ subject, onBack, onComplete, onReport, initialProgress }) {
+  const [currentQ, setCurrentQ] = useState(() => {
+    if (initialProgress?.currentQ !== undefined && initialProgress.currentQ < subject.questions.length) {
+      return initialProgress.currentQ;
+    }
+    return 0;
+  });
+  const [answers, setAnswers] = useState(() => {
+    if (Array.isArray(initialProgress?.answers) && initialProgress.answers.length === subject.questions.length) {
+      return initialProgress.answers;
+    }
+    return Array(subject.questions.length).fill(null);
+  });
+  const [bookmarks, setBookmarks] = useState(() => {
+    if (Array.isArray(initialProgress?.bookmarks) && initialProgress.bookmarks.length === subject.questions.length) {
+      return initialProgress.bookmarks;
+    }
+    return Array(subject.questions.length).fill(false);
+  });
   const [showResult, setShowResult] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(subject.questions.length * 60); // 1 min per question
+  const [timeLeft, setTimeLeft] = useState(() => {
+    if (typeof initialProgress?.timeLeft === 'number' && initialProgress.timeLeft > 0) {
+      return initialProgress.timeLeft;
+    }
+    return subject.questions.length * 60;
+  });
   const [showAlert, setShowAlert] = useState(true);
   const [isReviewMode, setIsReviewMode] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -32,9 +52,78 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
   };
 
   const answersRef = useRef(answers);
+  const currentQRef = useRef(currentQ);
+  const bookmarksRef = useRef(bookmarks);
+  const timeLeftRef = useRef(timeLeft);
+
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
+
+  useEffect(() => {
+    currentQRef.current = currentQ;
+  }, [currentQ]);
+
+  useEffect(() => {
+    bookmarksRef.current = bookmarks;
+  }, [bookmarks]);
+
+  useEffect(() => {
+    timeLeftRef.current = timeLeft;
+  }, [timeLeft]);
+
+  const persistProgress = (qIdx, ansList, bmkList, time) => {
+    if (showResult) return;
+    try {
+      const answeredCount = ansList.filter(a => a !== null).length;
+      if (answeredCount > 0 || qIdx > 0) {
+        const progressData = {
+          subjectId: subject.id,
+          subjectName: subject.name,
+          subjectCategory: subject.category || 'General',
+          subjectYear: subject.year || 3,
+          subjectType: subject.type || 'Midterm',
+          currentQ: qIdx,
+          answers: ansList,
+          bookmarks: bmkList,
+          timeLeft: time,
+          totalQuestions: subject.questions.length,
+          answeredCount,
+          updatedAt: Date.now()
+        };
+        localStorage.setItem('examhub_in_progress_exam', JSON.stringify(progressData));
+      }
+    } catch (e) {
+      console.warn("Failed to persist progress:", e);
+    }
+  };
+
+  // Automatically save progress whenever answers, bookmarks, or current question change
+  useEffect(() => {
+    if (showResult) return;
+    try {
+      const answeredCount = answers.filter(a => a !== null).length;
+      if (answeredCount > 0 || currentQ > 0) {
+        const progressData = {
+          subjectId: subject.id,
+          subjectName: subject.name,
+          subjectCategory: subject.category || 'General',
+          subjectYear: subject.year || 3,
+          subjectType: subject.type || 'Midterm',
+          currentQ,
+          answers,
+          bookmarks,
+          timeLeft: timeLeftRef.current,
+          totalQuestions: subject.questions.length,
+          answeredCount,
+          updatedAt: Date.now()
+        };
+        localStorage.setItem('examhub_in_progress_exam', JSON.stringify(progressData));
+      }
+    } catch (e) {
+      console.warn("Failed to persist progress:", e);
+    }
+  }, [currentQ, answers, bookmarks, showResult, subject]);
 
   useEffect(() => {
     if (showResult || isPaused) return;
@@ -43,18 +132,48 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(timer);
+          try {
+            localStorage.removeItem('examhub_in_progress_exam');
+          } catch (e) {
+            console.warn(e);
+          }
           const currentAnswers = answersRef.current;
           const score = currentAnswers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
           onComplete(score);
           setShowResult(true);
           return 0;
         }
-        return prev - 1;
+
+        const newTime = prev - 1;
+        // Periodically sync remaining time to localStorage
+        if (newTime % 5 === 0) {
+          try {
+            const saved = localStorage.getItem('examhub_in_progress_exam');
+            if (saved) {
+              const parsed = JSON.parse(saved);
+              if (parsed.subjectId === subject.id) {
+                parsed.timeLeft = newTime;
+                parsed.updatedAt = Date.now();
+                localStorage.setItem('examhub_in_progress_exam', JSON.stringify(parsed));
+              }
+            }
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+        return newTime;
       });
     }, 1000);
     
     return () => clearInterval(timer);
-  }, [showResult, isPaused, subject.questions, onComplete]);
+  }, [showResult, isPaused, subject.questions, subject.id, onComplete]);
+
+  const handleExit = () => {
+    if (!showResult) {
+      persistProgress(currentQ, answers, bookmarks, timeLeft);
+    }
+    onBack();
+  };
 
   const q = subject.questions[currentQ];
   const answered = answers[currentQ] !== null;
@@ -70,6 +189,11 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
     if (currentQ < subject.questions.length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
+      try {
+        localStorage.removeItem('examhub_in_progress_exam');
+      } catch (e) {
+        console.warn(e);
+      }
       const score = answers.reduce((sum, ans, idx) => {
         return sum + (ans === subject.questions[idx].answer ? 1 : 0);
       }, 0);
@@ -227,6 +351,11 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
               ดูเฉลย
             </button>
             <button className="btn btn-outline" onClick={() => {
+              try {
+                localStorage.removeItem('examhub_in_progress_exam');
+              } catch (e) {
+                console.warn(e);
+              }
               setAnswers(Array(subject.questions.length).fill(null));
               setCurrentQ(0);
               setTimeLeft(subject.questions.length * 60);
@@ -304,7 +433,7 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
               </button>
               <button 
                 className="btn btn-outline" 
-                onClick={onBack}
+                onClick={handleExit}
                 style={{ padding: '0.65rem 1.25rem', width: '100%', fontSize: '0.875rem' }}
               >
                 <HomeIcon size={15} />
@@ -320,7 +449,7 @@ export default function Exam({ subject, onBack, onComplete, onReport }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button 
             className="btn btn-outline" 
-            onClick={onBack}
+            onClick={handleExit}
             style={{ width: '32px', height: '32px', padding: 0 }}
             title="กลับหน้าหลัก"
           >

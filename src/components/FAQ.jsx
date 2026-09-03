@@ -32,6 +32,10 @@ const FAQ_DATA = [
       {
         q: "ระบบจับเวลาและการคิดคะแนนทำงานอย่างไร?",
         a: "ระบบจะกำหนดเวลาเฉลี่ยข้อละ 1 นาที (สามารถเลือกเปิด/ปิดตัวจับเวลาได้ในการตั้งค่า) เมื่อทำเสร็จและกดส่ง ระบบจะตรวจคำตอบและคิดคะแนนแบบเรียลไทม์ พร้อมบันทึกสถิติเพื่อนำไปวิเคราะห์จุดแข็ง-จุดอ่อน"
+      },
+      {
+        q: "สามารถติดตั้ง ExamHub เป็นแอปพลิเคชัน (PWA) บนมือถือหรือคอมพิวเตอร์ได้อย่างไร?",
+        a: "ExamHub รองรับ Progressive Web App (PWA) คุณสามารถติดตั้งลงเครื่องได้โดยตรงโดยไม่ต้องผ่าน App Store หรือ Play Store:\n• บนคอมพิวเตอร์ (Chrome / Edge): กดปุ่ม 'ติดตั้งแอป' ที่มุมขวาล่าง หรือกดไอคอนหน้าจอ/คอมพิวเตอร์ที่ช่อง Address Bar ด้านบน\n• บน Android (Chrome): กดป๊อปอัป 'ติดตั้งทันที' หรือกดเมนูจุด 3 จุด (⋮) > เลือก 'ติดตั้งแอป' หรือ 'เพิ่มลงในหน้าจอหลัก'\n• บน iOS (iPhone / iPad - Safari): กดปุ่มแชร์ (⎋ Share) ด้านล่าง > เลื่อนลงแล้วเลือก 'เพิ่มไปยังหน้าจอโฮม' (Add to Home Screen)"
       }
     ]
   },
@@ -792,6 +796,9 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onHome}>เริ่มทำข้อสอบ</span>
         </div>
         <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
+          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
+        </p>
         <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 ExamHub. All rights reserved.</p>
       </footer>
     </div>

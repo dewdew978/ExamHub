@@ -1,13 +1,52 @@
 import { useState, useEffect } from 'react';
-import { FileText, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle } from 'lucide-react';
+import { FileText, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle, Sparkles, PlayCircle, Trash2, X } from 'lucide-react';
 
-export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport }) {
+export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport, onResumeExam }) {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedExamType, setSelectedExamType] = useState('All');
+  const [inProgressExam, setInProgressExam] = useState(null);
+  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
   
   const [showGreeting, setShowGreeting] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  useEffect(() => {
+    const checkInProgress = () => {
+      try {
+        const saved = localStorage.getItem('examhub_in_progress_exam');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.subjectId && parsed.totalQuestions) {
+            setInProgressExam(parsed);
+            return;
+          }
+        }
+        setInProgressExam(null);
+      } catch (e) {
+        console.warn("Failed to read in-progress exam:", e);
+      }
+    };
+
+    checkInProgress();
+    window.addEventListener('focus', checkInProgress);
+    return () => window.removeEventListener('focus', checkInProgress);
+  }, []);
+
+  const handleOpenDiscardConfirm = (e) => {
+    e.stopPropagation();
+    setShowDiscardConfirm(true);
+  };
+
+  const handleConfirmDiscard = () => {
+    try {
+      localStorage.removeItem('examhub_in_progress_exam');
+    } catch (err) {
+      console.warn(err);
+    }
+    setInProgressExam(null);
+    setShowDiscardConfirm(false);
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -470,6 +509,158 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
         </div>
       </div>
 
+      {/* In-Progress Exam Resume Banner */}
+      {inProgressExam && (
+        <div 
+          className="card animate-fade-in"
+          style={{
+            marginTop: '1.75rem',
+            marginBottom: '1rem',
+            padding: '1.25rem 1.5rem',
+            borderRadius: '16px',
+            border: '1px solid var(--accent)',
+            background: 'linear-gradient(135deg, rgba(134, 59, 255, 0.09) 0%, rgba(0, 112, 243, 0.06) 100%)',
+            boxShadow: '0 8px 30px rgba(134, 59, 255, 0.12)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Top highlight bar */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: 'linear-gradient(90deg, var(--accent) 0%, #a855f7 50%, #38bdf8 100%)'
+          }} />
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1.25rem',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ flex: '1 1 320px', minWidth: 0 }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                color: 'var(--accent)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginBottom: '0.35rem'
+              }}>
+                <Sparkles size={13} />
+                <span>ข้อสอบที่ทำค้างไว้ล่าสุด</span>
+              </div>
+
+              <h3 style={{
+                fontSize: '1.2rem',
+                fontWeight: 700,
+                margin: '0 0 0.4rem',
+                color: 'var(--text)',
+                letterSpacing: '-0.3px',
+                wordBreak: 'break-word'
+              }}>
+                {inProgressExam.subjectName}
+              </h3>
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem',
+                flexWrap: 'wrap',
+                fontSize: '0.8125rem',
+                color: 'var(--text-muted)',
+                marginBottom: '0.85rem'
+              }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <FileText size={14} color="var(--accent)" />
+                  ทำไปแล้ว <strong>{inProgressExam.answeredCount}</strong> / {inProgressExam.totalQuestions} ข้อ
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <Clock size={14} color="var(--warning)" />
+                  เวลาคงเหลือ <strong>{Math.floor(inProgressExam.timeLeft / 60)}:{(inProgressExam.timeLeft % 60).toString().padStart(2, '0')} นาที</strong>
+                </span>
+                <span style={{
+                  background: 'var(--surface-hover)',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '6px',
+                  fontSize: '0.75rem',
+                  boxShadow: 'var(--shadow-border)'
+                }}>
+                  ข้อที่ {inProgressExam.currentQ + 1}
+                </span>
+              </div>
+
+              {/* Progress Bar */}
+              <div style={{
+                width: '100%',
+                maxWidth: '480px',
+                height: '6px',
+                background: 'var(--surface-active)',
+                borderRadius: '999px',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  width: `${Math.min(100, Math.round((inProgressExam.answeredCount / inProgressExam.totalQuestions) * 100))}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, var(--accent) 0%, #38bdf8 100%)',
+                  borderRadius: '999px',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.625rem',
+              alignSelf: 'center',
+              flexShrink: 0
+            }}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => onResumeExam && onResumeExam(inProgressExam)}
+                style={{
+                  padding: '0.65rem 1.35rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  borderRadius: '10px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  boxShadow: '0 4px 14px rgba(134, 59, 255, 0.35)'
+                }}
+              >
+                <PlayCircle size={17} />
+                ทำต่อทันที
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={handleOpenDiscardConfirm}
+                title="ยกเลิกข้อสอบนี้"
+                style={{
+                  padding: '0.65rem',
+                  borderRadius: '10px',
+                  color: 'var(--text-muted)'
+                }}
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {selectedYear === null 
         ? renderYearSelection() 
         : selectedCategory === null 
@@ -488,6 +679,132 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
           <AlertTriangle size={13} color="var(--error)" /> แจ้งข้อสอบผิด / รายงานปัญหา
         </button>
       </div>
+
+      {/* 🛑 Custom Confirmation Modal for Discarding In-Progress Exam */}
+      {showDiscardConfirm && inProgressExam && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.25rem'
+          }}
+          onClick={() => setShowDiscardConfirm(false)}
+        >
+          <div 
+            className="card animate-fade-in"
+            style={{
+              maxWidth: '420px',
+              width: '100%',
+              padding: '2rem 1.75rem',
+              borderRadius: '20px',
+              textAlign: 'center',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(239, 68, 68, 0.15)',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setShowDiscardConfirm(false)}
+              aria-label="ปิด"
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                padding: '0.35rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '8px'
+              }}
+            >
+              <X size={18} />
+            </button>
+
+            {/* Warning Icon Badge */}
+            <div style={{
+              width: '58px',
+              height: '58px',
+              borderRadius: '16px',
+              background: 'rgba(239, 68, 68, 0.12)',
+              color: 'var(--error)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.25rem',
+              boxShadow: '0 4px 14px rgba(239, 68, 68, 0.2)'
+            }}>
+              <Trash2 size={28} />
+            </div>
+
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', letterSpacing: '-0.3px' }}>
+              ยกเลิกข้อสอบที่ทำค้างไว้?
+            </h3>
+
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.55, margin: '0 0 1.25rem' }}>
+              คุณต้องการยกเลิกและล้างข้อมูลข้อสอบชุดนี้ใช่หรือไม่? คำตอบที่บันทึกไว้จะไม่สามารถกู้คืนได้
+            </p>
+
+            {/* Exam Details Box */}
+            <div style={{
+              background: 'var(--surface-hover)',
+              padding: '0.875rem 1rem',
+              borderRadius: '12px',
+              textAlign: 'left',
+              marginBottom: '1.5rem',
+              fontSize: '0.8125rem',
+              border: '1px solid var(--border-divider)'
+            }}>
+              <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: '0.35rem' }}>
+                {inProgressExam.subjectName}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
+                <span>ความคืบหน้า: <strong>{inProgressExam.answeredCount} / {inProgressExam.totalQuestions} ข้อ</strong></span>
+                <span>เวลาคงเหลือ: <strong>{Math.floor(inProgressExam.timeLeft / 60)}:{(inProgressExam.timeLeft % 60).toString().padStart(2, '0')} นาที</strong></span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={() => setShowDiscardConfirm(false)}
+                style={{ flex: 1, padding: '0.65rem 1rem', borderRadius: '10px' }}
+              >
+                ยกเลิก
+              </button>
+              <button 
+                type="button"
+                className="btn btn-primary" 
+                style={{
+                  flex: 1,
+                  padding: '0.65rem 1rem',
+                  borderRadius: '10px',
+                  background: 'var(--error)',
+                  color: '#ffffff',
+                  borderColor: 'var(--error)',
+                  boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)'
+                }}
+                onClick={handleConfirmDiscard}
+              >
+                ยืนยันการล้าง
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
