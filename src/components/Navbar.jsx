@@ -107,7 +107,7 @@ export default function Navbar({
           white-space: nowrap;
         }
         .snav-link:hover { color: var(--text); background: var(--surface-hover); }
-        .snav-link.active { color: var(--accent); background: var(--surface-hover); font-weight: 600; }
+        .snav-link.active { color: var(--text); background: var(--surface-hover); font-weight: 700; box-shadow: inset 0 0 0 1px var(--border-color); }
         .snav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.45rem; flex-shrink: 0; }
         .snav-btn {
           height: 38px !important;

@@ -159,7 +159,8 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         ]}
       />
 
-      <section className="landing-hero" id="top">
+      <main id="main-content">
+        <section className="landing-hero" id="top">
         <Aurora colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} blend={0.5} amplitude={1.0} speed={0.6} />
         <div className="landing-hero-inner">
           <div className="landing-badge">
@@ -188,9 +189,9 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           <h2 className="landing-section-title">3 ขั้นตอนง่ายๆ ในการเตรียมพร้อมสอบ</h2>
         </div>
         <div className="landing-steps-grid">
-          <div className="landing-step-card"><div className="landing-step-num">01</div><Layers size={24} style={{ marginBottom: '1rem', color: 'var(--accent)' }} /><h3>เลือกวิชา</h3><p>เลือกรายวิชาตามชั้นปีที่คุณต้องการฝึก</p></div>
-          <div className="landing-step-card"><div className="landing-step-num">02</div><Target size={24} style={{ marginBottom: '1rem', color: '#f59e0b' }} /><h3>จับเวลา</h3><p>ฝึกทำข้อสอบพร้อมระบบจับเวลานับถอยหลัง</p></div>
-          <div className="landing-step-card"><div className="landing-step-num">03</div><FileCheck2 size={24} style={{ marginBottom: '1rem', color: 'var(--success)' }} /><h3>วิเคราะห์</h3><p>ดูเฉลยละเอียดและเรดาร์ชาร์ตวิเคราะห์ทักษะ</p></div>
+          <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">01</div><Layers size={24} style={{ marginBottom: '1rem', color: 'var(--accent)' }} /><h3>เลือกวิชา</h3><p>เลือกรายวิชาตามชั้นปีที่คุณต้องการฝึก</p></div>
+          <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">02</div><Target size={24} style={{ marginBottom: '1rem', color: '#f59e0b' }} /><h3>จับเวลา</h3><p>ฝึกทำข้อสอบพร้อมระบบจับเวลานับถอยหลัง</p></div>
+          <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">03</div><FileCheck2 size={24} style={{ marginBottom: '1rem', color: 'var(--success)' }} /><h3>วิเคราะห์</h3><p>ดูเฉลยละเอียดและเรดาร์ชาร์ตวิเคราะห์ทักษะ</p></div>
         </div>
       </section>
 
@@ -269,6 +270,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           })}
         </div>
       </section>
+      </main>
 
       {/* 6. Footer */}
       <footer className="landing-footer">
@@ -285,7 +287,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
           พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
         </p>
-        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 EXETIA. All rights reserved.</p>
+        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>
     </div>
   );

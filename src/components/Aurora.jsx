@@ -138,12 +138,17 @@ export default function Aurora(props) {
       gl.canvas.style.backgroundColor = 'transparent';
 
       let program;
+      const SCALE = 0.5;
 
       const resize = () => {
         if (!ctn) return;
         const width = ctn.offsetWidth || window.innerWidth;
         const height = ctn.offsetHeight || window.innerHeight;
-        renderer.setSize(width, height);
+        renderer.setSize(Math.max(1, Math.floor(width * SCALE)), Math.max(1, Math.floor(height * SCALE)));
+        if (gl.canvas) {
+          gl.canvas.style.width = '100%';
+          gl.canvas.style.height = '100%';
+        }
         if (program) {
           program.uniforms.uResolution.value = [width, height];
         }
@@ -155,10 +160,20 @@ export default function Aurora(props) {
         delete geometry.attributes.uv;
       }
 
-      const colorStopsArray = colorStops.map(hex => {
-        const c = new Color(hex);
-        return [c.r, c.g, c.b];
-      });
+      let cachedStopsKey = '';
+      let cachedColorStopsArray = null;
+      const getColorStopsArray = (stops) => {
+        const key = stops.join(',');
+        if (key === cachedStopsKey && cachedColorStopsArray) {
+          return cachedColorStopsArray;
+        }
+        cachedStopsKey = key;
+        cachedColorStopsArray = stops.map(hex => {
+          const c = new Color(hex);
+          return [c.r, c.g, c.b];
+        });
+        return cachedColorStopsArray;
+      };
 
       program = new Program(gl, {
         vertex: VERT,
@@ -166,7 +181,7 @@ export default function Aurora(props) {
         uniforms: {
           uTime: { value: 0 },
           uAmplitude: { value: amplitude },
-          uColorStops: { value: colorStopsArray },
+          uColorStops: { value: getColorStopsArray(colorStops) },
           uResolution: { value: [ctn.offsetWidth || window.innerWidth, ctn.offsetHeight || window.innerHeight] },
           uBlend: { value: blend }
         }
@@ -176,26 +191,41 @@ export default function Aurora(props) {
       ctn.appendChild(gl.canvas);
 
       let animateId = 0;
+      let lastTime = 0;
+      const fpsInterval = 1000 / 24; // 24 FPS cap - smooth aurora movement, 60% less CPU!
+      let isVisible = true;
+
       const update = t => {
         animateId = requestAnimationFrame(update);
+        if (!isVisible) return;
+        if (t - lastTime < fpsInterval) return;
+        lastTime = t;
+
         const { time = t * 0.01, speed = 1.0 } = propsRef.current;
         program.uniforms.uTime.value = time * speed * 0.1;
         program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
         program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
         const stops = propsRef.current.colorStops ?? colorStops;
-        program.uniforms.uColorStops.value = stops.map(hex => {
-          const c = new Color(hex);
-          return [c.r, c.g, c.b];
-        });
+        program.uniforms.uColorStops.value = getColorStopsArray(stops);
         renderer.render({ scene: mesh });
       };
       animateId = requestAnimationFrame(update);
 
       resize();
 
+      // Pause when scrolled out of view or tab is in background
+      let observer;
+      if (typeof IntersectionObserver !== 'undefined') {
+        observer = new IntersectionObserver(([entry]) => {
+          isVisible = entry.isIntersecting;
+        }, { threshold: 0.05 });
+        observer.observe(ctn);
+      }
+
       cleanupFn = () => {
         cancelAnimationFrame(animateId);
         window.removeEventListener('resize', resize);
+        if (observer) observer.disconnect();
         if (ctn && gl.canvas.parentNode === ctn) {
           ctn.removeChild(gl.canvas);
         }

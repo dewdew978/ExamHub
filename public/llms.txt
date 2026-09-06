@@ -1,0 +1,20 @@
+﻿# EXETIA
+
+> แพลตฟอร์มคลังข้อสอบและแบบฝึกหัดออนไลน์ (Data Science, Cloud, AI & MIS)
+
+## ภาพรวม (Overview)
+EXETIA เป็นเว็บแอปพลิเคชันคลังข้อสอบออนไลน์สำหรับนักศึกษาและบุคลากรสายเทคโนโลยีสารสนเทศ ออกแบบมาเพื่อการทบทวนความรู้ก่อนสอบจริง พร้อมเฉลยละเอียดเชิงลึก step-by-step การวิเคราะห์ทักษะ และระบบจับเวลาเสมือนจริง
+
+## เนื้อหาและรายวิชาหลัก (Key Subjects)
+- [Data Science & Machine Learning](https://exetia-exam.vercel.app/home): ข้อสอบทฤษฎีและการคำนวณ Machine Learning
+- [AWS Cloud Computing](https://exetia-exam.vercel.app/home): ข้อสอบแนวปฏิบัติ AWS Cloud
+- [Intelligent Systems](https://exetia-exam.vercel.app/home): ระบบรู้จำ การประมวลผลสัญญาณ และ AI
+- [Management Information Systems](https://exetia-exam.vercel.app/home): ระบบฐานข้อมูล, CRM และ Project Management
+
+## ลิงก์สำคัญ (Important Links)
+- [หน้าแรก](https://exetia-exam.vercel.app/)
+- [คลังข้อสอบทั้งหมด](https://exetia-exam.vercel.app/home)
+- [ข่าวสาร & อัปเดต](https://exetia-exam.vercel.app/blog)
+- [เกี่ยวกับเรา](https://exetia-exam.vercel.app/about)
+- [คำถามที่พบบ่อย](https://exetia-exam.vercel.app/faq)
+- [ข้อกำหนดการใช้งาน](https://exetia-exam.vercel.app/terms)
