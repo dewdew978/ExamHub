@@ -18,6 +18,7 @@ import Blog from './components/Blog';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
+import localIndex from './data/index.json';
 import './index.css';
 
 const getViewFromPath = (pathname) => {
@@ -74,9 +75,9 @@ function App() {
   const [categoryScores, setCategoryScores] = useState({});
   const [showChart, setShowChart] = useState(false);
   
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects] = useState(localIndex);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [authRequiredMessage, setAuthRequiredMessage] = useState('');
   
   const [theme, setTheme] = useState(() => {
@@ -176,9 +177,8 @@ function App() {
           
         if (examsError) throw examsError;
         
-        const localIndex = await import('./data/index.json');
         let mergedSubjects = (examsData || []).map(exam => {
-          const local = localIndex.default.find(l => l.id === exam.id);
+          const local = localIndex.find(l => l.id === exam.id);
           const customKey = `examhub_custom_exam_${exam.id}`;
           const savedCustom = localStorage.getItem(customKey);
           let customQuestionCount = exam.questionCount;
@@ -222,7 +222,9 @@ function App() {
             }
           }
         }
-        setSubjects(mergedSubjects);
+        if (mergedSubjects.length > 0) {
+          setSubjects(mergedSubjects);
+        }
 
         // 2. Check auth status
         const { data: { session } } = await supabase.auth.getSession();
@@ -240,12 +242,6 @@ function App() {
         }
       } catch (err) {
         console.error("Error fetching data:", err);
-        try {
-          const localIndex = await import('./data/index.json');
-          setSubjects(localIndex.default);
-        } catch (localErr) {
-          console.error("Failed to load fallback local index:", localErr);
-        }
       } finally {
         setLoading(false);
       }
@@ -416,8 +412,9 @@ function App() {
 
   if (loading) {
     return (
-      <div className="app-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', gap: '1rem' }}>
         <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid var(--border)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>กำลังโหลด EXETIA...</p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
