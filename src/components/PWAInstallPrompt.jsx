@@ -77,7 +77,7 @@ export default function PWAInstallPrompt() {
     <>
       {isVisible && (
         <aside 
-          aria-label="ติดตั้งแอปพลิเคชัน ExamHub"
+          aria-label="ติดตั้งแอปพลิเคชัน EXETIA"
           className="animate-fade-in"
           style={{
             position: 'fixed',
@@ -122,7 +122,7 @@ export default function PWAInstallPrompt() {
                   alignItems: 'center',
                   gap: '0.35rem'
                 }}>
-                  ติดตั้งแอป ExamHub
+                  ติดตั้งแอป EXETIA
                   <Sparkles size={14} style={{ color: 'var(--accent)' }} />
                 </h4>
                 <button

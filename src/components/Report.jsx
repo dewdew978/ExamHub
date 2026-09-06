@@ -183,7 +183,7 @@ export default function Report({ subjects = [], initialData = null, user = null,
                   รายงานข้อสอบผิดพลาด / แจ้งปัญหา
                 </h1>
                 <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                  ช่วยเราพัฒนา ExamHub ให้ดียิ่งขึ้น หากพบข้อสอบผิด เฉลยไม่ตรง หรือบั๊กในระบบ
+                  ช่วยเราพัฒนา EXETIA ให้ดียิ่งขึ้น หากพบข้อสอบผิด เฉลยไม่ตรง หรือบั๊กในระบบ
                 </p>
               </div>
             </div>

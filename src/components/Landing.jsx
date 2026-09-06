@@ -11,7 +11,7 @@ import Aurora from './Aurora';
 import BorderGlow from './BorderGlow';
 import Navbar from './Navbar';
 
-export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, user }) {
+export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -151,9 +151,9 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         onStartGuest={onStart}
         showLogin={false}
         links={[
-          { label: 'ขั้นตอน', onClick: () => scrollToSection('landing-steps') },
-          { label: 'ฟีเจอร์เด่น', onClick: () => scrollToSection('landing-features') },
-          { label: 'รายวิชาทั้งหมด', onClick: () => scrollToSection('landing-preview') },
+          { label: 'หน้าแรก', onClick: () => scrollToSection('top'), active: true },
+          { label: 'คลังข้อสอบ', onClick: onStart },
+          { label: 'ข่าวสาร & อัปเดต', onClick: onNavigateBlog },
           { label: 'คำถามที่พบบ่อย', onClick: onNavigateFaq },
           { label: 'เกี่ยวกับเรา', onClick: onNavigateAbout },
         ]}
@@ -281,11 +281,11 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
         </div>
-        <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+        <p style={{ margin: '0 0 0.25rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
           พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
         </p>
-        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 ExamHub. All rights reserved.</p>
+        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>
     </div>
   );

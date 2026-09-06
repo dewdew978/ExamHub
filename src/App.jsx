@@ -14,6 +14,7 @@ import Report from './components/Report';
 import AdminDashboard from './components/AdminDashboard';
 import UserSettings from './components/UserSettings';
 import TermsOfService from './components/TermsOfService';
+import Blog from './components/Blog';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
@@ -23,6 +24,7 @@ const getViewFromPath = (pathname) => {
   const path = (pathname || '').toLowerCase().replace(/\/$/, '') || '/';
   if (path === '/' || path === '/landing' || path === '/landingpage') return 'landing';
   if (path === '/home') return 'home';
+  if (path === '/blog' || path === '/news' || path === '/changelog' || path === '/updates') return 'blog';
   if (path === '/about' || path === '/aboutus') return 'about';
   if (path === '/faq' || path === '/faqs' || path === '/help') return 'faq';
   if (path === '/terms' || path === '/termsofservice' || path === '/privacy') return 'terms';
@@ -38,8 +40,9 @@ const getViewFromPath = (pathname) => {
 
 const getPathFromView = (view) => {
   switch (view) {
-    case 'landing': return '/landingpage';
+    case 'landing': return '/';
     case 'home': return '/home';
+    case 'blog': return '/blog';
     case 'about': return '/about';
     case 'faq': return '/faq';
     case 'terms': return '/terms';
@@ -110,6 +113,57 @@ function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Update document.title and meta description dynamically based on view
+  useEffect(() => {
+    const pageMeta = {
+      landing: {
+        title: 'EXETIA | คลังข้อสอบและแบบฝึกหัดออนไลน์ (Data Science, Cloud, AI & MIS)',
+        desc: 'แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษาและสายไอที สรุปแนวข้อสอบ Data Science, AI & Cloud พร้อมเฉลยละเอียดเชิงลึก ช่วยเพิ่มความมั่นใจก่อนลงสนามสอบจริง'
+      },
+      home: {
+        title: 'คลังข้อสอบทั้งหมด | EXETIA',
+        desc: 'รวมชุดข้อสอบและแบบฝึกหัด Data Science, Machine Learning, AWS Cloud, Intelligent Systems และ MIS ฝึกทำฟรีพร้อมเฉลยละเอียด'
+      },
+      blog: {
+        title: 'ข่าวสาร & อัปเดตระบบ | EXETIA Blog',
+        desc: 'ติดตามข่าวสาร ฟีเจอร์ใหม่ อัปเดตระบบ และบทความเทคโนโลยีการสอบจากทีมงาน EXETIA'
+      },
+      about: {
+        title: 'เกี่ยวกับเรา | EXETIA',
+        desc: 'ทำความรู้จักกับ EXETIA แพลตฟอร์มคลังข้อสอบออนไลน์เพื่อพัฒนาทักษะด้านไอทีและการศึกษา'
+      },
+      faq: {
+        title: 'คำถามที่พบบ่อย (FAQ) | EXETIA',
+        desc: 'รวมข้อสงสัยและคำถามที่พบบ่อยเกี่ยวกับการใช้งานแพลตฟอร์ม การทำข้อสอบ และระบบสมาชิก EXETIA'
+      },
+      schedule: {
+        title: 'ตารางสอบและกำหนดการ | EXETIA',
+        desc: 'ตรวจสอบตารางสอบและกำหนดการสำคัญต่างๆ บนแพลตฟอร์ม EXETIA'
+      },
+      terms: {
+        title: 'ข้อกำหนดการใช้งานและนโยบายความเป็นส่วนตัว | EXETIA',
+        desc: 'ข้อตกลง เงื่อนไขการให้บริการ และนโยบายการคุ้มครองข้อมูลส่วนบุคคลของ EXETIA'
+      },
+      login: {
+        title: 'เข้าสู่ระบบ / สมัครสมาชิก | EXETIA',
+        desc: 'เข้าสู่ระบบบัญชี EXETIA เพื่อบันทึกประวัติการทำข้อสอบ ดูสถิติคลิกเดียว'
+      },
+      report: {
+        title: 'แจ้งปัญหาข้อสอบ | EXETIA',
+        desc: 'ส่งรายงานข้อผิดพลาดของโจทย์ คำตอบ หรือระบบข้อสอบแก่ผู้ดูแลระบบ EXETIA'
+      }
+    };
+
+    const currentMeta = pageMeta[currentView];
+    if (currentMeta) {
+      document.title = currentMeta.title;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', currentMeta.desc);
+      }
+    }
+  }, [currentView]);
 
   // Fetch initial data
   useEffect(() => {
@@ -381,6 +435,23 @@ function App() {
         onNavigateAbout={() => setCurrentView('about')}
         onNavigateFaq={() => setCurrentView('faq')}
         onNavigateTerms={() => setCurrentView('terms')}
+        onNavigateBlog={() => setCurrentView('blog')}
+      />
+    );
+  }
+
+  // Standalone Blog & Changelog Page
+  if (currentView === 'blog') {
+    return (
+      <Blog 
+        user={user}
+        isAdmin={isAdmin}
+        onHome={() => setCurrentView('landing')}
+        onStart={() => setCurrentView('home')}
+        onLogin={() => setCurrentView('login')}
+        onNavigateAbout={() => setCurrentView('about')}
+        onNavigateFaq={() => setCurrentView('faq')}
+        onOpenAdminBlog={() => setCurrentView('admin_reports')}
       />
     );
   }
@@ -396,6 +467,7 @@ function App() {
         onHome={() => setCurrentView('landing')}
         onNavigateFaq={() => setCurrentView('faq')}
         onNavigateTerms={() => setCurrentView('terms')}
+        onNavigateBlog={() => setCurrentView('blog')}
       />
     );
   }
@@ -408,6 +480,7 @@ function App() {
         onNavigateLanding={() => setCurrentView('landing')}
         onNavigateAbout={() => setCurrentView('about')}
         onNavigateTerms={() => setCurrentView('terms')}
+        onNavigateBlog={() => setCurrentView('blog')}
         onLogin={() => setCurrentView('login')}
         user={user}
       />
@@ -424,6 +497,7 @@ function App() {
         onHome={() => setCurrentView('landing')}
         onNavigateAbout={() => setCurrentView('about')}
         onNavigateFaq={() => setCurrentView('faq')}
+        onNavigateBlog={() => setCurrentView('blog')}
       />
     );
   }
@@ -490,7 +564,7 @@ function App() {
                 <div className="app-brand-icon">
                   <BookOpen size={19} />
                 </div>
-                <span>ExamHub</span>
+                <span>EXETIA</span>
               </a>
             </div>
 
@@ -498,35 +572,34 @@ function App() {
             <div className="app-nav-center">
               <nav className="app-nav-links">
                 <button 
+                  className={`app-nav-link ${currentView === 'landing' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('landing')}
+                >
+                  หน้าแรก
+                </button>
+                <button 
                   className={`app-nav-link ${currentView === 'home' ? 'active' : ''}`}
                   onClick={goHome}
                 >
                   คลังข้อสอบ
                 </button>
                 <button 
-                  className={`app-nav-link ${currentView === 'schedule' ? 'active' : ''}`}
-                  onClick={() => setCurrentView('schedule')}
+                  className={`app-nav-link ${currentView === 'blog' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('blog')}
                 >
-                  ตารางสอบ
-                </button>
-                <button 
-                  className={`app-nav-link ${currentView === 'history' ? 'active' : ''}`}
-                  onClick={() => {
-                    if (!user) {
-                      setAuthRequiredMessage('กรุณาเข้าสู่ระบบก่อนเพื่อดูประวัติคะแนน');
-                      setCurrentView('login');
-                    } else {
-                      setCurrentView('history');
-                    }
-                  }}
-                >
-                  ประวัติคะแนน
+                  ข่าวสาร & อัปเดต
                 </button>
                 <button 
                   className={`app-nav-link ${currentView === 'faq' ? 'active' : ''}`}
                   onClick={() => setCurrentView('faq')}
                 >
                   คำถามที่พบบ่อย
+                </button>
+                <button 
+                  className={`app-nav-link ${currentView === 'about' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('about')}
+                >
+                  เกี่ยวกับเรา
                 </button>
               </nav>
             </div>
@@ -644,6 +717,39 @@ function App() {
                       >
                         <Sparkles size={14} color="var(--accent)" />
                         <span>หน้าแนะนำ (Landing)</span>
+                      </button>
+
+                      {/* 2.1 ข่าวสาร & อัปเดต (Blog) */}
+                      <button 
+                        style={{
+                          fontFamily: 'inherit',
+                          padding: '0.75rem 1rem',
+                          background: currentView === 'blog' ? 'rgba(0,112,243,0.1)' : 'transparent',
+                          color: currentView === 'blog' ? 'var(--accent)' : 'var(--text)',
+                          border: 'none',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          borderBottom: '1px solid var(--border)',
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          fontWeight: currentView === 'blog' ? 600 : 400
+                        }}
+                        onClick={() => {
+                          setCurrentView('blog');
+                          setShowMenu(false);
+                        }}
+                        onMouseOver={(e) => {
+                          if (currentView !== 'blog') e.currentTarget.style.background = 'var(--card)';
+                        }}
+                        onMouseOut={(e) => {
+                          if (currentView !== 'blog') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <Sparkles size={14} color="#8b5cf6" />
+                        <span>ข่าวสาร & อัปเดต (Blog)</span>
                       </button>
 
                       {/* 3. ข้อมูลส่วนตัว & ตั้งค่า */}
@@ -985,6 +1091,32 @@ function App() {
                 >
                   <Sparkles size={16} color="var(--accent)" />
                   <span>หน้าแนะนำ (Landing)</span>
+                </button>
+
+                {/* 0.2 ข่าวสาร & อัปเดต (Blog) */}
+                <button 
+                  style={{
+                    fontFamily: 'inherit',
+                    padding: '0.875rem 1rem',
+                    background: currentView === 'blog' ? 'var(--surface-hover)' : 'transparent',
+                    color: currentView === 'blog' ? 'var(--accent)' : 'var(--text)',
+                    border: 'none',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    width: '100%',
+                    fontWeight: currentView === 'blog' ? 600 : 400
+                  }}
+                  onClick={() => {
+                    setCurrentView('blog');
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <Sparkles size={16} color="#8b5cf6" />
+                  <span>ข่าวสาร & อัปเดต (Blog)</span>
                 </button>
 
 
@@ -1416,7 +1548,7 @@ function App() {
           <div className="card animate-fade-in" style={{ padding: '2.5rem', maxWidth: '400px', width: '90%', textAlign: 'center' }}>
             <LogOut size={48} style={{ color: 'var(--error)', margin: '0 auto 1.5rem', opacity: 0.8 }} />
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 600 }}>ยืนยันการออกจากระบบ</h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ ExamHub?</p>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ EXETIA?</p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
               <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(false)}>
                 ยกเลิก

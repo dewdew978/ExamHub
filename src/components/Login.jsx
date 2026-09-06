@@ -351,11 +351,11 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
 
               <h2 style={{ fontSize: '1.25rem', letterSpacing: '-0.3px', margin: 0, fontWeight: 600 }}>
                 {mode === 'signup' && 'Create an account'}
-                {mode === 'signin' && 'Welcome to ExamHub'}
+                {mode === 'signin' && 'Welcome to EXETIA'}
                 {mode === 'forgot' && 'ลืมรหัสผ่าน (Forgot Password)'}
               </h2>
               <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                {mode === 'signup' && 'กรอกข้อมูลด้านล่างเพื่อสร้างบัญชีผู้ใช้งาน ExamHub'}
+                {mode === 'signup' && 'กรอกข้อมูลด้านล่างเพื่อสร้างบัญชีผู้ใช้งาน EXETIA'}
                 {mode === 'signin' && 'เข้าสู่ระบบเพื่อบันทึกประวัติคะแนนและผลการทดสอบของคุณ'}
                 {mode === 'forgot' && 'กรอกอีเมลของคุณ เราจะส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปให้'}
               </p>

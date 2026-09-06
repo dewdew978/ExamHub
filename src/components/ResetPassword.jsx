@@ -127,7 +127,7 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
                 ตั้งรหัสผ่านใหม่
               </h2>
               <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                กรุณากรอกรหัสผ่านใหม่ที่คุณต้องการใช้งานสำหรับ ExamHub
+                กรุณากรอกรหัสผ่านใหม่ที่คุณต้องการใช้งานสำหรับ EXETIA
               </p>
             </div>
 

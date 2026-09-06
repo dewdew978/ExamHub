@@ -6,7 +6,7 @@ import { BookOpen, ArrowRight, LogIn } from "lucide-react";
  * Props:
  *  user         – Supabase user object (or null)
  *  links        – array of { label, onClick, active? } rendered as center nav links
- *  onBrand      – click handler for the ExamHub logo
+ *  onBrand      – click handler for the EXETIA logo
  *  onStart      – CTA button when logged in ("เข้าคลังข้อสอบ")
  *  onLogin      – ghost button when logged out ("เข้าสู่ระบบ")
  *  onStartGuest – primary button when logged out ("เริ่มทำข้อสอบ"), falls back to onStart
@@ -156,7 +156,7 @@ export default function Navbar({
               <div className="snav-brand-icon">
                 <BookOpen size={19} />
               </div>
-              <span>ExamHub</span>
+              <span>EXETIA</span>
             </button>
 
             <div className="snav-center">

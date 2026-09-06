@@ -3,7 +3,7 @@ import { Target, Lightbulb, Zap, ArrowRight, Heart, Users } from 'lucide-react';
 import Aurora from './Aurora';
 import Navbar from './Navbar';
 
-export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNavigateTerms, user }) {
+export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -278,6 +278,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         links={[
           { label: 'หน้าแรก', onClick: onHome },
           { label: 'คลังข้อสอบ', onClick: onStart },
+          { label: 'ข่าวสาร & อัปเดต', onClick: onNavigateBlog },
           { label: 'คำถามที่พบบ่อย', onClick: onNavigateFaq },
           { label: 'เกี่ยวกับเรา', active: true },
         ]}
@@ -305,7 +306,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
           </h1>
 
           <p className="about-subtitle">
-            ExamHub ก่อตั้งขึ้นด้วยเป้าหมายเพื่อเป็นแพลตฟอร์มคลังข้อสอบที่เข้าถึงง่าย รวดเร็ว และแม่นยำที่สุด พร้อมคำอธิบายและเฉลยละเอียด step-by-step ช่วยให้นักศึกษาเข้าใจบทเรียนและทำคะแนนได้ดียิ่งขึ้น
+            EXETIA ก่อตั้งขึ้นด้วยเป้าหมายเพื่อเป็นแพลตฟอร์มคลังข้อสอบที่เข้าถึงง่าย รวดเร็ว และแม่นยำที่สุด พร้อมคำอธิบายและเฉลยละเอียด step-by-step ช่วยให้นักศึกษาเข้าใจบทเรียนและทำคะแนนได้ดียิ่งขึ้น
           </p>
         </div>
       </section>
@@ -346,7 +347,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
           <span className="about-section-tag">Core Values</span>
           <h2 className="about-section-title">คุณค่าหลักที่เรายึดมั่น</h2>
           <p className="about-section-desc">
-            สิ่งที่ทำให้ ExamHub เป็นเครื่องมือเตรียมสอบที่ตอบโจทย์และได้รับความไว้วางใจ
+            สิ่งที่ทำให้ EXETIA เป็นเครื่องมือเตรียมสอบที่ตอบโจทย์และได้รับความไว้วางใจ
           </p>
         </div>
 
@@ -381,11 +382,11 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
         </div>
-        <p style={{ margin: '0 0 0.35rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+        <p style={{ margin: '0 0 0.35rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
           พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
         </p>
-        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 ExamHub. All rights reserved.</p>
+        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark, AlertTriangle } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
+import NumberTicker from './NumberTicker';
 
 const renderTextWithMath = (text) => {
   if (typeof text !== 'string') return text;
@@ -317,31 +318,65 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
     return (
       <div className="animate-fade-in" style={{ maxWidth: '540px', margin: '2rem auto', padding: '0 0.75rem' }}>
         <div className="card" style={{ padding: '2.5rem 1.5rem', borderRadius: '12px', textAlign: 'center' }}>
-          <div style={{ fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-1px', marginBottom: '0.25rem' }}>
-            {score}/{total}
+          <div style={{ 
+            fontSize: '3rem', 
+            fontWeight: 800, 
+            letterSpacing: '-1.5px', 
+            marginBottom: '0.5rem',
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'center',
+            gap: '0.35rem',
+            lineHeight: 1
+          }}>
+            <NumberTicker value={score} duration={1600} style={{ color: 'var(--text)' }} />
+            <span style={{ fontSize: '1.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>/{total}</span>
           </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.75rem' }}>คะแนนที่คุณทำได้</p>
+
+          <div style={{ marginBottom: '1.75rem' }}>
+            <span style={{
+              display: 'inline-block',
+              padding: '0.35rem 0.85rem',
+              borderRadius: '9999px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              background: pct >= 80 ? 'rgba(34, 197, 94, 0.12)' : pct >= 50 ? 'rgba(59, 130, 246, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+              color: pct >= 80 ? '#16a34a' : pct >= 50 ? '#2563eb' : '#dc2626',
+              marginBottom: '0.5rem'
+            }}>
+              {pct >= 80 ? '🎉 ยอดเยี่ยมมาก!' : pct >= 50 ? '👍 ผ่านเกณฑ์' : '💪 พยายามอีกนิดนะ'}
+            </span>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>คะแนนที่คุณทำได้</p>
+          </div>
           
           <div style={{ 
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', 
-            padding: '1rem', borderRadius: '8px', boxShadow: 'var(--shadow-border)',
+            padding: '1rem', borderRadius: '10px', boxShadow: 'var(--shadow-border)',
             marginBottom: '2rem', background: 'var(--surface-hover)'
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{score}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ถูก</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#16a34a' }}>
+                <NumberTicker value={score} duration={1200} />
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>ถูก</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{wrong}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ผิด</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#dc2626' }}>
+                <NumberTicker value={wrong} duration={1200} />
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>ผิด</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{skipped}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>ข้าม</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>
+                <NumberTicker value={skipped} duration={1200} />
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>ข้าม</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>{pct}%</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>เปอร์เซ็นต์</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)' }}>
+                <NumberTicker value={pct} duration={1600} />%
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>เปอร์เซ็นต์</div>
             </div>
           </div>
 

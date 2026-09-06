@@ -3,7 +3,7 @@ import { Shield, Lock, Scale, BookOpen, CheckCircle, AlertCircle, UserCheck, Eye
 import Aurora from './Aurora';
 import Navbar from './Navbar';
 
-export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbout, onNavigateFaq, user }) {
+export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbout, onNavigateFaq, onNavigateBlog, user }) {
   const [activeTab, setActiveTab] = useState('terms'); // 'terms' | 'privacy'
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
@@ -255,8 +255,10 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
         showLogin={!user}
         links={[
           { label: 'หน้าแรก', onClick: onHome },
+          { label: 'คลังข้อสอบ', onClick: onStart },
+          { label: 'ข่าวสาร & อัปเดต', onClick: onNavigateBlog },
+          { label: 'คำถามที่พบบ่อย', onClick: onNavigateFaq },
           { label: 'เกี่ยวกับเรา', onClick: onNavigateAbout },
-          { label: 'คำถามที่พบบ่อย (FAQ)', onClick: onNavigateFaq },
         ]}
       />
 
@@ -277,7 +279,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
             ข้อกำหนดและ<span className="terms-title-gradient">ความเป็นส่วนตัว</span>
           </h1>
           <p className="terms-subtitle">
-            ความโปร่งใสและมาตรฐานความปลอดภัยในการให้บริการคลังข้อสอบออนไลน์ของ ExamHub
+            ความโปร่งใสและมาตรฐานความปลอดภัยในการให้บริการคลังข้อสอบออนไลน์ของ EXETIA
           </p>
         </div>
       </section>
@@ -318,10 +320,10 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
                 <h2 className="terms-block-title">1. บทนำและวัตถุประสงค์ในการให้บริการ</h2>
               </div>
               <p className="terms-block-text">
-                ยินดีต้อนรับสู่ <strong>ExamHub</strong> แพลตฟอร์มคลังข้อสอบและแบบฝึกหัดออนไลน์ที่สร้างขึ้นเพื่อสนับสนุนการเรียนรู้ ทบทวนความรู้ และพัฒนาทักษะทางวิชาการของนักศึกษาและผู้สนใจในสาขา Data Science, Artificial Intelligence (AI), Cloud Computing, MIS และ Data Warehouse
+                ยินดีต้อนรับสู่ <strong>EXETIA</strong> แพลตฟอร์มคลังข้อสอบและแบบฝึกหัดออนไลน์ที่สร้างขึ้นเพื่อสนับสนุนการเรียนรู้ ทบทวนความรู้ และพัฒนาทักษะทางวิชาการของนักศึกษาและผู้สนใจในสาขา Data Science, Artificial Intelligence (AI), Cloud Computing, MIS และ Data Warehouse
               </p>
               <p className="terms-block-text">
-                การเข้าถึงและใช้งานแพลตฟอร์ม ExamHub ถือว่าคุณได้อ่าน เข้าใจ และยอมรับข้อตกลงและเงื่อนไขการใช้บริการเหล่านี้ทั้งหมด หากคุณไม่ยอมรับข้อตกลงใดๆ โปรดยุติการใช้งานแพลตฟอร์มทันที
+                การเข้าถึงและใช้งานแพลตฟอร์ม EXETIA ถือว่าคุณได้อ่าน เข้าใจ และยอมรับข้อตกลงและเงื่อนไขการใช้บริการเหล่านี้ทั้งหมด หากคุณไม่ยอมรับข้อตกลงใดๆ โปรดยุติการใช้งานแพลตฟอร์มทันที
               </p>
             </div>
 
@@ -339,7 +341,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
                 <li>คุณต้องให้ข้อมูลที่ถูกต้องในการสมัคร (เช่น อีเมลที่ใช้งานได้จริง และชื่อเล่นที่เหมาะสม)</li>
                 <li>คุณมีหน้าที่รับผิดชอบในการรักษาความปลอดภัยของรหัสผ่านและข้อมูลบัญชีของคุณ</li>
                 <li>ห้ามมิให้แชร์หรือส่งต่อสิทธิ์การเข้าถึงบัญชีที่มีสิทธิ์ระดับผู้ดูแล (Admin) แก่บุคคลภายนอก</li>
-                <li>ExamHub ขอสงวนสิทธิ์ในการระงับหรือยกเลิกบัญชีที่มีพฤติกรรมละเมิดกฎ หรือพยายามเจาะระบบ</li>
+                <li>EXETIA ขอสงวนสิทธิ์ในการระงับหรือยกเลิกบัญชีที่มีพฤติกรรมละเมิดกฎ หรือพยายามเจาะระบบ</li>
               </ul>
             </div>
 
@@ -351,7 +353,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
                 <h2 className="terms-block-title">3. ทรัพย์สินทางปัญญาและลิขสิทธิ์เนื้อหา</h2>
               </div>
               <p className="terms-block-text">
-                ชุดข้อสอบ คำอธิบายเฉลย โครงสร้างระบบ และซอร์สโค้ดของ ExamHub ได้รับการคุ้มครองตามกฎหมายทรัพย์สินทางปัญญา:
+                ชุดข้อสอบ คำอธิบายเฉลย โครงสร้างระบบ และซอร์สโค้ดของ EXETIA ได้รับการคุ้มครองตามกฎหมายทรัพย์สินทางปัญญา:
               </p>
               <ul className="terms-list">
                 <li>เนื้อหาทั้งหมดมีวัตถุประสงค์เพื่อการศึกษาและการเตรียมสอบส่วนบุคคลโดยไม่แสวงหาผลกำไร (Non-commercial Educational Use)</li>
@@ -367,7 +369,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
                 </div>
                 <h2 className="terms-block-title">4. ข้อห้ามและมารยาทในการใช้งาน (Acceptable Use)</h2>
               </div>
-              <p className="terms-block-text">ในการใช้งาน ExamHub ผู้ใช้ตกลงว่าจะไม่กระทำการดังต่อไปนี้:</p>
+              <p className="terms-block-text">ในการใช้งาน EXETIA ผู้ใช้ตกลงว่าจะไม่กระทำการดังต่อไปนี้:</p>
               <ul className="terms-list">
                 <li>ใช้ระบบอัตโนมัติ (Bot / Scraper) ยิงคำขอในปริมาณมากจนทำให้เซิร์ฟเวอร์ขัดข้อง (DDoS)</li>
                 <li>ส่งรายงานปัญหาเท็จ (Spam Report) หรือส่งข้อความก่อกวนผ่านระบบแจ้งปัญหาข้อสอบ</li>
@@ -383,7 +385,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
                 <h2 className="terms-block-title">5. ข้อจำกัดความรับผิดชอบ (Disclaimer)</h2>
               </div>
               <p className="terms-block-text">
-                แบบฝึกหัดและข้อสอบใน ExamHub ถูกจัดทำขึ้นเพื่อการทบทวนและฝึกฝนความเข้าใจเท่านั้น แม้ทีมงานจะพยายามตรวจสอบความถูกต้องอย่างเต็มที่ แต่ไม่รับประกันว่าข้อสอบจะตรงกับข้อสอบจริงในห้องสอบ 100% ทั้งนี้ผลคะแนนในระบบไม่สามารถนำไปอ้างอิงเป็นเกรดทางการของสถาบันการศึกษาได้
+                แบบฝึกหัดและข้อสอบใน EXETIA ถูกจัดทำขึ้นเพื่อการทบทวนและฝึกฝนความเข้าใจเท่านั้น แม้ทีมงานจะพยายามตรวจสอบความถูกต้องอย่างเต็มที่ แต่ไม่รับประกันว่าข้อสอบจะตรงกับข้อสอบจริงในห้องสอบ 100% ทั้งนี้ผลคะแนนในระบบไม่สามารถนำไปอ้างอิงเป็นเกรดทางการของสถาบันการศึกษาได้
               </p>
               <div className="terms-callout">
                 💡 หากคุณพบข้อสอบที่มีข้อผิดพลาด เฉลยไม่ชัดเจน หรือคำถามกำกวม สามารถใช้ฟังก์ชัน <strong>"แจ้งปัญหาข้อสอบ" (Report)</strong> เพื่อให้แอดมินตรวจสอบและแก้ไขได้ตลอดเวลา
@@ -408,7 +410,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
                 <h2 className="terms-block-title">1. ข้อมูลที่เราเก็บรวบรวม (Data Collection)</h2>
               </div>
               <p className="terms-block-text">
-                ExamHub ให้ความสำคัญสูงสุดกับความเป็นส่วนตัวของคุณ เราจัดเก็บเฉพาะข้อมูลที่จำเป็นต่อการให้บริการ ดังนี้:
+                EXETIA ให้ความสำคัญสูงสุดกับความเป็นส่วนตัวของคุณ เราจัดเก็บเฉพาะข้อมูลที่จำเป็นต่อการให้บริการ ดังนี้:
               </p>
               <ul className="terms-list">
                 <li><strong>ข้อมูลบัญชี:</strong> อีเมล, รหัสผ่าน (เข้ารหัสผ่าน Supabase Auth), ชื่อเล่น (Nickname), รูป Avatar และ Bio สั้นๆ</li>
@@ -477,11 +479,11 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateFaq}>คำถามที่พบบ่อย (FAQ)</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
         </div>
-        <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+        <p style={{ margin: '0 0 0.25rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
           พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
         </p>
-        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 ExamHub. All rights reserved.</p>
+        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>
     </div>
   );

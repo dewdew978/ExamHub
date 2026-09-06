@@ -22,8 +22,8 @@ const FAQ_DATA = [
     categoryName: 'ทั่วไป & การใช้งาน',
     items: [
       {
-        q: "ExamHub คืออะไร และใช้งานฟรีหรือไม่?",
-        a: "ExamHub คือแพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา ที่รวบรวมข้อสอบทั้ง Midterm และ Final ตรงตามหลักสูตรมหาวิทยาลัย ใช้งานได้ฟรี ทุกคนสามารถฝึกทำข้อสอบและดูเฉลยละเอียดได้ทันที"
+        q: "EXETIA คืออะไร และใช้งานฟรีหรือไม่?",
+        a: "EXETIA คือแพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา ที่รวบรวมข้อสอบทั้ง Midterm และ Final ตรงตามหลักสูตรมหาวิทยาลัย ใช้งานได้ฟรี ทุกคนสามารถฝึกทำข้อสอบและดูเฉลยละเอียดได้ทันที"
       },
       {
         q: "ต้องสมัครสมาชิกก่อนทำข้อสอบหรือไม่?",
@@ -34,8 +34,8 @@ const FAQ_DATA = [
         a: "ระบบจะกำหนดเวลาเฉลี่ยข้อละ 1 นาที (สามารถเลือกเปิด/ปิดตัวจับเวลาได้ในการตั้งค่า) เมื่อทำเสร็จและกดส่ง ระบบจะตรวจคำตอบและคิดคะแนนแบบเรียลไทม์ พร้อมบันทึกสถิติเพื่อนำไปวิเคราะห์จุดแข็ง-จุดอ่อน"
       },
       {
-        q: "สามารถติดตั้ง ExamHub เป็นแอปพลิเคชัน (PWA) บนมือถือหรือคอมพิวเตอร์ได้อย่างไร?",
-        a: "ExamHub รองรับ Progressive Web App (PWA) คุณสามารถติดตั้งลงเครื่องได้โดยตรงโดยไม่ต้องผ่าน App Store หรือ Play Store:\n• บนคอมพิวเตอร์ (Chrome / Edge): กดปุ่ม 'ติดตั้งแอป' ที่มุมขวาล่าง หรือกดไอคอนหน้าจอ/คอมพิวเตอร์ที่ช่อง Address Bar ด้านบน\n• บน Android (Chrome): กดป๊อปอัป 'ติดตั้งทันที' หรือกดเมนูจุด 3 จุด (⋮) > เลือก 'ติดตั้งแอป' หรือ 'เพิ่มลงในหน้าจอหลัก'\n• บน iOS (iPhone / iPad - Safari): กดปุ่มแชร์ (⎋ Share) ด้านล่าง > เลื่อนลงแล้วเลือก 'เพิ่มไปยังหน้าจอโฮม' (Add to Home Screen)"
+        q: "สามารถติดตั้ง EXETIA เป็นแอปพลิเคชัน (PWA) บนมือถือหรือคอมพิวเตอร์ได้อย่างไร?",
+        a: "EXETIA รองรับ Progressive Web App (PWA) คุณสามารถติดตั้งลงเครื่องได้โดยตรงโดยไม่ต้องผ่าน App Store หรือ Play Store:\n• บนคอมพิวเตอร์ (Chrome / Edge): กดปุ่ม 'ติดตั้งแอป' ที่มุมขวาล่าง หรือกดไอคอนหน้าจอ/คอมพิวเตอร์ที่ช่อง Address Bar ด้านบน\n• บน Android (Chrome): กดป๊อปอัป 'ติดตั้งทันที' หรือกดเมนูจุด 3 จุด (⋮) > เลือก 'ติดตั้งแอป' หรือ 'เพิ่มลงในหน้าจอหลัก'\n• บน iOS (iPhone / iPad - Safari): กดปุ่มแชร์ (⎋ Share) ด้านล่าง > เลื่อนลงแล้วเลือก 'เพิ่มไปยังหน้าจอโฮม' (Add to Home Screen)"
       }
     ]
   },
@@ -84,7 +84,7 @@ const NEED_TYPES = [
   { id: 'general_feedback', label: 'ข้อเสนอแนะทั่วไป / อื่นๆ', icon: MessageSquare, color: 'var(--success)' }
 ];
 
-export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavigateTerms, onLogin, user }) {
+export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavigateTerms, onNavigateBlog, onLogin, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -501,8 +501,9 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
         onStartGuest={onHome}
         links={[
           { label: 'หน้าแรก', onClick: onNavigateLanding ?? onHome },
+          { label: 'คลังข้อสอบ', onClick: onHome },
+          { label: 'ข่าวสาร & อัปเดต', onClick: onNavigateBlog },
           { label: 'คำถามที่พบบ่อย', onClick: () => scrollToSection('faq-list'), active: true },
-          { label: 'Tell Us Your Needs', onClick: () => scrollToSection('tell-us-needs') },
           { label: 'เกี่ยวกับเรา', onClick: onNavigateAbout },
         ]}
       />
@@ -525,7 +526,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
             ศูนย์ช่วยเหลือ & <span className="faq-title-gradient">คำถามที่พบบ่อย</span>
           </h1>
           <p className="faq-subtitle">
-            รวบรวมคำตอบทุกข้อสงสัยเกี่ยวกับการฝึกทำข้อสอบ ระบบคะแนน และการใช้งาน ExamHub พร้อมเปิดรับทุกข้อเสนอแนะ
+            รวบรวมคำตอบทุกข้อสงสัยเกี่ยวกับการฝึกทำข้อสอบ ระบบคะแนน และการใช้งาน EXETIA พร้อมเปิดรับทุกข้อเสนอแนะ
           </p>
 
           {/* Search Box */}
@@ -640,7 +641,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
               Tell Us About Your Needs
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: '580px', margin: '0 auto', lineHeight: 1.6 }}>
-              บอกสิ่งที่คุณอยากให้ ExamHub พัฒนาเพิ่มเติม ไม่ว่าจะเป็นรายวิชาใหม่ ฟีเจอร์ที่ต้องการ หรือข้อเสนอแนะในการใช้งาน
+              บอกสิ่งที่คุณอยากให้ EXETIA พัฒนาเพิ่มเติม ไม่ว่าจะเป็นรายวิชาใหม่ ฟีเจอร์ที่ต้องการ หรือข้อเสนอแนะในการใช้งาน
             </p>
           </div>
 
@@ -667,7 +668,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
                     ขอบคุณสำหรับข้อเสนอแนะ!
                   </h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.6 }}>
-                    ทีมงาน ExamHub ได้รับข้อมูลความต้องการของคุณเรียบร้อยแล้ว เราจะนำไปพัฒนาและปรับปรุงระบบให้ดียิ่งขึ้นครับ
+                    ทีมงาน EXETIA ได้รับข้อมูลความต้องการของคุณเรียบร้อยแล้ว เราจะนำไปพัฒนาและปรับปรุงระบบให้ดียิ่งขึ้นครับ
                   </p>
                   <button 
                     className="btn btn-outline" 
@@ -795,11 +796,11 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
           <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
           <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onHome}>เริ่มทำข้อสอบ</span>
         </div>
-        <p style={{ margin: '0 0 0.25rem 0' }}>ExamHub — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+        <p style={{ margin: '0 0 0.25rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
           พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
         </p>
-        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 ExamHub. All rights reserved.</p>
+        <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -36,6 +36,7 @@ import {
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { supabase } from '../lib/supabase';
+import AdminBlogManager from './AdminBlogManager';
 
 // Issue types config matching Report.jsx & FAQ.jsx
 const ISSUE_TYPES_MAP = {
@@ -1018,6 +1019,33 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                 <BarChart3 size={16} color={currentNav === 'scores' ? 'var(--accent)' : 'currentColor'} />
                 <span style={{ flex: 1 }}>ประวัติการสอบ (Runs)</span>
               </button>
+
+              {/* Item: Blog & News Management */}
+              <button
+                onClick={() => {
+                  setCurrentNav('blogs');
+                  setSelectedExamId(null);
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.6rem 0.75rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: currentNav === 'blogs' ? 'var(--surface-hover)' : 'transparent',
+                  color: currentNav === 'blogs' ? 'var(--text)' : 'var(--text-muted)',
+                  fontWeight: currentNav === 'blogs' ? 600 : 400,
+                  fontSize: '0.875rem',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  borderLeft: currentNav === 'blogs' ? '3px solid #8b5cf6' : '3px solid transparent'
+                }}
+              >
+                <Sparkles size={16} color={currentNav === 'blogs' ? '#8b5cf6' : 'currentColor'} />
+                <span style={{ flex: 1 }}>ข่าวสาร & บล็อก (Blog)</span>
+              </button>
             </nav>
           </div>
 
@@ -1151,6 +1179,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                 {currentNav === 'exams' && (loadedExamData ? loadedExamData.name : 'จัดการชุดข้อสอบ (Exams)')}
                 {currentNav === 'reports' && 'กล่องรายงานปัญหา (Report Inbox)'}
                 {currentNav === 'scores' && 'ประวัติการสอบ (Runs)'}
+                {currentNav === 'blogs' && 'จัดการข่าวสาร & บล็อก (Blog & Changelog)'}
               </span>
             </div>
           </div>
@@ -1351,6 +1380,39 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#10b981' }}>
                     ซิงค์กับ Supabase user_scores
+                  </div>
+                </div>
+
+                {/* Frame 5: Blog & Changelog */}
+                <div 
+                  onClick={() => setCurrentNav('blogs')}
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '12px',
+                    padding: '1.25rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                >
+                  <div style={{
+                    width: '36px', height: '36px', borderRadius: '10px',
+                    background: '#8b5cf6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    marginBottom: '1rem', boxShadow: '0 2px 8px rgba(139,92,246,0.3)'
+                  }}>
+                    <Sparkles size={18} />
+                  </div>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                    ข่าวสาร & บันทึกระบบ (Changelog)
+                  </div>
+                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', letterSpacing: '-0.5px' }}>
+                    4+ <span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>โพสต์</span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#8b5cf6' }}>
+                    จัดการไทม์ไลน์ข่าวสาร →
                   </div>
                 </div>
               </div>
@@ -2361,6 +2423,20 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                 </div>
               )}
             </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* VIEW 5: BLOG & CHANGELOG MANAGEMENT                                       */}
+          {/* ========================================================================= */}
+          {currentNav === 'blogs' && (
+            <AdminBlogManager 
+              user={user} 
+              onOpenPublicBlog={() => {
+                if (typeof window !== 'undefined') {
+                  window.open('/blog', '_blank');
+                }
+              }} 
+            />
           )}
 
         </div>

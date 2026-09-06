@@ -20,8 +20,8 @@ export default defineConfig({
         'sitemap.xml'
       ],
       manifest: {
-        name: 'ExamHub | คลังข้อสอบและแบบฝึกหัดออนไลน์',
-        short_name: 'ExamHub',
+        name: 'EXETIA | คลังข้อสอบและแบบฝึกหัดออนไลน์',
+        short_name: 'EXETIA',
         description: 'แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษาและสายไอที สรุปแนวข้อสอบ Data Science, AI & Cloud พร้อมเฉลยละเอียดเชิงลึก',
         theme_color: '#0a0b10',
         background_color: '#0a0b10',
