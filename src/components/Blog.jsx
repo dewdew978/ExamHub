@@ -294,7 +294,7 @@ export default function Blog({
     return () => observer.disconnect();
   }, []);
 
-  // Fetch blogs on mount
+  // Fetch blogs on mount & listen for real-time changes
   useEffect(() => {
     let isMounted = true;
     const fetchAll = async () => {
@@ -309,7 +309,16 @@ export default function Blog({
       }
     };
     fetchAll();
-    return () => { isMounted = false; };
+
+    const handleBlogsChanged = () => {
+      fetchAll();
+    };
+    window.addEventListener('exetia-blogs-changed', handleBlogsChanged);
+
+    return () => { 
+      isMounted = false; 
+      window.removeEventListener('exetia-blogs-changed', handleBlogsChanged);
+    };
   }, []);
 
   // Tag counts calculation

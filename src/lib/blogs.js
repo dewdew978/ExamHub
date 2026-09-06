@@ -152,7 +152,7 @@ const DELETED_STORAGE_KEY = 'examhub_deleted_blog_ids';
 export function getDeletedBlogIds() {
   try {
     const raw = localStorage.getItem(DELETED_STORAGE_KEY);
-    return new Set(raw ? JSON.parse(raw) : []);
+    return new Set(raw ? JSON.parse(raw).map(String) : []);
   } catch {
     return new Set();
   }
@@ -160,8 +160,9 @@ export function getDeletedBlogIds() {
 
 export function addDeletedBlogId(id) {
   try {
+    const strId = String(id);
     const deleted = getDeletedBlogIds();
-    deleted.add(id);
+    deleted.add(strId);
     localStorage.setItem(DELETED_STORAGE_KEY, JSON.stringify(Array.from(deleted)));
   } catch (e) {
     console.warn('Failed to record deleted blog id:', e);
@@ -170,8 +171,9 @@ export function addDeletedBlogId(id) {
 
 export function removeDeletedBlogId(id) {
   try {
+    const strId = String(id);
     const deleted = getDeletedBlogIds();
-    deleted.delete(id);
+    deleted.delete(strId);
     localStorage.setItem(DELETED_STORAGE_KEY, JSON.stringify(Array.from(deleted)));
   } catch (e) {
     console.warn('Failed to unmark deleted blog id:', e);
@@ -184,56 +186,46 @@ export function removeDeletedBlogId(id) {
 export async function getBlogs({ includeDrafts = false } = {}) {
   const deletedIds = getDeletedBlogIds();
 
-  let dbBlogs = [];
+  // 1. Fetch from Supabase
+  let dbBlogs = null;
   try {
     let query = supabase.from('blogs').select('*').order('published_at', { ascending: false });
     if (!includeDrafts) {
       query = query.eq('published', true);
     }
     const { data, error } = await query;
-    if (!error && Array.isArray(data) && data.length > 0) {
+    if (!error && Array.isArray(data)) {
       dbBlogs = data;
+      // Sync fresh data to localStorage for offline access
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.warn('LocalStorage save error:', e);
+      }
     }
   } catch (err) {
     console.warn('Supabase blogs fetch error (fallback to local storage):', err);
   }
 
-  // Load from local storage
-  let localBlogs = [];
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) {
-      localBlogs = JSON.parse(raw);
+  // 2. Authoritative list resolution
+  let allList = [];
+  if (dbBlogs !== null) {
+    // Supabase connected: Database is the authoritative source of truth!
+    allList = dbBlogs.filter((b) => !deletedIds.has(String(b.id)));
+  } else {
+    // Offline fallback: Use LocalStorage, then INITIAL_BLOGS
+    let localBlogs = [];
+    try {
+      const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (raw) localBlogs = JSON.parse(raw);
+    } catch {}
+
+    if (localBlogs.length > 0) {
+      allList = localBlogs.filter((b) => !deletedIds.has(String(b.id)));
+    } else {
+      allList = INITIAL_BLOGS.filter((b) => !deletedIds.has(String(b.id)));
     }
-  } catch (err) {
-    console.warn('LocalStorage blog read error:', err);
   }
-
-  // Merge map: DB > Local Storage > Seed Blogs
-  const blogsMap = new Map();
-
-  // 1. Put seed blogs first (skip if deleted)
-  INITIAL_BLOGS.forEach((b) => {
-    if (!deletedIds.has(b.id)) {
-      blogsMap.set(b.id, b);
-    }
-  });
-
-  // 2. Put local blogs (overwrites seeds, skip if deleted)
-  localBlogs.forEach((b) => {
-    if (!deletedIds.has(b.id)) {
-      blogsMap.set(b.id, b);
-    }
-  });
-
-  // 3. Put DB blogs (overwrites local, skip if deleted)
-  dbBlogs.forEach((b) => {
-    if (!deletedIds.has(b.id)) {
-      blogsMap.set(b.id, b);
-    }
-  });
-
-  let allList = Array.from(blogsMap.values());
 
   if (!includeDrafts) {
     allList = allList.filter((b) => b.published !== false);
@@ -271,8 +263,8 @@ export async function saveBlogPost(blog) {
   // 1. Save to local storage for instant offline availability
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    let localList = raw ? JSON.parse(raw) : [...INITIAL_BLOGS];
-    const idx = localList.findIndex((b) => b.id === preparedBlog.id);
+    let localList = raw ? JSON.parse(raw) : [];
+    const idx = localList.findIndex((b) => String(b.id) === String(preparedBlog.id));
     if (idx >= 0) {
       localList[idx] = preparedBlog;
     } else {
@@ -284,6 +276,7 @@ export async function saveBlogPost(blog) {
   }
 
   // 2. Sync to Supabase
+  let savedData = preparedBlog;
   try {
     const { data, error } = await supabase
       .from('blogs')
@@ -292,13 +285,18 @@ export async function saveBlogPost(blog) {
       .single();
 
     if (!error && data) {
-      return { success: true, data };
+      savedData = data;
     }
   } catch (err) {
     console.warn('Supabase upsert blog warning:', err);
   }
 
-  return { success: true, data: preparedBlog, isLocalOnly: true };
+  // 3. Dispatch change event
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('exetia-blogs-changed', { detail: { savedBlog: savedData } }));
+  }
+
+  return { success: true, data: savedData };
 }
 
 /**
@@ -306,28 +304,41 @@ export async function saveBlogPost(blog) {
  */
 export async function deleteBlogPost(id) {
   if (!id) return { success: false };
+  const strId = String(id);
 
-  // 1. Permanently record as deleted so it never resurrects from seed or cache
-  addDeletedBlogId(id);
+  // 1. Permanently record as deleted so it never resurrects locally
+  addDeletedBlogId(strId);
 
   // 2. Remove from local storage
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    let localList = raw ? JSON.parse(raw) : [...INITIAL_BLOGS];
-    localList = localList.filter((b) => b.id !== id);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(localList));
+    if (raw) {
+      const localList = JSON.parse(raw).filter((b) => String(b.id) !== strId);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(localList));
+    }
   } catch (e) {
     console.warn('LocalStorage blog delete error:', e);
   }
 
   // 3. Remove from Supabase
+  let supabaseError = null;
   try {
-    await supabase.from('blogs').delete().eq('id', id);
+    const { error } = await supabase.from('blogs').delete().eq('id', strId);
+    if (error) {
+      console.warn('Supabase delete error:', error);
+      supabaseError = error.message;
+    }
   } catch (err) {
     console.warn('Supabase delete blog warning:', err);
+    supabaseError = err.message;
   }
 
-  return { success: true };
+  // 4. Notify app components that blogs have changed
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('exetia-blogs-changed', { detail: { deletedId: strId } }));
+  }
+
+  return { success: !supabaseError, error: supabaseError };
 }
 
 /**

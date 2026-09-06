@@ -284,12 +284,15 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
     const targetId = deleteConfirmBlog.id;
     try {
       // 1. Instant optimistic UI update
-      setBlogs(prev => prev.filter(b => b.id !== targetId));
+      setBlogs(prev => prev.filter(b => String(b.id) !== String(targetId)));
       setDeleteConfirmBlog(null);
       showToast('ลบข่าวสารเรียบร้อย');
 
       // 2. Delete from LocalStorage and Supabase
-      await deleteBlogPost(targetId);
+      const res = await deleteBlogPost(targetId);
+      if (res && res.error) {
+        showToast('ข้อผิดพลาดจากฐานข้อมูล: ' + res.error);
+      }
 
       // 3. Refresh list to ensure consistency
       await loadBlogs();
