@@ -4,5 +4,5 @@ Disallow: /admin
 Disallow: /settings
 Disallow: /reset-password
 
-Sitemap: https://exam-hub-seven.vercel.app/sitemap.xml
+Sitemap: https://exetia-exam.vercel.app/sitemap.xml
 

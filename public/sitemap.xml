@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage / Landing Page -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/</loc>
+    <loc>https://exetia-exam.vercel.app/</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -10,7 +10,7 @@
   
   <!-- Exam Catalog (Home) -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/home</loc>
+    <loc>https://exetia-exam.vercel.app/home</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -18,7 +18,7 @@
 
   <!-- News & Blog -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/blog</loc>
+    <loc>https://exetia-exam.vercel.app/blog</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -26,7 +26,7 @@
 
   <!-- Schedule -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/schedule</loc>
+    <loc>https://exetia-exam.vercel.app/schedule</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -34,7 +34,7 @@
 
   <!-- FAQ / Help -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/faq</loc>
+    <loc>https://exetia-exam.vercel.app/faq</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -42,7 +42,7 @@
 
   <!-- About Us -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/about</loc>
+    <loc>https://exetia-exam.vercel.app/about</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -50,7 +50,7 @@
 
   <!-- Report Issue -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/report</loc>
+    <loc>https://exetia-exam.vercel.app/report</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -58,7 +58,7 @@
 
   <!-- Login / Sign Up -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/login</loc>
+    <loc>https://exetia-exam.vercel.app/login</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -66,7 +66,7 @@
 
   <!-- Terms of Service & Privacy Policy -->
   <url>
-    <loc>https://exam-hub-seven.vercel.app/terms</loc>
+    <loc>https://exetia-exam.vercel.app/terms</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
