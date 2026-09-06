@@ -10,49 +10,6 @@ export const BLOG_CATEGORIES = {
 
 export const INITIAL_BLOGS = [
   {
-    id: 'examhub-v1-5-blog-launch',
-    slug: 'examhub-v1-5-blog-launch',
-    title: 'เปิดตัว Blog & Changelog ไทม์ไลน์ข่าวสารและการอัปเดตระบบ',
-    description: 'อัปเกรดระบบติดตามข่าวสารและการเปลี่ยนแปลงของ EXETIA ในรูปแบบ Timeline Minimal สไตล์ Magic UI เพื่อให้นักศึกษาและผู้ใช้งานติดตามฟีเจอร์ใหม่ได้สะดวกสบาย',
-    category: 'feature',
-    version_tag: 'v1.5.0',
-    author_name: 'EXETIA Team',
-    author_avatar: '🚀',
-    author_role: 'Core Team',
-    cover_url: 'https://cdn.magicui.design/blog-demo.mp4',
-    media_type: 'video',
-    source_name: 'Magic UI',
-    source_url: 'https://magicui.design/docs/templates/blog',
-    published: true,
-    pinned: true,
-    read_time: '2 นาที',
-    published_at: '2026-09-06T12:00:00.000Z',
-    content: `### 🌟 ก้าวใหม่ของการสื่อสารใน EXETIA
-
-เพื่อความโปร่งใสและมอบประสบการณ์ที่ดีที่สุดแก่นักศึกษาทุกคน วันนี้ EXETIA ได้เปิดตัวหน้า **Blog & Changelog** รูปแบบใหม่ ซึ่งนำแรงบันดาลใจจากสถาปัตยกรรมมินิมอลของ **Magic UI** มารังสรรค์เป็นไทม์ไลน์ที่อ่านง่าย สบายตา และมีชีวิตชีวา
-
----
-
-### ✨ ไฮไลต์ฟีเจอร์ของระบบ Blog
-
-- **Timeline Design**: จัดเรียงข่าวสารตามลำดับวันที่อย่างสวยงาม สลับแสดงแท็กเวอร์ชัน รูปภาพประกอบ และวิดีโอเดโมแบบวนซ้ำ
-- **Filter & Search**: กรองบทความตามหมวดหมู่ (*ฟีเจอร์ใหม่*, *ข้อสอบใหม่*, *อัปเดตระบบ*, *ประกาศ*) และค้นหาตามข้อความได้แบบเรียลไทม์
-- **Admin Dashboard Integration**: แอดมินสามารถเพิ่ม แก้ไข ลบ และพรีวิวเนื้อหา Markdown พร้อม KaTeX Math Formula ได้จากหลังบ้านทันที
-- **Supabase Cloud Sync**: ซิงค์ข้อมูลกับฐานข้อมูล PostgreSQL บน Supabase แบบเรียลไทม์ พร้อมระบบ Fallback รองรับการทำงานออฟไลน์
-- **Responsive & Dark/Light Mode**: ปรับสไตล์เข้ากับธีมหลักของเว็บไซต์อย่างไร้รอยต่อ
-
----
-
-### 🛠️ เทคโนโลยีเบื้องหลัง
-
-- **Styling**: Tailwind CSS & Modern CSS Variables พร้อม Backdrop Blur
-- **Icons**: Lucide React
-- **Media**: HTML5 Responsive Video & Progressive Image Loading
-- **Storage**: Supabase Database + Local Cache Fallback
-
-ขอขอบคุณทุกข้อเสนอแนะและเสียงตอบรับจากเพื่อนๆ ทุกคน แล้วพบกับการอัปเดตชุดข้อสอบใหม่ๆ ในเร็วๆ นี้ครับ!`
-  },
-  {
     id: 'dw-advanced-60q-release',
     slug: 'dw-advanced-60q-release',
     title: 'เพิ่มชุดข้อสอบใหม่: DW Advanced Comprehensive Exam (60 ข้อ)',
@@ -114,35 +71,6 @@ export const INITIAL_BLOGS = [
 - **Scalability**: การใช้งาน *Predictive Scaling* ร่วมกับ Target Tracking Scaling Policies บน EC2 Auto Scaling Groups
 
 สามารถเข้าไปฝึกทำได้แล้ววันนี้ในคลังข้อสอบหมวดหมู่ **Cloud Technology Infrastructure** ครับ!`
-  },
-  {
-    id: 'admin-dashboard-flux-redesign',
-    slug: 'admin-dashboard-flux-redesign',
-    title: 'ยกเครื่อง Admin Dashboard สไตล์ Flux AgentOps พร้อมระบบตรวจรายงานทันที',
-    description: 'ออกแบบระบบคอนโซลแอดมินใหม่ทั้งหมดด้วย Left-Rail Sidebar Navigation, Elevated Stat Tiles และ Question Editor สดพร้อมสูตร KaTeX',
-    category: 'system',
-    version_tag: 'v1.3.0',
-    author_name: 'EXETIA Dev',
-    author_avatar: '⚡',
-    author_role: 'System Architect',
-    cover_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-    media_type: 'image',
-    source_name: 'Flux AgentOps',
-    source_url: 'https://flux-agentops.reui.io/',
-    published: true,
-    pinned: false,
-    read_time: '3 นาที',
-    published_at: '2026-08-15T15:45:00.000Z',
-    content: `### 💻 เพิ่มประสิทธิภาพการดูแลระบบให้รวดเร็วและเป็นมืออาชีพ
-
-ทีมพัฒนาได้ทำการปรับปรุงหน้า **Admin Dashboard** ครั้งใหญ่ เพื่อรองรับการจัดการข้อสอบนับพันข้อและการตอบสนองต่อรายงานข้อผิดพลาดจากผู้ใช้ได้อย่างรวดเร็ว
-
-### 🎨 สิ่งที่เปลี่ยนแปลงในเวอร์ชันนี้:
-
-1. **Left-Rail Sidebar Navigation**: ย้ายเมนูควบคุมมาไว้ด้านซ้ายเพื่อความคล่องตัว สไตล์ Console สมัยใหม่
-2. **Elevated Metrics Frame Panels**: แสดงสถิติสำคัญแบบ Real-time ทั้งจำนวนข้อสอบ คลังคำถาม รีพอร์ตคงค้าง และประวัติการสอบ
-3. **Interactive Question Editor**: แก้ไขโจทย์ ช้อยส์ เฉลย และคำอธิบายที่มีสูตร KaTeX ได้สดๆ พร้อมดูตัวอย่าง Live Preview แบบเดียวกับที่ผู้เรียนเห็น
-4. **Instant Action Workflow**: กดปุ่มเดียวจากหน้ารีพอร์ตปัญหาเพื่อกระโดดเข้าหน้าแก้ไขข้อสอบข้อนั้นได้ทันที`
   }
 ];
 
