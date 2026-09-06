@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Exam References & Source Citations
  * Provides structured bibliographic references and educational source metadata
  * for all exam subjects on EXETIA.
@@ -334,13 +334,49 @@ export const EXAM_REFERENCES = {
 export function getSubjectReferenceData(subject) {
   if (!subject) return null;
 
-  // 1. Direct custom reference in subject object
-  if (subject.references && Array.isArray(subject.references) && subject.references.length > 0) {
+  // Normalize stringified JSON references if coming from Supabase or text storage
+  let rawRefs = subject.references;
+  if (typeof rawRefs === 'string') {
+    try {
+      rawRefs = JSON.parse(rawRefs);
+    } catch {
+      rawRefs = null;
+    }
+  }
+
+  // If rawRefs is an object containing references array and metadata
+  if (rawRefs && typeof rawRefs === 'object' && !Array.isArray(rawRefs)) {
     return {
-      primarySource: subject.primarySource || subject.source || subject.name,
+      primarySource: rawRefs.primarySource || rawRefs.primary_source || subject.primarySource || subject.primary_source || subject.source || subject.name,
+      organization: rawRefs.organization || subject.organization || 'คลังข้อสอบ EXETIA',
+      curatedBy: rawRefs.curatedBy || rawRefs.curated_by || subject.curatedBy || subject.curated_by || '',
+      references: Array.isArray(rawRefs.references) ? rawRefs.references : []
+    };
+  }
+
+  // 1. Direct custom reference array in subject
+  if (rawRefs && Array.isArray(rawRefs) && rawRefs.length > 0) {
+    return {
+      primarySource: subject.primarySource || subject.primary_source || subject.source || subject.name,
       organization: subject.organization || 'คลังข้อสอบ EXETIA',
-      curatedBy: subject.curatedBy || '',
-      references: subject.references
+      curatedBy: subject.curatedBy || subject.curated_by || '',
+      references: rawRefs
+    };
+  }
+
+  // Direct primarySource / organization without references array
+  if (subject.primarySource || subject.primary_source) {
+    return {
+      primarySource: subject.primarySource || subject.primary_source,
+      organization: subject.organization || 'คลังข้อสอบ EXETIA',
+      curatedBy: subject.curatedBy || subject.curated_by || '',
+      references: [
+        {
+          title: subject.primarySource || subject.primary_source,
+          author: subject.curatedBy || subject.curated_by || 'ผู้จัดทำ / คณาจารย์ผู้สอน',
+          desc: 'แหล่งที่มาและเอกสารอ้างอิงประกอบชุดข้อสอบ'
+        }
+      ]
     };
   }
 
@@ -348,7 +384,7 @@ export function getSubjectReferenceData(subject) {
     return {
       primarySource: subject.source || subject.reference,
       organization: subject.organization || 'คลังข้อสอบ EXETIA',
-      curatedBy: subject.curatedBy || '',
+      curatedBy: subject.curatedBy || subject.curated_by || '',
       references: [
         {
           title: subject.source || subject.reference,

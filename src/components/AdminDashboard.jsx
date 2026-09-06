@@ -31,12 +31,15 @@ import {
   Zap, 
   LogOut,
   Menu,
-  GraduationCap 
+  GraduationCap,
+  ExternalLink,
+  Shield
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { supabase } from '../lib/supabase';
 import AdminBlogManager from './AdminBlogManager';
+import { EXAM_REFERENCES } from '../data/examReferences';
 
 // Issue types config matching Report.jsx & FAQ.jsx
 const ISSUE_TYPES_MAP = {
@@ -158,8 +161,22 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     color: '#0070f3',
     desc: '',
     year: 3,
-    type: 'Midterm'
+    type: 'Midterm',
+    primarySource: '',
+    organization: '',
+    curatedBy: '',
+    references: []
   });
+
+  // Exam References Management Modal
+  const [showRefModal, setShowRefModal] = useState(false);
+  const [refFormData, setRefFormData] = useState({
+    primarySource: '',
+    organization: '',
+    curatedBy: '',
+    references: []
+  });
+  const [savingRef, setSavingRef] = useState(false);
 
   // Scores History State
   const [userScoreLogs, setUserScoreLogs] = useState([]);
@@ -330,9 +347,19 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
         }
       }
 
+      const defaultRef = EXAM_REFERENCES[examId] || {};
       const merged = {
+        ...defaultRef,
         ...subjectMeta,
         ...examData,
+        primarySource: examData?.primarySource || subjectMeta.primarySource || defaultRef.primarySource || '',
+        organization: examData?.organization || subjectMeta.organization || defaultRef.organization || '',
+        curatedBy: examData?.curatedBy || subjectMeta.curatedBy || defaultRef.curatedBy || '',
+        references: (examData?.references && examData.references.length > 0)
+          ? examData.references
+          : (subjectMeta.references && subjectMeta.references.length > 0)
+            ? subjectMeta.references
+            : defaultRef.references || [],
         isCustomModified: !!saved
       };
 
@@ -366,6 +393,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       desc: updatedData.desc,
       icon: updatedData.icon,
       color: updatedData.color,
+      primarySource: updatedData.primarySource || '',
+      organization: updatedData.organization || '',
+      curatedBy: updatedData.curatedBy || '',
+      references: updatedData.references || [],
       questions: updatedData.questions
     };
     localStorage.setItem(customKey, JSON.stringify(toStore));
@@ -375,7 +406,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       isCustomModified: true
     });
 
-    showToast(`บันทึกชุดข้อสอบ "${updatedData.name}" เรียบร้อย (${updatedData.questions.length} ข้อ)`);
+    showToast(`บันทึกชุดข้อสอบ "${updatedData.name}" เรียบร้อย (${updatedData.questions?.length || 0} ข้อ)`);
   };
 
   // Reset Exam Data to Default from JSON file
@@ -391,9 +422,15 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       const mod = await import(`../data/${examId}.json`);
       const originalData = mod.default;
       const subjectMeta = subjects.find(s => s.id === examId) || {};
+      const defaultRef = EXAM_REFERENCES[examId] || {};
       setLoadedExamData({
+        ...defaultRef,
         ...subjectMeta,
         ...originalData,
+        primarySource: defaultRef.primarySource || '',
+        organization: defaultRef.organization || '',
+        curatedBy: defaultRef.curatedBy || '',
+        references: defaultRef.references || [],
         isCustomModified: false
       });
       showToast('รีเซ็ตข้อสอบกลับเป็นค่าเริ่มต้นเรียบร้อย');
@@ -414,6 +451,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       color: examData.color || '#0070f3',
       iconBg: examData.iconBg || 'rgba(0, 112, 243, 0.15)',
       desc: examData.desc || '',
+      primarySource: examData.primarySource || '',
+      organization: examData.organization || '',
+      curatedBy: examData.curatedBy || '',
+      references: examData.references || [],
       questions: examData.questions || []
     };
 
@@ -440,10 +481,92 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       color: examData.color || '#0070f3',
       iconBg: examData.iconBg || 'rgba(0, 112, 243, 0.15)',
       desc: examData.desc || '',
+      primarySource: examData.primarySource || '',
+      organization: examData.organization || '',
+      curatedBy: examData.curatedBy || '',
+      references: examData.references || [],
       questions: examData.questions || []
     };
     navigator.clipboard.writeText(JSON.stringify(exportObj, null, 2));
     showToast('คัดลอก JSON ลงในคลิปบอร์ดแล้ว');
+  };
+
+  // Open References Modal
+  const openRefModal = () => {
+    if (!selectedExamId) return;
+    const defaultRef = EXAM_REFERENCES[selectedExamId] || {};
+    setRefFormData({
+      primarySource: loadedExamData?.primarySource || defaultRef.primarySource || '',
+      organization: loadedExamData?.organization || defaultRef.organization || '',
+      curatedBy: loadedExamData?.curatedBy || defaultRef.curatedBy || '',
+      references: (loadedExamData?.references && loadedExamData.references.length > 0)
+        ? loadedExamData.references.map(r => ({ ...r }))
+        : (defaultRef.references || []).map(r => ({ ...r }))
+    });
+    setShowRefModal(true);
+  };
+
+  // Save References (to LocalStorage and optionally Supabase)
+  const handleSaveReferences = async (syncToSupabase = false) => {
+    if (!selectedExamId || !loadedExamData) return;
+    setSavingRef(true);
+
+    try {
+      const cleanRefs = (refFormData.references || [])
+        .map(r => ({
+          title: (r.title || '').trim(),
+          author: (r.author || '').trim(),
+          desc: (r.desc || '').trim(),
+          url: (r.url || '').trim()
+        }))
+        .filter(r => r.title.length > 0);
+
+      const updatedExam = {
+        ...loadedExamData,
+        primarySource: refFormData.primarySource.trim(),
+        organization: refFormData.organization.trim(),
+        curatedBy: refFormData.curatedBy.trim(),
+        references: cleanRefs
+      };
+
+      // 1. Save to local storage & state
+      saveExamData(updatedExam);
+
+      // 2. Sync to Supabase if requested
+      if (syncToSupabase) {
+        const { error } = await supabase
+          .from('exams')
+          .update({
+            primarySource: updatedExam.primarySource,
+            organization: updatedExam.organization,
+            curatedBy: updatedExam.curatedBy,
+            references: updatedExam.references,
+            primary_source: updatedExam.primarySource,
+            curated_by: updatedExam.curatedBy
+          })
+          .eq('id', selectedExamId);
+
+        if (error) {
+          console.warn("Supabase reference update error:", error);
+          if (error.code === 'PGRST204') {
+            showToast('บันทึกลงในเครื่องแล้ว (💡 แจ้งเตือน: กรุณารัน scripts/add_references_to_exams.sql ใน Supabase SQL Editor ก่อนซิงค์)');
+          } else {
+            showToast(`บันทึกในเครื่องแล้ว (Supabase: ${error.message})`);
+          }
+        } else {
+          showToast('✅ บันทึกและซิงค์แหล่งอ้างอิงกับ Supabase เรียบร้อย!');
+        }
+      } else {
+        showToast('บันทึกแหล่งอ้างอิงลงในระบบเรียบร้อย');
+      }
+
+      setShowRefModal(false);
+    } catch (err) {
+      console.error("Error saving references:", err);
+      showToast('เกิดข้อผิดพลาดในการบันทึกแหล่งอ้างอิง');
+    } finally {
+      setSavingRef(false);
+    }
   };
 
   // Question Editor Handlers
@@ -1872,6 +1995,16 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
 
                       <button 
                         className="btn btn-outline"
+                        onClick={openRefModal}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}
+                        title="จัดการแหล่งที่มาและเอกสารอ้างอิง"
+                      >
+                        <BookOpen size={14} color="#10b981" />
+                        <span>แหล่งอ้างอิง ({loadedExamData?.references?.length || 0})</span>
+                      </button>
+
+                      <button 
+                        className="btn btn-outline"
                         onClick={() => setShowImportModal(true)}
                         style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}
                         title="นำเข้าข้อสอบจาก AI หรือ JSON"
@@ -1955,6 +2088,54 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                             </div>
                             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                               หมวดหมู่: {loadedExamData.category} • ไฟล์: <code>{selectedExamId}.json</code>
+                            </div>
+
+                            {/* References & Sources Badge/Action */}
+                            <div style={{ marginTop: '0.45rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.78rem' }}>
+                              {loadedExamData.primarySource ? (
+                                <>
+                                  <span style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
+                                    <BookOpen size={12} />
+                                    <span>{loadedExamData.primarySource}</span>
+                                  </span>
+                                  {loadedExamData.organization && (
+                                    <span style={{ color: 'var(--text-muted)' }}>• {loadedExamData.organization}</span>
+                                  )}
+                                  {loadedExamData.references?.length > 0 && (
+                                    <span style={{ 
+                                      padding: '0.1rem 0.4rem', 
+                                      borderRadius: '999px', 
+                                      background: 'rgba(16, 185, 129, 0.12)', 
+                                      color: '#10b981', 
+                                      fontSize: '0.6875rem',
+                                      fontWeight: 600
+                                    }}>
+                                      {loadedExamData.references.length} เอกสารอ้างอิง
+                                    </span>
+                                  )}
+                                  <button 
+                                    onClick={openRefModal}
+                                    style={{
+                                      background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer',
+                                      fontSize: '0.75rem', textDecoration: 'underline', padding: 0
+                                    }}
+                                  >
+                                    แก้ไขอ้างอิง
+                                  </button>
+                                </>
+                              ) : (
+                                <button 
+                                  onClick={openRefModal}
+                                  style={{
+                                    background: 'rgba(16, 185, 129, 0.1)', border: '1px dashed #10b981',
+                                    color: '#10b981', borderRadius: '6px', padding: '0.2rem 0.5rem',
+                                    fontSize: '0.75rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.25rem'
+                                  }}
+                                >
+                                  <Plus size={12} />
+                                  <span>+ เพิ่มแหล่งที่มาและเอกสารอ้างอิง</span>
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -2691,8 +2872,9 @@ D. ตัวเลือก 4
           padding: '1rem'
         }}>
           <div style={{
-            background: 'var(--surface)', maxWidth: '520px', width: '100%',
-            borderRadius: '14px', border: '1px solid var(--border-color)', overflow: 'hidden'
+            background: 'var(--surface)', maxWidth: '560px', width: '100%', maxHeight: '90vh',
+            borderRadius: '14px', border: '1px solid var(--border-color)', overflow: 'hidden',
+            display: 'flex', flexDirection: 'column'
           }}>
             <div style={{ padding: '1.125rem 1.25rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -2703,9 +2885,18 @@ D. ตัวเลือก 4
               </button>
             </div>
 
-            <form onSubmit={(e) => {
+            <form onSubmit={async (e) => {
               e.preventDefault();
               const cleanId = newExamForm.id.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+              const cleanRefs = (newExamForm.references || [])
+                .map(r => ({
+                  title: (r.title || '').trim(),
+                  author: (r.author || '').trim(),
+                  desc: (r.desc || '').trim(),
+                  url: (r.url || '').trim()
+                }))
+                .filter(r => r.title.length > 0);
+
               const newExamObj = {
                 id: cleanId,
                 name: newExamForm.name.trim(),
@@ -2713,16 +2904,45 @@ D. ตัวเลือก 4
                 icon: newExamForm.icon || '📝',
                 color: newExamForm.color || '#0070f3',
                 iconBg: `${newExamForm.color || '#0070f3'}26`,
-                desc: newExamForm.desc.trim(),
+                desc: (newExamForm.desc || '').trim(),
                 year: parseInt(newExamForm.year, 10) || 3,
                 type: newExamForm.type || 'Midterm',
+                primarySource: (newExamForm.primarySource || '').trim(),
+                organization: (newExamForm.organization || '').trim(),
+                curatedBy: (newExamForm.curatedBy || '').trim(),
+                references: cleanRefs,
                 questions: []
               };
+
+              // 1. Save locally
               localStorage.setItem(`examhub_custom_exam_${cleanId}`, JSON.stringify(newExamObj));
+
+              // 2. Sync to Supabase if connected
+              try {
+                await supabase.from('exams').upsert({
+                  id: cleanId,
+                  name: newExamObj.name,
+                  category: newExamObj.category,
+                  icon: newExamObj.icon,
+                  color: newExamObj.color,
+                  iconBg: newExamObj.iconBg,
+                  desc: newExamObj.desc,
+                  questionCount: 0,
+                  year: newExamObj.year,
+                  type: newExamObj.type,
+                  primarySource: newExamObj.primarySource,
+                  organization: newExamObj.organization,
+                  curatedBy: newExamObj.curatedBy,
+                  references: newExamObj.references
+                }, { onConflict: 'id' });
+              } catch (err) {
+                console.warn("Supabase upsert notice:", err);
+              }
+
               setShowNewExamModal(false);
               showToast(`สร้างวิชา "${newExamObj.name}" สำเร็จ`);
               loadExamDetails(cleanId);
-            }} style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            }} style={{ padding: '1.25rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
                 <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
                   รหัส ID (เช่น ai_intro_30q) <span style={{ color: '#ef4444' }}>*</span>
@@ -2751,6 +2971,19 @@ D. ตัวเลือก 4
                 />
               </div>
 
+              <div>
+                <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
+                  คำอธิบายชุดข้อสอบ / ขอบเขตเนื้อหา
+                </label>
+                <input 
+                  type="text"
+                  placeholder="เช่น Machine Learning · Deep Learning · Computer Vision"
+                  value={newExamForm.desc}
+                  onChange={(e) => setNewExamForm({ ...newExamForm, desc: e.target.value })}
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.8125rem', fontFamily: 'var(--font-sans)', outline: 'none' }}
+                />
+              </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
                   <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>หมวดหมู่</label>
@@ -2775,11 +3008,349 @@ D. ตัวเลือก 4
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
+              {/* References Section */}
+              <div style={{ 
+                borderTop: '1px solid var(--border-color)', 
+                paddingTop: '0.75rem',
+                marginTop: '0.25rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem' }}>
+                  <BookOpen size={15} color="#10b981" />
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>
+                    แหล่งที่มาและเอกสารอ้างอิง (References - Optional)
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                  <div>
+                    <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+                      แหล่งข้อมูลหลัก (Primary Source)
+                    </label>
+                    <input 
+                      type="text"
+                      placeholder="เช่น เอกสารประกอบการสอน / ตำรา"
+                      value={newExamForm.primarySource}
+                      onChange={(e) => setNewExamForm({ ...newExamForm, primarySource: e.target.value })}
+                      style={{ width: '100%', padding: '0.45rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.78rem', outline: 'none' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+                      องค์กร / สถาบัน (Organization)
+                    </label>
+                    <input 
+                      type="text"
+                      placeholder="เช่น มหาวิทยาลัย... หรือ AWS"
+                      value={newExamForm.organization}
+                      onChange={(e) => setNewExamForm({ ...newExamForm, organization: e.target.value })}
+                      style={{ width: '100%', padding: '0.45rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.78rem', outline: 'none' }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+                    ผู้เรียบเรียง (Curated By)
+                  </label>
+                  <input 
+                    type="text"
+                    placeholder="เช่น lnwfilmSynthesis หรือ คณาจารย์ผู้สอน"
+                    value={newExamForm.curatedBy}
+                    onChange={(e) => setNewExamForm({ ...newExamForm, curatedBy: e.target.value })}
+                    style={{ width: '100%', padding: '0.45rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.78rem', outline: 'none' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
                 <button type="button" className="btn btn-outline" onClick={() => setShowNewExamModal(false)}>ยกเลิก</button>
                 <button type="submit" className="btn btn-primary">+ สร้างชุดข้อสอบ</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 5B. EXAM REFERENCES MODAL                                                 */}
+      {/* ========================================================================= */}
+      {showRefModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(5px)',
+          zIndex: 230, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '1rem'
+        }}>
+          <div style={{
+            background: 'var(--surface)', maxWidth: '680px', width: '100%', maxHeight: '90vh',
+            borderRadius: '14px', border: '1px solid var(--border-color)', overflow: 'hidden',
+            display: 'flex', flexDirection: 'column'
+          }}>
+            {/* Modal Header */}
+            <div style={{ padding: '1.125rem 1.25rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <BookOpen size={18} color="#10b981" />
+                <div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>
+                    จัดการแหล่งที่มาและเอกสารอ้างอิง
+                  </h3>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    {loadedExamData?.name} (<code>{selectedExamId}</code>)
+                  </div>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowRefModal(false)} 
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '1.25rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {/* Primary Source & Org */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
+                    แหล่งข้อมูลหลัก (Primary Source)
+                  </label>
+                  <input 
+                    type="text"
+                    placeholder="เช่น AWS Academy Cloud Architecting"
+                    value={refFormData.primarySource}
+                    onChange={(e) => setRefFormData({ ...refFormData, primarySource: e.target.value })}
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
+                    องค์กร / สถาบัน (Organization)
+                  </label>
+                  <input 
+                    type="text"
+                    placeholder="เช่น Amazon Web Services (AWS)"
+                    value={refFormData.organization}
+                    onChange={(e) => setRefFormData({ ...refFormData, organization: e.target.value })}
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
+                  ผู้จัดทำ / เรียบเรียงชุดข้อสอบ (Curated By)
+                </label>
+                <input 
+                  type="text"
+                  placeholder="เช่น lnwfilmSynthesis หรือ คณาจารย์ภาควิชา"
+                  value={refFormData.curatedBy}
+                  onChange={(e) => setRefFormData({ ...refFormData, curatedBy: e.target.value })}
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface-hover)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                />
+              </div>
+
+              {/* Reference Items Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
+                <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <span>รายการเอกสาร / ตำราอ้างอิง ({refFormData.references?.length || 0})</span>
+                </label>
+                <button 
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={() => setRefFormData({
+                    ...refFormData,
+                    references: [...(refFormData.references || []), { title: '', author: '', url: '', desc: '' }]
+                  })}
+                  style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                >
+                  <Plus size={13} />
+                  <span>เพิ่มเอกสารอ้างอิง</span>
+                </button>
+              </div>
+
+              {/* Reference Items List */}
+              {(!refFormData.references || refFormData.references.length === 0) ? (
+                <div style={{ textAlign: 'center', padding: '1.5rem', background: 'var(--surface-hover)', borderRadius: '8px', border: '1px dashed var(--border-color)', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
+                  ยังไม่มีรายการเอกสารอ้างอิง คลิกปุ่ม "+ เพิ่มเอกสารอ้างอิง" เพื่อเพิ่มหนังสือ ตำรา หรือลิงก์ทางการ
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {refFormData.references.map((item, idx) => (
+                    <div 
+                      key={idx}
+                      style={{
+                        background: 'var(--surface-hover)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '8px',
+                        padding: '0.875rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)' }}>
+                          รายการที่ {idx + 1}
+                        </span>
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            const updated = refFormData.references.filter((_, i) => i !== idx);
+                            setRefFormData({ ...refFormData, references: updated });
+                          }}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem' }}
+                        >
+                          <Trash2 size={13} /> ลบ
+                        </button>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                        <input 
+                          type="text"
+                          placeholder="ชื่อหนังสือ / เอกสาร (เช่น The Data Warehouse Toolkit) *"
+                          value={item.title || ''}
+                          onChange={(e) => {
+                            const updated = [...refFormData.references];
+                            updated[idx] = { ...updated[idx], title: e.target.value };
+                            setRefFormData({ ...refFormData, references: updated });
+                          }}
+                          style={{ width: '100%', padding: '0.45rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                        />
+                        <input 
+                          type="text"
+                          placeholder="ผู้แต่ง / เจ้าของลิขสิทธิ์ (เช่น Ralph Kimball)"
+                          value={item.author || ''}
+                          onChange={(e) => {
+                            const updated = [...refFormData.references];
+                            updated[idx] = { ...updated[idx], author: e.target.value };
+                            setRefFormData({ ...refFormData, references: updated });
+                          }}
+                          style={{ width: '100%', padding: '0.45rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        <input 
+                          type="url"
+                          placeholder="ลิงก์ URL อ้างอิงภายนอก (เช่น https://aws.amazon.com/...)"
+                          value={item.url || ''}
+                          onChange={(e) => {
+                            const updated = [...refFormData.references];
+                            updated[idx] = { ...updated[idx], url: e.target.value };
+                            setRefFormData({ ...refFormData, references: updated });
+                          }}
+                          style={{ flex: 1, padding: '0.45rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                        />
+                        {item.url && (
+                          <a 
+                            href={item.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.45rem 0.6rem', borderRadius: '6px', background: 'var(--surface)', border: '1px solid var(--border-color)', color: 'var(--accent)', textDecoration: 'none', fontSize: '0.75rem', flexShrink: 0 }}
+                            title="ทดสอบเปิดลิงก์"
+                          >
+                            <span>เปิด</span>
+                            <ExternalLink size={12} />
+                          </a>
+                        )}
+                      </div>
+
+                      <textarea 
+                        rows={2}
+                        placeholder="คำอธิบายสรุปขอบเขตเนื้อหา หรือบทที่ครอบคลุม..."
+                        value={item.desc || ''}
+                        onChange={(e) => {
+                          const updated = [...refFormData.references];
+                          updated[idx] = { ...updated[idx], desc: e.target.value };
+                          setRefFormData({ ...refFormData, references: updated });
+                        }}
+                        style={{ width: '100%', padding: '0.45rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.8125rem', outline: 'none' }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Supabase Notice Box */}
+              <div style={{
+                background: 'rgba(16, 185, 129, 0.08)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
+                borderRadius: '8px',
+                padding: '0.75rem 0.9rem',
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)',
+                lineHeight: 1.5
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                  <span style={{ color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <Shield size={13} />
+                    <span>การเชื่อมต่อ Supabase</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const sql = `-- อัปเดตแหล่งอ้างอิงวิชา ${selectedExamId} ในตาราง exams
+UPDATE public.exams 
+SET "primarySource" = '${(refFormData.primarySource || '').replace(/'/g, "''")}',
+    organization = '${(refFormData.organization || '').replace(/'/g, "''")}',
+    "curatedBy" = '${(refFormData.curatedBy || '').replace(/'/g, "''")}',
+    "references" = '${JSON.stringify(refFormData.references || []).replace(/'/g, "''")}'::jsonb
+WHERE id = '${selectedExamId}';`;
+                      navigator.clipboard.writeText(sql);
+                      showToast('คัดลอก SQL สำหรับรันใน Supabase เรียบร้อย');
+                    }}
+                    style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontSize: '0.72rem', textDecoration: 'underline' }}
+                  >
+                    คัดลอก SQL อัปเดตวิชานี้
+                  </button>
+                </div>
+                <span>เมื่อกด <strong>"บันทึก & ซิงค์ Supabase"</strong> ระบบจะบันทึกข้อมูลเข้า LocalStorage และส่งคำสั่งอัปเดตไปยังตาราง <code>exams</code> ใน Supabase ทันที</span>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              padding: '0.875rem 1.25rem', borderTop: '1px solid var(--border-color)',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem'
+            }}>
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={() => setShowRefModal(false)}
+                disabled={savingRef}
+              >
+                ยกเลิก
+              </button>
+
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button 
+                  type="button"
+                  className="btn btn-outline" 
+                  onClick={() => handleSaveReferences(false)}
+                  disabled={savingRef}
+                  style={{ fontSize: '0.8125rem' }}
+                >
+                  <Save size={14} /> บันทึกลงเครื่อง
+                </button>
+                <button 
+                  type="button"
+                  className="btn btn-primary" 
+                  onClick={() => handleSaveReferences(true)}
+                  disabled={savingRef}
+                  style={{ fontSize: '0.8125rem', background: '#10b981', borderColor: '#10b981' }}
+                >
+                  {savingRef ? (
+                    <span>กำลังซิงค์...</span>
+                  ) : (
+                    <>
+                      <BookOpen size={14} />
+                      <span>บันทึก & ซิงค์ Supabase</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -182,16 +182,21 @@ function App() {
           const customKey = `examhub_custom_exam_${exam.id}`;
           const savedCustom = localStorage.getItem(customKey);
           let customQuestionCount = exam.questionCount;
+          let customParsed = null;
           if (savedCustom) {
             try {
-              const parsed = JSON.parse(savedCustom);
-              if (parsed.questions) customQuestionCount = parsed.questions.length;
+              customParsed = JSON.parse(savedCustom);
+              if (customParsed.questions) customQuestionCount = customParsed.questions.length;
             } catch (e) {
               console.warn(e);
             }
           }
           return {
             ...exam,
+            primarySource: customParsed?.primarySource || exam.primarySource || exam.primary_source,
+            organization: customParsed?.organization || exam.organization,
+            curatedBy: customParsed?.curatedBy || exam.curatedBy || exam.curated_by,
+            references: customParsed?.references || exam.references,
             questionCount: customQuestionCount,
             requiresAuth: local?.requiresAuth || exam.requiresAuth || false
           };
@@ -214,7 +219,11 @@ function App() {
                   desc: customExam.desc || '',
                   questionCount: customExam.questions?.length || 0,
                   year: customExam.year || 3,
-                  type: customExam.type || 'Midterm'
+                  type: customExam.type || 'Midterm',
+                  primarySource: customExam.primarySource,
+                  organization: customExam.organization,
+                  curatedBy: customExam.curatedBy,
+                  references: customExam.references || []
                 });
               }
             } catch (e) {
