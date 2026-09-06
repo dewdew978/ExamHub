@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FileText, ArrowLeft, PlayCircle, Info, Sparkles, RotateCcw } from 'lucide-react';
+import { FileText, ArrowLeft, PlayCircle, Info, Sparkles, RotateCcw, BookOpen, ExternalLink, Shield } from 'lucide-react';
+import { getSubjectReferenceData } from '../data/examReferences';
 
 export default function ExamIntro({ subject, onStart, onResume, onBack }) {
   const [inProgress, setInProgress] = useState(null);
@@ -20,6 +21,7 @@ export default function ExamIntro({ subject, onStart, onResume, onBack }) {
 
   const choiceTypes = new Set(subject.questions.map(q => q.choices?.length || 4));
   const typesArray = Array.from(choiceTypes).sort((a, b) => a - b);
+  const refData = getSubjectReferenceData(subject);
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '720px', margin: '1rem auto 2.5rem' }}>
@@ -120,6 +122,123 @@ export default function ExamIntro({ subject, onStart, onResume, onBack }) {
             <p style={{ margin: 0 }}>เมื่อทำถึงข้อสุดท้าย ให้กดปุ่ม <strong>“ดูผลคะแนน”</strong> เพื่อส่งข้อสอบและดูเฉลย <br/>สามารถใช้ <strong>"ตัวนำทางข้อสอบ"</strong> (ไอคอนตารางมุมขวาบน) เพื่อกระโดดไปยังข้อที่ต้องการได้ทันที</p>
           </div>
         </div>
+
+        {/* แหล่งที่มาและเอกสารอ้างอิง (Sources & References) */}
+        {refData && (
+          <div style={{
+            background: 'var(--surface-hover)',
+            padding: '1.25rem',
+            borderRadius: '8px',
+            border: '1px solid var(--border-color)',
+            borderLeft: '4px solid #10b981',
+            marginBottom: '2rem'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', fontWeight: 600, margin: 0, color: 'var(--text)' }}>
+                <BookOpen size={18} color="#10b981" />
+                <span>แหล่งที่มาและเอกสารอ้างอิง (References)</span>
+              </h3>
+              {refData.organization && (
+                <span style={{ 
+                  fontSize: '0.75rem', 
+                  padding: '0.2rem 0.65rem', 
+                  borderRadius: '999px', 
+                  background: 'rgba(16, 185, 129, 0.12)', 
+                  color: '#10b981', 
+                  fontWeight: 600,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.3rem'
+                }}>
+                  <Shield size={12} />
+                  {refData.organization}
+                </span>
+              )}
+            </div>
+
+            {refData.primarySource && (
+              <div style={{ marginBottom: '0.75rem', fontSize: '0.875rem' }}>
+                <span style={{ color: 'var(--text-muted)' }}>แหล่งข้อมูลหลัก: </span>
+                <strong style={{ color: 'var(--text)' }}>{refData.primarySource}</strong>
+                {refData.curatedBy && (
+                  <span style={{ marginLeft: '0.5rem', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    (เรียบเรียงโดย: <strong style={{ color: 'var(--accent)' }}>{refData.curatedBy}</strong>)
+                  </span>
+                )}
+              </div>
+            )}
+
+            {refData.references && refData.references.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '0.5rem' }}>
+                {refData.references.map((item, idx) => (
+                  <div 
+                    key={idx} 
+                    style={{ 
+                      padding: '0.75rem 0.9rem', 
+                      borderRadius: '8px', 
+                      background: 'var(--surface)', 
+                      border: '1px solid var(--border-color)',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text)', lineHeight: 1.4 }}>
+                          {item.title}
+                        </div>
+                        {item.author && (
+                          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                            โดย: {item.author}
+                          </div>
+                        )}
+                        {item.desc && (
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem', lineHeight: 1.5 }}>
+                            {item.desc}
+                          </div>
+                        )}
+                      </div>
+                      {item.url && (
+                        <a 
+                          href={item.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{
+                            color: 'var(--accent)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            fontSize: '0.75rem',
+                            flexShrink: 0,
+                            padding: '0.25rem 0.55rem',
+                            borderRadius: '6px',
+                            background: 'var(--surface-hover)',
+                            textDecoration: 'none',
+                            border: '1px solid var(--border-color)'
+                          }}
+                          title="เปิดเอกสารอ้างอิงภายนอก"
+                        >
+                          <span>ดูข้อมูล</span>
+                          <ExternalLink size={12} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div style={{ 
+              marginTop: '0.85rem', 
+              paddingTop: '0.65rem', 
+              borderTop: '1px dashed var(--border-color)', 
+              fontSize: '0.78rem', 
+              color: 'var(--text-muted)',
+              lineHeight: 1.5
+            }}>
+              💡 <strong>หมายเหตุทางวิชาการ:</strong> ชุดข้อสอบนี้จัดทำและเรียบเรียงขึ้นเพื่อวัตถุประสงค์ในการทบทวนความรู้ การฝึกคิดวิเคราะห์ และเตรียมความพร้อมก่อนลงสนามสอบจริง โดยอ้างอิงตามมาตรฐานหลักสูตรวิชาการที่เกี่ยวข้อง
+            </div>
+          </div>
+        )}
 
         {!inProgress && (
           <div style={{ textAlign: 'center' }}>
