@@ -12,6 +12,9 @@ import BorderGlow from './BorderGlow';
 import Navbar from './Navbar';
 import StatCount, { statCountStyles } from './StatCount';
 
+// Tutorial video lives in the public "media" bucket of Supabase Storage
+const TUTORIAL_VIDEO_URL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/media/exetia-tutorial.mp4`;
+
 export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
@@ -125,6 +128,9 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         .landing-section-title { font-size: 2.35rem; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 0.75rem; }
         .landing-section-desc { color: var(--text-muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto; }
         .landing-steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
+        .landing-video { margin: 2.5rem auto 0; max-width: 900px; display: grid; gap: 0.75rem; }
+        .landing-video video { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; border: 1px solid var(--border-color); background: #0a0b10; display: block; }
+        .landing-video figcaption { text-align: center; color: var(--text-muted); font-size: 0.875rem; }
         .landing-step-card { padding: 2rem 1.75rem; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-color); position: relative; }
         .landing-step-num { font-size: 3.25rem; font-weight: 800; color: var(--border-divider); position: absolute; top: 1.25rem; right: 1.5rem; }
         .landing-features-section { padding: 5.5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
@@ -207,6 +213,18 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">02</div><Target size={24} style={{ marginBottom: '1rem', color: '#f59e0b' }} /><h3>จับเวลา</h3><p>ฝึกทำข้อสอบพร้อมระบบจับเวลานับถอยหลัง</p></div>
           <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">03</div><FileCheck2 size={24} style={{ marginBottom: '1rem', color: 'var(--success)' }} /><h3>วิเคราะห์</h3><p>ดูเฉลยละเอียดและเรดาร์ชาร์ตวิเคราะห์ทักษะ</p></div>
         </div>
+        <figure className="landing-video">
+          {/* preload="none": the video downloads only when the visitor presses play */}
+          <video
+            controls
+            preload="none"
+            playsInline
+            poster="/exetia-tutorial-poster.jpg"
+            src={TUTORIAL_VIDEO_URL}
+            aria-label="วิดีโอสอนใช้งาน EXETIA"
+          />
+          <figcaption>วิดีโอสอนใช้งาน EXETIA · 1:53 นาที · เลือกวิชา ทำข้อสอบ ดูเฉลย สมัครสมาชิก และแจ้งข้อสอบผิด</figcaption>
+        </figure>
       </section>
 
       <section className="landing-features-section" id="landing-features">
