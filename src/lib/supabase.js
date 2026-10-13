@@ -5,9 +5,5 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Security: Admin role is checked via server-controlled app_metadata or verified admin emails
-export const checkIsAdmin = (user) => {
-  if (!user) return false;
-  const adminEmails = ['thewhitedead.office@gmail.com', 'pawaritdew5@gmail.com', 'pawaritpansing@gmail.com'];
-  return user.app_metadata?.role === 'admin' || (user.email && adminEmails.includes(user.email.toLowerCase()));
-};
+// Security: Admin role comes only from server-controlled app_metadata, matching the RLS policies
+export const checkIsAdmin = (user) => user?.app_metadata?.role === 'admin';
