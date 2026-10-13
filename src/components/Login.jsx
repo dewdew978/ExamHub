@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { validatePassword, PASSWORD_HINT } from '../lib/passwordPolicy';
 import { EyeIcon, EyeOffIcon, Lock, Mail, ArrowLeft, CheckCircle2, RotateCw } from 'lucide-react';
 
 export default function Login({ onLogin, onClose, authRequiredMessage }) {
@@ -50,6 +51,12 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
     if (mode !== 'forgot' && !password) {
       setPasswordError('กรุณากรอกรหัสผ่าน');
       hasError = true;
+    } else if (mode === 'signup') {
+      const policyError = validatePassword(password);
+      if (policyError) {
+        setPasswordError(policyError);
+        hasError = true;
+      }
     }
 
     if (hasError) {
@@ -483,6 +490,7 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
                       </button>
                     </div>
                     {passwordError && <span style={{ color: 'var(--error)', fontSize: '0.75rem' }}>{passwordError}</span>}
+                    {mode === 'signup' && !passwordError && <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{PASSWORD_HINT}</span>}
                   </div>
                 )}
               </div>

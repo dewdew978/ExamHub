@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { validatePassword, PASSWORD_HINT } from '../lib/passwordPolicy';
 import { Eye, EyeOff, Lock, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
 
 export default function ResetPassword({ onSuccess, onBackToLogin }) {
@@ -19,8 +20,9 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
       setError('กรุณากรอกรหัสผ่านใหม่');
       return;
     }
-    if (password.length < 6) {
-      setError('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
+    const policyError = validatePassword(password);
+    if (policyError) {
+      setError(policyError);
       return;
     }
     if (password !== confirmPassword) {
@@ -147,7 +149,7 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
               {/* New Password */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
-                  รหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)
+                  รหัสผ่านใหม่ ({PASSWORD_HINT})
                 </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <input

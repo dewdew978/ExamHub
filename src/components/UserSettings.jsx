@@ -22,6 +22,7 @@ import {
   X
 } from 'lucide-react';
 import { supabase, checkIsAdmin } from '../lib/supabase';
+import { validatePassword, PASSWORD_HINT } from '../lib/passwordPolicy';
 
 const AVATAR_EMOJIS = [
   '🎓', '🦊', '🚀', '🐼', '🦁', '⚡', '🦉', '💻', 
@@ -127,8 +128,9 @@ export default function UserSettings({
     e.preventDefault();
     setPasswordError('');
 
-    if (!newPassword || newPassword.length < 6) {
-      setPasswordError('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
+    const policyError = validatePassword(newPassword);
+    if (policyError) {
+      setPasswordError(policyError);
       return;
     }
 
@@ -788,7 +790,7 @@ export default function UserSettings({
                       className="input"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="ความยาวอย่างน้อย 6 ตัวอักษร"
+                      placeholder={PASSWORD_HINT}
                       style={{ width: '100%', padding: '0.75rem 2.5rem 0.75rem 1rem', borderRadius: '8px' }}
                     />
                     <button
