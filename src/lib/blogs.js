@@ -17,7 +17,7 @@ export const INITIAL_BLOGS = [
     category: 'exam',
     version_tag: 'v1.4.2',
     author_name: 'Data Team',
-    author_avatar: '📊',
+    author_avatar: '',
     author_role: 'Curriculum Lead',
     cover_url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
     media_type: 'image',
@@ -27,11 +27,11 @@ export const INITIAL_BLOGS = [
     pinned: false,
     read_time: '3 นาที',
     published_at: '2026-09-01T10:30:00.000Z',
-    content: `### 🎯 ต้อนรับสอบปลายภาคด้วยคลังข้อสอบ DW คุณภาพสูง
+    content: `### ต้อนรับสอบปลายภาคด้วยคลังข้อสอบ DW คุณภาพสูง
 
 ทีมงานได้เพิ่มชุดข้อสอบใหม่ล่าสุด **Data Warehouse Hard (60 ข้อ)** เพื่อให้นักศึกษาชั้นปีที่ 3 ได้ฝึกทำโจทย์ที่มีระดับความยากและซับซ้อนใกล้เคียงข้อสอบจริงมากที่สุด
 
-### 📌 ประเด็นสำคัญที่ครอบคลุมในชุดนี้:
+### ประเด็นสำคัญที่ครอบคลุมในชุดนี้:
 
 1. **สถาปัตยกรรม Data Warehouse**: เปรียบเทียบความแตกต่างเชิงลึกระหว่าง *Inmon (Corporate Information Factory)* และ *Kimball (Dimensional Data Warehouse)*
 2. **Dimensional Modeling**: การออกแบบ Star Schema, Snowflake Schema, Fact Table Granularity และ Conformed Dimensions
@@ -39,7 +39,7 @@ export const INITIAL_BLOGS = [
 4. **Slowly Changing Dimensions (SCD)**: ตัวอย่างสถานการณ์จริงของการจัดการ Type 1, 2, 3, 4, และ 6
 5. **Hierarchies & Traps**: การรับมือกับ Ragged, Unbalanced Hierarchies และ Chasm Trap ใน Data Warehouse
 
-> **💡 เคล็ดลับการทำข้อสอบ**: ข้อสอบชุดนี้ไม่มีช้อยส์ลวงแบบ "ถูกทุกข้อ" หรือ "ไม่มีข้อใดถูก" ทุกตัวเลือกถูกออกแบบมาเพื่อทดสอบความเข้าใจแก่นทฤษฎีอย่างแท้จริง ขอให้ทุกคนตั้งใจอ่านโจทย์และทบทวนให้ดีครับ!`
+> **เคล็ดลับการทำข้อสอบ**: ข้อสอบชุดนี้ไม่มีช้อยส์ลวงแบบ "ถูกทุกข้อ" หรือ "ไม่มีข้อใดถูก" ทุกตัวเลือกถูกออกแบบมาเพื่อทดสอบความเข้าใจแก่นทฤษฎีอย่างแท้จริง ขอให้ทุกคนตั้งใจอ่านโจทย์และทบทวนให้ดีครับ!`
   },
   {
     id: 'aws-cloud-exam-update',
@@ -49,7 +49,7 @@ export const INITIAL_BLOGS = [
     category: 'exam',
     version_tag: 'v1.4.0',
     author_name: 'Cloud Instructor',
-    author_avatar: '☁️',
+    author_avatar: '',
     author_role: 'Cloud Architect',
     cover_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
     media_type: 'image',
@@ -59,11 +59,11 @@ export const INITIAL_BLOGS = [
     pinned: false,
     read_time: '2 นาที',
     published_at: '2026-08-25T09:00:00.000Z',
-    content: `### 🚀 เจาะลึก Cloud Solution Architecture ให้แม่นยำยิ่งขึ้น
+    content: `### เจาะลึก Cloud Solution Architecture ให้แม่นยำยิ่งขึ้น
 
 ข้อสอบชุด **AWS Cloud Analytics & Architecture** ได้รับการปรับปรุงครั้งใหญ่ โดยเพิ่มคำถามแนววิเคราะห์เชิงลึกอีก 5 ข้อ พร้อมปรับช้อยส์ลวงให้สมจริงตามมาตรฐาน AWS Certified Solutions Architect
 
-### 🔑 หัวข้อข้อสอบที่เพิ่มเข้ามาใหม่:
+### หัวข้อข้อสอบที่เพิ่มเข้ามาใหม่:
 
 - **S3 Storage Optimization**: เจาะลึกการเลือก Tier ด้วย *S3 Intelligent-Tiering* vs *Lifecycle Policies* สำหรับข้อมูลที่มี Pattern การเข้าถึงไม่แน่นอน
 - **High Availability & Low Latency**: การคอนฟิก *DynamoDB Global Tables* แบบ Multi-Region Active-Active

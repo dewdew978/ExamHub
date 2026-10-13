@@ -260,7 +260,7 @@ export default function Report({ subjects = [], initialData = null, user = null,
                     outline: 'none'
                   }}
                 >
-                  <option value="general">🌐 ปัญหาทั่วไป / ไม่เกี่ยวกับข้อสอบ</option>
+                  <option value="general">ปัญหาทั่วไป / ไม่เกี่ยวกับข้อสอบ</option>
                   {subjects.map(s => (
                     <option key={s.id} value={s.id}>
                       {s.name} ({s.questionCount} ข้อ)

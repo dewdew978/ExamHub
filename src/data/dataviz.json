@@ -2,7 +2,7 @@
   "id": "dataviz",
   "category": "Data Visualization & Analytics",
   "name": "Data Visualization & Analytics",
-  "icon": "📈",
+  "icon": "",
   "color": "#06b6d4",
   "iconBg": "rgba(6,182,212,0.15)",
   "desc": "Data Warehouse · DAX · Charts · Storytelling · Dashboard",

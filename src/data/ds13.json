@@ -2,7 +2,7 @@
   "id": "ds13",
   "category": "Data Science",
   "name": "DS Week 13",
-  "icon": "📊",
+  "icon": "",
   "color": "#fb923c",
   "iconBg": "rgba(251,146,60,0.15)",
   "desc": "Model Evaluation · Metrics · Classification · Regression",

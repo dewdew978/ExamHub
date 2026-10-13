@@ -2,7 +2,7 @@
   "id": "isd_midterm_hard_60",
   "category": "Intelligent System Development",
   "name": "Midterm Hard Mode (60 Questions)",
-  "icon": "🔥",
+  "icon": "",
   "color": "#ef4444",
   "iconBg": "rgba(239,68,68,0.15)",
   "desc": "ชุดข้อสอบจำลอง 60 ข้อ ระดับความยากขั้นสูง อ้างอิงจากเนื้อหา Git, CV, ML, CNN, RNN/GAN และ RL อย่างเจาะลึก",

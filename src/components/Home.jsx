@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import SubjectIcon from './SubjectIcon';
 import { FileText, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle, Sparkles, PlayCircle, Trash2, X } from 'lucide-react';
 
 export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport, onResumeExam }) {
@@ -153,7 +154,6 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
           name: sub.category,
           count: 0,
           questionCount: 0,
-          icon: sub.icon || '📚',
           color: sub.color || '#0ea5e9',
           iconBg: sub.iconBg || 'rgba(14,165,233,0.15)'
         };
@@ -203,7 +203,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
                   background: cat.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '1.15rem', flexShrink: 0
                 }}>
-                  {cat.icon}
+                  <SubjectIcon category={cat.name} color={cat.color} />
                 </div>
                 <h3 style={{ fontSize: '1.05rem', letterSpacing: '-0.25px', margin: 0, fontWeight: 600 }}>{cat.name}</h3>
               </div>
@@ -680,7 +680,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
         </button>
       </div>
 
-      {/* 🛑 Custom Confirmation Modal for Discarding In-Progress Exam */}
+      {/* Custom Confirmation Modal for Discarding In-Progress Exam */}
       {showDiscardConfirm && inProgressExam && (
         <div 
           style={{

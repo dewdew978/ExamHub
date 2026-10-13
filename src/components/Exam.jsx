@@ -344,7 +344,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
               color: pct >= 80 ? '#16a34a' : pct >= 50 ? '#2563eb' : '#dc2626',
               marginBottom: '0.5rem'
             }}>
-              {pct >= 80 ? '🎉 ยอดเยี่ยมมาก!' : pct >= 50 ? '👍 ผ่านเกณฑ์' : '💪 พยายามอีกนิดนะ'}
+              {pct >= 80 ? 'ยอดเยี่ยมมาก!' : pct >= 50 ? 'ผ่านเกณฑ์' : 'พยายามอีกนิดนะ'}
             </span>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>คะแนนที่คุณทำได้</p>
           </div>

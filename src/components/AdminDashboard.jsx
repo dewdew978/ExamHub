@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import SubjectIcon from './SubjectIcon';
 import { 
   AlertTriangle, 
   CheckCircle2, 
@@ -157,7 +158,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     id: '',
     name: '',
     category: 'General',
-    icon: '📝',
+    icon: '',
     color: '#0070f3',
     desc: '',
     year: 3,
@@ -447,7 +448,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       id: examData.id,
       category: examData.category,
       name: examData.name,
-      icon: examData.icon || '📝',
+      icon: examData.icon || '',
       color: examData.color || '#0070f3',
       iconBg: examData.iconBg || 'rgba(0, 112, 243, 0.15)',
       desc: examData.desc || '',
@@ -477,7 +478,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       id: examData.id,
       category: examData.category,
       name: examData.name,
-      icon: examData.icon || '📝',
+      icon: examData.icon || '',
       color: examData.color || '#0070f3',
       iconBg: examData.iconBg || 'rgba(0, 112, 243, 0.15)',
       desc: examData.desc || '',
@@ -549,12 +550,12 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
         if (error) {
           console.warn("Supabase reference update error:", error);
           if (error.code === 'PGRST204') {
-            showToast('บันทึกลงในเครื่องแล้ว (💡 แจ้งเตือน: กรุณารัน scripts/add_references_to_exams.sql ใน Supabase SQL Editor ก่อนซิงค์)');
+            showToast('บันทึกลงในเครื่องแล้ว (แจ้งเตือน: กรุณารัน scripts/add_references_to_exams.sql ใน Supabase SQL Editor ก่อนซิงค์)');
           } else {
             showToast(`บันทึกในเครื่องแล้ว (Supabase: ${error.message})`);
           }
         } else {
-          showToast('✅ บันทึกและซิงค์แหล่งอ้างอิงกับ Supabase เรียบร้อย!');
+          showToast('บันทึกและซิงค์แหล่งอ้างอิงกับ Supabase เรียบร้อย!');
         }
       } else {
         showToast('บันทึกแหล่งอ้างอิงลงในระบบเรียบร้อย');
@@ -1674,7 +1675,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                          <span style={{ fontSize: '1.125rem' }}>{sub.icon || '📝'}</span>
+                          <SubjectIcon category={sub.category} size={18} color={sub.color} />
                           <div>
                             <div style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{sub.name}</div>
                             <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>{sub.category} • ปี {sub.year}</div>
@@ -1817,10 +1818,11 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                           onClick={() => setExamSearchQuery('')}
                           style={{
                             position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)',
-                            background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.6875rem'
+                            background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.6875rem', display: 'flex'
                           }}
+                          aria-label="ล้างคำค้นหา"
                         >
-                          ✕
+                          <X size={14} />
                         </button>
                       )}
                     </div>
@@ -1931,7 +1933,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                           background: exam.iconBg || 'rgba(0, 112, 243, 0.1)',
                                           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem'
                                         }}>
-                                          {exam.icon || '📚'}
+                                          <SubjectIcon category={exam.category} size={18} color={exam.color} />
                                         </div>
                                         <div>
                                           <span style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', fontWeight: 500 }}>
@@ -2073,7 +2075,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                             background: loadedExamData.iconBg || 'rgba(0,112,243,0.1)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.375rem'
                           }}>
-                            {loadedExamData.icon || '📝'}
+                            <SubjectIcon category={loadedExamData.category} size={20} color={loadedExamData.color} />
                           </div>
                           <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -2294,7 +2296,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     color: 'var(--text)'
                                   }}>
                                     <span style={{ fontWeight: 600, color: 'var(--accent)', marginRight: '0.35rem' }}>
-                                      💡 เฉลย:
+                                      เฉลย:
                                     </span>
                                     <span>{renderTextWithMath(qItem.explain)}</span>
                                   </div>
@@ -2369,10 +2371,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                   }}
                 >
                   <option value="all">ทุกสถานะ ({reports.length})</option>
-                  <option value="pending">⏳ รอตรวจสอบ ({reportStats.pending})</option>
-                  <option value="investigating">🔍 กำลังตรวจ ({reportStats.investigating})</option>
-                  <option value="resolved">✅ แก้ไขแล้ว ({reportStats.resolved})</option>
-                  <option value="dismissed">🚫 ปิดเรื่อง ({reportStats.dismissed})</option>
+                  <option value="pending">รอตรวจสอบ ({reportStats.pending})</option>
+                  <option value="investigating">กำลังตรวจ ({reportStats.investigating})</option>
+                  <option value="resolved">แก้ไขแล้ว ({reportStats.resolved})</option>
+                  <option value="dismissed">ปิดเรื่อง ({reportStats.dismissed})</option>
                 </select>
 
                 <select
@@ -2777,7 +2779,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   {questionFormData.choices.map((c, idx) => (
                     <div key={idx} style={{ color: idx === questionFormData.answer ? '#10b981' : 'var(--text)', fontWeight: idx === questionFormData.answer ? 600 : 400 }}>
-                      {String.fromCharCode(65 + idx)}. {c ? renderTextWithMath(c) : '(ว่าง)'} {idx === questionFormData.answer && '✓ (เฉลย)'}
+                      {String.fromCharCode(65 + idx)}. {c ? renderTextWithMath(c) : '(ว่าง)'} {idx === questionFormData.answer && '(เฉลย)'}
                     </div>
                   ))}
                 </div>
@@ -2901,7 +2903,7 @@ D. ตัวเลือก 4
                 id: cleanId,
                 name: newExamForm.name.trim(),
                 category: newExamForm.category.trim() || 'General',
-                icon: newExamForm.icon || '📝',
+                icon: newExamForm.icon || '',
                 color: newExamForm.color || '#0070f3',
                 iconBg: `${newExamForm.color || '#0070f3'}26`,
                 desc: (newExamForm.desc || '').trim(),

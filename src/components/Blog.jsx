@@ -12,11 +12,13 @@ import {
   Globe, 
   LayoutGrid, 
   GitCommit, 
-  ArrowLeft 
+  ArrowLeft,
+  Newspaper
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import Navbar from './Navbar';
+import UserAvatar from './UserAvatar';
 import DotGridBackground from './DotGridBackground';
 import { getBlogs, formatBlogDate, BLOG_CATEGORIES } from '../lib/blogs';
 
@@ -1065,7 +1067,7 @@ export default function Blog({
                         )
                       ) : (
                         <div className="magic-card-media-placeholder">
-                          <span style={{ fontSize: '2.5rem' }}>{blog.author_avatar || '🎓'}</span>
+                          <Newspaper size={40} color="var(--text-muted)" strokeWidth={1.5} aria-hidden="true" />
                         </div>
                       )}
 
@@ -1145,7 +1147,7 @@ export default function Blog({
                       {/* Card Footer: Date, Author & Read Time */}
                       <div className="magic-card-footer">
                         <div className="magic-card-author">
-                          <span style={{ fontSize: '1rem' }}>{blog.author_avatar || '🎓'}</span>
+                          <UserAvatar name={blog.author_name || 'EXETIA'} size={24} />
                           <div>
                             <div style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text)' }}>
                               {blog.author_name || 'EXETIA'}
@@ -1204,7 +1206,7 @@ export default function Blog({
                       </span>
                     )}
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                      {blog.author_avatar} {blog.author_name}
+                      {blog.author_name}
                     </div>
                   </div>
 
@@ -1411,7 +1413,7 @@ export default function Blog({
 
               {/* Meta: Author & Date */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.75rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-divider)' }}>
-                <span style={{ fontSize: '1.5rem' }}>{activeArticleModal.author_avatar || '🚀'}</span>
+                <UserAvatar name={activeArticleModal.author_name || 'EXETIA'} size={36} />
                 <div>
                   <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>{activeArticleModal.author_name} ({activeArticleModal.author_role || 'Core Team'})</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -1500,7 +1502,7 @@ export default function Blog({
       <footer style={{ borderTop: '1px solid var(--border-divider)', padding: '2rem 1.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           <span>© 2026 EXETIA. All rights reserved.</span>
-          <span style={{ fontSize: '0.8rem' }}>พัฒนาด้วย ❤️ เพื่อการเรียนรู้ที่ดีกว่าของทุกคน</span>
+          <span style={{ fontSize: '0.8rem' }}>พัฒนาเพื่อการเรียนรู้ที่ดีกว่าของทุกคน</span>
         </div>
       </footer>
     </div>

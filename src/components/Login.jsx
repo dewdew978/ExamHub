@@ -73,8 +73,7 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
           password,
           options: {
             data: {
-              nickname: nickname.trim(),
-              avatar_emoji: '🎓'
+              nickname: nickname.trim()
             },
             emailRedirectTo: `${window.location.origin}/home`
           }
@@ -239,7 +238,7 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
               borderRadius: '12px', padding: '0.875rem 1rem', fontSize: '0.8125rem',
               color: 'var(--text-muted)', textAlign: 'left', lineHeight: 1.6, marginBottom: '1.5rem'
             }}>
-              💡 <strong>คำแนะนำ:</strong> กรุณาคลิกลิงก์ในอีเมลเพื่อเปิดใช้งานบัญชี (หากไม่พบอีเมลในกล่องข้อความหลัก ลองตรวจสอบในโฟลเดอร์ <strong>Junk / Spam / เมลขยะ</strong>)
+              <strong>คำแนะนำ:</strong> กรุณาคลิกลิงก์ในอีเมลเพื่อเปิดใช้งานบัญชี (หากไม่พบอีเมลในกล่องข้อความหลัก ลองตรวจสอบในโฟลเดอร์ <strong>Junk / Spam / เมลขยะ</strong>)
             </div>
 
             {resendSuccess && (
@@ -302,7 +301,7 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
               borderRadius: '12px', padding: '0.875rem 1rem', fontSize: '0.8125rem',
               color: 'var(--text-muted)', textAlign: 'left', lineHeight: 1.6, marginBottom: '1.5rem'
             }}>
-              💡 <strong>ขั้นตอนถัดไป:</strong> เปิดอีเมลของคุณแล้วคลิกปุ่ม <strong>"Reset Password"</strong> เพื่อกำหนดรหัสผ่านใหม่
+              <strong>ขั้นตอนถัดไป:</strong> เปิดอีเมลของคุณแล้วคลิกปุ่ม <strong>"Reset Password"</strong> เพื่อกำหนดรหัสผ่านใหม่
             </div>
 
             {resendSuccess && (

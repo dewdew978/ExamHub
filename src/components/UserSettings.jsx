@@ -23,11 +23,7 @@ import {
 } from 'lucide-react';
 import { supabase, checkIsAdmin } from '../lib/supabase';
 import { validatePassword, PASSWORD_HINT } from '../lib/passwordPolicy';
-
-const AVATAR_EMOJIS = [
-  '🎓', '🦊', '🚀', '🐼', '🦁', '⚡', '🦉', '💻', 
-  '🎯', '🌟', '🐱', '🤖', '🏆', '🔥', '🧠', '☕'
-];
+import UserAvatar from './UserAvatar';
 
 export default function UserSettings({ 
   user, 
@@ -53,7 +49,6 @@ export default function UserSettings({
   
   // Profile Form States (Only Avatar, Nickname, and Bio)
   const [nickname, setNickname] = useState(metadata.nickname || '');
-  const [avatarEmoji, setAvatarEmoji] = useState(metadata.avatar_emoji || '🎓');
   const [bio, setBio] = useState(metadata.bio || '');
 
   // Preferences Form States
@@ -93,7 +88,6 @@ export default function UserSettings({
       const updatedMetadata = {
         ...metadata,
         nickname: nickname.trim(),
-        avatar_emoji: avatarEmoji,
         bio: bio.trim(),
         updated_at: new Date().toISOString()
       };
@@ -239,7 +233,6 @@ export default function UserSettings({
         data: {
           nickname: 'ผู้ใช้งานที่ถูกลบ',
           bio: '',
-          avatar_emoji: '👤',
           is_deleted: true,
           deleted_at: new Date().toISOString()
         }
@@ -565,39 +558,15 @@ export default function UserSettings({
                   <User size={18} color="var(--accent)" />
                   ข้อมูลโปรไฟล์ส่วนตัว
                 </h2>
-                <p>ปรับแต่งชื่อเล่นและไอคอนประจำตัวที่ใช้แสดงผลในระบบ</p>
+                <p>ปรับแต่งชื่อเล่นและข้อมูลที่ใช้แสดงผลในระบบ</p>
               </div>
 
-              {/* Avatar Emoji Selector */}
-              <div style={{ marginBottom: '1.75rem' }}>
-                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.625rem' }}>
-                  เลือกไอคอนประจำตัว (Avatar)
-                </label>
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {AVATAR_EMOJIS.map(emoji => (
-                    <button
-                      key={emoji}
-                      type="button"
-                      onClick={() => setAvatarEmoji(emoji)}
-                      style={{
-                        width: '42px',
-                        height: '42px',
-                        borderRadius: '10px',
-                        fontSize: '1.35rem',
-                        border: avatarEmoji === emoji ? '2px solid var(--accent)' : '1px solid var(--border-color)',
-                        background: avatarEmoji === emoji ? 'rgba(0, 112, 243, 0.12)' : 'var(--surface)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transform: avatarEmoji === emoji ? 'scale(1.08)' : 'none',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-                </div>
+              {/* Avatar preview: first letter of the nickname */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', marginBottom: '1.75rem' }}>
+                <UserAvatar name={nickname || user?.email || ''} size={48} />
+                <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                  รูปโปรไฟล์ใช้ตัวอักษรแรกของชื่อเล่นโดยอัตโนมัติ
+                </span>
               </div>
 
               {/* Nickname */}
@@ -628,7 +597,7 @@ export default function UserSettings({
                   className="input"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  placeholder="เช่น มุ่งมั่นเตรียมสอบ Midterm และคว้าเกรด A ทุกวิชา 🚀"
+                  placeholder="เช่น มุ่งมั่นเตรียมสอบ Midterm และคว้าเกรด A ทุกวิชา"
                   rows={3}
                   maxLength={150}
                   style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', resize: 'vertical' }}
@@ -680,7 +649,7 @@ export default function UserSettings({
                     onClick={onToggleTheme}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}
                   >
-                    {theme === 'dark' ? '🌙 โหมดมืด' : '☀️ โหมดสว่าง'}
+                    {theme === 'dark' ? 'โหมดมืด' : 'โหมดสว่าง'}
                   </button>
                 </div>
 
@@ -989,7 +958,7 @@ export default function UserSettings({
         </main>
       </div>
 
-      {/* 🛑 MODAL 1: Confirm Global Sign Out */}
+      {/* MODAL 1: Confirm Global Sign Out */}
       {showGlobalSignOutModal && (
         <div 
           style={{
@@ -1082,7 +1051,7 @@ export default function UserSettings({
         </div>
       )}
 
-      {/* 🛑 MODAL 2: Confirm Reset All Scores */}
+      {/* MODAL 2: Confirm Reset All Scores */}
       {showResetScoresModal && (
         <div 
           style={{
@@ -1197,7 +1166,7 @@ export default function UserSettings({
         </div>
       )}
 
-      {/* 🛑 MODAL 3: Confirm Delete Account */}
+      {/* MODAL 3: Confirm Delete Account */}
       {showDeleteAccountModal && (
         <div 
           style={{

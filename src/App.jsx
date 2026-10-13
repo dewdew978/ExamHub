@@ -16,6 +16,7 @@ import UserSettings from './components/UserSettings';
 import TermsOfService from './components/TermsOfService';
 import Blog from './components/Blog';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import UserAvatar from './components/UserAvatar';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import localIndex from './data/index.json';
@@ -213,7 +214,7 @@ function App() {
                   id: customExam.id,
                   name: customExam.name,
                   category: customExam.category || 'General',
-                  icon: customExam.icon || '📝',
+                  icon: customExam.icon || '',
                   color: customExam.color || '#0070f3',
                   iconBg: customExam.iconBg || 'rgba(0, 112, 243, 0.15)',
                   desc: customExam.desc || '',
@@ -1049,19 +1050,7 @@ function App() {
                       setShowMobileMenu(false);
                     }}
                   >
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      background: 'var(--surface)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1.1rem',
-                      boxShadow: 'var(--shadow-sm)'
-                    }}>
-                      {user?.user_metadata?.avatar_emoji || '🎓'}
-                    </div>
+                    <UserAvatar name={user?.user_metadata?.nickname || user?.email || ''} size={32} />
                     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                       <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {user?.user_metadata?.nickname || user?.email?.split('@')[0]}

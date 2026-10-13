@@ -1,6 +1,6 @@
 import React from "react"
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from "recharts"
-import { Star } from "lucide-react"
+import { Star, X } from "lucide-react"
 
 const defaultChartData = [
   { skill: "MIS", score: 0 },
@@ -42,9 +42,10 @@ export function Pattern({ data = defaultChartData, onClose }) {
       >
         <button 
           onClick={onClose}
-          style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '1rem', padding: '0.25rem' }}
+          style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '1rem', padding: '0.25rem', display: 'flex' }}
+          aria-label="ปิด"
         >
-          ✕
+          <X size={16} />
         </button>
         <div style={{ textAlign: 'center', marginBottom: '1rem', marginTop: '0.25rem' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', margin: 0 }}>

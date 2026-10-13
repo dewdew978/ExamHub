@@ -195,7 +195,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
       title: '',
       slug: '',
       description: '',
-      content: `### 🌟 สรุปใจความสำคัญ
+      content: `### สรุปใจความสำคัญ
 
 เขียนเนื้อหาของข่าวสารหรือการอัปเดตที่นี่...
 
@@ -204,12 +204,12 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
 
 ---
 
-### 💡 ข้อมูลเพิ่มเติม
+### ข้อมูลเพิ่มเติม
 สามารถใส่ข้อความเน้นย้ำ สูตรคณิตศาสตร์ $E=mc^2$ หรือบล็อกโค้ดได้ตามต้องการ`,
       category: 'feature',
       version_tag: '',
       author_name: user?.user_metadata?.nickname || user?.email?.split('@')[0] || 'EXETIA Team',
-      author_avatar: user?.user_metadata?.avatar_emoji || '🚀',
+      author_avatar: '',
       author_role: 'Admin / Core Team',
       cover_url: '',
       media_type: 'image',
@@ -614,10 +614,10 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
             }}
           >
             <option value="all">ทุกหมวดหมู่</option>
-            <option value="feature">✨ ฟีเจอร์ใหม่</option>
-            <option value="exam">📚 ข้อสอบใหม่</option>
-            <option value="system">⚡ อัปเดตระบบ</option>
-            <option value="announcement">🔔 ประกาศ</option>
+            <option value="feature">ฟีเจอร์ใหม่</option>
+            <option value="exam">ข้อสอบใหม่</option>
+            <option value="system">อัปเดตระบบ</option>
+            <option value="announcement">ประกาศ</option>
           </select>
 
           <select
@@ -710,7 +710,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
                               background: 'var(--surface-hover)', border: '1px solid var(--border-color)',
                               padding: '0.1rem 0.45rem', borderRadius: '4px'
                             }}>
-                              🔗 {b.source_name}
+                              {b.source_name}
                             </span>
                           )}
                         </div>
@@ -911,10 +911,10 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
                       onChange={(e) => setEditingBlog({ ...editingBlog, category: e.target.value })}
                       className="admin-input"
                     >
-                      <option value="feature">✨ ฟีเจอร์ใหม่ (Feature)</option>
-                      <option value="exam">📚 ข้อสอบใหม่ (New Exam)</option>
-                      <option value="system">⚡ อัปเดตระบบ (System)</option>
-                      <option value="announcement">🔔 ประกาศ (Announcement)</option>
+                      <option value="feature">ฟีเจอร์ใหม่ (Feature)</option>
+                      <option value="exam">ข้อสอบใหม่ (New Exam)</option>
+                      <option value="system">อัปเดตระบบ (System)</option>
+                      <option value="announcement">ประกาศ (Announcement)</option>
                     </select>
                   </div>
 
@@ -950,17 +950,6 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
                       value={editingBlog.author_name || ''}
                       onChange={(e) => setEditingBlog({ ...editingBlog, author_name: e.target.value })}
                       placeholder="EXETIA Team"
-                      className="admin-input"
-                    />
-                  </div>
-
-                  <div className="admin-form-group">
-                    <label className="admin-label">อิโมจิประจำตัวผู้เขียน</label>
-                    <input
-                      type="text"
-                      value={editingBlog.author_avatar || ''}
-                      onChange={(e) => setEditingBlog({ ...editingBlog, author_avatar: e.target.value })}
-                      placeholder="🚀, 🎓, ⚡"
                       className="admin-input"
                     />
                   </div>
@@ -1111,7 +1100,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
                         className={`btn ${previewTab === 'write' ? 'btn-primary' : 'btn-outline'}`}
                         style={{ padding: '0.35rem 0.85rem', fontSize: '0.775rem' }}
                       >
-                        ✏️ เขียนเนื้อหา (Markdown)
+                        เขียนเนื้อหา (Markdown)
                       </button>
                       <button
                         type="button"
@@ -1119,7 +1108,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
                         className={`btn ${previewTab === 'preview' ? 'btn-primary' : 'btn-outline'}`}
                         style={{ padding: '0.35rem 0.85rem', fontSize: '0.775rem' }}
                       >
-                        👁️ ดูตัวอย่างสด (Live Preview)
+                        ดูตัวอย่างสด (Live Preview)
                       </button>
                     </div>
 

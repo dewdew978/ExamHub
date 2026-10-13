@@ -2,7 +2,7 @@
   "id": "isd_midterm_60_items",
   "category": "Intelligent System Development",
   "name": "ISD Midterm Mock Exam",
-  "icon": "📝",
+  "icon": "",
   "color": "#10b981",
   "iconBg": "rgba(16,185,129,0.15)",
   "desc": "แนวข้อสอบกลางภาค 60 ข้อ (Git, CV, ML/DL, CNN, RNN, GAN, RL)",

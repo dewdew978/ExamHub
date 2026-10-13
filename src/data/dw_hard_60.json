@@ -2,7 +2,7 @@
   "id": "dw_hard_60",
   "category": "Data Warehousing",
   "name": "DW Advanced Comprehensive Exam (60 Questions)",
-  "icon": "🏢",
+  "icon": "",
   "color": "#eab308",
   "iconBg": "rgba(234,179,8,0.15)",
   "desc": "ชุดข้อสอบจำลองขั้นสูง 60 ข้อ ครอบคลุม OLAP, Architecture, Bus Matrix, Star/Snowflake Schema และ SCD อย่างละเอียด",

@@ -2,7 +2,7 @@
   "id": "ds11",
   "category": "Data Science",
   "name": "DS Week 11",
-  "icon": "📝",
+  "icon": "",
   "color": "#f43f5e",
   "iconBg": "rgba(244,63,94,0.15)",
   "desc": "NLP · Tokenization · Bag-of-Words · TF-IDF",
