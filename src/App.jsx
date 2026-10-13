@@ -1,20 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Landing from './components/Landing';
-import AboutUs from './components/AboutUs';
-import FAQ from './components/FAQ';
-import Home from './components/Home';
-import Exam from './components/Exam';
-import ExamIntro from './components/ExamIntro';
-import { Pattern } from './components/Pattern';
-import Schedule from './components/Schedule';
-import Login from './components/Login';
-import ResetPassword from './components/ResetPassword';
-import ScoreHistory from './components/ScoreHistory';
-import Report from './components/Report';
-import AdminDashboard from './components/AdminDashboard';
-import UserSettings from './components/UserSettings';
-import TermsOfService from './components/TermsOfService';
-import Blog from './components/Blog';
+import PageLoader from './components/PageLoader';
+
+// Every view except the landing page is split into its own chunk and loaded on demand,
+// so heavy libraries (KaTeX, Recharts) and the admin tools stay out of the first load.
+const AboutUs = lazy(() => import('./components/AboutUs'));
+const FAQ = lazy(() => import('./components/FAQ'));
+const Home = lazy(() => import('./components/Home'));
+const Exam = lazy(() => import('./components/Exam'));
+const ExamIntro = lazy(() => import('./components/ExamIntro'));
+const Pattern = lazy(() => import('./components/Pattern').then((m) => ({ default: m.Pattern })));
+const Schedule = lazy(() => import('./components/Schedule'));
+const Login = lazy(() => import('./components/Login'));
+const ResetPassword = lazy(() => import('./components/ResetPassword'));
+const ScoreHistory = lazy(() => import('./components/ScoreHistory'));
+const Report = lazy(() => import('./components/Report'));
+const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
+const UserSettings = lazy(() => import('./components/UserSettings'));
+const TermsOfService = lazy(() => import('./components/TermsOfService'));
+const Blog = lazy(() => import('./components/Blog'));
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import UserAvatar from './components/UserAvatar';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
@@ -97,6 +101,21 @@ function App() {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Warm the exam library chunks while the landing page is idle so "start" opens instantly
+  useEffect(() => {
+    if (currentView !== 'landing') return;
+    const prefetch = () => {
+      import('./components/Home');
+      import('./components/ExamIntro');
+    };
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(prefetch, { timeout: 4000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(prefetch, 2500);
+    return () => clearTimeout(id);
+  }, [currentView]);
 
   // Sync browser URL bar with current view
   useEffect(() => {
@@ -1378,6 +1397,7 @@ function App() {
       </div>
 
       <main className="main-content">
+        <Suspense fallback={<PageLoader inline />}>
         {currentView === 'home' && (
           <Home 
             subjects={subjects} 
@@ -1528,10 +1548,13 @@ function App() {
             <button className="btn btn-primary" onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
           </div>
         )}
+        </Suspense>
       </main>
       
       {showChart && (
-        <Pattern data={chartData} onClose={() => setShowChart(false)} />
+        <Suspense fallback={null}>
+          <Pattern data={chartData} onClose={() => setShowChart(false)} />
+        </Suspense>
       )}
 
       {showLogoutConfirm && (
