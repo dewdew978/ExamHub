@@ -1,4 +1,5 @@
-import { BookOpen, ArrowRight, LogIn } from "lucide-react";
+import { useState } from "react";
+import { BookOpen, ArrowRight, LogIn, Menu, X } from "lucide-react";
 
 /**
  * Shared floating island Navbar — used across Landing, AboutUs, FAQ
@@ -21,6 +22,12 @@ export default function Navbar({
   onStartGuest,
   showLogin = true,
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const runAndClose = (fn) => () => {
+    setMenuOpen(false);
+    fn?.();
+  };
+
   return (
     <>
       <style>{`
@@ -135,17 +142,54 @@ export default function Navbar({
           background: var(--surface-hover) !important;
           transform: none !important;
         }
+        .snav-menu-toggle {
+          display: none;
+          width: 38px;
+          height: 38px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          border: 1px solid var(--border-color);
+          background: transparent;
+          color: var(--text);
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+        .snav-menu-panel {
+          display: none;
+          flex-direction: column;
+          gap: 0.25rem;
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          border-radius: 20px;
+          background: color-mix(in srgb, var(--surface) 94%, transparent);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: 1px solid var(--border-color);
+          box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+          pointer-events: auto;
+        }
+        .snav-menu-panel .snav-link { text-align: left; padding: 0.75rem 1rem; font-size: 0.95rem; }
+        .snav-menu-login { display: none !important; }
         @media (max-width: 920px) {
-          .snav-wrapper { top: 0.75rem; padding: 0 0.75rem; }
+          .snav-wrapper { top: 0.75rem; padding: 0 0.75rem; flex-direction: column; align-items: center; }
+          .snav, .snav-menu-panel { width: 100%; max-width: 1100px; box-sizing: border-box; }
           .snav { padding: 0.35rem 0.6rem 0.35rem 0.85rem; }
           .snav-inner { display: flex; justify-content: space-between; }
           .snav-center { display: none !important; }
+          .snav-menu-toggle { display: inline-flex; }
+          .snav-menu-panel.open { display: flex; }
         }
         @media (max-width: 480px) {
           .snav-wrapper { top: 0.5rem; padding: 0 0.5rem; }
           .snav { padding: 0.3rem 0.5rem 0.3rem 0.75rem; }
           .snav-brand { font-size: 1.1rem; gap: 0.5rem; }
           .snav-brand-icon { width: 30px; height: 30px; border-radius: 8px; }
+          .snav-actions { gap: 0.35rem; }
+          .snav-btn { padding: 0 0.9rem !important; }
+          /* Login moves into the menu panel so the bar fits 320px phones */
+          .snav-actions .snav-btn-ghost { display: none !important; }
+          .snav-menu-login { display: flex !important; }
         }
       `}</style>
 
@@ -198,9 +242,47 @@ export default function Navbar({
                   </button>
                 </>
               )}
+              {links.length > 0 && (
+                <button
+                  className="snav-menu-toggle"
+                  onClick={() => setMenuOpen((open) => !open)}
+                  aria-label={menuOpen ? "ปิดเมนู" : "เปิดเมนู"}
+                  aria-expanded={menuOpen}
+                  aria-controls="snav-menu-panel"
+                >
+                  {menuOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
+              )}
             </div>
           </div>
         </header>
+
+        {links.length > 0 && (
+          <nav
+            id="snav-menu-panel"
+            className={`snav-menu-panel${menuOpen ? " open" : ""}`}
+          >
+            {links.map((link, i) => (
+              <button
+                key={i}
+                className={`snav-link${link.active ? " active" : ""}`}
+                onClick={runAndClose(link.onClick)}
+              >
+                {link.label}
+              </button>
+            ))}
+            {!user && showLogin && (
+              <button
+                className="snav-link snav-menu-login"
+                onClick={runAndClose(onLogin)}
+                style={{ alignItems: "center", gap: "0.5rem" }}
+              >
+                <LogIn size={16} />
+                <span>เข้าสู่ระบบ</span>
+              </button>
+            )}
+          </nav>
+        )}
       </div>
     </>
   );

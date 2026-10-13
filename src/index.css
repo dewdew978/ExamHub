@@ -159,6 +159,11 @@ h1 {
   color: var(--text);
 }
 
+/* Keep icons at their intended size even when a button's padding squeezes its content box */
+.btn svg {
+  flex-shrink: 0;
+}
+
 .btn:hover {
   background: var(--surface-hover);
 }

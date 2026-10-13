@@ -75,9 +75,11 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           overflow: hidden;
           text-align: center;
         }
-        .landing-hero-inner { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .landing-hero-inner { position: relative; z-index: 2; width: 100%; min-width: 0; max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .landing-badge {
           display: inline-flex;
+          max-width: 100%;
+          box-sizing: border-box;
           align-items: center;
           gap: 0.5rem;
           padding: 0.4rem 1.15rem;
