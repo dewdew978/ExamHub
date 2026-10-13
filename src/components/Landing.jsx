@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { 
   GraduationCap, 
   ChevronRight, 
@@ -10,6 +10,7 @@ import {
 import Aurora from './Aurora';
 import BorderGlow from './BorderGlow';
 import Navbar from './Navbar';
+import StatCount, { statCountStyles } from './StatCount';
 
 export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
   const [isDark, setIsDark] = useState(() => {
@@ -144,6 +145,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           .landing-steps-grid { grid-template-columns: 1fr; }
           .landing-grid { grid-template-columns: 1fr; }
         }
+        ${statCountStyles}
       `}</style>
 
       <Navbar
@@ -176,11 +178,21 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
             <button className="landing-btn-secondary" onClick={() => scrollToSection('landing-steps')}><span>วิธีใช้งาน</span></button>
           </div>
           <div className="landing-stats-bar" id="landing-stats">
-            <div className="landing-stat-item"><div className="landing-stat-number">2</div><div className="landing-stat-label">ระดับชั้นปี</div></div>
-            <div className="landing-stat-divider" />
-            <div className="landing-stat-item"><div className="landing-stat-number">{subjects.length || 0}</div><div className="landing-stat-label">ชุดข้อสอบ</div></div>
-            <div className="landing-stat-divider" />
-            <div className="landing-stat-item"><div className="landing-stat-number">{totalQuestions || 0}</div><div className="landing-stat-label">ข้อสอบทั้งหมด</div></div>
+            {[
+              { value: 2, label: 'ระดับชั้นปี' },
+              { value: subjects.length || 0, label: 'ชุดข้อสอบ' },
+              { value: totalQuestions || 0, label: 'ข้อสอบทั้งหมด' },
+            ].map((stat, i) => (
+              <Fragment key={stat.label}>
+                {i > 0 && <div className="landing-stat-divider" />}
+                <div className="landing-stat-item">
+                  <div className="landing-stat-number">
+                    <StatCount value={stat.value} delay={0.3 + i * 0.15} />
+                  </div>
+                  <div className="landing-stat-label">{stat.label}</div>
+                </div>
+              </Fragment>
+            ))}
           </div>
         </div>
       </section>

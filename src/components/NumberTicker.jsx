@@ -39,6 +39,12 @@ export default function NumberTicker({
     const start = direction === 'down' ? targetVal : initialVal;
     const end = direction === 'down' ? initialVal : targetVal;
 
+    // Respect reduced-motion: show the final number without counting
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayValue(end);
+      return undefined;
+    }
+
     timeoutId = setTimeout(() => {
       const startTime = performance.now();
 
