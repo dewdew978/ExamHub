@@ -121,4 +121,5 @@ npm run preview
 ---
 
 ## 📄 ใบอนุญาต (License)
-สงวนลิขสิทธิ์ © ExamHub Project. รายละเอียดเพิ่มเติมดูได้ที่หน้า Terms of Service & Privacy Policy ภายในแอปพลิเคชัน
+* **ซอร์สโค้ด (Source Code)**: เผยแพร่ภายใต้ใบอนุญาต [MIT License](./LICENSE)
+* **คลังข้อสอบและเนื้อหาเฉลย (Exam Contents & Problem Sets)**: สงวนสิทธิ์สำหรับใช้เพื่อการศึกษาและการเรียนรู้เท่านั้น (Non-Commercial Educational Purpose) ห้ามนำไปใช้ซ้ำในเชิงพาณิชย์โดยไม่ได้รับอนุญาต
