@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { FileText, ArrowLeft, PlayCircle, Info, Sparkles, RotateCcw, BookOpen, ExternalLink, Shield } from 'lucide-react';
 import { getSubjectReferenceData } from '../data/examReferences';
+import { readExamPreferences } from '../lib/examPreferences';
 
 export default function ExamIntro({ subject, onStart, onResume, onBack }) {
   const [inProgress, setInProgress] = useState(null);
+  const [{ timerEnabled }] = useState(readExamPreferences);
 
   useEffect(() => {
     try {
@@ -67,7 +69,7 @@ export default function ExamIntro({ subject, onStart, onResume, onBack }) {
               <span>คุณมีข้อสอบชุดนี้ที่ทำค้างไว้</span>
             </div>
             <p style={{ margin: '0 0 1rem', fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              ตอบไปแล้ว <strong>{inProgress.answeredCount}</strong> จาก {subject.questions.length} ข้อ (ข้อล่าสุด: ข้อที่ {inProgress.currentQ + 1}) • เวลาคงเหลือ <strong>{Math.floor(inProgress.timeLeft / 60)}:{(inProgress.timeLeft % 60).toString().padStart(2, '0')} นาที</strong>
+              ตอบไปแล้ว <strong>{inProgress.answeredCount}</strong> จาก {subject.questions.length} ข้อ (ข้อล่าสุด: ข้อที่ {inProgress.currentQ + 1}) • {timerEnabled ? <>เวลาคงเหลือ <strong>{Math.floor(inProgress.timeLeft / 60)}:{(inProgress.timeLeft % 60).toString().padStart(2, '0')} นาที</strong></> : 'ไม่จำกัดเวลา'}
             </p>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
               <button 
@@ -116,9 +118,9 @@ export default function ExamIntro({ subject, onStart, onResume, onBack }) {
               {typesArray.map(type => (
                 <li key={type}>รูปแบบ: ปรนัย {type} ตัวเลือก 1 คำตอบ</li>
               ))}
-              <li>เวลาในการทำข้อสอบ <strong>{subject.questions.length} นาที</strong> (เฉลี่ยข้อละ 1 นาที)</li>
+              <li>{timerEnabled ? <>เวลาในการทำข้อสอบ <strong>{subject.questions.length} นาที</strong> (เฉลี่ยข้อละ 1 นาที)</> : <>เวลาในการทำข้อสอบ <strong>ไม่จำกัดเวลา</strong></>}</li>
             </ul>
-            <p style={{ marginBottom: '0.75rem' }}>ตัวจับเวลาจะเริ่มเดินหลังจากที่คุณกดปุ่ม <strong>“เริ่มทำข้อสอบ”</strong> ด้านล่าง</p>
+            {timerEnabled && <p style={{ marginBottom: '0.75rem' }}>ตัวจับเวลาจะเริ่มเดินหลังจากที่คุณกดปุ่ม <strong>“เริ่มทำข้อสอบ”</strong> ด้านล่าง</p>}
             <p style={{ margin: 0 }}>เมื่อทำถึงข้อสุดท้าย ให้กดปุ่ม <strong>“ดูผลคะแนน”</strong> เพื่อส่งข้อสอบและดูเฉลย <br/>สามารถใช้ <strong>"ตัวนำทางข้อสอบ"</strong> (ไอคอนตารางมุมขวาบน) เพื่อกระโดดไปยังข้อที่ต้องการได้ทันที</p>
           </div>
         </div>

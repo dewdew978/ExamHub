@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import SubjectIcon from './SubjectIcon';
+import { readExamPreferences } from '../lib/examPreferences';
 import { FileText, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle, Sparkles, PlayCircle, Trash2, X } from 'lucide-react';
 
 export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport, onResumeExam }) {
@@ -7,6 +8,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedExamType, setSelectedExamType] = useState('All');
   const [inProgressExam, setInProgressExam] = useState(null);
+  const [{ timerEnabled }] = useState(readExamPreferences);
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
   
   const [showGreeting, setShowGreeting] = useState(true);
@@ -584,7 +586,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
                   <Clock size={14} color="var(--warning)" />
-                  เวลาคงเหลือ <strong>{Math.floor(inProgressExam.timeLeft / 60)}:{(inProgressExam.timeLeft % 60).toString().padStart(2, '0')} นาที</strong>
+                  {timerEnabled ? <>เวลาคงเหลือ <strong>{Math.floor(inProgressExam.timeLeft / 60)}:{(inProgressExam.timeLeft % 60).toString().padStart(2, '0')} นาที</strong></> : 'ไม่จำกัดเวลา'}
                 </span>
                 <span style={{
                   background: 'var(--surface-hover)',
@@ -771,7 +773,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>ความคืบหน้า: <strong>{inProgressExam.answeredCount} / {inProgressExam.totalQuestions} ข้อ</strong></span>
-                <span>เวลาคงเหลือ: <strong>{Math.floor(inProgressExam.timeLeft / 60)}:{(inProgressExam.timeLeft % 60).toString().padStart(2, '0')} นาที</strong></span>
+                <span>{timerEnabled ? <>เวลาคงเหลือ: <strong>{Math.floor(inProgressExam.timeLeft / 60)}:{(inProgressExam.timeLeft % 60).toString().padStart(2, '0')} นาที</strong></> : 'ไม่จำกัดเวลา'}</span>
               </div>
             </div>
 

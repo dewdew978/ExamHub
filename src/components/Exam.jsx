@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark, AlertTriangle } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import NumberTicker from './NumberTicker';
+import { readExamPreferences, createQuestionOrder } from '../lib/examPreferences';
 
-const renderTextWithMath = (text) => {
-  if (typeof text !== 'string') return text;
+const renderTextWithMath = (text, enabled) => {
+  if (!enabled || typeof text !== 'string') return text;
   const parts = text.split('$');
   return parts.map((part, index) => {
     if (index % 2 === 1) {
@@ -15,7 +16,16 @@ const renderTextWithMath = (text) => {
   });
 };
 
-export default function Exam({ subject, onBack, onComplete, onReport, initialProgress }) {
+export default function Exam({ subject: sourceSubject, onBack, onComplete, onReport, initialProgress }) {
+  const [preferences, setPreferences] = useState(readExamPreferences);
+  const [questionOrder, setQuestionOrder] = useState(() =>
+    createQuestionOrder(sourceSubject.questions.length, preferences.autoShuffle, initialProgress));
+  const subject = useMemo(() => ({
+    ...sourceSubject,
+    questions: questionOrder.map(index => sourceSubject.questions[index]),
+  }), [sourceSubject, questionOrder]);
+  const { mathRendering, timerEnabled } = preferences;
+  const renderText = text => renderTextWithMath(text, mathRendering);
   const [currentQ, setCurrentQ] = useState(() => {
     if (initialProgress?.currentQ !== undefined && initialProgress.currentQ < subject.questions.length) {
       return initialProgress.currentQ;
@@ -87,6 +97,8 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
           currentQ: qIdx,
           answers: ansList,
           bookmarks: bmkList,
+          questionOrder,
+          timerEnabled,
           timeLeft: time,
           totalQuestions: subject.questions.length,
           answeredCount,
@@ -114,6 +126,8 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
           currentQ,
           answers,
           bookmarks,
+          questionOrder,
+          timerEnabled,
           timeLeft: timeLeftRef.current,
           totalQuestions: subject.questions.length,
           answeredCount,
@@ -124,50 +138,51 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
     } catch (e) {
       console.warn("Failed to persist progress:", e);
     }
-  }, [currentQ, answers, bookmarks, showResult, subject]);
+  }, [currentQ, answers, bookmarks, showResult, subject, questionOrder, timerEnabled]);
 
   useEffect(() => {
-    if (showResult || isPaused) return;
+    if (!timerEnabled || showResult || isPaused) return;
     
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          try {
-            localStorage.removeItem('examhub_in_progress_exam');
-          } catch (e) {
-            console.warn(e);
-          }
-          const currentAnswers = answersRef.current;
-          const score = currentAnswers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
-          onComplete(score);
-          setShowResult(true);
-          return 0;
-        }
+      const newTime = Math.max(0, timeLeftRef.current - 1);
+      timeLeftRef.current = newTime;
+      setTimeLeft(newTime);
 
-        const newTime = prev - 1;
-        // Periodically sync remaining time to localStorage
-        if (newTime % 5 === 0) {
-          try {
-            const saved = localStorage.getItem('examhub_in_progress_exam');
-            if (saved) {
-              const parsed = JSON.parse(saved);
-              if (parsed.subjectId === subject.id) {
-                parsed.timeLeft = newTime;
-                parsed.updatedAt = Date.now();
-                localStorage.setItem('examhub_in_progress_exam', JSON.stringify(parsed));
-              }
-            }
-          } catch (e) {
-            console.warn(e);
-          }
+      // Keep submission outside a state updater: Strict Mode may call updaters twice.
+      if (newTime === 0) {
+        clearInterval(timer);
+        try {
+          localStorage.removeItem('examhub_in_progress_exam');
+        } catch (e) {
+          console.warn(e);
         }
-        return newTime;
-      });
+        const currentAnswers = answersRef.current;
+        const score = currentAnswers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
+        onComplete(score);
+        setShowResult(true);
+        return;
+      }
+
+      // Periodically sync remaining time to localStorage
+      if (newTime % 5 === 0) {
+        try {
+          const saved = localStorage.getItem('examhub_in_progress_exam');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.subjectId === subject.id) {
+              parsed.timeLeft = newTime;
+              parsed.updatedAt = Date.now();
+              localStorage.setItem('examhub_in_progress_exam', JSON.stringify(parsed));
+            }
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+      }
     }, 1000);
     
     return () => clearInterval(timer);
-  }, [showResult, isPaused, subject.questions, subject.id, onComplete]);
+  }, [timerEnabled, showResult, isPaused, subject.questions, subject.id, onComplete]);
 
   const handleExit = () => {
     if (!showResult) {
@@ -252,7 +267,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h3 style={{ fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '1rem', fontWeight: 500 }}>
-                        {renderTextWithMath(q.q)}
+                        {renderText(q.q)}
                       </h3>
   
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1rem' }}>
@@ -286,7 +301,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
                               <div style={{ width: '18px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
                                 {icon || <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{String.fromCharCode(65 + cIdx)}</span>}
                               </div>
-                              <span style={{ lineHeight: 1.4 }}>{renderTextWithMath(choice)}</span>
+                              <span style={{ lineHeight: 1.4 }}>{renderText(choice)}</span>
                             </div>
                           );
                         })}
@@ -297,7 +312,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
                         borderRadius: '6px', fontSize: '0.8125rem' 
                       }}>
                         <div style={{ fontWeight: 600, marginBottom: '0.2rem', color: 'var(--text)' }}>คำอธิบาย:</div>
-                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{renderTextWithMath(q.explain)}</div>
+                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{renderText(q.explain)}</div>
                       </div>
                     </div>
                   </div>
@@ -391,7 +406,11 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
               } catch (e) {
                 console.warn(e);
               }
+              const nextPreferences = readExamPreferences();
+              setPreferences(nextPreferences);
+              setQuestionOrder(createQuestionOrder(sourceSubject.questions.length, nextPreferences.autoShuffle));
               setAnswers(Array(subject.questions.length).fill(null));
+              setBookmarks(Array(subject.questions.length).fill(false));
               setCurrentQ(0);
               setTimeLeft(subject.questions.length * 60);
               setShowAlert(true);
@@ -504,15 +523,15 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
           >
             <LayoutGrid size={15} />
           </button>
-          <button 
+          {timerEnabled && <button
             className="btn btn-outline" 
             onClick={() => setIsPaused(true)}
             style={{ width: '32px', height: '32px', padding: 0 }}
             title="พักสอบชั่วคราว"
           >
             <Pause size={15} />
-          </button>
-          <div style={{ 
+          </button>}
+          {timerEnabled ? <div style={{
             display: 'flex', alignItems: 'center', gap: '0.35rem', 
             background: timeLeft < 60 ? 'rgba(239, 68, 68, 0.1)' : 'var(--surface-hover)', 
             color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
@@ -521,7 +540,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
           }}>
             <Clock size={16} />
             <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
-          </div>
+          </div> : <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>ไม่จำกัดเวลา</span>}
         </div>
       </div>
 
@@ -614,7 +633,9 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
           </div>
           <div style={{ paddingRight: '1.5rem' }}>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.4, margin: 0 }}>
-              ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที (รวม {subject.questions.length} นาที) เมื่อเวลาหมดจะทำการส่งข้อสอบอัตโนมัติ
+              {timerEnabled
+                ? <>ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที (รวม {subject.questions.length} นาที) เมื่อเวลาหมดจะทำการส่งข้อสอบอัตโนมัติ</>
+                : 'ฝึกทำข้อสอบแบบไม่จำกัดเวลา เมื่อทำเสร็จให้กดดูผลคะแนนเพื่อส่งข้อสอบ'}
             </p>
           </div>
           <button 
@@ -663,7 +684,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
             {onReport && (
               <button 
                 type="button"
-                onClick={() => onReport({ subjectId: subject.id, questionNumber: currentQ + 1, issueType: 'wrong_answer' })}
+                onClick={() => onReport({ subjectId: subject.id, questionNumber: questionOrder[currentQ] + 1, issueType: 'wrong_answer' })}
                 style={{ 
                   background: 'transparent', border: 'none', cursor: 'pointer', 
                   color: 'var(--text-muted)',
@@ -692,7 +713,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
         </div>
 
         <h3 style={{ fontSize: '1.05rem', lineHeight: 1.5, marginBottom: '1.25rem', fontWeight: 500 }}>
-          {renderTextWithMath(q.q)}
+          {renderText(q.q)}
         </h3>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -745,7 +766,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
                 }}>
                   {isRight ? <CheckCircle size={14} /> : isWrong ? <XCircle size={14} /> : String.fromCharCode(65 + idx)}
                 </div>
-                <span style={{ lineHeight: 1.45 }}>{renderTextWithMath(choice)}</span>
+                <span style={{ lineHeight: 1.45 }}>{renderText(choice)}</span>
               </button>
             );
           })}
@@ -763,7 +784,7 @@ export default function Exam({ subject, onBack, onComplete, onReport, initialPro
               <Check size={15} /> เฉลยและคำอธิบาย
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5, margin: 0 }}>
-              {renderTextWithMath(q.explain)}
+              {renderText(q.explain)}
             </p>
           </div>
         )}
