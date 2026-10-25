@@ -50,19 +50,10 @@ USING (published = true);
 -- 2. Authenticated users with admin role can perform all actions
 CREATE POLICY "Allow admins full access to blogs"
 ON public.blogs FOR ALL
+TO authenticated
 USING (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'
-  OR (auth.jwt() ->> 'email') IN (
-    'thewhitedead.office@gmail.com',
-    'pawaritdew5@gmail.com',
-    'pawaritpansing@gmail.com'
-  )
 )
 WITH CHECK (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin'
-  OR (auth.jwt() ->> 'email') IN (
-    'thewhitedead.office@gmail.com',
-    'pawaritdew5@gmail.com',
-    'pawaritpansing@gmail.com'
-  )
 );

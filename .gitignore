@@ -23,6 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+.env.*
+!.env.example
 chat_summary.md
 
 # AI / Agent tool directories and configurations
