@@ -124,6 +124,8 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
         errorMessage = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
       } else if (errorMessage.toLowerCase().includes('email not confirmed')) {
         errorMessage = 'อีเมลนี้ยังไม่ได้ยืนยันตัวตน กรุณาตรวจสอบลิงก์ในอีเมลของคุณ';
+      } else if (errorMessage.toLowerCase().includes('rate limit')) {
+        errorMessage = 'ระบบส่งอีเมลถึงขีดจำกัดชั่วคราว (Rate Limit) กรุณารอสักครู่แล้วลองใหม่อีกครั้ง';
       }
       setError(errorMessage);
     } finally {
@@ -149,7 +151,12 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
       setResendSuccess('ส่งลิงก์ยืนยันใหม่อีกครั้งเรียบร้อยแล้ว!');
       startCooldown();
     } catch (err) {
-      setError(err.message || 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง');
+      const msg = err.message || '';
+      if (msg.toLowerCase().includes('rate limit')) {
+        setError('ส่งอีเมลถึงขีดจำกัดชั่วคราว กรุณารอสักครู่แล้วลองใหม่อีกครั้ง');
+      } else {
+        setError(msg || 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง');
+      }
     } finally {
       setLoading(false);
     }
@@ -169,7 +176,12 @@ export default function Login({ onLogin, onClose, authRequiredMessage }) {
       setResendSuccess('ส่งลิงก์รีเซ็ตรหัสผ่านใหม่เรียบร้อยแล้ว!');
       startCooldown();
     } catch (err) {
-      setError(err.message || 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง');
+      const msg = err.message || '';
+      if (msg.toLowerCase().includes('rate limit')) {
+        setError('ส่งอีเมลถึงขีดจำกัดชั่วคราว กรุณารอสักครู่แล้วลองใหม่อีกครั้ง');
+      } else {
+        setError(msg || 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง');
+      }
     } finally {
       setLoading(false);
     }

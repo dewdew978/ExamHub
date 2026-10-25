@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { validatePassword, PASSWORD_HINT } from '../lib/passwordPolicy';
-import { Eye, EyeOff, Lock, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Lock, CheckCircle2, AlertTriangle, ArrowRight, RotateCcw } from 'lucide-react';
 
 export default function ResetPassword({ onSuccess, onBackToLogin }) {
   const [password, setPassword] = useState('');
@@ -11,9 +11,40 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isInvalidLink, setIsInvalidLink] = useState(false);
+
+  useEffect(() => {
+    // 1. Check URL hash or search for Supabase error parameters (e.g. expired link)
+    const hash = window.location.hash ? window.location.hash.substring(1) : '';
+    const search = window.location.search ? window.location.search.substring(1) : '';
+    const params = new URLSearchParams(hash || search);
+
+    const errorDesc = params.get('error_description');
+    const errorCode = params.get('error_code');
+
+    if (errorDesc || errorCode) {
+      setIsInvalidLink(true);
+      if (errorCode === 'otp_expired' || (errorDesc && errorDesc.toLowerCase().includes('expired'))) {
+        setError('ลิงก์สำหรับรีเซ็ตรหัสผ่านหมดอายุแล้ว กรุณาขอลิงก์ใหม่อีกครั้ง');
+      } else {
+        setError(decodeURIComponent(errorDesc ? errorDesc.replace(/\+/g, ' ') : 'ลิงก์รีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุ'));
+      }
+      return;
+    }
+
+    // 2. Check if a recovery session exists or if code is being exchanged
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const hasTokenInUrl = params.get('code') || params.get('access_token');
+      if (!session && !hasTokenInUrl) {
+        setIsInvalidLink(true);
+        setError('ไม่พบสิทธิ์การกู้คืนรหัสผ่าน หรือลิงก์หมดอายุแล้ว กรุณาขอลิงก์ใหม่อีกครั้ง');
+      }
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isInvalidLink) return;
     setError('');
 
     if (!password) {
@@ -47,7 +78,13 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
       }
     } catch (err) {
       console.error('Password reset error:', err);
-      setError(err.message || 'เกิดข้อผิดพลาดในการตั้งรหัสผ่านใหม่ ลิงก์อาจหมดอายุแล้ว กรุณาลองขอลิงก์ใหม่อีกครั้ง');
+      const msg = err.message || '';
+      if (msg.toLowerCase().includes('session') || msg.toLowerCase().includes('auth')) {
+        setIsInvalidLink(true);
+        setError('เซสชันการกู้คืนรหัสผ่านหมดอายุแล้ว กรุณาขอลิงก์รีเซ็ตรหัสผ่านใหม่อีกครั้ง');
+      } else {
+        setError(msg || 'เกิดข้อผิดพลาดในการตั้งรหัสผ่านใหม่ ลิงก์อาจหมดอายุแล้ว กรุณาลองขอลิงก์ใหม่อีกครั้ง');
+      }
     } finally {
       setLoading(false);
     }
@@ -129,7 +166,9 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
                 ตั้งรหัสผ่านใหม่
               </h2>
               <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-                กรุณากรอกรหัสผ่านใหม่ที่คุณต้องการใช้งานสำหรับ EXETIA
+                {isInvalidLink 
+                  ? 'ลิงก์การกู้คืนรหัสผ่านของคุณมีปัญหาหรือไม่ถูกต้อง' 
+                  : 'กรุณากรอกรหัสผ่านใหม่ที่คุณต้องการใช้งานสำหรับ EXETIA'}
               </p>
             </div>
 
@@ -140,92 +179,114 @@ export default function ResetPassword({ onSuccess, onBackToLogin }) {
                 borderRadius: '8px', border: '1px solid rgba(255,0,0,0.2)',
                 display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center'
               }}>
-                <AlertTriangle size={16} />
+                <AlertTriangle size={16} style={{ flexShrink: 0 }} />
                 <span>{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
-              {/* New Password */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
-                  รหัสผ่านใหม่ ({PASSWORD_HINT})
-                </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="กรอกรหัสผ่านใหม่"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={{
-                      width: '100%', padding: '0.65rem 2.5rem 0.65rem 0.75rem', borderRadius: '8px',
-                      border: '1px solid var(--border-color)', background: 'var(--surface-hover)',
-                      color: 'var(--text)', fontSize: '0.875rem', outline: 'none'
-                    }}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      position: 'absolute', right: '0.5rem', background: 'none', border: 'none',
-                      cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center'
-                    }}
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
+            {!isInvalidLink ? (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+                {/* New Password */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                    รหัสผ่านใหม่ ({PASSWORD_HINT})
+                  </label>
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="กรอกรหัสผ่านใหม่"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      style={{
+                        width: '100%', padding: '0.65rem 2.5rem 0.65rem 0.75rem', borderRadius: '8px',
+                        border: '1px solid var(--border-color)', background: 'var(--surface-hover)',
+                        color: 'var(--text)', fontSize: '0.875rem', outline: 'none'
+                      }}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: 'absolute', right: '0.5rem', background: 'none', border: 'none',
+                        cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center'
+                      }}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Confirm Password */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
-                  ยืนยันรหัสผ่านใหม่อีกครั้ง
-                </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    style={{
-                      width: '100%', padding: '0.65rem 2.5rem 0.65rem 0.75rem', borderRadius: '8px',
-                      border: '1px solid var(--border-color)', background: 'var(--surface-hover)',
-                      color: 'var(--text)', fontSize: '0.875rem', outline: 'none'
-                    }}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    style={{
-                      position: 'absolute', right: '0.5rem', background: 'none', border: 'none',
-                      cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center'
-                    }}
-                  >
-                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
+                {/* Confirm Password */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                    ยืนยันรหัสผ่านใหม่อีกครั้ง
+                  </label>
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      style={{
+                        width: '100%', padding: '0.65rem 2.5rem 0.65rem 0.75rem', borderRadius: '8px',
+                        border: '1px solid var(--border-color)', background: 'var(--surface-hover)',
+                        color: 'var(--text)', fontSize: '0.875rem', outline: 'none'
+                      }}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      style={{
+                        position: 'absolute', right: '0.5rem', background: 'none', border: 'none',
+                        cursor: 'pointer', color: 'var(--text-muted)', display: 'flex', alignItems: 'center'
+                      }}
+                    >
+                      {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                  style={{ width: '100%', height: '44px', marginTop: '0.5rem', fontWeight: 600 }}
+                >
+                  {loading ? 'กำลังบันทึกรหัสผ่าน...' : 'บันทึกรหัสผ่านใหม่'}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={onBackToLogin}
+                  style={{ width: '100%', height: '40px', fontSize: '0.85rem' }}
+                >
+                  กลับไปหน้าเข้าสู่ระบบ
+                </button>
+              </form>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={onBackToLogin}
+                  style={{ width: '100%', height: '44px', fontSize: '0.875rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                >
+                  <RotateCcw size={16} />
+                  <span>ไปหน้าขอลิงก์รีเซ็ตรหัสผ่านใหม่</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={onBackToLogin}
+                  style={{ width: '100%', height: '40px', fontSize: '0.85rem' }}
+                >
+                  กลับไปหน้าเข้าสู่ระบบ
+                </button>
               </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={loading}
-                style={{ width: '100%', height: '44px', marginTop: '0.5rem', fontWeight: 600 }}
-              >
-                {loading ? 'กำลังบันทึกรหัสผ่าน...' : 'บันทึกรหัสผ่านใหม่'}
-              </button>
-
-              <button
-                type="button"
-                className="btn btn-outline"
-                onClick={onBackToLogin}
-                style={{ width: '100%', height: '40px', fontSize: '0.85rem' }}
-              >
-                กลับไปหน้าเข้าสู่ระบบ
-              </button>
-            </form>
+            )}
           </>
         )}
       </div>

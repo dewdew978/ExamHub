@@ -204,6 +204,18 @@
     "type": "Midterm"
   },
   {
+    "id": "final_ml_exam_100q",
+    "category": "Data Science & Machine Learning",
+    "name": "แบบทดสอบเตรียมสอบ Final Machine Learning (100 ข้อ ครบทุกบท)",
+    "icon": "🧠",
+    "color": "#4f46e5",
+    "iconBg": "rgba(79, 70, 229, 0.15)",
+    "desc": "ครอบคลุม Neural Networks · Apriori · FP-Growth · Sequential Pattern Mining · Recommender Systems · MLOps ครบทั้งระดับ ง่าย-ปานกลาง-ยาก พร้อมเฉลยละเอียด",
+    "questionCount": 100,
+    "year": 3,
+    "type": "Final"
+  },
+  {
     "id": "aws_cloud_foundations_60_items",
     "category": "Cloud Technology Infrastructure",
     "name": "AWS Cloud Foundations Mock Exam (60 Questions)",
@@ -252,5 +264,17 @@
     "year": 3,
     "type": "Midterm",
     "requiresAuth": true
+  },
+  {
+    "id": "isd_final_100q",
+    "category": "Intelligent System Development",
+    "name": "ISD Final Comprehensive Mock Exam (100 Questions)",
+    "icon": "🤖",
+    "color": "#6366f1",
+    "iconBg": "rgba(99, 102, 241, 0.15)",
+    "desc": "แนวข้อสอบไฟนอล 100 ข้อ ครบ 6 บท (LLMs, Noisy Docs, Evaluation, API, Front-End, Back-End) ง่าย-ปานกลาง-ยาก",
+    "questionCount": 100,
+    "year": 3,
+    "type": "Final"
   }
 ]

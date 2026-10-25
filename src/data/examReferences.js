@@ -131,6 +131,27 @@ export const EXAM_REFERENCES = {
       }
     ]
   },
+  'final_ml_exam_100q': {
+    primarySource: 'Comprehensive Final Machine Learning Examination Guide (100 Questions)',
+    organization: 'Machine Learning & AI Academic Curriculum',
+    references: [
+      {
+        title: 'Deep Learning & Neural Networks Foundations',
+        author: 'Ian Goodfellow, Yoshua Bengio, and Aaron Courville (MIT Press)',
+        desc: 'ครอบคลุม Perceptron, Activation Functions (Sigmoid, Tanh, ReLU, Softplus), Backpropagation, Optimization และ Loss Functions'
+      },
+      {
+        title: 'Data Mining: Concepts and Techniques (3rd Edition)',
+        author: 'Jiawei Han, Micheline Kamber, Jian Pei (Morgan Kaufmann)',
+        desc: 'ครอบคลุม Association Rule Mining (Apriori, FP-Growth), Sequential Pattern Mining (GSP, PrefixSpan)'
+      },
+      {
+        title: 'Recommender Systems Handbook & MLOps Engineering Best Practices',
+        author: 'Francesco Ricci et al. / Google Cloud MLOps Guidelines',
+        desc: 'ครอบคลุม Collaborative Filtering, Content-Based, Matrix Factorization และ MLOps Pipeline Automation (CT, CD, Drift Monitoring)'
+      }
+    ]
+  },
   'ds_ml_calc_30q': {
     primarySource: 'Machine Learning Mathematical Foundations & Step-by-Step Calculations',
     organization: 'Applied Mathematics & Data Science Curriculum',
@@ -168,6 +189,33 @@ export const EXAM_REFERENCES = {
   },
 
   // Intelligent System Development
+  'isd_final_100q': {
+    primarySource: '06026240 Intelligent System Development: Final Exam Comprehensive Blueprint',
+    organization: 'Intelligent System Development Curriculum (Dr. Bhattarabhorn Wattanacheep)',
+    curatedBy: 'ISD Synthesis',
+    references: [
+      {
+        title: 'Chapter VII: LLMs & Prompt Engineering and Agentic AI Systems',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'Tokenization, Context Windows, Two-stage Pipelines, Verification Loops, Inverse Calculation & Ground-truth free testing'
+      },
+      {
+        title: 'Chapter VIII: Noisy Documents, Image Denoising & Structured Text-to-Answer Model',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'OpenCV 4-step deskew, background division, denoising, adaptive thresholding, closed-vocabulary snapping, SQLite and consistency rules CHK1-CHK7'
+      },
+      {
+        title: 'Chapter VIIII: Evaluation Metrics and Overfitting Diagnosis',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'Confusion Matrix, Accuracy Paradox, Precision-Recall tradeoffs, CER/WER, MAE/MAPE/RMSE, Learning Curves & Overfitting remedies'
+      },
+      {
+        title: 'Chapter X - XII: Full-stack Intelligent System Architecture (API, Front-End & Back-End)',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'RESTful API principles, HTTP status codes, FastAPI, 4 UI States, Docker containers, Reverse Proxy (Nginx) & Database Security'
+      }
+    ]
+  },
   'isd_midterm_60_items': {
     primarySource: 'Intelligent System Development: CV, ML, DL & Git Version Control',
     organization: 'Computer Science & AI Engineering Curriculum',

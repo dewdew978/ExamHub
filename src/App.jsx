@@ -222,6 +222,13 @@ function App() {
           };
         });
 
+        // Add any local bundled exams that are not yet synced to Supabase
+        localIndex.forEach(local => {
+          if (!mergedSubjects.some(s => s.id === local.id)) {
+            mergedSubjects.push(local);
+          }
+        });
+
         // Add newly created exams from localStorage if any
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
@@ -281,6 +288,7 @@ function App() {
     // Set up auth listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
+        if (session?.user) setUser(session.user);
         setCurrentView('reset-password');
       } else if (session?.user) {
         setUser(session.user);
