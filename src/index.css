@@ -36,8 +36,8 @@
   --text-muted: #666666;
   --border-color: rgba(0,0,0,0.08);
   --border-divider: #eaeaea;
-  --font-sans: 'Geist', 'Plus Jakarta Sans', 'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: 'Geist', 'Plus Jakarta Sans', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --shadow-border: 0px 0px 0px 1px var(--border-color);
   --shadow-sm: var(--shadow-border), 0px 2px 2px rgba(0,0,0,0.04), 0px 0px 0px 1px var(--surface) inset;
   --shadow-md: var(--shadow-border), 0px 2px 4px rgba(0,0,0,0.04), 0px 4px 8px rgba(0,0,0,0.04);

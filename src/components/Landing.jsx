@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, lazy, Suspense } from 'react';
 import { 
   GraduationCap, 
   ChevronRight, 
@@ -7,7 +7,7 @@ import {
   FileCheck2,
   ArrowRight
 } from 'lucide-react';
-import Aurora from './Aurora';
+const Aurora = lazy(() => import('./Aurora'));
 import BorderGlow from './BorderGlow';
 import Navbar from './Navbar';
 import StatCount, { statCountStyles } from './StatCount';
@@ -16,12 +16,23 @@ import StatCount, { statCountStyles } from './StatCount';
 const TUTORIAL_VIDEO_URL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/media/exetia-tutorial.mp4`;
 
 export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
+  const [showAurora, setShowAurora] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark');
     }
     return false;
   });
+
+  useEffect(() => {
+    // Avoid running heavy WebGL shaders on mobile screens (< 768px) or when reduced motion is preferred
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!isMobile) {
+        setShowAurora(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -78,6 +89,14 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
           padding: 8.5rem 1.5rem 4.5rem;
           overflow: hidden;
           text-align: center;
+        }
+        .landing-hero::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 50% 25%, rgba(99, 102, 241, 0.12), transparent 70%);
+          pointer-events: none;
+          z-index: 1;
         }
         .landing-hero-inner { position: relative; z-index: 2; width: 100%; min-width: 0; max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .landing-badge {
@@ -171,7 +190,11 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
 
       <main id="main-content">
         <section className="landing-hero" id="top">
-        <Aurora colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} blend={0.5} amplitude={1.0} speed={0.6} />
+        {showAurora && (
+          <Suspense fallback={null}>
+            <Aurora colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} blend={0.5} amplitude={1.0} speed={0.6} />
+          </Suspense>
+        )}
         <div className="landing-hero-inner">
           <div className="landing-badge">
             <span className="landing-badge-dot" />
