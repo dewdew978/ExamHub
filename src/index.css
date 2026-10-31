@@ -1,22 +1,4 @@
 @font-face {
-  font-family: 'Geist';
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-400-normal.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Geist';
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-500-normal.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Geist';
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-600-normal.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;
-}
-@font-face {
   font-family: 'Geist Mono';
   src: url('https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-400-normal.woff2') format('woff2');
   font-weight: 400;
@@ -36,7 +18,7 @@
   --text-muted: #666666;
   --border-color: rgba(0,0,0,0.08);
   --border-divider: #eaeaea;
-  --font-sans: 'Geist', 'Plus Jakarta Sans', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --shadow-border: 0px 0px 0px 1px var(--border-color);
   --shadow-sm: var(--shadow-border), 0px 2px 2px rgba(0,0,0,0.04), 0px 0px 0px 1px var(--surface) inset;
@@ -105,6 +87,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "liga" 1;
   font-variant-numeric: tabular-nums;
+  font-synthesis: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -123,11 +106,15 @@ h1, h2, h3, h4 {
   font-weight: 600;
   line-height: 1.2;
   text-wrap: balance;
-  letter-spacing: -1px;
+  letter-spacing: normal;
 }
 
-h1 {
-  letter-spacing: -2.4px;
+/* Thai combining marks stay clearer without aggressive negative tracking. */
+html[lang="th"] h1,
+html[lang="th"] h2,
+html[lang="th"] h3,
+html[lang="th"] h4 {
+  letter-spacing: normal !important;
 }
 
 .card {

@@ -335,8 +335,8 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
         <div className="card" style={{ padding: '2.5rem 1.5rem', borderRadius: '12px', textAlign: 'center' }}>
           <div style={{ 
             fontSize: '3rem', 
-            fontWeight: 800, 
-            letterSpacing: '-1.5px', 
+            fontWeight: 700,
+            letterSpacing: 'normal',
             marginBottom: '0.5rem',
             display: 'flex',
             alignItems: 'baseline',

@@ -77,7 +77,7 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
 
         .terms-title {
           font-size: clamp(2rem, 4vw, 2.75rem);
-          font-weight: 800;
+          font-weight: 700;
           letter-spacing: -0.03em;
           line-height: 1.2;
           margin: 0;

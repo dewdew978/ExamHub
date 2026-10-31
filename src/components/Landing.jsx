@@ -120,8 +120,8 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         @keyframes landingPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
         .landing-title {
           font-size: clamp(2.35rem, 5.8vw, 4rem);
-          font-weight: 800;
-          letter-spacing: -2.2px;
+          font-weight: 700;
+          letter-spacing: normal;
           line-height: 1.12;
           margin: 0 0 1.35rem 0;
           color: var(--text);
@@ -136,7 +136,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         .landing-btn-primary { background: var(--btn-primary-bg) !important; color: var(--btn-primary-text) !important; height: 48px !important; padding: 0 1.85rem !important; border-radius: 999px !important; border: none !important; cursor: pointer !important; }
         .landing-btn-secondary { background: var(--surface) !important; color: var(--text) !important; height: 48px !important; padding: 0 1.65rem !important; border-radius: 999px !important; border: 1px solid var(--border-color) !important; cursor: pointer !important; }
         .landing-stats-bar { display: flex; align-items: center; justify-content: center; gap: 3rem; padding: 1.25rem 2.75rem; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-color); backdrop-filter: blur(16px); }
-        .landing-stat-number { font-size: 1.75rem; font-weight: 800; color: var(--text); }
+        .landing-stat-number { font-size: 1.75rem; font-weight: 700; color: var(--text); }
         .landing-stat-label { color: var(--text-muted); font-size: 0.8125rem; margin-top: 0.25rem; }
         .landing-demo-wrapper { width: 100%; max-width: 760px; margin: 3.5rem auto 0; text-align: left; }
         .landing-demo-card { background: var(--surface); border: 1px solid var(--border-color); border-radius: 24px; padding: 1.75rem 2rem; }
@@ -144,14 +144,14 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         .landing-steps-section { padding: 5.5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
         .landing-section-header { text-align: center; margin-bottom: 3.5rem; }
         .landing-section-tag { color: var(--accent); font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 0.5rem; display: inline-block; }
-        .landing-section-title { font-size: 2.35rem; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 0.75rem; }
+        .landing-section-title { font-size: 2.35rem; font-weight: 700; letter-spacing: normal; margin-bottom: 0.75rem; }
         .landing-section-desc { color: var(--text-muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto; }
         .landing-steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
         .landing-video { margin: 2.5rem auto 0; max-width: 900px; display: grid; gap: 0.75rem; }
         .landing-video video { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; border: 1px solid var(--border-color); background: #0a0b10; display: block; }
         .landing-video figcaption { text-align: center; color: var(--text-muted); font-size: 0.875rem; }
         .landing-step-card { padding: 2rem 1.75rem; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-color); position: relative; }
-        .landing-step-num { font-size: 3.25rem; font-weight: 800; color: var(--border-divider); position: absolute; top: 1.25rem; right: 1.5rem; }
+        .landing-step-num { font-size: 3.25rem; font-weight: 700; color: var(--border-divider); position: absolute; top: 1.25rem; right: 1.5rem; }
         .landing-features-section { padding: 5.5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
         .landing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
         .landing-feature-glow-card { border-radius: 20px; height: 100%; }

@@ -195,7 +195,7 @@ function renderMarkdownContent(content) {
     }
     if (trimmed.startsWith('## ')) {
       elements.push(
-        <h2 key={index} style={{ fontSize: '1.45rem', fontWeight: 800, margin: '1.5rem 0 0.65rem', color: 'var(--text)' }}>
+        <h2 key={index} style={{ fontSize: '1.45rem', fontWeight: 700, margin: '1.5rem 0 0.65rem', color: 'var(--text)' }}>
           {renderInline(trimmed.slice(3))}
         </h2>
       );
@@ -1258,7 +1258,7 @@ export default function Blog({
                     </div>
 
                     <h2 
-                      style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 0.5rem', color: 'var(--text)', cursor: 'pointer' }}
+                      style={{ fontSize: '1.45rem', fontWeight: 700, margin: '0 0 0.5rem', color: 'var(--text)', cursor: 'pointer' }}
                       onClick={() => setActiveArticleModal(blog)}
                     >
                       {blog.title}
@@ -1407,7 +1407,7 @@ export default function Blog({
               </div>
 
               {/* Title */}
-              <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.4rem)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '1rem', lineHeight: 1.25 }}>
+              <h1 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.4rem)', fontWeight: 700, letterSpacing: 'normal', marginBottom: '1rem', lineHeight: 1.25 }}>
                 {activeArticleModal.title}
               </h1>
 

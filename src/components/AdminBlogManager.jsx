@@ -77,11 +77,11 @@ function renderPreviewMarkdown(content) {
       return;
     }
     if (trimmed.startsWith('## ')) {
-      elements.push(<h3 key={idx} style={{ fontSize: '1.2rem', fontWeight: 800, margin: '1.25rem 0 0.45rem' }}>{renderInline(trimmed.slice(3))}</h3>);
+      elements.push(<h3 key={idx} style={{ fontSize: '1.2rem', fontWeight: 700, margin: '1.25rem 0 0.45rem' }}>{renderInline(trimmed.slice(3))}</h3>);
       return;
     }
     if (trimmed.startsWith('# ')) {
-      elements.push(<h2 key={idx} style={{ fontSize: '1.4rem', fontWeight: 800, margin: '1.5rem 0 0.5rem' }}>{renderInline(trimmed.slice(2))}</h2>);
+      elements.push(<h2 key={idx} style={{ fontSize: '1.4rem', fontWeight: 700, margin: '1.5rem 0 0.5rem' }}>{renderInline(trimmed.slice(2))}</h2>);
       return;
     }
     if (trimmed.startsWith('> ')) {
@@ -538,7 +538,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>ข่าวทั้งหมด</span>
             <FileText size={18} color="var(--accent)" />
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>{stats.total}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 700 }}>{stats.total}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>รวมฉบับร่าง & เผยแพร่</div>
         </div>
 
@@ -550,7 +550,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>เผยแพร่แล้ว (Live)</span>
             <CheckCircle2 size={18} color="#10b981" />
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10b981' }}>{stats.published}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 700, color: '#10b981' }}>{stats.published}</div>
           <div style={{ fontSize: '0.75rem', color: '#10b981', marginTop: '0.25rem' }}>แสดงบนหน้าเว็บทันที</div>
         </div>
 
@@ -562,7 +562,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>ฉบับร่าง (Drafts)</span>
             <Clock size={18} color="#f59e0b" />
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f59e0b' }}>{stats.drafts}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 700, color: '#f59e0b' }}>{stats.drafts}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>ซ่อนจากสายตาผู้ใช้</div>
         </div>
 
@@ -574,7 +574,7 @@ export default function AdminBlogManager({ user, onOpenPublicBlog }) {
             <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>ปักหมุดข่าวเด่น</span>
             <Pin size={18} color="#8b5cf6" />
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#8b5cf6' }}>{stats.pinned}</div>
+          <div style={{ fontSize: '1.75rem', fontWeight: 700, color: '#8b5cf6' }}>{stats.pinned}</div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>แสดงด้านบนสุดของไทม์ไลน์</div>
         </div>
       </div>

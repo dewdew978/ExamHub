@@ -94,7 +94,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         }
         .about-title {
           font-size: clamp(2.2rem, 5vw, 3.4rem);
-          font-weight: 800;
+          font-weight: 700;
           letter-spacing: -1.75px;
           line-height: 1.15;
           margin: 0 0 1.25rem 0;
@@ -138,7 +138,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         }
         .about-section-title {
           font-size: 2.2rem;
-          font-weight: 800;
+          font-weight: 700;
           letter-spacing: -1px;
           margin: 0 0 0.75rem 0;
         }
@@ -167,7 +167,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         }
         .about-card-large h3 {
           font-size: 1.4rem;
-          font-weight: 800;
+          font-weight: 700;
           margin: 1rem 0 0.75rem 0;
           letter-spacing: -0.5px;
         }
@@ -231,7 +231,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         }
         .about-bottom-cta h2 {
           font-size: 2.2rem;
-          font-weight: 800;
+          font-weight: 700;
           letter-spacing: -1px;
           margin: 0 0 0.75rem 0;
         }

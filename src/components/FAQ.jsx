@@ -240,7 +240,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
         }
         .faq-title {
           font-size: clamp(2.2rem, 5.5vw, 3.6rem);
-          font-weight: 800;
+          font-weight: 700;
           letter-spacing: -1.8px;
           line-height: 1.15;
           margin: 0 0 1.25rem 0;
@@ -637,7 +637,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
             }}>
               Voice of Learner
             </span>
-            <h2 style={{ fontSize: 'clamp(1.85rem, 5vw, 2.5rem)', fontWeight: 800, letterSpacing: '-1px', margin: '0 0 0.75rem 0' }}>
+            <h2 style={{ fontSize: 'clamp(1.85rem, 5vw, 2.5rem)', fontWeight: 700, letterSpacing: 'normal', margin: '0 0 0.75rem 0' }}>
               Tell Us About Your Needs
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: '580px', margin: '0 auto', lineHeight: 1.6 }}>
