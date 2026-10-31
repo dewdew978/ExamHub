@@ -17,6 +17,13 @@ const subject = {
     { q: 'Third question', choices: ['Yes', 'No'], answer: 0, explain: 'Third explanation' },
   ],
 };
+const biasedChoiceSubject = {
+  id: 'biased-choice-fixture', name: 'Biased choices',
+  questions: [
+    { q: 'Biased first', choices: ['Wrong A', 'Wrong B', 'Wrong C', 'Correct D'], answer: 3, explain: 'Correct explanation' },
+    { q: 'Biased second', choices: ['Correct A2', 'Wrong B2', 'Wrong C2', 'Wrong D2'], answer: 0, explain: 'Second explanation' },
+  ],
+};
 const renderExam = (props = {}) => renderToStaticMarkup(createElement(Exam, {
   subject, onBack() {}, onComplete() {}, ...props,
 }));
@@ -135,4 +142,40 @@ test('blocked browser storage falls back to default exam preferences', () => {
   assert.match(html, /03:00/);
   assert.match(html, /class="katex"/);
   assert.match(html, /First /);
+});
+
+test('new attempts use the balanced displayed choice order', () => {
+  const html = renderExam({ subject: biasedChoiceSubject });
+  assert.ok(html.indexOf('Correct D') < html.indexOf('Wrong A'));
+});
+
+test('versioned progress restores answers against the balanced choice order', () => {
+  const html = renderExam({ subject: biasedChoiceSubject, initialProgress: {
+    subjectId: biasedChoiceSubject.id,
+    choiceOrderVersion: 1,
+    currentQ: 0,
+    answers: [0, null],
+    bookmarks: [false, false],
+    timeLeft: 90,
+  } });
+  assert.ok(html.indexOf('Correct D') < html.indexOf('Wrong A'));
+  assert.match(html, /Correct explanation/);
+});
+
+test('legacy progress keeps its original choice order and answer indexes', () => {
+  const html = renderExam({ subject: biasedChoiceSubject, initialProgress: {
+    subjectId: biasedChoiceSubject.id,
+    currentQ: 0,
+    answers: [3, null],
+    bookmarks: [false, false],
+    timeLeft: 90,
+  } });
+  assert.ok(html.indexOf('Wrong A') < html.indexOf('Correct D'));
+  assert.match(html, /Correct explanation/);
+});
+
+test('active choices render as equal-height grid rows', () => {
+  const html = renderExam({ subject: biasedChoiceSubject });
+  assert.match(html, /data-choice-list="active"[^>]*style="[^"]*display:grid[^"]*grid-auto-rows:1fr/);
+  assert.match(html, /data-choice-option="active"[^>]*style="[^"]*height:100%/);
 });

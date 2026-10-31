@@ -30,4 +30,5 @@ chat_summary.md
 # AI / Agent tool directories and configurations
 .claude/
 .codex/
+.superpowers/
 .mcp.json

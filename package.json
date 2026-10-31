@@ -9,6 +9,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "test": "node --test",
+    "audit:choices": "node scripts/audit-exam-choices.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

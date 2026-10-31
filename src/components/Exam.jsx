@@ -4,6 +4,11 @@ import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import NumberTicker from './NumberTicker';
 import { readExamPreferences, createQuestionOrder } from '../lib/examPreferences';
+import {
+  CHOICE_ORDER_VERSION,
+  balanceQuestionChoices,
+  resolveChoiceOrderVersion,
+} from '../lib/choiceOrder';
 
 const renderTextWithMath = (text, enabled) => {
   if (!enabled || typeof text !== 'string') return text;
@@ -18,12 +23,18 @@ const renderTextWithMath = (text, enabled) => {
 
 export default function Exam({ subject: sourceSubject, onBack, onComplete, onReport, initialProgress }) {
   const [preferences, setPreferences] = useState(readExamPreferences);
+  const [choiceOrderVersion, setChoiceOrderVersion] = useState(() =>
+    resolveChoiceOrderVersion(initialProgress));
+  const usesBalancedChoices = choiceOrderVersion === CHOICE_ORDER_VERSION;
+  const choiceOrderedQuestions = useMemo(() =>
+    balanceQuestionChoices(sourceSubject.questions, usesBalancedChoices),
+  [sourceSubject.questions, usesBalancedChoices]);
   const [questionOrder, setQuestionOrder] = useState(() =>
     createQuestionOrder(sourceSubject.questions.length, preferences.autoShuffle, initialProgress));
   const subject = useMemo(() => ({
     ...sourceSubject,
-    questions: questionOrder.map(index => sourceSubject.questions[index]),
-  }), [sourceSubject, questionOrder]);
+    questions: questionOrder.map(index => choiceOrderedQuestions[index]),
+  }), [sourceSubject, questionOrder, choiceOrderedQuestions]);
   const { mathRendering, timerEnabled } = preferences;
   const renderText = text => renderTextWithMath(text, mathRendering);
   const [currentQ, setCurrentQ] = useState(() => {
@@ -98,6 +109,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           answers: ansList,
           bookmarks: bmkList,
           questionOrder,
+          choiceOrderVersion: usesBalancedChoices ? CHOICE_ORDER_VERSION : undefined,
           timerEnabled,
           timeLeft: time,
           totalQuestions: subject.questions.length,
@@ -127,6 +139,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           answers,
           bookmarks,
           questionOrder,
+          choiceOrderVersion: usesBalancedChoices ? CHOICE_ORDER_VERSION : undefined,
           timerEnabled,
           timeLeft: timeLeftRef.current,
           totalQuestions: subject.questions.length,
@@ -138,7 +151,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     } catch (e) {
       console.warn("Failed to persist progress:", e);
     }
-  }, [currentQ, answers, bookmarks, showResult, subject, questionOrder, timerEnabled]);
+  }, [currentQ, answers, bookmarks, showResult, subject, questionOrder, timerEnabled, usesBalancedChoices]);
 
   useEffect(() => {
     if (!timerEnabled || showResult || isPaused) return;
@@ -270,7 +283,10 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                         {renderText(q.q)}
                       </h3>
   
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1rem' }}>
+                      <div
+                        data-choice-list="review"
+                        style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.4rem', marginBottom: '1rem' }}
+                      >
                         {q.choices.map((choice, cIdx) => {
                           const isSelected = userAnswer === cIdx;
                           const isCorrectChoice = cIdx === q.answer;
@@ -293,10 +309,11 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                           }
   
                           return (
-                            <div key={cIdx} style={{
+                            <div key={cIdx} data-choice-option="review" style={{
                               padding: '0.6rem 0.8rem', borderRadius: '6px',
                               background: bg, boxShadow: boxShadow, color: color,
-                              display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.875rem'
+                              display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.875rem',
+                              height: '100%'
                             }}>
                               <div style={{ width: '18px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
                                 {icon || <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{String.fromCharCode(65 + cIdx)}</span>}
@@ -408,6 +425,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
               }
               const nextPreferences = readExamPreferences();
               setPreferences(nextPreferences);
+              setChoiceOrderVersion(resolveChoiceOrderVersion(initialProgress, true));
               setQuestionOrder(createQuestionOrder(sourceSubject.questions.length, nextPreferences.autoShuffle));
               setAnswers(Array(subject.questions.length).fill(null));
               setBookmarks(Array(subject.questions.length).fill(false));
@@ -716,7 +734,10 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           {renderText(q.q)}
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div
+          data-choice-list="active"
+          style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.5rem' }}
+        >
           {q.choices.map((choice, idx) => {
             const isSelected = answers[currentQ] === idx;
             const isRight = answered && idx === q.answer;
@@ -740,6 +761,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
               <button 
                 key={idx} 
                 className="btn"
+                data-choice-option="active"
                 style={{
                   background: bg,
                   boxShadow: boxShadow,
@@ -753,6 +775,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                   color: color,
                   fontSize: '0.875rem',
                   width: '100%',
+                  height: '100%',
                   justifyContent: 'flex-start'
                 }}
                 onClick={() => handleSelect(idx)}
