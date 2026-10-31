@@ -42,7 +42,7 @@ before(async () => {
   server = await createServer({ configFile: false, plugins: [react(), katexInterop],
     optimizeDeps: { noDiscovery: true, include: [] },
     ssr: { noExternal: ['react-katex'] },
-    server: { middlewareMode: true }, appType: 'custom' });
+    server: { middlewareMode: true, hmr: { port: 24679 } }, appType: 'custom' });
   Exam = (await server.ssrLoadModule('/src/components/Exam.jsx')).default;
   ExamIntro = (await server.ssrLoadModule('/src/components/ExamIntro.jsx')).default;
 });

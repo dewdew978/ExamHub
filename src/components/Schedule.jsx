@@ -55,79 +55,122 @@ const examSchedule = [
   {
     id: 6,
     year: 3,
-    date: "26 ตุลาคม 2569",
+    date: "จันทร์ 2 พฤศจิกายน 2569",
     time: "09:30 - 12:30",
+    courseCode: "06026211",
     title: "APPLIED MACHINE LEARNING",
+    group: "กลุ่ม 12 ปฏิบัติ",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-10-26T09:30:00").getTime(),
+    location: "IT - Project Base4 ชั้น 3 - D4",
+    progress: 98,
+    timestamp: new Date("2026-11-02T09:30:00+07:00").getTime(),
   },
   {
     id: 7,
     year: 3,
-    date: "28 ตุลาคม 2569",
-    time: "13:30 - 16:30",
-    title: "CLOUD TECHNOLOGY INFRASTRUCTURE",
+    date: "จันทร์ 2 พฤศจิกายน 2569",
+    time: "09:30 - 12:30",
+    courseCode: "06026211",
+    title: "APPLIED MACHINE LEARNING",
+    group: "กลุ่ม 11 ทฤษฎี",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-10-28T13:30:00").getTime(),
+    location: "IT - Project Base4 ชั้น 3 - D4",
+    progress: 98,
+    timestamp: new Date("2026-11-02T09:30:00+07:00").getTime(),
   },
   {
     id: 8,
     year: 3,
-    date: "30 ตุลาคม 2569",
+    date: "พุธ 4 พฤศจิกายน 2569",
     time: "13:30 - 16:30",
-    title: "DEEP LEARNING IN MEDICAL IMAGE AND VIDEO ANALYSIS",
+    courseCode: "06026242",
+    title: "CLOUD TECHNOLOGY INFRASTRUCTURE",
+    group: "กลุ่ม 11 ทฤษฎี",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-10-30T13:30:00").getTime(),
+    location: "IT - L304 - B6",
+    progress: 97,
+    timestamp: new Date("2026-11-04T13:30:00+07:00").getTime(),
   },
   {
     id: 9,
     year: 3,
-    date: "2 พฤศจิกายน 2569",
-    time: "09:30 - 12:30",
-    title: "INTELLIGENT SYSTEM DEVELOPMENT",
+    date: "ศุกร์ 6 พฤศจิกายน 2569",
+    time: "13:30 - 16:30",
+    courseCode: "06026225",
+    title: "DEEP LEARNING IN MEDICAL IMAGE AND VIDEO ANALYSIS",
+    group: "กลุ่ม 11 ทฤษฎี",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-11-02T09:30:00").getTime(),
+    location: "IT - M 22 - B10",
+    progress: 95,
+    timestamp: new Date("2026-11-06T13:30:00+07:00").getTime(),
   },
   {
     id: 10,
     year: 3,
-    date: "4 พฤศจิกายน 2569",
+    date: "จันทร์ 9 พฤศจิกายน 2569",
     time: "09:30 - 12:30",
-    title: "DATA WAREHOUSING",
+    courseCode: "06026240",
+    title: "INTELLIGENT SYSTEM DEVELOPMENT",
+    group: "กลุ่ม 12 ปฏิบัติ",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-11-04T09:30:00").getTime(),
+    location: "IT - M 22 - B5",
+    progress: 94,
+    timestamp: new Date("2026-11-09T09:30:00+07:00").getTime(),
   },
   {
     id: 11,
     year: 3,
-    date: "จัดสอบเอง",
-    time: "-",
-    title: "INVESTMENT PLANNING",
+    date: "จันทร์ 9 พฤศจิกายน 2569",
+    time: "09:30 - 12:30",
+    courseCode: "06026240",
+    title: "INTELLIGENT SYSTEM DEVELOPMENT",
+    group: "กลุ่ม 11 ทฤษฎี",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-11-10T00:00:00").getTime(),
+    location: "IT - M 22 - B5",
+    progress: 94,
+    timestamp: new Date("2026-11-09T09:30:00+07:00").getTime(),
   },
   {
     id: 12,
     year: 3,
-    date: "จัดสอบเอง",
-    time: "-",
-    title: "PROFESSIONAL COMMUNICATION AND PRESENTATION",
+    date: "พุธ 11 พฤศจิกายน 2569",
+    time: "09:30 - 12:30",
+    courseCode: "06026212",
+    title: "DATA WAREHOUSING",
+    group: "กลุ่ม 12 ปฏิบัติ",
     type: "Final",
-    location: "-",
-    timestamp: new Date("2026-11-10T00:00:00").getTime(),
+    location: "IT - Project Base4 ชั้น 3 - E1",
+    progress: 92,
+    timestamp: new Date("2026-11-11T09:30:00+07:00").getTime(),
+  },
+  {
+    id: 13,
+    year: 3,
+    date: "พุธ 11 พฤศจิกายน 2569",
+    time: "09:30 - 12:30",
+    courseCode: "06026212",
+    title: "DATA WAREHOUSING",
+    group: "กลุ่ม 11 ทฤษฎี",
+    type: "Final",
+    location: "IT - Project Base4 ชั้น 3 - E1",
+    progress: 92,
+    timestamp: new Date("2026-11-11T09:30:00+07:00").getTime(),
   }
 ];
 
-export default function Schedule() {
+const DAY_MS = 24 * 60 * 60 * 1000;
+const BANGKOK_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+function getDaysUntilExam(timestamp, now = Date.now()) {
+  const examDay = Math.floor((timestamp + BANGKOK_OFFSET_MS) / DAY_MS);
+  const currentDay = Math.floor((now + BANGKOK_OFFSET_MS) / DAY_MS);
+  return examDay - currentDay;
+}
+
+export default function Schedule({ now = Date.now() }) {
   const [activeYear, setActiveYear] = useState(3);
   const [activeTerm, setActiveTerm] = useState('All');
-  const currentTime = Date.now();
+  const currentTime = now;
 
   const filteredSchedule = examSchedule.filter(item => {
     const matchYear = item.year === activeYear;
@@ -208,6 +251,7 @@ export default function Schedule() {
           {filteredSchedule.map((item, index) => {
             const isPast = item.timestamp < currentTime;
             const isNext = !isPast && (index === 0 || filteredSchedule[index - 1].timestamp < currentTime);
+            const daysUntilExam = getDaysUntilExam(item.timestamp, currentTime);
             
             let indicatorBg = 'var(--surface)';
             let indicatorBorder = '2px solid var(--border-divider)';
@@ -263,13 +307,23 @@ export default function Schedule() {
                         }}>
                           {item.type}
                         </span>
+                        {item.progress && (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600 }}>
+                            {item.progress}%
+                          </span>
+                        )}
                         <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                           {item.date}
                         </span>
                       </div>
                       <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.35rem', lineHeight: 1.35, letterSpacing: '-0.2px' }}>
-                        {item.title}
+                        {item.courseCode && `${item.courseCode} `}{item.title}
                       </h3>
+                      {item.group && (
+                        <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                          {item.group}
+                        </div>
+                      )}
                     </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flexShrink: 0 }}>
@@ -285,6 +339,13 @@ export default function Schedule() {
                       )}
                     </div>
                   </div>
+                  {!isPast && daysUntilExam >= 0 && (
+                    <div style={{ marginTop: '0.75rem', paddingTop: '0.65rem', borderTop: '1px solid var(--border-divider)', color: isNext ? 'var(--accent)' : 'var(--text-muted)', fontSize: '0.8125rem', fontWeight: 500 }}>
+                      {daysUntilExam === 0
+                        ? 'สอบวันนี้'
+                        : `เหลืออีก ${daysUntilExam} วันก่อนถึงวันสอบวิชานี้`}
+                    </div>
+                  )}
                 </div>
               </div>
             );
