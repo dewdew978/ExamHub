@@ -24,6 +24,10 @@ const biasedChoiceSubject = {
     { q: 'Biased second', choices: ['Correct A2', 'Wrong B2', 'Wrong C2', 'Wrong D2'], answer: 0, explain: 'Second explanation' },
   ],
 };
+const multipleAnswerSubject = {
+  id: 'multiple-fixture', name: 'Multiple answers', adminOnly: true,
+  questions: [{ q: 'Select two', choices: ['One', 'Two', 'Three'], answer: [0, 2], explain: 'Private explanation' }],
+};
 const renderExam = (props = {}) => renderToStaticMarkup(createElement(Exam, {
   subject, onBack() {}, onComplete() {}, ...props,
 }));
@@ -40,6 +44,7 @@ before(async () => {
     },
   };
   server = await createServer({ configFile: false, plugins: [react(), katexInterop],
+    cacheDir: `node_modules/.vite-tests/exam-preferences-${process.pid}`,
     optimizeDeps: { noDiscovery: true, include: [] },
     ssr: { noExternal: ['react-katex'] },
     server: { middlewareMode: true, hmr: { port: 24679 } }, appType: 'custom' });
@@ -62,6 +67,36 @@ test('default preferences keep the timer, formulas, and original question order'
   assert.match(html, /class="katex"/);
   assert.match(html, /First /);
   assert.doesNotMatch(html, /Second question/);
+});
+
+test('multiple-answer questions require confirmation and withhold the explanation until submitted', () => {
+  const html = renderExam({ subject: multipleAnswerSubject });
+  assert.match(html, /ยืนยันคำตอบ/);
+  assert.match(html, /เลือก 2 คำตอบ/);
+  assert.match(html, /disabled=""/);
+  assert.doesNotMatch(html, /Private explanation/);
+});
+
+test('submitted multiple answers mark every correct option and reveal the explanation', () => {
+  const html = renderExam({ subject: multipleAnswerSubject, initialProgress: {
+    answers: [[0, 2]], currentQ: 0, timeLeft: 60,
+  } });
+  assert.match(html, /Private explanation/);
+  assert.equal((html.match(/aria-pressed="true"/g) || []).length, 2);
+  assert.doesNotMatch(html, /ยืนยันคำตอบ/);
+});
+
+test('multiple-answer exam instructions describe selecting multiple answers', () => {
+  const html = renderToStaticMarkup(createElement(ExamIntro, { subject: multipleAnswerSubject }));
+  assert.match(html, /หลายคำตอบ/);
+  assert.doesNotMatch(html, /3 ตัวเลือก 1 คำตอบ/);
+});
+
+test('private source exams retain choice letters referenced by their explanations', () => {
+  const html = renderExam({ subject: { ...biasedChoiceSubject, adminOnly: true } });
+  assert.ok(html.indexOf('Wrong A') < html.indexOf('Wrong B'));
+  assert.ok(html.indexOf('Wrong B') < html.indexOf('Wrong C'));
+  assert.ok(html.indexOf('Wrong C') < html.indexOf('Correct D'));
 });
 
 test('turning formulas off shows the raw question and choices', () => {

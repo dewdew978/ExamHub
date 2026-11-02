@@ -1,11 +1,36 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // Prepare the UMD math renderer before a lazy exam view requests it.
+  optimizeDeps: {
+    include: ['react-katex'],
+  },
+  server: {
+    fs: {
+      deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/server/**', '**/api/**'],
+    },
+  },
   plugins: [
     react(),
+    {
+      name: 'admin-practice-api',
+      async configureServer(server) {
+        const { serveAdminPractice } = await import('./api/admin-practice.js');
+        const env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
+        server.middlewares.use('/api/admin-practice', async (req, res, next) => {
+          try {
+            const url = new URL(req.url, 'http://localhost');
+            req.query = Object.fromEntries(url.searchParams);
+            res.status = status => { res.statusCode = status; return res; };
+            res.json = body => { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(body)); };
+            await serveAdminPractice(req, res, env);
+          } catch (error) { next(error); }
+        });
+      },
+    },
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
@@ -131,4 +156,4 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 600
   },
-})
+}))

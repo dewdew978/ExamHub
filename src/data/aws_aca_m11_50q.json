@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m11_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การทำให้สถาปัตยกรรมเป็นอัตโนมัติ (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "Automation · Infrastructure as Code · CloudFormation · Quick Starts · Amazon Q Developer · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M11 Automating Your Architecture",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M11 Automating Your Architecture",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M11 AutomatingYourArchitecture.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "ทีมสร้างสภาพแวดล้อมจำนวนมากด้วยการคลิก AWS Management Console ซ้ำทุกครั้ง ความเสี่ยงใดสัมพันธ์กับกระบวนการนี้ตามบทเรียน?",
+      "choices": [
+        "ทำให้ได้ version control ของทุกการตั้งค่าโดยอัตโนมัติ",
+        "ทำให้ทุก environment มี audit trail ครบถ้วนเสมอ",
+        "ทำซ้ำในขนาดใหญ่ได้ยากและการตั้งค่าอาจไม่สอดคล้องกัน",
+        "ทำให้การตั้งค่าของทุก environment เหมือนกันเสมอ"
+      ],
+      "answer": 2,
+      "explain": "กระบวนการ manual ไม่รองรับ repeatability at scale และมีความเสี่ยงต่อ inconsistent configurations\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 9"
+    },
+    {
+      "q": "ทีมไม่สามารถย้อนดูได้ว่าโครงสร้างพื้นฐานที่สร้างด้วยมือเปลี่ยนแปลงจากเวอร์ชันก่อนอย่างไร ปัญหานี้ตรงกับความเสี่ยงข้อใด?",
+      "choices": [
+        "ไม่มี version control",
+        "มี templates ซับซ้อนเกินไป",
+        "มี conditions หลายเงื่อนไข",
+        "มี change sets มากเกินไป"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนระบุว่าการไม่มี version control เป็นหนึ่งในความเสี่ยงของ manual processes\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 9"
+    },
+    {
+      "q": "หลังผู้ดูแลหลายคนปรับ infrastructure ด้วยมือ ทีมไม่พบประวัติที่เพียงพอสำหรับตรวจสอบการดำเนินการย้อนหลัง ปัญหานี้ตรงกับความเสี่ยงใดในบทเรียน?",
+      "choices": [
+        "มี automated testing",
+        "มี change sets ที่รอ execution",
+        "ขาด audit trails",
+        "ใช้ template หลายเวอร์ชัน"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนระบุว่าการขาด audit trails เป็นหนึ่งในความเสี่ยงจาก manual processes\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 9"
+    },
+    {
+      "q": "ทีมต้องการลดการเข้าไปจัดการทรัพยากรด้วยมือ พร้อมเพิ่มประสิทธิภาพการทำงาน แนวทางใดตรงกับประโยชน์ที่บทเรียนระบุ?",
+      "choices": [
+        "แบ่ง environment ให้แต่ละคนตั้งค่าด้วยวิธีของตน",
+        "เพิ่มจำนวนผู้ดูแลให้คลิกสร้าง resources พร้อมกัน",
+        "ใช้ automation กับขั้นตอนที่ทำซ้ำ",
+        "ใช้รายการตรวจสอบแต่ยังสร้างทุก resource ด้วยมือ"
+      ],
+      "answer": 2,
+      "explain": "Automation ลด manual intervention หรือ access และช่วยปรับปรุง productivity\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 10"
+    },
+    {
+      "q": "Infrastructure as code (IaC) หมายถึงอะไรตามบทเรียน?",
+      "choices": [
+        "การเขียน template เพื่อ provision และจัดการ cloud resources",
+        "การเขียนเฉพาะ business logic ของแอปพลิเคชัน",
+        "การจัดทำรายการทรัพยากรหลังสร้างด้วย console แล้ว",
+        "การเขียนคู่มือให้ผู้ดูแลสร้างทุก resource ด้วยมือ"
+      ],
+      "answer": 0,
+      "explain": "IaC ใช้ template file สำหรับ provision และ manage ทรัพยากรคลาวด์\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 13, 17"
+    },
+    {
+      "q": "Template ของ IaC ควรมีลักษณะการใช้งานใดตามภาพรวมในบทเรียน?",
+      "choices": [
+        "มนุษย์อ่านได้และเครื่องนำไปประมวลผลได้",
+        "เครื่องประมวลผลได้แต่มีไว้เก็บ application logs เท่านั้น",
+        "มนุษย์อ่านได้แต่ต้องแปลทุกขั้นตอนเป็นการคลิกด้วยมือ",
+        "มนุษย์อ่านได้แต่มีไว้บรรยาย business requirements เท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "ภาพรวม IaC ระบุ template ว่าเป็นทั้ง human readable และ machine consumable\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 13"
+    },
+    {
+      "q": "บริษัทต้องสร้าง environment แบบเดียวกันซ้ำเพื่อใช้ทดลองหลายครั้ง ประโยชน์ใดของ IaC ตอบโจทย์นี้โดยตรง?",
+      "choices": [
+        "การกำหนดค่าแต่ละ environment อย่างอิสระ",
+        "การไม่มี audit trails",
+        "การสร้าง infrastructure ด้วย manual access มากขึ้น",
+        "Reusability และ repeatability"
+      ],
+      "answer": 3,
+      "explain": "IaC ช่วย replicate และ redeploy infrastructure โดยมีประโยชน์หลักด้านการใช้ซ้ำและทำซ้ำ\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 13, 14"
+    },
+    {
+      "q": "หลาย stacks ถูกสร้างจาก template แบบเดียวกัน และต้องการใช้การตั้งค่ามาตรฐานใหม่ร่วมกัน ควรเริ่มจัดการการเปลี่ยนแปลงที่ใด?",
+      "choices": [
+        "สร้าง template ใหม่ให้ต่างกันในแต่ละ stack",
+        "แก้เฉพาะ stack แรกแล้วรอให้ทุก stack เปลี่ยนตามเอง",
+        "แก้ template แล้วใช้ปรับปรุง stacks ที่เกี่ยวข้อง",
+        "แก้ทรัพยากรด้วยมือแยกทุก stack โดยไม่แก้ template"
+      ],
+      "answer": 2,
+      "explain": "IaC ช่วยเผยแพร่การเปลี่ยนแปลงไปยัง stacks โดยปรับ template และนำไปปรับปรุงสภาพแวดล้อม\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 14"
+    },
+    {
+      "q": "สภาพแวดล้อมทดลองทั้งหมดสร้างจาก CloudFormation stack และไม่มีนโยบายเก็บทรัพยากรไว้ เมื่อต้องการ cleanup ควรทำอย่างไรตามบทเรียน?",
+      "choices": [
+        "ลบ repository ที่เก็บ template เพียงอย่างเดียว",
+        "ลบไฟล์ template ต้นฉบับเพียงอย่างเดียว",
+        "ลบส่วน Outputs แล้ว update stack เพียงอย่างเดียว",
+        "Delete stack เพื่อให้ลบทรัพยากรที่ stack สร้าง"
+      ],
+      "answer": 3,
+      "explain": "การลบ stack ช่วย cleanup ทรัพยากรที่สร้างขึ้น โดยต้องพิจารณานโยบายเก็บทรัพยากรประกอบ\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 14, 25"
+    },
+    {
+      "q": "กลุ่มทรัพยากร AWS ที่ CloudFormation สร้างและจัดการร่วมกันเรียกว่าอะไร?",
+      "choices": [
+        "Namespace",
+        "Hosted zone",
+        "Stack",
+        "Target group"
+      ],
+      "answer": 2,
+      "explain": "CloudFormation เรียก collection ของทรัพยากรที่จัดการร่วมกันว่า stack\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 15"
+    },
+    {
+      "q": "ชุดการดำเนินการใดตรงกับความสามารถจัดการวงจรชีวิต stack ของ CloudFormation?",
+      "choices": [
+        "Create, query logs และ resolve DNS",
+        "Create, update และ delete",
+        "Delete, scan source code และ generate unit tests",
+        "Update, balance requests และ resize databases"
+      ],
+      "answer": 1,
+      "explain": "CloudFormation สร้าง ปรับปรุง และลบ stacks ได้\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 15"
+    },
+    {
+      "q": "ทีมต้องการติดตามเวอร์ชันของการ deploy AWS resources ผ่านไฟล์ที่จัดการได้ ควรเลือกแนวทางใด?",
+      "choices": [
+        "บันทึกเฉพาะชื่อ stack ล่าสุดโดยไม่เก็บ template",
+        "เก็บเฉพาะภาพหน้าจอ console หลัง deploy",
+        "เก็บรายการ resources ล่าสุดโดยไม่เก็บประวัติ template",
+        "เก็บ CloudFormation templates ในระบบ version control"
+      ],
+      "answer": 3,
+      "explain": "CloudFormation สนับสนุน version control ของ resource deployments และ lab ใช้ templates ใน code repository\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 15, 56"
+    },
+    {
+      "q": "นักพัฒนาต้องการอัปโหลด application code แล้วให้บริการจัดเตรียม AWS environment ให้อัตโนมัติ บริการใดตรงกับคำอธิบายในบทเรียน?",
+      "choices": [
+        "AWS Quick Starts",
+        "AWS Serverless Application Model",
+        "AWS Elastic Beanstalk",
+        "AWS Cloud Development Kit"
+      ],
+      "answer": 2,
+      "explain": "Elastic Beanstalk เป็นบริการ fully managed ที่เปิด environment จาก application code ที่อัปโหลด\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 16"
+    },
+    {
+      "q": "ทีมต้องเขียนโครงสร้างพื้นฐาน serverless ที่ใช้บ่อยด้วย syntax แบบย่อซึ่งเป็นส่วนขยายของ CloudFormation ควรเลือกอะไร?",
+      "choices": [
+        "AWS Quick Starts",
+        "AWS Serverless Application Model (AWS SAM)",
+        "AWS Elastic Beanstalk",
+        "AWS Cloud Development Kit (AWS CDK)"
+      ],
+      "answer": 1,
+      "explain": "AWS SAM ขยาย CloudFormation ด้วย shorthand syntax สำหรับ common serverless infrastructure\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 16"
+    },
+    {
+      "q": "ทีมถนัดภาษาโปรแกรมและต้องการใช้ภาษาที่คุ้นเคยเพื่อ model และ provision resources ผ่าน CloudFormation ควรใช้เครื่องมือใด?",
+      "choices": [
+        "AWS Quick Starts",
+        "AWS Serverless Application Model (AWS SAM)",
+        "AWS Cloud Development Kit (AWS CDK)",
+        "AWS Elastic Beanstalk"
+      ],
+      "answer": 2,
+      "explain": "AWS CDK เป็น framework ที่ใช้ภาษาโปรแกรมคุ้นเคยเพื่อ model และ provision ผ่าน CloudFormation\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 16"
+    },
+    {
+      "q": "ทีมพัฒนา full stack web และ mobile apps ต้องการ framework ที่ช่วยลดการเขียนโค้ดและความซับซ้อนของ backend integrations ควรพิจารณาอะไร?",
+      "choices": [
+        "AWS CloudFormation Designer",
+        "AWS Amplify",
+        "AWS Quick Starts",
+        "AWS Serverless Application Model"
+      ],
+      "answer": 1,
+      "explain": "AWS Amplify ถูกอธิบายว่าเป็น framework สำหรับ full stack web/mobile ที่ลดภาระการเขียนโค้ดและ backend integrations\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 16"
+    },
+    {
+      "q": "เมื่อเลือก IaC solution ทีมควรประเมินปัจจัยชุดใดตามบทเรียน?",
+      "choices": [
+        "เฉพาะทักษะของทีมโดยไม่พิจารณา use case",
+        "เฉพาะความสะดวกโดยไม่ประเมินระดับ control ที่ต้องการ",
+        "Use case, สมดุลระหว่าง convenience กับ control และทักษะของทีม",
+        "เฉพาะจำนวนไฟล์ template โดยไม่พิจารณาความต้องการ"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนแนะนำให้เลือกตาม use case ความสะดวกเทียบกับการควบคุม และ skills ของทีม\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 17"
+    },
+    {
+      "q": "ทีมมี CloudFormation template เก็บอยู่ใน S3 แล้ว ขั้นตอนใดสอดคล้องกับการสร้าง environment ตามบทเรียน?",
+      "choices": [
+        "ชี้ CloudFormation ไปยัง template ใน S3 แล้วสั่ง create stack",
+        "อัปโหลด template ไป S3 แล้วรอให้สร้าง stack เอง",
+        "สร้าง change set เพื่ออ่าน template โดยไม่สร้าง stack",
+        "รัน drift detection บน template ก่อนมี stack"
+      ],
+      "answer": 0,
+      "explain": "CloudFormation รับ template ที่อัปโหลดหรืออ้างจาก S3 จากนั้น create stack เพื่อสร้าง resources\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 19"
+    },
+    {
+      "q": "หลัง CloudFormation สร้าง stack สำเร็จ ความสัมพันธ์กับทรัพยากรที่สร้างเป็นอย่างไร?",
+      "choices": [
+        "Stack จัดการได้เฉพาะ resources ที่อยู่ในบริการเดียวกัน",
+        "Stack ใช้บันทึกผลเท่านั้นและ update resources ต่อไม่ได้",
+        "Stack สิ้นสุดบทบาททันทีหลัง resources ถูกสร้างสำเร็จ",
+        "Stack ยังคงควบคุมทรัพยากรเพื่อ update, detect drift หรือ delete ได้"
+      ],
+      "answer": 3,
+      "explain": "Stack retains control ของทรัพยากรและรองรับ update stack, detect drift และ delete stack\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 19"
+    },
+    {
+      "q": "CloudFormation templates เขียนได้ด้วยรูปแบบข้อมูลคู่ใดที่บทเรียนระบุ?",
+      "choices": [
+        "JSON และ XML",
+        "JSON และ YAML",
+        "TOML และ INI",
+        "XML และ YAML"
+      ],
+      "answer": 1,
+      "explain": "CloudFormation IaC กำหนดใน templates ที่เขียนด้วย JSON หรือ YAML\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 20, 32"
+    },
+    {
+      "q": "ทีมต้องการ template ที่เน้นความอ่านง่าย ใช้ข้อความไม่ยืดยาว และใส่ comments ได้ รูปแบบใดตรงกับข้อดีในบทเรียน?",
+      "choices": [
+        "XML",
+        "YAML",
+        "JSON",
+        "CSV"
+      ],
+      "answer": 1,
+      "explain": "ข้อดีของ YAML ที่ระบุคือ readability, less verbose และ embedded comments\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 20"
+    },
+    {
+      "q": "ส่วนใดเป็น section ที่จำเป็นต้องมีใน CloudFormation template ตามบทเรียน?",
+      "choices": [
+        "Conditions",
+        "Resources",
+        "Outputs",
+        "Parameters"
+      ],
+      "answer": 1,
+      "explain": "Resources เป็น section เดียวที่จำเป็น ส่วน sections อื่นเป็น optional\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 21"
+    },
+    {
+      "q": "ต้องการประกาศ EC2 instance ใน Resources ของ CloudFormation ค่าประเภท resource ใดตรงกับตัวอย่าง?",
+      "choices": [
+        "AWS::EC2::Instance",
+        "AWS::EC2::VPC",
+        "AWS::S3::Bucket",
+        "AWS::EC2::SecurityGroup"
+      ],
+      "answer": 0,
+      "explain": "ตัวอย่าง EC2 instance ใช้ Type เป็น AWS::EC2::Instance\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 22"
+    },
+    {
+      "q": "ทีมต้องการให้ stack ส่งค่า Instance ID กลับหลังสร้างทรัพยากรเสร็จ ควรกำหนดค่าเหล่านี้ในส่วนใดของ template?",
+      "choices": [
+        "Metadata",
+        "Outputs",
+        "Description",
+        "Conditions"
+      ],
+      "answer": 1,
+      "explain": "Outputs ระบุค่าที่ต้องการส่งกลับหลัง stack ถูกสร้าง เช่น Instance ID ในตัวอย่าง\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 22"
+    },
+    {
+      "q": "ทีมต้องการใช้ template เดียว แต่สร้างทรัพยากรบางส่วนเฉพาะเมื่อเป็น production ควรใช้ section ใดกำหนดตรรกะนี้?",
+      "choices": [
+        "Outputs",
+        "Metadata",
+        "Conditions",
+        "Description"
+      ],
+      "answer": 2,
+      "explain": "Conditions ช่วยให้ template เดียว provision ทรัพยากรต่างกันตามเงื่อนไขของ environment\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 24"
+    },
+    {
+      "q": "ก่อนปรับ stack ที่ใช้งานอยู่ ผู้ดูแลต้องการเห็นรายการผลการเปลี่ยนแปลงเพื่อพิจารณาก่อน ควรทำอะไร?",
+      "choices": [
+        "รัน drift detection เพื่อตรวจสถานะปัจจุบันเท่านั้น",
+        "รัน update stack โดยไม่สร้าง change set",
+        "สร้างและตรวจสอบ change set",
+        "ตรวจ Outputs ของ stack เดิมเพียงอย่างเดียว"
+      ],
+      "answer": 2,
+      "explain": "Change sets ใช้ preview changes ก่อนนำการเปลี่ยนแปลงไปใช้จริง\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 25"
+    },
+    {
+      "q": "ทีมต้องการดูแผนผังทรัพยากรบน canvas พร้อมใช้ editor สำหรับ JSON และ YAML ในเครื่องมือเดียว เครื่องมือใดในบทเรียนตรงกับงานนี้?",
+      "choices": [
+        "AWS Quick Starts deployment guide",
+        "AWS CloudFormation Designer",
+        "CloudFormation drift detection",
+        "CloudFormation change set preview"
+      ],
+      "answer": 1,
+      "explain": "CloudFormation Designer มีทั้ง canvas pane และ integrated JSON/YAML editor pane\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 23"
+    },
+    {
+      "q": "ต้องการกำหนดให้ resource ได้รับการเก็บรักษาหรือสำรองข้อมูลเมื่อ stack ถูกลบ ควรพิจารณา attribute ใด?",
+      "choices": [
+        "DeletionPolicy",
+        "Description",
+        "Metadata",
+        "DependsOn"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนระบุ DeletionPolicy สำหรับการเก็บรักษาหรือสำรอง resource เมื่อมีการลบ stack\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 25"
+    },
+    {
+      "q": "หลัง deploy ด้วย CloudFormation มีคนแก้ inbound port ของ security group ด้วยมือ ต้องใช้ความสามารถใดตรวจว่าทรัพยากรต่างจาก template?",
+      "choices": [
+        "Drift detection",
+        "Change set preview",
+        "Stack update",
+        "Template version control"
+      ],
+      "answer": 0,
+      "explain": "Drift detection ตรวจความแตกต่างระหว่าง resources จริงกับการตั้งค่าที่ stack คาดหวัง\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 26"
+    },
+    {
+      "q": "ใน CloudFormation resource แบบ EC2 instance ทีมต้องการเปลี่ยน AMI ที่ใช้สร้างเครื่อง ควรแก้ property ใดในตัวอย่าง?",
+      "choices": [
+        "InstanceType",
+        "Description",
+        "KeyName",
+        "ImageId"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่าง EC2 resource กำหนด AMI ผ่าน ImageId ส่วน InstanceType ใช้ระบุชนิด instance และ KeyName ใช้ระบุ key pair\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 22"
+    },
+    {
+      "q": "ทีมแบ่ง templates ตามหน้าที่ และมีชุดที่ประกอบด้วย VPC, internet gateway, VPN และ NAT devices ควรจัดในหมวดใด?",
+      "choices": [
+        "Network",
+        "Security",
+        "Backend services",
+        "Frontend services"
+      ],
+      "answer": 0,
+      "explain": "ตารางการจัด templates รวม VPC, internet gateway, VPN และ NAT devices ไว้ในหมวด Network\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 27"
+    },
+    {
+      "q": "Template ที่รวม IAM policies, users, groups และ roles ควรอยู่ในหมวดใดตามแนวทางจัดระเบียบในบทเรียน?",
+      "choices": [
+        "Backend services",
+        "Security",
+        "Frontend services",
+        "Network"
+      ],
+      "answer": 1,
+      "explain": "ตารางจัด IAM policies, users, groups และ roles ไว้ในหมวด Security\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 27"
+    },
+    {
+      "q": "หลายแอปพลิเคชันใช้ CRM database และระบบ monitoring ร่วมกัน ควรจัด resources ส่วนกลางเหล่านี้ใน template หมวดใด?",
+      "choices": [
+        "Backend services",
+        "Security",
+        "Frontend services",
+        "Shared services"
+      ],
+      "answer": 3,
+      "explain": "Shared services ครอบคลุม CRM databases, common monitoring, alarms และทรัพยากรส่วนกลางอื่น\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 27"
+    },
+    {
+      "q": "AWS Quick Starts ใช้แนวทางใดในการจัดเตรียม architecture ตามบทเรียน?",
+      "choices": [
+        "ใช้ template สำหรับติดตาม resources ที่สร้างด้วยมือเท่านั้น",
+        "ใช้เฉพาะ application code โดยไม่กำหนด infrastructure",
+        "ใช้เฉพาะขั้นตอนสร้าง resources ด้วยมือจาก deployment guide",
+        "ใช้ automated reference architectures ที่อาศัย CloudFormation templates"
+      ],
+      "answer": 3,
+      "explain": "Quick Starts เป็น automated reference architectures ที่สร้างบน CloudFormation templates\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 16, 34"
+    },
+    {
+      "q": "ทีมเลือก Quick Start แต่ต้องการทราบ deployment options และวิธีตั้งค่าให้ตรงความต้องการ ควรอ่านอะไรที่มาพร้อม template?",
+      "choices": [
+        "Outputs ของ stack ที่ไม่เกี่ยวข้อง",
+        "Version history ของ application code เท่านั้น",
+        "Drift detection report ของ stack อื่น",
+        "Deployment guide ของ Quick Start"
+      ],
+      "answer": 3,
+      "explain": "Quick Starts มี deployment guide อธิบาย options และการปรับ configuration ให้ตรงความต้องการ\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 35, 37"
+    },
+    {
+      "q": "เหตุใด Quick Starts จึงเหมาะสำหรับเป็นจุดเริ่มต้นของ reference architecture?",
+      "choices": [
+        "เป็นเพียงตัวอย่างโค้ดที่ไม่มี deployment guide",
+        "บังคับให้ทุก deployment ใช้ configuration เดียวโดยห้ามปรับ",
+        "รองรับการสร้าง resources ในบริการเดียวต่อ architecture เท่านั้น",
+        "สะท้อน AWS best practices ด้าน security และ high availability"
+      ],
+      "answer": 3,
+      "explain": "Quick Starts อาศัย AWS best practices โดยเฉพาะ security และ high availability\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 34, 35, 37"
+    },
+    {
+      "q": "ทีมต้องเขียน CloudFormation template ของตนเองเร็วขึ้นโดยเรียนรู้รูปแบบที่มีอยู่ ควรใช้ Quick Starts อย่างไร?",
+      "choices": [
+        "ใช้เฉพาะตรวจ drift โดยไม่ศึกษา template ที่ให้มา",
+        "ใช้ deployment guide แทน Resources section ใน template",
+        "ศึกษารูปแบบและแนวปฏิบัติ แล้วใช้เป็นฐานพัฒนา template ของตน",
+        "ใช้ Quick Start โดยไม่ตรวจ deployment options หรือ configuration"
+      ],
+      "answer": 2,
+      "explain": "Quick Starts ช่วยให้เห็น patterns และ practices เพื่อเร่งการพัฒนา templates ของตนเอง\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 34, 37"
+    },
+    {
+      "q": "Amazon Q Developer ถูกอธิบายว่าเป็นเครื่องมือประเภทใด?",
+      "choices": [
+        "เครื่องมือเก็บ version history ที่แทน code repository โดยตรง",
+        "ผู้ช่วยเขียนโค้ดที่ใช้ generative AI สำหรับนักพัฒนาและ IT professionals",
+        "เครื่องมือ provision resources ที่แทน CloudFormation stack โดยตรง",
+        "เครื่องมือ deploy reference architectures แบบ CloudFormation templates"
+      ],
+      "answer": 1,
+      "explain": "Amazon Q Developer เป็น generative AI-powered coding assistant สำหรับ developers และ IT professionals\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 40"
+    },
+    {
+      "q": "ในตัวอย่างการใช้ Amazon Q Developer กับ CloudFormation เมื่อนักพัฒนาเริ่มพิมพ์ resource ในไฟล์ YAML ขั้นตอนถัดไปเป็นอย่างไร?",
+      "choices": [
+        "Q แก้ resources จริงแทนการเสนอ code ใน template",
+        "Q เสนอ code snippet และสร้าง production stack ทันทีโดยไม่รอรับ",
+        "Q แปลง template เป็น deployment guide โดยไม่เพิ่ม code",
+        "Q เสนอ code snippet และนักพัฒนาเลือกยอมรับเพื่อเพิ่มลง template"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่างแสดงการเสนอ snippet ซึ่งเพิ่มเข้า template เมื่อนักพัฒนายอมรับ\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 42"
+    },
+    {
+      "q": "ทีมต้องการตรวจ code เพื่อหาช่องโหว่และรับคำแนะนำแก้ไข ความสามารถใดของ Amazon Q Developer ตรงกับงานนี้?",
+      "choices": [
+        "ใช้ change set แทนการตรวจ application code",
+        "ใช้ drift detection เพื่อสร้าง unit tests",
+        "Scan project code for security vulnerabilities และเสนอ remediation",
+        "ใช้ template Outputs เพื่อแสดงช่องโหว่ของ project code"
+      ],
+      "answer": 2,
+      "explain": "ช่วง Test and secure รองรับการ scan vulnerabilities และให้ remediation suggestions\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 40, 41"
+    },
+    {
+      "q": "นักพัฒนาต้องการความช่วยเหลือสร้าง unit tests ความสามารถนี้อยู่ในช่วงใดของ SDLC ที่ Amazon Q Developer สนับสนุน?",
+      "choices": [
+        "Plan",
+        "Maintain and modernize",
+        "Operate",
+        "Test and secure"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนระบุ Generate unit tests ไว้ในช่วง Test and secure\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 41"
+    },
+    {
+      "q": "นักพัฒนาเพิ่งรับช่วงโค้ดที่ไม่คุ้นเคย และต้องการให้ Q อธิบายโค้ดผ่านการสนทนา กิจกรรมนี้ตรงกับช่วงใดในภาพ SDLC?",
+      "choices": [
+        "Plan",
+        "Maintain and modernize",
+        "Operate",
+        "Test and secure"
+      ],
+      "answer": 0,
+      "explain": "ส่วน Plan ระบุการ Explain code with conversational coding และการถามคำถามเพื่อรับคำแนะนำ\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 41"
+    },
+    {
+      "q": "ทีมกำลังวิเคราะห์ปัญหาการเชื่อมต่อเครือข่าย Amazon Q Developer ใช้ร่วมกับเครื่องมือใดที่บทเรียนกล่าวถึง?",
+      "choices": [
+        "VPC Reachability Analyzer",
+        "AWS Cost Explorer",
+        "AWS Budgets",
+        "AWS CloudFormation Designer"
+      ],
+      "answer": 0,
+      "explain": "ในช่วง Operate บทเรียนระบุการ troubleshoot network connectivity ด้วย VPC Reachability Analyzer\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 41"
+    },
+    {
+      "q": "ทีมต้องการ modernize code ที่มีอยู่ ควรพิจารณาความสามารถใดของ Amazon Q Developer ตามบทเรียน?",
+      "choices": [
+        "Unit test generation โดยไม่ทำ code transformation",
+        "Agent for code transformation",
+        "Inline code recommendations สำหรับโค้ดใหม่เท่านั้น",
+        "Security scanning โดยไม่ทำ code transformation"
+      ],
+      "answer": 1,
+      "explain": "ช่วง Maintain and modernize กล่าวถึง Amazon Q Developer Agent for code transformation\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 41"
+    },
+    {
+      "q": "แม้ทีมเปลี่ยนมาใช้ IaC แล้ว ความท้าทายใดในการเขียน templates ยังถูกระบุในบทเรียน?",
+      "choices": [
+        "Human error, ทักษะต่างกัน, template ซับซ้อน และ security vulnerabilities",
+        "สร้างหลายบริการไม่ได้, update stack ไม่ได้ และลบ stack ไม่ได้",
+        "ใช้ version control ไม่ได้, ทำซ้ำไม่ได้ และไม่มี templates",
+        "เขียนได้เฉพาะ YAML, ใช้ Outputs ไม่ได้ และไม่มี Conditions"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนระบุปัญหาด้านคน ความแตกต่างของทักษะ ขนาดและความซับซ้อน รวมถึงช่องโหว่ของ IaC\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 39"
+    },
+    {
+      "q": "ทีมเปลี่ยนงานปฏิบัติการที่เคยทำตามคู่มือให้เป็นโค้ดที่รันซ้ำได้ สอดคล้องกับ Well-Architected best practice ข้อใด?",
+      "choices": [
+        "Perform operations as code",
+        "Make frequent, small, reversible changes",
+        "Use automation when scaling resources",
+        "Automate security best practices"
+      ],
+      "answer": 0,
+      "explain": "แนวทาง design for operations ระบุ Perform operations as code\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 49, 53"
+    },
+    {
+      "q": "แผนการเปลี่ยนแปลงใดสอดคล้องกับ Well-Architected automation best practices มากที่สุด?",
+      "choices": [
+        "เปลี่ยนชุดใหญ่ ทำบ่อย และย้อนกลับไม่ได้",
+        "สะสมการเปลี่ยนแปลงชุดใหญ่ก่อน deploy นาน ๆ ครั้ง",
+        "เปลี่ยนทีละน้อย แต่งดเตรียมวิธีย้อนกลับ",
+        "เปลี่ยนทีละน้อย ทำบ่อย และย้อนกลับได้"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนแนะนำ frequent, small, reversible changes\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 49, 53"
+    },
+    {
+      "q": "ทีมต้องการให้แนวปฏิบัติด้านความปลอดภัยถูกใช้อย่างสม่ำเสมอ แนวทางใดตรงกับหลักการในบทเรียน?",
+      "choices": [
+        "Automate security best practices",
+        "ตรวจ security เฉพาะครั้งแรกแล้วไม่รวมใน automation",
+        "ให้ผู้ดูแลแต่ละคนเลือก security configuration เองทุกครั้ง",
+        "ใช้ manual security configuration แยกทุก deployment"
+      ],
+      "answer": 0,
+      "explain": "Well-Architected section ระบุให้ทำ security best practices เป็นอัตโนมัติ\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 50, 53"
+    },
+    {
+      "q": "ใน Café deployment lab ทีมเก็บ templates ใน code repository และต้องการให้การเปลี่ยนแปลงนำไปสร้างหรือปรับ stacks ผ่าน pipeline ควรใช้แนวทางใด?",
+      "choices": [
+        "ใช้ drift detection แทน pipeline deployment",
+        "ใช้ Git เพื่อเรียก AWS CodePipeline",
+        "ใช้ CloudFormation Designer แทน pipeline trigger",
+        "ใช้ Outputs section แทน code repository"
+      ],
+      "answer": 1,
+      "explain": "Lab ระบุการใช้ Git invoke CodePipeline เพื่อ create หรือ update stacks จาก templates ใน repository\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 56"
+    },
+    {
+      "q": "ในการ deploy สถาปัตยกรรมแบบแยกชั้นตาม guided lab ควรจัดความสัมพันธ์ระหว่าง networking layer และ application layer อย่างไร?",
+      "choices": [
+        "Deploy networking layer ด้วยมือเสมอแล้วใช้ template เฉพาะ application",
+        "Deploy application layer แล้วสร้าง networking layer ที่ไม่เชื่อมโยงกัน",
+        "Deploy แต่ละ layer โดยห้ามอ้างอิงกันแม้ต้องใช้เครือข่ายร่วมกัน",
+        "Deploy networking layer แล้วให้ application layer อ้างอิง networking layer"
+      ],
+      "answer": 3,
+      "explain": "Guided lab ใช้ CloudFormation deploy VPC networking layer และ application layer ที่ references networking layer\n\nอ้างอิง: ACAv3 EN M11 AutomatingYourArchitecture.pdf หน้า 45"
+    }
+  ]
+}

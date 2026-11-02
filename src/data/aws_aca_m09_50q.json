@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m09_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การรักษาความปลอดภัยในการเข้าถึงของผู้ใช้ แอปพลิเคชัน และข้อมูล (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "IAM · Federation · Cognito · Organizations · KMS · Security Services · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M09 Securing User Application and Data Access",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M09 Securing User Application and Data Access",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "นักพัฒนา 30 คนต้องใช้สิทธิ์เหมือนกัน และมีการปรับสิทธิ์บ่อย ควรจัดการอย่างไร",
+      "choices": [
+        "ใช้ SCP เพียงอย่างเดียวเพื่อให้สิทธิ์แก่นักพัฒนาโดยไม่สร้าง IAM policy",
+        "แนบนโยบายกับ IAM group แล้วเพิ่มนักพัฒนาเป็นสมาชิก",
+        "สร้าง IAM role แยกทุกคนและแก้นโยบายของแต่ละ role ทีละฉบับ",
+        "แนบนโยบายแยกกับผู้ใช้ทุกคนและแก้ทีละคน"
+      ],
+      "answer": 1,
+      "explain": "IAM group ช่วยจัดการสิทธิ์ร่วมกันตามหน้าที่ โดยแก้นโยบายของกลุ่มได้จากจุดเดียว\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 8, 9"
+    },
+    {
+      "q": "พนักงานย้ายจากทีมทดสอบไปเป็นนักพัฒนา และต้องเลิกใช้สิทธิ์ของทีมเดิม ควรทำอย่างไร",
+      "choices": [
+        "นำออกจากกลุ่มทดสอบและเพิ่มเข้ากลุ่มนักพัฒนา",
+        "เพิ่มเข้ากลุ่มนักพัฒนาโดยคงกลุ่มทดสอบไว้เสมอ",
+        "สร้างกลุ่มใหม่ที่รวมสิทธิ์ทีมทดสอบกับนักพัฒนาแล้วเพิ่มพนักงานเข้าไป",
+        "แก้นโยบายกลุ่มทดสอบทั้งหมดให้มีสิทธิ์เหมือนนักพัฒนา"
+      ],
+      "answer": 0,
+      "explain": "ปรับสมาชิกกลุ่มให้ตรงกับหน้าที่ใหม่ เพื่อรับสิทธิ์ใหม่และถอนสิทธิ์เดิม\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 10"
+    },
+    {
+      "q": "ข้อใดอธิบายโครงสร้าง IAM group ได้ถูกต้อง",
+      "choices": [
+        "ผู้ใช้เป็นสมาชิกหลายกลุ่มได้ แต่ไม่สามารถซ้อนกลุ่มภายในกลุ่ม",
+        "IAM group มีไว้รวม AWS accounts โดยตรง",
+        "กลุ่มหนึ่งเป็นสมาชิกของอีกกลุ่มได้เสมอ",
+        "ผู้ใช้เป็นสมาชิกได้เพียงกลุ่มเดียว"
+      ],
+      "answer": 0,
+      "explain": "IAM รองรับผู้ใช้หลายกลุ่ม แต่ไม่รองรับ nested groups\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 10"
+    },
+    {
+      "q": "นโยบายของกลุ่มอนุญาต Kinesis แต่นโยบายที่แนบกับผู้ใช้ปฏิเสธ Kinesis อย่างชัดเจน ผลเป็นอย่างไร",
+      "choices": [
+        "ผู้ใช้เข้าถึง Kinesis ไม่ได้ เพราะมี explicit deny",
+        "ผู้ใช้เข้าถึงได้ เพราะนโยบายกลุ่มสำคัญกว่า",
+        "ผู้ใช้เข้าถึงได้เฉพาะเมื่อเรียกผ่านคอนโซล",
+        "AWS เลือกนโยบายที่สร้างล่าสุดเท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "Explicit deny มีผลเหนือ Allow ในตัวอย่างนี้ ไม่ได้ขึ้นกับว่านโยบายแนบกับผู้ใช้หรือกลุ่ม\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 11, 12"
+    },
+    {
+      "q": "ในกรณีที่พิจารณาเฉพาะ identity-based policies หากไม่มีนโยบายใดอนุญาตการกระทำหนึ่ง ผู้ใช้จะทำการกระทำนั้นได้หรือไม่",
+      "choices": [
+        "ไม่ได้ เพราะยังไม่มีสิทธิ์ Allow สำหรับการกระทำนั้น",
+        "ได้ หากเป็นสมาชิก IAM group ใดก็ได้",
+        "ได้ หากทรัพยากรอยู่ใน Region เดียวกัน",
+        "ได้ เพราะไม่มี explicit deny"
+      ],
+      "answer": 0,
+      "explain": "เมื่อไม่มีการอนุญาตที่ใช้ได้ การเข้าถึงจะถูกปฏิเสธโดยปริยาย\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 53"
+    },
+    {
+      "q": "ABAC บน AWS ใช้ข้อมูลชนิดใดเป็นหลักในการกำหนดสิทธิ์",
+      "choices": [
+        "Attributes ในรูปแบบ tags ของตัวตนและทรัพยากร",
+        "รายการ ARN ของทรัพยากรแต่ละรายการโดยไม่อาศัย attributes",
+        "ตำแหน่งงานที่กำหนดเป็นกลุ่มสิทธิ์เท่านั้น",
+        "การกำหนดให้ผู้ใช้ทุกคนมีนโยบายฉบับเดียวกันโดยไม่มีเงื่อนไข"
+      ],
+      "answer": 0,
+      "explain": "ABAC ใช้คุณลักษณะ เช่น key-value tags เพื่อกำหนดเงื่อนไขการเข้าถึง\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 14, 15"
+    },
+    {
+      "q": "แต่ละทีมสร้างทรัพยากรใหม่ทุกวัน และต้องเข้าถึงเฉพาะทรัพยากรที่มี Project tag ตรงกับทีม ควรใช้แนวทางใด",
+      "choices": [
+        "เพิ่ม ARN ของทุกทรัพยากรใหม่ในนโยบายของทุกคน",
+        "ABAC โดยเปรียบเทียบ tags ของตัวตนกับทรัพยากร",
+        "รวมทุกทีมไว้ใน IAM group เดียวและให้สิทธิ์ทุก Project",
+        "ใช้ permissions boundary ที่อนุญาตทุก Project โดยไม่ตรวจ tags"
+      ],
+      "answer": 1,
+      "explain": "ABAC ช่วยขยายการจัดการสิทธิ์ตามคุณลักษณะ ลดการแก้นโยบายทุกครั้งที่เพิ่มทรัพยากร\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 14, 16, 17"
+    },
+    {
+      "q": "นโยบายตามหน้าที่ระบุรายการทรัพยากรทีละรายการ เมื่อหลายหน้าที่ต้องใช้ทรัพยากรใหม่จะเกิดภาระใด",
+      "choices": [
+        "ต้องเพิ่ม tags ให้ทรัพยากรเท่านั้น แม้นโยบายไม่ได้ตรวจ tags",
+        "ต้องเพิ่มผู้ใช้เข้า IAM group ทุกกลุ่มเพื่อรับสิทธิ์ทรัพยากรใหม่",
+        "อาจต้องปรับนโยบายหลายฉบับเพื่อเพิ่มทรัพยากรนั้น",
+        "นโยบายจะอนุญาตทรัพยากรใหม่เสมอโดยไม่ต้องแก้รายการ"
+      ],
+      "answer": 2,
+      "explain": "RBAC ที่ระบุทรัพยากรเป็นรายการอาจต้องแก้หลาย policy เมื่อทรัพยากรเปลี่ยน\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 13"
+    },
+    {
+      "q": "องค์กรใช้ ABAC ตาม Env tag แต่ทรัพยากรใหม่มักไม่มี tag ควรเพิ่มมาตรการใดให้สอดคล้องกับแนวทางในบทเรียน",
+      "choices": [
+        "สร้าง IAM group เพิ่ม แต่ปล่อยทรัพยากรใหม่โดยไม่มี Env tag",
+        "ตั้งชื่อทรัพยากรให้ตรงกับ Env โดยไม่กำหนด tag ที่นโยบายตรวจ",
+        "กำหนดให้ทรัพยากรใหม่มี attributes ที่ใช้ควบคุมสิทธิ์",
+        "ให้สิทธิ์กว้างขึ้นกับทุก Env แทนการตรวจ attributes"
+      ],
+      "answer": 2,
+      "explain": "ตัวอย่าง ABAC กำหนดคุณลักษณะให้ตัวตน และกำหนดให้ทรัพยากรใหม่มีคุณลักษณะที่จำเป็น\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 16"
+    },
+    {
+      "q": "ในระบบ identity federation ฝ่ายใดรับผิดชอบการยืนยันตัวตนของผู้ใช้",
+      "choices": [
+        "Service provider หรือ SP ในทุกกรณี",
+        "Customer managed KMS key",
+        "AWS Organizations OU",
+        "Identity provider หรือ IdP"
+      ],
+      "answer": 3,
+      "explain": "IdP ตรวจสอบตัวตน แล้วส่งข้อมูลที่ใช้ประกอบการอนุญาตเข้าถึงไปยังอีกฝ่าย\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 19"
+    },
+    {
+      "q": "เมื่อ IdP ยืนยันตัวตนสำเร็จแล้ว หน้าที่หลักของ service provider คืออะไร",
+      "choices": [
+        "สร้างตัวตนถาวรใหม่ในทุกระบบแทนการใช้ความเชื่อถือ",
+        "ตรวจรหัสผ่านต้นทางแทน IdP ทุกครั้งเสมอ",
+        "ให้สิทธิ์ทุกทรัพยากรทันทีที่ได้รับผลการยืนยันตัวตน",
+        "ควบคุมการเข้าถึงทรัพยากรของตน"
+      ],
+      "answer": 3,
+      "explain": "Federation แยกบทบาทการยืนยันตัวตนของ IdP ออกจากการควบคุมทรัพยากรของ SP\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 19"
+    },
+    {
+      "q": "แอปพลิเคชันต้องการ AWS credentials ที่มีอายุจำกัด แทนการฝัง access key ระยะยาว ควรใช้บริการใด",
+      "choices": [
+        "AWS Artifact",
+        "AWS WAF",
+        "Amazon Macie",
+        "AWS STS"
+      ],
+      "answer": 3,
+      "explain": "AWS STS ออก temporary credentials ที่จำกัดสิทธิ์และมีวันหมดอายุ\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 23, 24"
+    },
+    {
+      "q": "องค์กรมีระบบล็อกอินเดิมและใช้ identity broker เชื่อมไปยัง AWS broker ควรทำหน้าที่ใด",
+      "choices": [
+        "ให้ IdP token ทำหน้าที่แทน AWS credentials ในทุกบริการโดยตรง",
+        "ส่งรหัสผ่านองค์กรไปใช้เป็น AWS access key โดยตรง",
+        "ออกสิทธิ์ถาวรของตนให้ทุกแอปโดยไม่ใช้ STS",
+        "ขอ temporary credentials จาก STS แล้วส่งให้แอปพลิเคชัน"
+      ],
+      "answer": 3,
+      "explain": "Identity broker เป็นตัวกลางระหว่าง IdP กับ AWS และจัดการการขอและส่งต่อ credentials ชั่วคราว\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 24, 25"
+    },
+    {
+      "q": "พนักงานต้องเข้าหลาย AWS accounts ผ่านพอร์ทัลเดียว และองค์กรต้องการจัดสรรสิทธิ์จากส่วนกลาง ควรใช้บริการใด",
+      "choices": [
+        "Amazon Cognito identity pool เพียงอย่างเดียว",
+        "AWS IAM Identity Center",
+        "AWS KMS",
+        "Amazon Inspector"
+      ],
+      "answer": 1,
+      "explain": "IAM Identity Center รองรับการจัดการการเข้าถึงหลายบัญชีและ cloud applications จากส่วนกลาง\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 22"
+    },
+    {
+      "q": "ทีมพัฒนาแอปมือถือสำหรับลูกค้าต้องการสมัครสมาชิก ล็อกอิน และรองรับ social sign-in ควรเลือกบริการใด",
+      "choices": [
+        "AWS Control Tower",
+        "AWS Organizations",
+        "Amazon Cognito",
+        "Amazon Detective"
+      ],
+      "answer": 2,
+      "explain": "Cognito จัดการ authentication และผู้ใช้สำหรับเว็บและแอปมือถือ พร้อมรองรับ external IdPs\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 27, 31, 32"
+    },
+    {
+      "q": "ต้องการเก็บโปรไฟล์ผู้ใช้แอปและออก authentication tokens หลังล็อกอิน ควรใช้ส่วนใดของ Cognito",
+      "choices": [
+        "Identity pool",
+        "User pool",
+        "Organizational unit",
+        "Permissions boundary"
+      ],
+      "answer": 1,
+      "explain": "User pool ทำหน้าที่เป็น user directory และให้ tokens สำหรับการยืนยันตัวตนของแอป\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 27, 30, 31"
+    },
+    {
+      "q": "ผู้ใช้แอปล็อกอินแล้ว และต้องการแลก token เป็น AWS credentials เพื่อเรียกบริการ AWS ควรใช้ส่วนใด",
+      "choices": [
+        "Amazon Cognito identity pool",
+        "AWS Security Hub",
+        "Amazon Cognito user pool เพียงอย่างเดียว",
+        "AWS Organizations root"
+      ],
+      "answer": 0,
+      "explain": "Identity pool รองรับการแลก tokens เพื่อรับ credentials สำหรับเข้าถึง AWS services\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 29"
+    },
+    {
+      "q": "ลำดับใดตรงกับตัวอย่างการใช้ Cognito เพื่อเข้าถึง AWS services",
+      "choices": [
+        "ให้ identity pool เก็บรหัสผ่านและออก user pool token โดยไม่ยืนยันตัวตน",
+        "สร้าง IAM user ระยะยาวใหม่ทุกครั้งที่ผู้ใช้ล็อกอินแล้วส่ง access key ให้",
+        "ยืนยันตัวตนรับ token แล้วใช้รหัสผ่าน user pool แทน AWS credentials",
+        "ยืนยันตัวตนรับ token แล้วแลก token เป็น AWS credentials จากนั้นเรียกบริการ"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่างแยกขั้นตอน authentication ที่ user pool ออกจากการรับ AWS credentials ผ่าน identity pool\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 29"
+    },
+    {
+      "q": "ต้องการหน้าเว็บสำเร็จรูปสำหรับ sign-up sign-in MFA และ reset password ควรใช้คุณสมบัติใด",
+      "choices": [
+        "AWS Organizations consolidated billing",
+        "KMS key policy",
+        "Amazon Inspector dashboard",
+        "Cognito hosted UI"
+      ],
+      "answer": 3,
+      "explain": "Cognito มี hosted web pages สำหรับกระบวนการสมัครและยืนยันตัวตนเหล่านี้\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 31"
+    },
+    {
+      "q": "แอปต้องส่งผลการยืนยันตัวตนแบบ JSON token ไปยังทรัพยากรฝั่งเซิร์ฟเวอร์ Cognito รองรับมาตรฐานใดตามบทเรียน",
+      "choices": [
+        "SCP",
+        "AMI",
+        "JWT",
+        "OU"
+      ],
+      "answer": 2,
+      "explain": "Cognito รองรับ JWT ซึ่งเป็นรูปแบบ token ที่ส่งข้อมูลระหว่างฝ่ายต่าง ๆ ในรูป JSON\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 31"
+    },
+    {
+      "q": "เว็บไซต์ต้องแยกผู้ใช้แอปเป็น readers contributors และ editors คุณสมบัติใดของ user pool เหมาะกับการจัดกลุ่มนี้",
+      "choices": [
+        "Organizations member accounts",
+        "Nested IAM groups",
+        "KMS data key pairs",
+        "User pool groups"
+      ],
+      "answer": 3,
+      "explain": "User pool groups ใช้รวมผู้ใช้ตามประเภทหรือบทบาทภายในแอป\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 31"
+    },
+    {
+      "q": "บริษัทต้องการแยก production ออกจาก development ทั้งทรัพยากรและการกำกับดูแล แนวทางใดตรงกับประโยชน์ที่กล่าวในบทเรียน",
+      "choices": [
+        "แยกเป็น IAM groups แต่ให้แต่ละทีมเข้าถึงทรัพยากรทั้งหมด",
+        "แยก AWS accounts ตาม environment",
+        "แยกด้วย resource tags อย่างเดียวภายในบัญชีเดียว",
+        "แยกชื่อทรัพยากรแต่ใช้สิทธิ์และการจัดการส่วนกลางชุดเดียวกันทั้งหมด"
+      ],
+      "answer": 1,
+      "explain": "การใช้หลายบัญชีช่วยแยก environments และสร้างขอบเขตการจัดการที่ชัดเจน\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 37, 38"
+    },
+    {
+      "q": "ต้องการรวมการจัดการหลาย AWS accounts และรวมการเรียกเก็บเงิน ควรใช้บริการใด",
+      "choices": [
+        "Amazon Cognito",
+        "AWS Organizations",
+        "Amazon Macie",
+        "AWS WAF"
+      ],
+      "answer": 1,
+      "explain": "Organizations รองรับ account management และ consolidated billing จากส่วนกลาง\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 39"
+    },
+    {
+      "q": "องค์กรต้องจัดกลุ่มบัญชี Development และ Production เป็นลำดับชั้นเพื่อกำกับนโยบายร่วมกัน ควรใช้สิ่งใด",
+      "choices": [
+        "KMS aliases",
+        "EC2 security groups",
+        "Organizational units หรือ OUs",
+        "Cognito user pool groups"
+      ],
+      "answer": 2,
+      "explain": "OUs ใช้จัดกลุ่มบัญชีในโครงสร้างลำดับชั้นของ AWS Organizations\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 40, 41"
+    },
+    {
+      "q": "ข้อใดอธิบายบทบาทของ SCP ได้ถูกต้องที่สุด",
+      "choices": [
+        "กำหนดเพดานสิทธิ์ของบัญชีที่อยู่ในขอบเขต โดยไม่ให้สิทธิ์ด้วยตัวเอง",
+        "เก็บข้อมูลล็อกอินของผู้ใช้ที่ทำ federation",
+        "แทนที่ IAM policies ทั้งหมดในทุกบัญชี",
+        "ให้สิทธิ์ใช้งานทุกบริการทันทีที่แนบกับ OU"
+      ],
+      "answer": 0,
+      "explain": "SCP เป็น guardrail ส่วนการให้สิทธิ์ยังต้องอาศัยนโยบายที่เกี่ยวข้อง เช่น IAM policy\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 43, 51"
+    },
+    {
+      "q": "ต้องการให้ SCP มีผลกับหลายบัญชีในหน่วยงานเดียวกัน ควรแนบ SCP ที่ใด",
+      "choices": [
+        "IAM group ที่มีนักพัฒนาทุกบัญชีเป็นสมาชิก",
+        "Cognito user pool ของแอป",
+        "OU ที่มีบัญชีเหล่านั้นอยู่",
+        "KMS key ที่ทุกบัญชีใช้ร่วมกัน"
+      ],
+      "answer": 2,
+      "explain": "SCP แนบกับ root ของ Organizations, OU หรือบัญชีได้ โดย OU เหมาะกับการกำกับกลุ่มบัญชี\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 46"
+    },
+    {
+      "q": "SCP ของ OU ปฏิเสธบริการหนึ่ง ผู้ดูแล member account แนบ AdministratorAccess ให้ตนเอง จะข้ามข้อจำกัดนี้ได้หรือไม่",
+      "choices": [
+        "ได้ เพราะ AdministratorAccess ข้าม SCP ได้เสมอ",
+        "ได้ หากสร้าง IAM role ใหม่หลังจากแนบ SCP",
+        "ไม่ได้ เพราะผู้ดูแลภายในบัญชีลบล้าง SCP ไม่ได้",
+        "ได้ หากแนบ Allow กับ IAM user แทน IAM group"
+      ],
+      "answer": 2,
+      "explain": "SCP กำหนดข้อจำกัดส่วนกลางที่ local administrator ไม่สามารถ override ด้วย IAM policy\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 43"
+    },
+    {
+      "q": "สมมติ SCP ที่เกี่ยวข้องอนุญาตบริการอื่นตามปกติ แต่มี Deny ec2:* และ IAM policy ให้ Allow ec2:* กับ s3:* ผลคืออะไร",
+      "choices": [
+        "ใช้ไม่ได้ทั้งสองบริการเพราะ SCP มีคำว่า Deny",
+        "ใช้ S3 ได้ แต่ใช้ EC2 ไม่ได้",
+        "ใช้ EC2 ได้ แต่ใช้ S3 ไม่ได้",
+        "ใช้ได้ทั้ง EC2 และ S3"
+      ],
+      "answer": 1,
+      "explain": "Explicit deny ของ EC2 ใน SCP ตัดสิทธิ์ EC2 ส่วน S3 ยังได้รับสิทธิ์ตามเงื่อนไขที่โจทย์กำหนด\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 47"
+    },
+    {
+      "q": "Identity policy อนุญาต iam:CreateUser แต่ permissions boundary อนุญาตเฉพาะ S3 EC2 และ CloudWatch ผลเป็นอย่างไร",
+      "choices": [
+        "สร้าง IAM user ไม่ได้ เพราะอยู่นอก boundary",
+        "สร้างได้ หากแนบ Allow เดียวกันผ่าน IAM group เพิ่มอีกครั้ง",
+        "สร้างได้ เพราะ boundary จำกัดเฉพาะสิทธิ์ที่มี explicit deny เท่านั้น",
+        "สร้างได้ เพราะ identity policy มี Allow"
+      ],
+      "answer": 0,
+      "explain": "สิทธิ์ที่ identity-based policy ให้ต้องอยู่ภายใน permissions boundary ด้วย\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 48, 49"
+    },
+    {
+      "q": "ผู้ใช้มี IAM Allow สำหรับ S3 SQS และ KMS มี boundary อนุญาต S3 กับ SQS และ SCP ปฏิเสธ SQS โดยเงื่อนไขอื่นอนุญาตตามปกติ บริการใดใช้ได้",
+      "choices": [
+        "S3 SQS และ KMS",
+        "SQS เท่านั้น",
+        "S3 และ KMS",
+        "S3 เท่านั้น"
+      ],
+      "answer": 3,
+      "explain": "S3 ผ่านทุกชั้น ส่วน SQS ถูก SCP ปฏิเสธ และ KMS อยู่นอก boundary\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 50"
+    },
+    {
+      "q": "องค์กรต้องการเริ่มสภาพแวดล้อมหลายบัญชีตามแนวปฏิบัติ พร้อมระบบ governance แบบอัตโนมัติ ควรใช้บริการใด",
+      "choices": [
+        "Amazon Cognito",
+        "AWS Control Tower",
+        "AWS STS",
+        "Amazon Detective"
+      ],
+      "answer": 1,
+      "explain": "Control Tower ช่วยตั้งค่าและกำกับดูแล multi-account environment ตามแนวปฏิบัติของ AWS\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 52"
+    },
+    {
+      "q": "ฝ่ายความปลอดภัยต้องการห้ามการปิด CloudTrail ในทุก member account ที่อยู่ใน OU เดียวกัน ควรบังคับจากส่วนกลางอย่างไร",
+      "choices": [
+        "ใช้ IAM group เดียวเพื่อรวมผู้ดูแลจากทุกบัญชีโดยตรง",
+        "แนบ IAM Allow ให้ CloudTrail ที่ OU โดยไม่สร้าง SCP",
+        "ใช้ permissions boundary เพียงฉบับเดียวแนบตรงกับ OU",
+        "ใช้ SCP ปฏิเสธการกระทำที่ปิด CloudTrail แล้วแนบกับ OU"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนยกการห้ามปิด CloudTrail เป็นตัวอย่าง guardrail ที่บังคับใช้ผ่าน SCP\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 43, 44"
+    },
+    {
+      "q": "การเข้ารหัสแบบ symmetric มีลักษณะใด",
+      "choices": [
+        "เข้ารหัสได้เฉพาะข้อมูลที่อยู่บนเครือข่าย",
+        "ใช้ public key เข้ารหัสและ private key ถอดรหัส",
+        "ไม่ต้องมีกุญแจในการถอดรหัส",
+        "ใช้กุญแจเดียวกันเข้ารหัสและถอดรหัส"
+      ],
+      "answer": 3,
+      "explain": "Symmetric encryption ใช้กุญแจลับเดียวกันสำหรับทั้งสองกระบวนการ\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 57"
+    },
+    {
+      "q": "ต้องการให้ผู้ส่งเข้ารหัสด้วย public key โดยให้เฉพาะผู้ถือ private key ถอดรหัส วิธีใดตรงกับความต้องการ",
+      "choices": [
+        "Symmetric encryption",
+        "Consolidated billing",
+        "Asymmetric encryption",
+        "Attribute-based access control"
+      ],
+      "answer": 2,
+      "explain": "Asymmetric encryption ใช้คู่ public key และ private key ในตัวอย่างการเข้ารหัสนี้\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 59"
+    },
+    {
+      "q": "ต้องเข้ารหัสข้อมูลปริมาณมากโดยเน้นความเร็วและภาระคำนวณต่ำ ควรเลือกแนวทางใดตามบทเรียน",
+      "choices": [
+        "สร้าง asymmetric key pair แยกสำหรับข้อมูลแต่ละบล็อกเป็นหลัก",
+        "Symmetric encryption",
+        "ใช้ public key ของผู้รับเข้ารหัสข้อมูลทั้งหมดทีละส่วน",
+        "เข้ารหัสข้อมูลทั้งหมดด้วย asymmetric encryption เป็นหลัก"
+      ],
+      "answer": 1,
+      "explain": "Symmetric encryption โดยทั่วไปมีประสิทธิภาพและเหมาะกับข้อมูลปริมาณมาก\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 57, 58"
+    },
+    {
+      "q": "ข้อใดตรงกับ envelope encryption",
+      "choices": [
+        "เข้ารหัสข้อมูลด้วย data key แล้วเข้ารหัส data key ด้วยกุญแจอีกชั้น",
+        "ใช้กุญแจเดียวเข้ารหัสข้อมูลโดยไม่มีกระบวนการปกป้อง data key อีกชั้น",
+        "เข้ารหัสข้อมูลด้วย data key แล้วเก็บ plaintext data key แนบไว้โดยไม่ป้องกัน",
+        "ใช้ public key เข้ารหัสข้อมูลทั้งหมดโดยไม่สร้าง data key"
+      ],
+      "answer": 0,
+      "explain": "Envelope encryption แยก data key ที่เข้ารหัสข้อมูลออกจาก key ที่ใช้ปกป้อง data key\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 61, 71"
+    },
+    {
+      "q": "ข้อกำหนดระบุว่าข้อมูลต้องถูกเข้ารหัสก่อนส่งออกจากแอปขององค์กรไปยัง AWS ควรเลือกวิธีใด",
+      "choices": [
+        "Server-side encryption เพียงอย่างเดียว",
+        "ตั้งค่า S3 server-side encryption หลังส่งข้อมูลแทนการเข้ารหัสในแอป",
+        "Client-side encryption",
+        "เข้ารหัส EBS volume หลังจาก AWS รับข้อมูลแล้วเท่านั้น"
+      ],
+      "answer": 2,
+      "explain": "CSE เข้ารหัสในฝั่งแอปก่อนส่งข้อมูลไปยัง AWS\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 62, 63"
+    },
+    {
+      "q": "แอปส่งข้อมูลให้บริการ AWS แล้วให้บริการเข้ารหัสก่อนเขียนลงดิสก์ วิธีนี้เรียกว่าอะไร",
+      "choices": [
+        "Client-side encryption",
+        "Role-based access control",
+        "Server-side encryption",
+        "Identity federation"
+      ],
+      "answer": 2,
+      "explain": "SSE คือการให้บริการปลายทางเข้ารหัสข้อมูลที่รับมาเพื่อจัดเก็บ\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 62, 64"
+    },
+    {
+      "q": "ต้องการสร้างและจัดการ cryptographic keys พร้อมกำหนดว่าใครใช้ key ได้ ควรเลือกบริการใด",
+      "choices": [
+        "AWS WAF",
+        "AWS Organizations",
+        "AWS KMS",
+        "Amazon Inspector"
+      ],
+      "answer": 2,
+      "explain": "KMS จัดการ cryptographic keys และรองรับนโยบายควบคุมการใช้งาน key\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 65"
+    },
+    {
+      "q": "ระบบทำ envelope encryption และต้องการให้ KMS สร้าง symmetric data key ควรเลือก cryptographic operation ใด",
+      "choices": [
+        "GenerateDataKey",
+        "GenerateDataKeyPair",
+        "Decrypt",
+        "Encrypt"
+      ],
+      "answer": 0,
+      "explain": "GenerateDataKey ใช้สร้าง symmetric data key ส่วน GenerateDataKeyPair ใช้สร้างคู่กุญแจ\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 66"
+    },
+    {
+      "q": "ในตัวอย่าง EBS encryption หลัง KMS ถอดรหัส data key แล้ว ส่วนใดใช้ key เพื่อเข้ารหัสหรือถอดรหัสข้อมูล",
+      "choices": [
+        "EC2 host ดาวน์โหลด KMS key หลักออกมาใช้แทน data key",
+        "EBS เก็บ plaintext data key ถาวรไว้กับข้อมูลบน volume",
+        "แอปต้องส่งข้อมูลทุกบล็อกไปให้ KMS ประมวลผลโดยตรง",
+        "EC2 host หรือ hypervisor ใช้ data key ที่ถอดรหัสแล้วในหน่วยความจำ"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่างเก็บ encrypted data key กับข้อมูล และใช้ decrypted data key ในหน่วยความจำของ host\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 70"
+    },
+    {
+      "q": "ทีมตรวจสอบต้องการตรวจประวัติการใช้ KMS key ตามกิจกรรมในแล็บ ควรใช้บริการใด",
+      "choices": [
+        "Amazon Cognito",
+        "AWS Control Tower",
+        "AWS Shield",
+        "AWS CloudTrail"
+      ],
+      "answer": 3,
+      "explain": "แล็บกำหนดให้ใช้ CloudTrail เพื่อตรวจสอบการใช้งาน AWS KMS key\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 73"
+    },
+    {
+      "q": "เว็บต้องบล็อก HTTP requests ที่ขาด User-Agent header ควรใช้บริการใด",
+      "choices": [
+        "AWS KMS",
+        "AWS WAF",
+        "AWS STS",
+        "Amazon Macie"
+      ],
+      "answer": 1,
+      "explain": "WAF ตรวจสอบและอนุญาตหรือบล็อก web requests ตามกฎ เช่น ค่าใน HTTP headers\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 78"
+    },
+    {
+      "q": "ทีมต้องการบริการที่มุ่งลดผลกระทบจากการโจมตีแบบ DDoS ควรเลือกบริการใด",
+      "choices": [
+        "AWS Artifact",
+        "AWS Shield",
+        "Amazon Cognito",
+        "Amazon Macie"
+      ],
+      "answer": 1,
+      "explain": "Shield เป็นบริการป้องกัน DDoS ที่บทเรียนกล่าวถึงร่วมกับการป้องกันขอบเขตแอป\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 77, 78"
+    },
+    {
+      "q": "บริษัทกำลังย้ายข้อมูลเข้า S3 และต้องการค้นหาข้อมูลอ่อนไหวด้วย pattern matching และ machine learning ควรใช้บริการใด",
+      "choices": [
+        "Amazon Macie",
+        "AWS STS",
+        "Amazon Detective",
+        "Amazon Inspector"
+      ],
+      "answer": 0,
+      "explain": "Macie ใช้ค้นพบข้อมูลอ่อนไหวใน Amazon S3 และสร้าง findings เกี่ยวกับความเสี่ยงข้อมูล\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 79"
+    },
+    {
+      "q": "ต้องการสแกนช่องโหว่ซอฟต์แวร์ของ EC2 container images ใน ECR และ Lambda ควรใช้บริการใด",
+      "choices": [
+        "AWS WAF",
+        "Amazon Inspector",
+        "Amazon Cognito",
+        "AWS Organizations"
+      ],
+      "answer": 1,
+      "explain": "Inspector เป็น vulnerability management service สำหรับ workloads เหล่านี้\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 80"
+    },
+    {
+      "q": "มีเหตุการณ์น่าสงสัยเกี่ยวกับ IAM entity และทีมต้องการสำรวจความสัมพันธ์ของกิจกรรมเพื่อหาต้นเหตุ ควรใช้บริการใด",
+      "choices": [
+        "AWS KMS",
+        "AWS Control Tower",
+        "Amazon Detective",
+        "Amazon Macie"
+      ],
+      "answer": 2,
+      "explain": "Detective วิเคราะห์ข้อมูลและความสัมพันธ์ในรูปกราฟเพื่อสนับสนุนการสืบสวนเหตุการณ์\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 81"
+    },
+    {
+      "q": "ทีมความปลอดภัยต้องรวม findings จากหลายบัญชี รวมทั้งจาก Macie และ Inspector เพื่อจัดลำดับการแก้ไข ควรใช้บริการใด",
+      "choices": [
+        "AWS Shield",
+        "AWS STS",
+        "AWS Security Hub",
+        "Amazon Cognito"
+      ],
+      "answer": 2,
+      "explain": "Security Hub รวบรวม findings จากหลายแหล่งและช่วยติดตาม security posture และลำดับความสำคัญ\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 82, 84"
+    },
+    {
+      "q": "สถาปัตยกรรมใช้ WAF กรอง web requests ใช้ KMS เข้ารหัส และใช้ Inspector สแกนช่องโหว่ สอดคล้องกับแนวคิดใด",
+      "choices": [
+        "การใช้ authentication เป็นมาตรการความปลอดภัยเพียงชั้นเดียว",
+        "Defense in depth",
+        "การใช้มาตรการเดียวครอบคลุมความเสี่ยงทุกประเภท",
+        "การรวม security controls ทุกหน้าที่ไว้ในบริการเดียว"
+      ],
+      "answer": 1,
+      "explain": "Defense in depth ใช้มาตรการหลายชั้นเพื่อป้องกันความเสี่ยงต่างประเภทกัน\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 77, 84"
+    },
+    {
+      "q": "บริษัทต้องแก้สองปัญหา คือค้นหาข้อมูลอ่อนไหวใน S3 และรวม security findings จากหลายบริการ ควรจับคู่บริการอย่างไร",
+      "choices": [
+        "Macie สำหรับค้นหาข้อมูล และ Security Hub สำหรับรวม findings",
+        "Detective สำหรับค้นหาข้อมูล และ KMS สำหรับรวม findings",
+        "WAF สำหรับค้นหาข้อมูล และ STS สำหรับรวม findings",
+        "Inspector สำหรับค้นหาข้อมูล และ Cognito สำหรับรวม findings"
+      ],
+      "answer": 0,
+      "explain": "Macie เน้น sensitive data discovery ใน S3 ขณะที่ Security Hub รวม findings เพื่อการติดตามและตอบสนอง\n\nอ้างอิง: ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf หน้า 79, 82"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import SubjectIcon from './SubjectIcon';
 import { readExamPreferences } from '../lib/examPreferences';
+import { isAdminPractice } from '../lib/adminPractice';
 import { FileText, ArrowLeft, Clock, GraduationCap, Lock, AlertTriangle, Sparkles, PlayCircle, Trash2, X } from 'lucide-react';
 
 export default function Home({ subjects, onSelectSubject, user, onRequireLogin, onOpenReport, onResumeExam }) {
@@ -20,7 +21,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
         const saved = localStorage.getItem('examhub_in_progress_exam');
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (parsed && parsed.subjectId && parsed.totalQuestions) {
+          if (parsed && parsed.subjectId && parsed.totalQuestions && !isAdminPractice(parsed.subjectId)) {
             setInProgressExam(parsed);
             return;
           }
@@ -322,7 +323,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem', gap: '0.5rem' }}>
                       <h3 style={{ fontSize: '0.95rem', letterSpacing: '-0.25px', fontWeight: 600 }}>{sub.name}</h3>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
-                        {sub.requiresAuth && (
+                        {(sub.adminOnly || sub.requiresAuth) && (
                           <span style={{ 
                             fontSize: '0.65rem', 
                             fontWeight: 600, 
@@ -334,7 +335,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
                             alignItems: 'center',
                             gap: '0.25rem'
                           }}>
-                            <Lock size={10} /> {isLocked ? 'ต้อง Login' : 'ปลดล็อกแล้ว'}
+                            <Lock size={10} /> {sub.adminOnly ? 'เฉพาะแอดมิน' : isLocked ? 'ต้อง Login' : 'ปลดล็อกแล้ว'}
                           </span>
                         )}
                         {sub.type && (

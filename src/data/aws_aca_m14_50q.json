@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m14_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การสร้างสถาปัตยกรรม Serverless และ Microservices (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "Serverless · Microservices · Lambda · Containers · Step Functions · API Gateway · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M14 Building Serverless Architectures and Microservices",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M14 Building Serverless Architectures and Microservices",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "ข้อใดเป็นประโยชน์หลักของสถาปัตยกรรม Serverless ตามบทเรียน?",
+      "choices": [
+        "กำหนดให้จัดสรรเซิร์ฟเวอร์เต็มขนาดไว้ล่วงหน้า",
+        "ให้ผู้พัฒนาควบคุมการอัปเดตระบบปฏิบัติการของทุกโหนด",
+        "ลดภาระการจัดการเซิร์ฟเวอร์และรองรับการปรับขนาดอย่างต่อเนื่อง",
+        "กำหนดให้ทุกแอปพลิเคชันใช้ภาษาโปรแกรมเดียวกัน"
+      ],
+      "answer": 2,
+      "explain": "Serverless ช่วยลดการจัดการเซิร์ฟเวอร์ มีการปรับขนาดต่อเนื่อง และมีความพร้อมใช้งานสูงในตัว\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 9, 12"
+    },
+    {
+      "q": "แม้เปลี่ยนจากเซิร์ฟเวอร์ใน VPC เป็น Serverless แล้ว ทีมพัฒนายังต้องรับผิดชอบงานใด?",
+      "choices": [
+        "ติดตั้งแพลตฟอร์มบนอินสแตนซ์",
+        "กำหนดค่าอินสแตนซ์สำหรับทุกคำขอ",
+        "ติดตามและบำรุงรักษาแอปพลิเคชัน",
+        "อัปเดตระบบปฏิบัติการของโฮสต์"
+      ],
+      "answer": 2,
+      "explain": "ตารางเปรียบเทียบระบุว่าการสร้าง การนำแอปขึ้นใช้งาน และการติดตามดูแลแอปยังจำเป็นใน Serverless\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 21"
+    },
+    {
+      "q": "ทีมต้องเพิ่มการยืนยันตัวตนให้เว็บ Serverless บริการใดอยู่ในหมวด Authentication ตามบทเรียน?",
+      "choices": [
+        "AWS Step Functions",
+        "Amazon CloudFront",
+        "Amazon Cognito",
+        "AWS Amplify"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนจัด Amazon Cognito เป็นบริการสำหรับ Authentication\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 10"
+    },
+    {
+      "q": "ลักษณะ Specialized ของ Microservice หมายถึงข้อใด?",
+      "choices": [
+        "ทำหน้าที่ทางธุรกิจเฉพาะด้านเพื่อแก้ปัญหาหนึ่งเรื่อง",
+        "ต้องใช้ฐานข้อมูลร่วมกับบริการอื่นเสมอ",
+        "กำหนดให้ทุกทีมใช้เครื่องมือพัฒนาแบบเดียวกัน",
+        "รวมทุกกระบวนการทางธุรกิจไว้ในบริการเดียว"
+      ],
+      "answer": 0,
+      "explain": "Microservice แบบ Specialized มีหน้าที่ทางธุรกิจเฉพาะด้านและมีทีมขนาดเล็กดูแล\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 14"
+    },
+    {
+      "q": "ทีมชำระเงินต้องเผยแพร่รุ่นใหม่โดยไม่ต้องเผยแพร่บริการตะกร้าสินค้าพร้อมกัน คุณสมบัติใดของ Microservices ช่วยตอบโจทย์นี้?",
+      "choices": [
+        "กำหนดให้ทุกบริการเพิ่มขนาดพร้อมกัน",
+        "รวมซอร์สโค้ดทุกบริการเป็นหน่วยเผยแพร่เดียว",
+        "ผูกทุกบริการกับวงจรการพัฒนาเดียวกัน",
+        "พัฒนาและนำแต่ละบริการขึ้นใช้งานได้อย่างอิสระ"
+      ],
+      "answer": 3,
+      "explain": "ความเป็น Autonomous ช่วยให้พัฒนาและนำบริการขึ้นใช้งานโดยไม่กระทบบริการอื่น\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 14"
+    },
+    {
+      "q": "ระบบมีบริการค้นหาที่รับโหลดสูง แต่บริการจัดการบัญชีมีโหลดคงที่ แนวทางใดใช้ประโยชน์จาก Microservices ได้ตรงที่สุด?",
+      "choices": [
+        "เพิ่มขนาดบริการค้นหาแยกจากบริการจัดการบัญชี",
+        "ลดจำนวนบริการค้นหาเพื่อให้เท่ากับบริการบัญชี",
+        "เพิ่มขนาดทุกบริการในอัตราเดียวกัน",
+        "รวมทั้งสองบริการกลับเป็นกระบวนการเดียว"
+      ],
+      "answer": 0,
+      "explain": "Microservices สามารถปรับขนาดได้อิสระ จึงเพิ่มทรัพยากรเฉพาะบริการที่ต้องการได้\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 14, 16"
+    },
+    {
+      "q": "สองทีมใช้ภาษาโปรแกรมต่างกันในการพัฒนา Microservices ควรออกแบบการติดต่อระหว่างบริการอย่างไร?",
+      "choices": [
+        "รวมทั้งสองทีมเป็นหน่วยเผยแพร่เดียวก่อนจึงติดต่อกัน",
+        "บังคับให้เรียกฟังก์ชันภายในจากซอร์สโค้ดชุดเดียวกัน",
+        "เข้าถึงตัวแปรภายในโปรเซสของกันและกันโดยตรง",
+        "สื่อสารผ่าน API ที่กำหนดไว้อย่างชัดเจน"
+      ],
+      "answer": 3,
+      "explain": "Microservices ติดต่อผ่าน API ที่ชัดเจน และ API ช่วยเชื่อมแอปต่างภาษาโดยซ่อนความซับซ้อนภายใน\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 14, 59"
+    },
+    {
+      "q": "ข้อใดสอดคล้องกับลักษณะ Microservice ที่บทเรียนอธิบาย?",
+      "choices": [
+        "บริการต้องเก็บสถานะของทุกบริการไว้ในหน่วยความจำเดียว",
+        "บริการหนึ่งต้องรับผิดชอบหลายหน้าที่ทางธุรกิจที่ไม่เกี่ยวข้องกัน",
+        "บริการเป็น Stateless และมีที่เก็บข้อมูลของตนเอง",
+        "บริการทุกตัวต้องใช้ชุดเครื่องมือและฐานข้อมูลเดียวกัน"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนระบุว่า Microservice เป็น Stateless และมี Data Store ของตนเอง\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 14"
+    },
+    {
+      "q": "ชุดใดเป็นค่าที่ผู้พัฒนากำหนดให้ AWS Lambda function ได้ตามบทเรียน?",
+      "choices": [
+        "Runtime ภาษา ปริมาณหน่วยความจำ และ Timeout",
+        "Timeout ตารางแพตช์โฮสต์ และการติดตั้งแพลตฟอร์มบนโฮสต์",
+        "ปริมาณหน่วยความจำ รุ่น OS ของโฮสต์ และชนิด Hypervisor",
+        "Runtime ภาษา จำนวนโฮสต์จริง และตารางอัปเดต OS ของโฮสต์"
+      ],
+      "answer": 0,
+      "explain": "Lambda function กำหนด Runtime หน่วยความจำ และระยะเวลา Timeout ได้\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 22"
+    },
+    {
+      "q": "บทเรียนระบุรูปแบบใดสำหรับนำโค้ด Lambda function ขึ้นใช้งาน?",
+      "choices": [
+        "ไฟล์ .zip หรือ Container image",
+        "Amazon Machine Image หรือ EBS snapshot",
+        "ไฟล์ .zip หรือ Amazon Machine Image",
+        "Container image หรือ EBS snapshot"
+      ],
+      "answer": 0,
+      "explain": "Lambda รองรับการนำฟังก์ชันขึ้นใช้งานเป็นไฟล์ .zip หรือ Container image\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 22"
+    },
+    {
+      "q": "งานประมวลผลหนึ่งต้องทำงานต่อเนื่อง 25 นาทีต่อครั้งและไม่สามารถแบ่งงานได้ ควรเลือกแนวทางใดตามเกณฑ์ในบทเรียน?",
+      "choices": [
+        "ใช้ Lambda layer เพื่อขยายเวลาทำงานสูงสุด",
+        "ใช้โซลูชัน Container แทน Lambda function",
+        "ตั้ง Lambda timeout เป็น 25 นาที",
+        "เพิ่มหน่วยความจำ Lambda เพื่อยกเลิกข้อจำกัดระยะเวลา"
+      ],
+      "answer": 1,
+      "explain": "ตามบทเรียน Lambda ทำงานได้สูงสุด 15 นาที จึงแนะนำ Container สำหรับงานที่นานกว่านั้น\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 22, 37"
+    },
+    {
+      "q": "หากงานหนึ่งต้องใช้หน่วยความจำ 12 GB เกณฑ์ในเอกสารชี้ว่าควรพิจารณาโซลูชันใด?",
+      "choices": [
+        "Lambda โดยเพิ่ม Timeout เพื่อลดความต้องการหน่วยความจำโดยอัตโนมัติ",
+        "Container เพราะความต้องการเกินเกณฑ์หน่วยความจำ Lambda ที่บทเรียนระบุ",
+        "API Gateway เพราะใช้แทนหน่วยความจำของโปรแกรมได้",
+        "Lambda layer เพราะทำให้เพดานหน่วยความจำเพิ่มขึ้น"
+      ],
+      "answer": 1,
+      "explain": "บทเรียนระบุว่างานที่ใช้มากกว่า 10 GB ไม่เหมาะกับ Lambda และควรพิจารณา Container\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 37"
+    },
+    {
+      "q": "บริษัทมีแอปเดิมที่รันเป็น Container ในศูนย์ข้อมูลและต้องการย้ายขึ้นคลาวด์โดยลดการปรับโครงสร้างแอป แนวทางใดสอดคล้องกับบทเรียน?",
+      "choices": [
+        "รวมทุกบริการเป็น Monolith ใหม่ก่อนจึงเริ่มย้าย",
+        "ย้ายแอปด้วยโซลูชัน Container โดยคงโครงสร้างเดิมไว้ได้",
+        "เขียนใหม่ทั้งหมดเป็น Lambda ก่อนจึงเริ่มย้ายแอป",
+        "แยกทุกฟังก์ชันเป็น Microservice ก่อนจึงเริ่มย้าย"
+      ],
+      "answer": 1,
+      "explain": "Container ช่วยย้ายแอปเดิมจาก On-premises หรือ EC2 โดยไม่จำเป็นต้อง Refactor หรือเปลี่ยนสถาปัตยกรรม\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 37, 39"
+    },
+    {
+      "q": "เว็บต้องเรียก Lambda ผ่านคำขอ API และรอผลตอบกลับทันที รูปแบบใดตรงกับตัวอย่าง Synchronous invocation?",
+      "choices": [
+        "ใช้ Event source mapping เพื่ออ่าน Queue",
+        "เรียกผ่าน Amazon API Gateway หรือ Lambda function URL",
+        "เรียกจาก Scheduled event แบบ Asynchronous",
+        "เรียกจาก AWS service trigger แบบ Asynchronous"
+      ],
+      "answer": 1,
+      "explain": "ตัวอย่างการเรียกแบบ Synchronous ใช้คำขอ API ผ่าน API Gateway หรือ Lambda function URL\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 25, 26"
+    },
+    {
+      "q": "ทีมต้องการให้เหตุการณ์อัปโหลดภาพเข้า Amazon S3 เริ่มงานสร้างภาพย่อ โดยผู้ใช้ไม่ต้องรอผลประมวลผล ควรออกแบบอย่างไรตามบทเรียน?",
+      "choices": [
+        "ให้ผู้ใช้รอ Lambda ตอบกลับผ่าน API Gateway หลังอัปโหลด",
+        "เริ่มสร้างภาพย่อเฉพาะเมื่อผู้ใช้ส่งคำขอดูภาพผ่าน Synchronous API",
+        "ใช้เหตุการณ์จาก S3 เรียก Lambda แบบ Asynchronous",
+        "ให้ผู้ใช้เรียก Lambda แบบ Synchronous ก่อนอัปโหลดทุกครั้ง"
+      ],
+      "answer": 2,
+      "explain": "การแปลงภาพและ AWS service trigger เป็นตัวอย่างงาน Asynchronous และมีตัวอย่างใช้ S3 กับ Lambda สร้างภาพย่อ\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 25, 27, 31"
+    },
+    {
+      "q": "ร้านกาแฟต้องสร้างรายงานยอดขายทุกคืนจากฐานข้อมูล RDS โดยไม่ดูแลเซิร์ฟเวอร์รายงานตลอดเวลา แนวทางใดตรงกับสถาปัตยกรรมในบทเรียน?",
+      "choices": [
+        "ย้าย RDS มาอยู่บนเครื่องเดียวกับเซิร์ฟเวอร์รายงานที่ทีมดูแล",
+        "ใช้ Lambda เชื่อมต่อ RDS และทำงานตามกำหนดเวลา",
+        "เรียก Lambda สร้างรายงานเฉพาะเมื่อผู้ใช้เปิดหน้าเว็บ",
+        "ติดตั้งแอปรายงานบน EC2 ที่ทีมดูแลและเปิดไว้ตลอดเวลา"
+      ],
+      "answer": 1,
+      "explain": "สถาปัตยกรรมร้านกาแฟรุ่น V7 ใช้ Lambda เชื่อมต่อ RDS และสร้างรายงานตามกำหนดเวลา\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 25, 82, 83"
+    },
+    {
+      "q": "ใน Python Lambda handler ออบเจ็กต์ใดให้ข้อมูลเกี่ยวกับ Runtime และการเรียกใช้ฟังก์ชัน?",
+      "choices": [
+        "data",
+        "event",
+        "context",
+        "json"
+      ],
+      "answer": 2,
+      "explain": "context มีเมธอดและคุณสมบัติเกี่ยวกับ Runtime และ Invocation ส่วน event เก็บข้อมูลนำเข้าและข้อมูลบริการที่เรียก\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 29"
+    },
+    {
+      "q": "หลาย Lambda functions ใน Region เดียวกันต้องใช้ Dependency ชุดเดียวกัน ควรใช้ความสามารถใดเพื่อจัดแพ็กเกจให้นำกลับมาใช้ได้?",
+      "choices": [
+        "Step Functions Choice state",
+        "Amazon ECR lifecycle อย่างเดียว",
+        "API Gateway stages",
+        "Lambda layers"
+      ],
+      "answer": 3,
+      "explain": "Lambda layers ใช้แพ็กเกจ Dependency หรือ Custom runtime เพื่อให้ Lambda functions นำกลับมาใช้ได้\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 32"
+    },
+    {
+      "q": "Lambda function ต้องเข้าถึงบริการที่อยู่ภายใน VPC ของบริษัท ควรดำเนินการใดตามบทเรียน?",
+      "choices": [
+        "เปลี่ยน Lambda function เป็น WebSocket route",
+        "ใช้ Lambda layer เพื่อแทนการเชื่อมต่อเครือข่าย",
+        "ย้าย Dependency ทั้งหมดไปไว้ใน API Gateway cache",
+        "กำหนดค่า Lambda ให้เชื่อมต่อกับ VPC ของบริษัท"
+      ],
+      "answer": 3,
+      "explain": "Lambda สามารถกำหนดให้เชื่อมต่อ VPC ของลูกค้าเพื่อเข้าถึงบริการที่อยู่ภายใน VPC ได้\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 24, 32"
+    },
+    {
+      "q": "Python Lambda handler ต้องอ่านค่า length และ width ที่มากับข้อมูลนำเข้าของการเรียกฟังก์ชัน ควรอ่านจากอาร์กิวเมนต์ใดตามตัวอย่าง?",
+      "choices": [
+        "context",
+        "ค่าของ Timeout ที่กำหนดให้ฟังก์ชัน",
+        "event",
+        "ตัวแปร Runtime ที่ Lambda สร้างให้อัตโนมัติ"
+      ],
+      "answer": 2,
+      "explain": "ตัวอย่างอ่าน length และ width จาก event ซึ่งเป็นเอกสาร JSON ที่มีข้อมูลนำเข้าและข้อมูลของบริการที่เรียกใช้ฟังก์ชัน\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 29"
+    },
+    {
+      "q": "ทีมต้องเชื่อม Lambda กับแหล่งข้อมูลประเภท Queue หรือ Stream ควรพิจารณากลไกใดที่ระบุในบทเรียน?",
+      "choices": [
+        "API usage plan",
+        "Lambda layer",
+        "Event source mapping",
+        "Container image tag"
+      ],
+      "answer": 2,
+      "explain": "Lambda ใช้ Event source mappings กับ Queues และ Streams ได้\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 28, 32"
+    },
+    {
+      "q": "บริการใดทำหน้าที่เป็นที่เก็บ Container images ในกลุ่มบริการ Container ของ AWS?",
+      "choices": [
+        "AWS Fargate",
+        "Amazon ECS",
+        "Amazon ECR",
+        "Amazon EKS"
+      ],
+      "answer": 2,
+      "explain": "Amazon ECR เป็น Container image repository ส่วน ECS และ EKS เป็นบริการ Orchestration\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 41, 47"
+    },
+    {
+      "q": "ลำดับใดสอดคล้องกับกระบวนการสร้างและนำ Docker container ขึ้นใช้งานในบทเรียน?",
+      "choices": [
+        "สร้าง Image จาก Dockerfile → ดึงจาก Repository → อัปโหลดเข้า Repository",
+        "อัปโหลด Dockerfile เป็น Image → Deploy → Build Image ภายหลัง",
+        "สร้าง Image จาก Dockerfile → อัปโหลดไป Repository → ดึง Image ไป Deploy",
+        "Build Image → Deploy Dockerfile โดยตรง → ดึง Image เข้า Repository"
+      ],
+      "answer": 2,
+      "explain": "แผนภาพแสดงการ Build Image จาก Dockerfile อัปโหลดเข้า Repository แล้ว Pull Image เพื่อ Deploy\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 40"
+    },
+    {
+      "q": "ทีมต้องรัน Container โดยลดงานจัดเตรียมและบำรุงรักษาเซิร์ฟเวอร์ รวมถึงไม่ต้องจัดวาง Container บนคลัสเตอร์เอง ควรใช้ Compute option ใด?",
+      "choices": [
+        "Amazon EC2 ที่ทีมดูแลโฮสต์เอง",
+        "ECS บน EC2 ที่ทีมจัดเตรียมโหนดเอง",
+        "Kubernetes บน EC2 ที่ทีมติดตั้งและดูแลเอง",
+        "AWS Fargate"
+      ],
+      "answer": 3,
+      "explain": "Fargate ลดงานจัดการคลัสเตอร์และเซิร์ฟเวอร์ รวมถึงไม่ต้องปรับการจัดวาง Container บนโฮสต์\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 42"
+    },
+    {
+      "q": "ทีมเพิ่งเริ่มใช้ Container cluster และต้องการเครื่องมือของ AWS ที่ช่วยลดความซับซ้อนในการสร้างและดูแลคลัสเตอร์ ควรพิจารณาบริการใด?",
+      "choices": [
+        "Amazon EKS พร้อมเครื่องมือ Kubernetes",
+        "Amazon ECS พร้อมเครื่องมือของ AWS",
+        "Container cluster บน EC2 ที่ทีมพัฒนาเครื่องมือควบคุมเอง",
+        "Kubernetes ที่ทีมติดตั้งและดูแลคลัสเตอร์เอง"
+      ],
+      "answer": 1,
+      "explain": "ตารางเปรียบเทียบระบุ ECS เหมาะกับทีมใหม่ต่อ Container cluster และช่วยให้สร้างและดูแลคลัสเตอร์ง่ายขึ้น\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 45, 47"
+    },
+    {
+      "q": "ทีมมีประสบการณ์ Kubernetes และต้องการใช้ Toolset เดิมเพื่อควบคุม Container cluster บริการใดตรงกับความต้องการ?",
+      "choices": [
+        "AWS Lambda พร้อม Function handlers",
+        "Amazon ECS พร้อม ECS toolset",
+        "Amazon EKS",
+        "Amazon ECR สำหรับเก็บ Images โดยไม่มี Orchestrator"
+      ],
+      "answer": 2,
+      "explain": "EKS ใช้ Kubernetes toolset และเหมาะกับทีมที่คุ้นเคยกับสถาปัตยกรรมและการควบคุม Kubernetes cluster\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 45, 47"
+    },
+    {
+      "q": "ปัจจัยชุดใดทำให้ค่าใช้จ่ายในการรัน Lambda เพิ่มขึ้นตามคำอธิบายในบทเรียน?",
+      "choices": [
+        "หน่วยความจำที่จัดสรร จำนวน Repository และจำนวน API stages",
+        "ระยะเวลาทำงาน จำนวน Lambda layers และจำนวนภาษาในทีม",
+        "จำนวนครั้งที่เรียก ระยะเวลาทำงาน และหน่วยความจำที่จัดสรร",
+        "จำนวนครั้งที่เรียก จำนวน API versions และขนาดทีมพัฒนา"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนระบุว่าราคาของ Lambda เพิ่มตามจำนวน Invocation ระยะเวลา และหน่วยความจำที่จัดสรร\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 37"
+    },
+    {
+      "q": "องค์กรต้องการทำให้แอปทำงานในสภาพแวดล้อม Hybrid ได้เป็นมาตรฐานเดียวกัน เทคโนโลยีใดเป็น Use case ที่บทเรียนระบุโดยตรง?",
+      "choices": [
+        "Containers",
+        "API usage plans สำหรับควบคุมลูกค้าอย่างเดียว",
+        "Step Functions Choice states สำหรับแยกเส้นทางอย่างเดียว",
+        "Lambda layers สำหรับแชร์ Dependency อย่างเดียว"
+      ],
+      "answer": 0,
+      "explain": "หนึ่งใน Use cases ของ Container คือทำให้แอปใน Hybrid architecture มีมาตรฐานสอดคล้องกัน\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 39"
+    },
+    {
+      "q": "AWS Fargate สามารถใช้เป็น Compute สำหรับ Container cluster ของบริการคู่ใดตามบทเรียน?",
+      "choices": [
+        "Amazon CloudFront และ Amazon S3",
+        "Amazon API Gateway และ AWS AppSync",
+        "Amazon ECS และ Amazon EKS",
+        "Amazon ECR และ Amazon Cognito"
+      ],
+      "answer": 2,
+      "explain": "Fargate จัดการโหนดแบบ Serverless และใช้ได้กับทั้ง ECS และ EKS clusters\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 43, 44, 47"
+    },
+    {
+      "q": "แอปมีหลาย Microservices และทีมต้องเขียนโค้ดประสานงาน ส่งต่อข้อมูล จัดการ State และ Retry เองมากขึ้น ควรใช้บริการใดช่วย Orchestrate?",
+      "choices": [
+        "Amazon ECR",
+        "Amazon Cognito",
+        "AWS Amplify",
+        "AWS Step Functions"
+      ],
+      "answer": 3,
+      "explain": "Step Functions ประสาน Workflow หลายบริการ ดูแล State จุดตรวจ การเริ่มใหม่ และการจัดการข้อผิดพลาด\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 49, 50"
+    },
+    {
+      "q": "กระบวนการต้องตรวจสอบคำสั่งซื้อก่อน จากนั้นจึงเรียกชำระเงิน และจัดส่งเมื่อชำระเงินเสร็จ รูปแบบการประสานงานใดเหมาะที่สุด?",
+      "choices": [
+        "ใช้ Map state สร้างรายการงานโดยไม่กำหนดลำดับ",
+        "เรียก Task ตามลำดับ",
+        "ใช้ Pass state เพื่อจบ Workflow ทันที",
+        "เรียกทุก Task แบบขนานตั้งแต่เริ่ม"
+      ],
+      "answer": 1,
+      "explain": "Step Functions รองรับการทำ Task ตามลำดับ เหมาะเมื่อขั้นถัดไปต้องรอผลของขั้นก่อนหน้า\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 53"
+    },
+    {
+      "q": "Workflow ต้องเลือกเส้นทางอนุมัติธรรมดาหรืออนุมัติพิเศษตามยอดคำสั่งซื้อ ควรใช้ State ชนิดใด?",
+      "choices": [
+        "Pass",
+        "Wait",
+        "Fail",
+        "Choice"
+      ],
+      "answer": 3,
+      "explain": "Choice เพิ่มเงื่อนไขเพื่อควบคุมว่าจะเปลี่ยนไป State ใดถัดไป\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54"
+    },
+    {
+      "q": "หลังรับคำสั่งซื้อ ระบบต้องตรวจสอบเครดิตและตรวจสต็อกพร้อมกันเป็นคนละ Branch ของ Workflow ควรใช้ State ชนิดใด?",
+      "choices": [
+        "Pass",
+        "Wait",
+        "Choice",
+        "Parallel"
+      ],
+      "answer": 3,
+      "explain": "Parallel เพิ่ม Branch ของ State machines ภายใน State machine เพื่อทำงานหลายสายพร้อมกัน\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 53, 54"
+    },
+    {
+      "q": "Workflow ได้รับชุดข้อมูลลูกค้าและต้องทำขั้นตอนเดียวกันกับแต่ละ Record แบบขนาน ควรเลือก State ชนิดใด?",
+      "choices": [
+        "Choice",
+        "Wait",
+        "Fail",
+        "Map"
+      ],
+      "answer": 3,
+      "explain": "Map แยก Workflow สำหรับแต่ละ Record ในชุดข้อมูลและรองรับการประมวลผลแบบขนาน\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54"
+    },
+    {
+      "q": "ระบบต้องหยุด Workflow เป็นเวลาที่กำหนดก่อนเข้าสู่ขั้นตอนถัดไป ควรใช้ State ชนิดใด?",
+      "choices": [
+        "Choice",
+        "Task",
+        "Fail",
+        "Wait"
+      ],
+      "answer": 3,
+      "explain": "Wait ใช้หน่วง Workflow ตามระยะเวลาที่กำหนด\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54"
+    },
+    {
+      "q": "Workflow ส่งคำขอให้พนักงานอนุมัติแล้วต้องหยุดรอผลจากระบบภายนอกก่อนทำต่อ ควรใช้ความสามารถใด?",
+      "choices": [
+        "Pass state ที่ส่งต่อทันที",
+        "Fail state ที่จบด้วยความล้มเหลว",
+        "Parallel state โดยไม่รับผลอนุมัติ",
+        "Wait for callback"
+      ],
+      "answer": 3,
+      "explain": "ตัวเลือก Wait for callback หยุด Workflow เพื่อรอ Callback และมีตัวอย่างการรออนุมัติจากบุคคล\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54, 56"
+    },
+    {
+      "q": "State ประเภทใดใช้เรียกทำงานร่วมกับบริการ AWS ตามการแบ่งชนิด State ในบทเรียน?",
+      "choices": [
+        "Wait",
+        "Task",
+        "Choice",
+        "Fail"
+      ],
+      "answer": 1,
+      "explain": "Task เป็น Work state ที่ใช้ Integrate กับบริการ AWS\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54, 55"
+    },
+    {
+      "q": "ทีมต้องการส่งหรือกรองข้อมูลขาเข้าให้ State ถัดไปโดยไม่เรียกบริการประมวลผล ควรใช้ State ใด?",
+      "choices": [
+        "Fail",
+        "Task",
+        "Activity",
+        "Pass"
+      ],
+      "answer": 3,
+      "explain": "Pass ส่งต่อหรือกรองข้อมูลขาเข้าไปยัง State ถัดไป\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54"
+    },
+    {
+      "q": "เมื่อพบเงื่อนไขที่ทำให้กระบวนการไปต่อไม่ได้ ทีมต้องจบ State machine และบันทึกว่าไม่สำเร็จ ควรใช้ State ใด?",
+      "choices": [
+        "Fail",
+        "Wait",
+        "Pass",
+        "Map"
+      ],
+      "answer": 0,
+      "explain": "Fail หยุด State machine และระบุว่าการทำงานล้มเหลว\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 54"
+    },
+    {
+      "q": "ทีมต้องการ Workflow ระยะยาวที่มีประวัติการทำงานครบใน Console และบันทึกความคืบหน้าทุกครั้งที่เปลี่ยน State ควรเลือกชนิดใด?",
+      "choices": [
+        "Standard Workflow",
+        "WebSocket API",
+        "Express Workflow",
+        "Lambda layer"
+      ],
+      "answer": 0,
+      "explain": "Standard รองรับงานระยะยาว มี Full history ใน Console และ Persist State เมื่อเปลี่ยน State\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 51"
+    },
+    {
+      "q": "ตามตารางเปรียบเทียบในบทเรียน Express Workflow ต่างจาก Standard ด้านการคิดค่าบริการอย่างไร?",
+      "choices": [
+        "Express คิดตามจำนวนคำขอ Workflow และระยะเวลาทำงาน",
+        "Express คิดเฉพาะจำนวน State machines ที่นิยามไว้",
+        "Express คิดเฉพาะจำนวนครั้งที่แก้ไข Workflow",
+        "Express คิดตามจำนวน State transitions เท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "Express คิดตามจำนวน Requests และ Duration ส่วน Standard คิดตามจำนวน State transitions\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 51"
+    },
+    {
+      "q": "ในนิยาม State machine ด้วย Amazon States Language ฟิลด์ StartAt ใช้ระบุอะไร?",
+      "choices": [
+        "State แรกที่ต้องเริ่มทำงาน",
+        "State ถัดจาก State ปัจจุบัน",
+        "State ที่เป็นเส้นทางจัดการ Error เสมอ",
+        "State สุดท้ายที่ทำงานสำเร็จ"
+      ],
+      "answer": 0,
+      "explain": "StartAt ระบุชื่อ State แรกที่จะทำงาน ส่วน Next ชี้ไป State ถัดไป\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 55"
+    },
+    {
+      "q": "API ขององค์กรต้องมี Usage plans การตรวจสอบ Payload และ Private API endpoints ควรเลือก API type ใดตามบทเรียน?",
+      "choices": [
+        "REST API",
+        "Lambda function URL",
+        "WebSocket API",
+        "HTTP API"
+      ],
+      "answer": 0,
+      "explain": "REST API เหมาะกับงานที่ต้องการคุณสมบัติ API management เช่น Usage plans, Payload validation และ Private endpoints\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 61, 68"
+    },
+    {
+      "q": "ทีมสร้าง API สำหรับ Microservices ที่ไม่ต้องใช้คุณสมบัติจัดการขั้นสูงของ REST API และให้ความสำคัญกับ Latency และค่าใช้จ่ายที่ต่ำกว่า ควรเลือกชนิดใด?",
+      "choices": [
+        "WebSocket API",
+        "HTTP API",
+        "REST API พร้อมเพิ่ม Usage plans ทุก Client",
+        "REST API"
+      ],
+      "answer": 1,
+      "explain": "HTTP API เหมาะกับ Microservices และบทเรียนระบุว่ามี Latency และค่าใช้จ่ายต่ำกว่า REST API\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 61, 68"
+    },
+    {
+      "q": "แอปสนทนาต้องเชื่อมต่อกับ Backend แบบ Real-time และรักษา Active session ควรใช้ API type ใด?",
+      "choices": [
+        "WebSocket API",
+        "HTTP API แบบ Stateless",
+        "REST API แบบ Stateless",
+        "Lambda function URL แบบคำขอและผลตอบกลับ"
+      ],
+      "answer": 0,
+      "explain": "WebSocket API เป็น Stateful และสร้าง Session ระหว่าง Client กับ Backend สำหรับงาน Real-time\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 61, 68"
+    },
+    {
+      "q": "Backend ของ Microservice อยู่หลัง Application Load Balancer ภายใน VPC หากใช้ API Gateway HTTP API ควรพิจารณาส่วนเชื่อมต่อใดตามแผนภาพ?",
+      "choices": [
+        "API response cache",
+        "VPC link",
+        "Lambda layer",
+        "API usage plan"
+      ],
+      "answer": 1,
+      "explain": "แผนภาพ Backend integrations แสดง HTTP API เชื่อมกับ Load balancer ใน Customer VPC ผ่าน VPC link\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 62"
+    },
+    {
+      "q": "API ต้องส่งคำขอไปยังบริการ AWS ที่ API Gateway รองรับการเชื่อมต่อโดยตรง และไม่ต้องแปลงข้อมูลด้วยโค้ดเพิ่มเติม แนวทางใดสอดคล้องกับ Best practice ในบทเรียน?",
+      "choices": [
+        "เพิ่ม Lambda เป็นตัวกลางในทุกคำขอเสมอ",
+        "ใช้ Direct AWS service integration เมื่อมีให้ใช้",
+        "ส่งคำขอผ่าน Container หลายชั้นก่อนถึงบริการ",
+        "เก็บคำขอไว้ใน API cache โดยไม่ส่งต่อ"
+      ],
+      "answer": 1,
+      "explain": "บทเรียนแนะนำให้ใช้ Direct AWS service integrations เมื่อมีให้ใช้\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 62, 79, 80"
+    },
+    {
+      "q": "ทีมพบธุรกรรมประมวลผลล้มเหลวและต้องการเก็บไว้ตรวจสอบพร้อมลองทำใหม่ภายหลัง ควรใช้กลไกใด?",
+      "choices": [
+        "Dead-letter queue",
+        "API usage plan",
+        "API response cache",
+        "Lambda layer"
+      ],
+      "answer": 0,
+      "explain": "Dead-letter queue ใช้เก็บ ตรวจสอบ และ Retry ธุรกรรมที่ล้มเหลวตาม Best practice ด้าน Failure management\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 74, 80"
+    },
+    {
+      "q": "Workflow ทำธุรกรรมบางขั้นตอนไปแล้วแต่ขั้นตอนถัดไปล้มเหลว แนวทางใดตรงกับ Best practice ด้าน Failure management ที่บทเรียนระบุ?",
+      "choices": [
+        "ลองใหม่เฉพาะขั้นสุดท้ายโดยไม่พิจารณาผลที่เกิดก่อนหน้า",
+        "ถือว่าทั้งธุรกรรมสำเร็จเมื่อขั้นแรกสำเร็จ",
+        "จบ Workflow โดยเก็บผลบางส่วนไว้เสมอและไม่ย้อนกลับ",
+        "ออกแบบให้ย้อนกลับธุรกรรมที่ล้มเหลว"
+      ],
+      "answer": 3,
+      "explain": "นอกจากใช้ Dead-letter queue แล้ว บทเรียนแนะนำให้ Roll back ธุรกรรมที่ล้มเหลว\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 74, 80"
+    },
+    {
+      "q": "ทีมกำลังทบทวนการปกป้องข้อมูลของ Serverless application ข้อใดตรงกับแนวปฏิบัติที่ระบุในบทเรียน?",
+      "choices": [
+        "เข้ารหัสข้อมูลขณะจัดเก็บอย่างเดียวโดยไม่ป้องกันขณะส่ง",
+        "เข้ารหัสข้อมูลทั้งขณะส่งผ่านเครือข่ายและขณะจัดเก็บ",
+        "ใช้การควบคุมการเข้าถึงแทนการเข้ารหัสทั้งสองช่วง",
+        "เข้ารหัสข้อมูลขณะส่งอย่างเดียวโดยไม่ป้องกันขณะจัดเก็บ"
+      ],
+      "answer": 1,
+      "explain": "บทเรียนแนะนำการเข้ารหัสข้อมูลทั้ง In transit และ At rest รวมถึงนำความปลอดภัยของแอปมาใช้กับ Workload\n\nอ้างอิง: ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf หน้า 76, 80"
+    }
+  ]
+}

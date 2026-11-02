@@ -32,3 +32,9 @@ chat_summary.md
 .codex/
 .superpowers/
 .mcp.json
+
+# Private exam migration sources and generated recovery/export artifacts.
+server/data/
+deliverables/
+exam-output/
+.vercel/

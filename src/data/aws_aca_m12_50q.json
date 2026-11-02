@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m12_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การแคชเนื้อหา (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "CloudFront · CDN · TTL · ElastiCache · Redis · Memcached · Caching Strategies · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M12 Caching Content",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M12 Caching Content",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M12 CachingContent.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "ข้อใดอธิบายบทบาทของแคชได้ตรงที่สุด?",
+      "choices": [
+        "เก็บข้อมูลบางส่วนในชั้นความเร็วสูงเพื่อให้คำขอถัดไปเร็วขึ้น",
+        "เก็บประวัติทุกธุรกรรมเป็นสำเนาสำรอง",
+        "ย้ายข้อมูลทั้งหมดออกจากแหล่งข้อมูลหลักถาวร",
+        "จัดเรียงทุกคำขอให้ทำงานตามลำดับ"
+      ],
+      "answer": 0,
+      "explain": "แคชเป็นชั้นจัดเก็บความเร็วสูงที่เก็บข้อมูลบางส่วนสำหรับคำขอถัดไป\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 8"
+    },
+    {
+      "q": "โลโก้เว็บไซต์แทบไม่เปลี่ยนและถูกเรียกทุกหน้า เหตุใดจึงเหมาะกับการแคช?",
+      "choices": [
+        "เป็นข้อมูลที่ต้องคำนวณใหม่ทุกคำขอ",
+        "เป็นข้อมูลที่ต้องลบหลังอ่านทุกครั้ง",
+        "เป็นข้อมูลที่ใช้ได้เฉพาะผู้ดูแล",
+        "เป็นข้อมูลคงที่ที่ถูกเรียกใช้บ่อย"
+      ],
+      "answer": 3,
+      "explain": "ข้อมูลคงที่และเข้าถึงบ่อยเป็นตัวเลือกที่ดีสำหรับการแคช\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 10"
+    },
+    {
+      "q": "ระบบคำนวณคำตอบเดิมซ้ำหลายครั้งโดยใช้ CPU สูง ควรแคชสิ่งใด?",
+      "choices": [
+        "เฉพาะชื่อเครื่องคำนวณ",
+        "เฉพาะการตั้งค่าเครือข่าย",
+        "ผลลัพธ์ของการคำนวณ",
+        "เฉพาะหมายเลขคำขอ"
+      ],
+      "answer": 2,
+      "explain": "ผลลัพธ์การคำนวณที่ใช้ทรัพยากรมากเป็นข้อมูลที่ควรพิจารณาแคช\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 10"
+    },
+    {
+      "q": "คิวรีซับซ้อนชุดเดิมถูกเรียกบ่อยและใช้เวลานาน ควรแคชสิ่งใดเพื่อลดเวลาตอบ?",
+      "choices": [
+        "เฉพาะข้อความคำสั่งคิวรี",
+        "เฉพาะชื่อผู้เรียกคิวรี",
+        "เฉพาะชื่อฐานข้อมูล",
+        "ผลลัพธ์ของคิวรี"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนแนะนำแคชผลคิวรีที่ซับซ้อน ใช้เวลานาน หรือใช้บ่อย\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 10"
+    },
+    {
+      "q": "หลังเพิ่มแคช ราคาสินค้าบางครั้งเก่ากว่าฐานข้อมูล ทีมต้องออกแบบเรื่องใดเพิ่มเติม?",
+      "choices": [
+        "วิธีเก็บทุกข้อมูลในแคชตลอดไป",
+        "วิธีจัดการข้อมูลแคชที่ล้าสมัยตามความต้องการธุรกิจ",
+        "วิธีเพิ่มขนาดแคชโดยไม่พิจารณาอายุข้อมูล",
+        "วิธีทำให้ทุกไฟล์มี TTL เท่ากันเสมอ"
+      ],
+      "answer": 1,
+      "explain": "การจัดการ stale data เป็นข้อท้าทายที่ต้องพิจารณาตามกรณีธุรกิจ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 11"
+    },
+    {
+      "q": "เมื่อคำขอส่วนใหญ่ตอบได้จากแคช ผลโดยตรงต่อ origin คือข้อใด?",
+      "choices": [
+        "ภาระของแหล่งข้อมูลต้นทางลดลง",
+        "ข้อมูลต้นทางถูกลบทันที",
+        "ต้นทางต้องอยู่ใกล้ผู้ใช้ทุกคน",
+        "ต้นทางต้องทำงานซ้ำทุกคำขอ"
+      ],
+      "answer": 0,
+      "explain": "แคชลดการเข้าถึงชั้นจัดเก็บที่ช้ากว่าและลดภาระ origin\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 8, 11"
+    },
+    {
+      "q": "ข้อใดเป็นประโยชน์ของการแคชตามบทเรียน?",
+      "choices": [
+        "กำจัดงานพัฒนาระบบแคชทั้งหมด",
+        "ทำให้ไม่ต้องมีแหล่งข้อมูลหลัก",
+        "รับประกันว่าข้อมูลทุกสำเนาสดใหม่ตลอดเวลา",
+        "ลด latency และเพิ่มความคาดการณ์ได้ของประสิทธิภาพ"
+      ],
+      "answer": 3,
+      "explain": "การลด latency และประสิทธิภาพที่คาดการณ์ได้อยู่ในรายการประโยชน์ของแคช\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 11"
+    },
+    {
+      "q": "ข้อใดจับคู่บริการกับรูปแบบแคชได้ถูกต้อง?",
+      "choices": [
+        "CloudFront: database caching; ElastiCache: edge caching",
+        "CloudFront และ ElastiCache: edge caching ทั้งคู่",
+        "CloudFront: edge caching; ElastiCache: database caching",
+        "CloudFront: แคชคิวรีเท่านั้น; ElastiCache: แคชวิดีโอเท่านั้น"
+      ],
+      "answer": 2,
+      "explain": "CloudFront ใช้ edge location ส่วน ElastiCache ใช้ชั้นข้อมูลในหน่วยความจำ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 12"
+    },
+    {
+      "q": "ผู้ใช้หลายทวีปดาวน์โหลดไฟล์ภาพชุดเดียวกัน CDN ช่วยลด latency อย่างไร?",
+      "choices": [
+        "ส่งสำเนาจากแคชที่ใกล้ผู้ใช้",
+        "ส่งทุกคำขอกลับ origin แห่งเดียว",
+        "เปลี่ยนคำขออ่านทั้งหมดเป็นคำขอเขียน",
+        "ทำให้ทุกคนใช้เส้นทางเครือข่ายเดียว"
+      ],
+      "answer": 0,
+      "explain": "CDN ส่ง local copy จากแคช edge หรือ point of presence ใกล้ผู้ใช้\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 15"
+    },
+    {
+      "q": "เซิร์ฟเวอร์แคชของ CDN มีตำแหน่งเชิงตรรกะอย่างไร?",
+      "choices": [
+        "เป็นตัวกลางระหว่างไคลเอนต์กับแอปพลิเคชัน",
+        "เป็นตัวตั้งเวลางานแบตช์เท่านั้น",
+        "เป็นระบบธุรกรรมหลักแทนฐานข้อมูล",
+        "เป็นผู้สร้างข้อมูลธุรกิจใหม่ทุกคำขอ"
+      ],
+      "answer": 0,
+      "explain": "CDN มี intermediary servers ระหว่าง client กับ application\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 15"
+    },
+    {
+      "q": "ทีมต้องแจกจ่ายไฟล์ภาพ วิดีโอ และ web objects ที่ใช้ร่วมกัน แคชใดเหมาะตามบทเรียน?",
+      "choices": [
+        "แคชผลคิวรีฐานข้อมูลเท่านั้น",
+        "Edge cache",
+        "แคชลำดับข้อความเท่านั้น",
+        "แคชการเชื่อมต่อฐานข้อมูลเท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "ภาพ วิดีโอ และ web objects เป็นตัวอย่างเนื้อหาที่แคชที่ edge ได้\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 16"
+    },
+    {
+      "q": "บริษัทต้องส่งเนื้อหาทั่วโลกด้วย latency ต่ำและอัตราถ่ายโอนสูง ควรใช้บริการใด?",
+      "choices": [
+        "Amazon ElastiCache",
+        "Amazon RDS",
+        "Amazon CloudFront",
+        "Amazon SQS"
+      ],
+      "answer": 2,
+      "explain": "CloudFront เป็น CDN ที่ส่งเนื้อหาทั่วโลกผ่าน edge locations\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 17"
+    },
+    {
+      "q": "CloudFront ช่วยเพิ่มความทนทานต่อ DDoS โดยทำงานร่วมกับบริการใด?",
+      "choices": [
+        "Amazon RDS และ ElastiCache",
+        "AWS Shield และ AWS WAF",
+        "ElastiCache และ Elastic Transcoder",
+        "Elastic Transcoder และ Amazon S3"
+      ],
+      "answer": 1,
+      "explain": "บทเรียนระบุ Shield และ WAF เป็นบริการที่ช่วยเพิ่มความทนทานของ CloudFront ต่อ DDoS\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 17"
+    },
+    {
+      "q": "Edge locations ต่างจาก Regional edge caches อย่างไร?",
+      "choices": [
+        "มีจำนวนน้อยกว่า อยู่ไกลกว่า และมีแคชใหญ่กว่า",
+        "อยู่ในเครื่องผู้ใช้และไม่เชื่อมต่อ origin",
+        "มีจำนวนมากกว่า อยู่ใกล้ผู้ใช้กว่า และมีแคชเล็กกว่า",
+        "มีจำนวนเท่ากันและเก็บเฉพาะข้อมูลต้นทาง"
+      ],
+      "answer": 2,
+      "explain": "Edge locations มีมากและใกล้ผู้ใช้ แต่มีขนาดแคชเล็กกว่า\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 18"
+    },
+    {
+      "q": "องค์ประกอบใดมีแคชใหญ่กว่า edge location และช่วยเก็บเนื้อหาที่ได้รับความนิยมน้อยกว่า?",
+      "choices": [
+        "Amazon Elastic Transcoder",
+        "Regional edge cache",
+        "AWS WAF web ACL",
+        "Origin location"
+      ],
+      "answer": 1,
+      "explain": "Regional edge caches มีแคชใหญ่กว่าและช่วยเรื่องเนื้อหาที่นิยมไม่มาก\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 18"
+    },
+    {
+      "q": "แก้ไฟล์ที่ origin แล้ว แต่ผู้ใช้ยังได้ไฟล์เก่าจาก CloudFront สาเหตุใดตรงกับบทเรียน?",
+      "choices": [
+        "การแก้ origin ลบ distribution อัตโนมัติ",
+        "CloudFront เขียนทับ origin ทุกครั้ง",
+        "สำเนาในแคชยังไม่หมดอายุตาม TTL",
+        "Regional edge cache ไม่สามารถเก็บไฟล์"
+      ],
+      "answer": 2,
+      "explain": "สำเนาที่ใช้ TTL อาจล้าสมัยหาก origin เปลี่ยนก่อนแคชหมดอายุ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 19"
+    },
+    {
+      "q": "เมื่อสร้าง CloudFront distribution ต้องระบุสิ่งใดเพื่อบอกตำแหน่งเนื้อหาต้นทาง?",
+      "choices": [
+        "ชื่อ ElastiCache node",
+        "Origin location",
+        "คิวข้อความของผู้ใช้แต่ละราย",
+        "ลำดับการอ่านในฐานข้อมูล"
+      ],
+      "answer": 1,
+      "explain": "ขั้นตอนตั้งค่า distribution เริ่มจากระบุ origin location\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 20"
+    },
+    {
+      "q": "CloudFront ส่งการตั้งค่าของ distribution ไปที่ใดเพื่อเตรียมให้บริการ?",
+      "choices": [
+        "เฉพาะฐานข้อมูลธุรกรรม",
+        "เฉพาะ ElastiCache nodes",
+        "เฉพาะเบราว์เซอร์ผู้ดูแล",
+        "Edge locations"
+      ],
+      "answer": 3,
+      "explain": "CloudFront กระจาย configuration ของ distribution ไปยัง edge locations\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 20"
+    },
+    {
+      "q": "ทีมต้องการให้เนื้อหาที่แคชหมดอายุเร็วขึ้น ควรทำอย่างไร?",
+      "choices": [
+        "เพิ่ม maximum TTL",
+        "เปลี่ยนชื่อ distribution อย่างเดียว",
+        "ลด maximum TTL",
+        "เพิ่มขนาด ElastiCache node"
+      ],
+      "answer": 2,
+      "explain": "ค่า maximum TTL ที่ต่ำช่วยให้เนื้อหาในแคชหมดอายุเร็วขึ้น\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 21"
+    },
+    {
+      "q": "ทีมออก JavaScript รุ่นใหม่โดยเปลี่ยนชื่อไฟล์ตามรุ่นเพื่อให้ CloudFront ดึงไฟล์ใหม่ทันที นี่คือแนวทางใด?",
+      "choices": [
+        "Database lazy loading",
+        "เพิ่ม TTL ของไฟล์เดิม",
+        "Database write-through",
+        "Content versioning"
+      ],
+      "answer": 3,
+      "explain": "Content versioning ทำให้ดึงและแคชไฟล์ใหม่ทันที\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 21"
+    },
+    {
+      "q": "ไฟล์แต่ละประเภทต้องมีอายุแคชต่างกันและต้องควบคุมรายไฟล์ ควรใช้สิ่งใด?",
+      "choices": [
+        "Cache-Control headers",
+        "ชื่อ Region ของ distribution",
+        "จำนวน ElastiCache nodes",
+        "กฎลำดับข้อความในคิว"
+      ],
+      "answer": 0,
+      "explain": "Cache-Control headers ให้การควบคุมการหมดอายุของแต่ละไฟล์อย่างละเอียด\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 21"
+    },
+    {
+      "q": "บริษัทเผยแพร่เอกสารผิดและต้องการบังคับให้สำเนาที่ edge หมดอายุก่อน TTL ควรทำอะไร?",
+      "choices": [
+        "เพิ่มรูปแบบวิดีโอใน Transcoder",
+        "เพิ่ม TTL ของไฟล์เดิม",
+        "เปิด ElastiCache lazy loading",
+        "ส่ง CloudFront invalidation request"
+      ],
+      "answer": 3,
+      "explain": "Invalidation บังคับให้เนื้อหาใน edge caches หมดอายุ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 21"
+    },
+    {
+      "q": "ร้านค้าเพิ่ม TTL เพื่อลดการเรียก origin แต่แก้ราคาสินค้าบ่อย ข้อแลกเปลี่ยนใดควรคำนึงถึง?",
+      "choices": [
+        "TTL ที่นานขึ้นทำให้แคชอัปเดตพร้อม origin โดยอัตโนมัติ",
+        "TTL ที่นานขึ้นจะทำให้สำเนาในแคชหมดอายุเร็วขึ้น",
+        "การเพิ่ม TTL ทำให้ไม่จำเป็นต้องพิจารณาความสดของข้อมูล",
+        "ภาระ origin ที่ลดลงอาจแลกกับความเสี่ยงที่ผู้ใช้เห็นราคาเก่า"
+      ],
+      "answer": 3,
+      "explain": "อายุแคชที่ยาวช่วยลดการเข้าถึง origin แต่เมื่อ origin เปลี่ยน สำเนาอาจเก่าจนกว่าจะหมดอายุหรือถูกจัดการ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 6, 11, 19, 21"
+    },
+    {
+      "q": "บริการใดแปลงวิดีโอต้นฉบับเป็นหลายรูปแบบเอาต์พุตในตัวอย่างการสตรีม?",
+      "choices": [
+        "Amazon CloudFront",
+        "Amazon ElastiCache",
+        "Amazon Elastic Transcoder",
+        "Amazon Route 53"
+      ],
+      "answer": 2,
+      "explain": "Elastic Transcoder แปลง input video เป็นหลาย output formats\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 22"
+    },
+    {
+      "q": "ลำดับบริการหลังได้วิดีโอต้นฉบับในตัวอย่างการสตรีมคือข้อใด?",
+      "choices": [
+        "ElastiCache → Elastic Transcoder → Route 53",
+        "CloudFront → ElastiCache → Amazon S3",
+        "Elastic Transcoder → Amazon S3 → CloudFront",
+        "Amazon S3 → CloudFront → Elastic Transcoder"
+      ],
+      "answer": 2,
+      "explain": "แปลงวิดีโอ เก็บเอาต์พุตใน S3 แล้วส่งสตรีมผ่าน CloudFront\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 22"
+    },
+    {
+      "q": "ทีมต้องการวิเคราะห์คำขอเว็บและบล็อกภัยคุกคามก่อนถึงเซิร์ฟเวอร์ต้นทาง ควรใช้สิ่งใดร่วมกับ CloudFront?",
+      "choices": [
+        "AWS WAF web ACL",
+        "ElastiCache TTL",
+        "CloudFront content versioning",
+        "Elastic Transcoder pipeline"
+      ],
+      "answer": 0,
+      "explain": "WAF web ACL กำหนดกฎวิเคราะห์คำขอและบล็อกภัยคุกคามก่อนถึงเซิร์ฟเวอร์\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 23"
+    },
+    {
+      "q": "มาตรการ DDoS ของบริการใดช่วยให้เฉพาะทราฟฟิกเว็บที่ถูกต้องผ่านไปยัง CloudFront ตามบทเรียน?",
+      "choices": [
+        "AWS Shield",
+        "Amazon S3",
+        "Amazon Elastic Transcoder",
+        "Amazon ElastiCache"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนอธิบายว่า Shield DDoS mitigations กรองทราฟฟิกก่อนผ่านไป CloudFront\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 23"
+    },
+    {
+      "q": "ฐานข้อมูลมีคำขอสูง ทีมต้องลดเวลาตอบและต้นทุนจากการอ่านซ้ำ ควรพิจารณาวิธีใด?",
+      "choices": [
+        "เพิ่มอายุทุกคีย์ให้ไม่มีวันหมดอายุเสมอ",
+        "เพิ่มชั้นแคชฐานข้อมูลสำหรับข้อมูลที่อ่านซ้ำ",
+        "ย้ายไฟล์ภาพทั้งหมดเข้าไปในตารางธุรกรรม",
+        "เก็บผลลัพธ์ไว้เฉพาะเครื่องผู้ดูแลระบบ"
+      ],
+      "answer": 1,
+      "explain": "ปริมาณคำขอสูง เวลาตอบ และต้นทุนเป็นเหตุผลในการพิจารณาแคชฐานข้อมูล\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 29"
+    },
+    {
+      "q": "ข้อใดอธิบาย Amazon ElastiCache ได้ถูกต้อง?",
+      "choices": [
+        "บริการกำหนดเส้นทาง DNS",
+        "CDN ที่ส่งไฟล์จาก edge ทั่วโลก",
+        "บริการ key-value ในหน่วยความจำที่มีการจัดการให้",
+        "บริการแปลงวิดีโอหลายบิตเรต"
+      ],
+      "answer": 2,
+      "explain": "ElastiCache เป็น fully managed key-value in-memory data store\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 30"
+    },
+    {
+      "q": "ควรวาง ElastiCache ไว้ที่ใดในเชิงตรรกะเพื่อช่วยลดการอ่านฐานข้อมูล?",
+      "choices": [
+        "แทนที่แหล่งข้อมูลหลักทุกชนิดอย่างถาวร",
+        "ระหว่างแอปพลิเคชันกับ origin data store",
+        "ภายใน CloudFront edge location เท่านั้น",
+        "ระหว่างผู้ใช้กับ DNS เท่านั้น"
+      ],
+      "answer": 1,
+      "explain": "ElastiCache อยู่ระหว่าง application และ origin data store\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 30"
+    },
+    {
+      "q": "คู่เอนจินใดที่ ElastiCache รองรับตามบทเรียน?",
+      "choices": [
+        "CloudFront และ Route 53",
+        "Redis และ Amazon S3",
+        "Memcached และ Amazon RDS",
+        "Redis และ Memcached"
+      ],
+      "answer": 3,
+      "explain": "เอนจินที่ระบุคือ Redis และ Memcached\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 30"
+    },
+    {
+      "q": "ระบบต้องใช้โครงสร้างข้อมูลที่ซับซ้อนในแคช ควรเลือกอะไรตามเกณฑ์บทเรียน?",
+      "choices": [
+        "ElastiCache for Memcached",
+        "ElastiCache for Redis",
+        "CloudFront edge cache",
+        "CloudFront Regional edge cache"
+      ],
+      "answer": 1,
+      "explain": "Redis เหมาะเมื่อจำเป็นต้องรองรับ complex data types\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 31"
+    },
+    {
+      "q": "ทีมต้องการให้ key store รองรับ persistence ควรเลือกอะไร?",
+      "choices": [
+        "AWS WAF web ACL",
+        "ElastiCache for Redis",
+        "ElastiCache for Memcached",
+        "CloudFront distribution"
+      ],
+      "answer": 1,
+      "explain": "Persistence ของ key store เป็นเกณฑ์เลือก Redis\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 31"
+    },
+    {
+      "q": "เกมต้องจัดอันดับชุดข้อมูลคะแนนในหน่วยความจำ ควรเลือกอะไร?",
+      "choices": [
+        "ElastiCache for Redis",
+        "Amazon Elastic Transcoder",
+        "Amazon Route 53",
+        "ElastiCache for Memcached"
+      ],
+      "answer": 0,
+      "explain": "การ sort หรือ rank ชุดข้อมูลในหน่วยความจำเป็นความสามารถของ Redis ที่ระบุไว้\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 31"
+    },
+    {
+      "q": "แคชต้องมี high availability และ automatic failover ควรเลือกอะไรตามบทเรียน?",
+      "choices": [
+        "Amazon Elastic Transcoder",
+        "ElastiCache for Memcached",
+        "ElastiCache for Redis",
+        "CloudFront content versioning"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนแนะนำ Redis เมื่อจำเป็นต้องมี automatic failover\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 31"
+    },
+    {
+      "q": "แอปพลิเคชันต้องใช้ publish/subscribe messaging ผ่านเอนจินแคช ควรเลือกอะไร?",
+      "choices": [
+        "CloudFront cache-control headers",
+        "ElastiCache for Memcached",
+        "ElastiCache for Redis",
+        "CloudFront invalidation"
+      ],
+      "answer": 2,
+      "explain": "Redis รองรับ publish/subscribe messaging ตามเกณฑ์เลือกเอนจิน\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 31"
+    },
+    {
+      "q": "ทีมต้องการโมเดลพื้นฐาน โหนดหลายคอร์ และขยายแนวนอนด้วย Auto Discovery ควรเลือกอะไร?",
+      "choices": [
+        "CloudFront เพื่อ Regional edge cache",
+        "ElastiCache for Memcached",
+        "ElastiCache for Redis เพื่อ persistence",
+        "Elastic Transcoder เพื่อหลายรูปแบบ"
+      ],
+      "answer": 1,
+      "explain": "โมเดลพื้นฐาน หลายคอร์ และ Auto Discovery เป็นเกณฑ์เลือก Memcached\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 31"
+    },
+    {
+      "q": "ข้อใดอธิบาย node และ cluster ใน ElastiCache ได้ถูกต้อง?",
+      "choices": [
+        "Cluster เป็นหน่วยเล็กที่สุด ส่วน node รวมหลาย cluster",
+        "Node เป็นหน่วยเล็กที่สุด ส่วน cluster รวมหนึ่ง node ขึ้นไป",
+        "Node คือไฟล์ต้นทาง ส่วน cluster คือไฟล์ในแคช",
+        "Node คือผู้ใช้ ส่วน cluster คือ Region ของผู้ใช้"
+      ],
+      "answer": 1,
+      "explain": "Cluster เป็นกลุ่มเชิงตรรกะของหนึ่งโหนดหรือมากกว่า\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 32"
+    },
+    {
+      "q": "TTL ที่กำหนดให้คีย์ในแคชมีหน้าที่ใด?",
+      "choices": [
+        "กำหนดจำนวนคอร์ของ node",
+        "กำหนดลำดับเขียนของทุกแอป",
+        "กำหนดจำนวน Region สำรองไฟล์",
+        "กำหนดเวลาจนคีย์หมดอายุ"
+      ],
+      "answer": 3,
+      "explain": "TTL ระบุจำนวนวินาทีหรือมิลลิวินาทีจนคีย์หมดอายุ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 33"
+    },
+    {
+      "q": "คีย์หมดอายุตาม TTL แล้ว แอปพลิเคชันต้องอ่านข้อมูลนี้อีก ตามบทเรียนควรทำอะไร?",
+      "choices": [
+        "คิวรีฐานข้อมูลเพื่อขอข้อมูล",
+        "เขียนค่าแคชเก่าทับฐานข้อมูลทันที",
+        "ส่ง invalidation ไป CloudFront เท่านั้น",
+        "ถือว่าข้อมูลถูกลบจากฐานข้อมูลแล้ว"
+      ],
+      "answer": 0,
+      "explain": "เมื่อ TTL หมดอายุ แอปพลิเคชันคิวรีฐานข้อมูลเพื่อรับข้อมูล\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 33"
+    },
+    {
+      "q": "ข้อใดเป็นหลักการของ lazy loading?",
+      "choices": [
+        "เติมแคชหลังมีคำขอข้อมูลนั้น",
+        "โหลดทุกตารางเข้าแคชเมื่อเริ่มระบบ",
+        "เติมแคชทุกครั้งที่ฐานข้อมูลเปลี่ยน",
+        "ลบทุกไฟล์จาก CloudFront ก่อนอ่านข้อมูล"
+      ],
+      "answer": 0,
+      "explain": "Lazy loading อัปเดตแคชหลังข้อมูลถูกขอ\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 34"
+    },
+    {
+      "q": "แอปใช้ lazy loading และเกิด cache miss ควรดำเนินการอย่างไร?",
+      "choices": [
+        "รอให้ CloudFront สร้างข้อมูลแทนฐานข้อมูล",
+        "อ่านฐานข้อมูลแล้วคัดลอกข้อมูลเข้าแคช",
+        "เขียนค่าว่างลงฐานข้อมูลให้ตรงกับแคช",
+        "ตอบว่าไม่มีข้อมูลโดยไม่ตรวจฐานข้อมูล"
+      ],
+      "answer": 1,
+      "explain": "Cache miss ทำให้ไปอ่านฐานข้อมูลและคัดลอกข้อมูลเข้าแคชสำหรับครั้งถัดไป\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 35"
+    },
+    {
+      "q": "เมื่อ lazy loading พบข้อมูลที่ต้องการในแคช ผลที่คาดหวังคืออะไร?",
+      "choices": [
+        "เขียนข้อมูลทั้งหมดกลับ origin ก่อนตอบ",
+        "อ่านฐานข้อมูลหลักซ้ำทุกครั้งก่อนตอบ",
+        "ลบคีย์โดยไม่ส่งข้อมูลให้ผู้ขอ",
+        "ตอบด้วย latency ต่ำลงและลดภาระฐานข้อมูลหลัก"
+      ],
+      "answer": 3,
+      "explain": "Cache hit ช่วยตอบเร็วขึ้นและลดโหลดของฐานข้อมูลหลัก\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 35"
+    },
+    {
+      "q": "ทีมต้องการอัปเดตแคชทันทีหลังแก้ฐานข้อมูลหลัก ควรเลือกกลยุทธ์ใด?",
+      "choices": [
+        "Write-through",
+        "Lazy loading",
+        "CloudFront invalidation",
+        "Content versioning"
+      ],
+      "answer": 0,
+      "explain": "Write-through อัปเดตแคชทันทีหลังอัปเดตฐานข้อมูลหลัก\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 34, 36"
+    },
+    {
+      "q": "ข้อควรระวังของ lazy loading เมื่อข้อมูลต้นทางเปลี่ยนคืออะไร?",
+      "choices": [
+        "ต้องมีกลยุทธ์ในโปรแกรมเพื่อรักษาความสดของแคช",
+        "ต้องเก็บข้อมูลที่ไม่เคยถูกขอทุกแถว",
+        "ไม่สามารถเกิด cache miss ได้อีก",
+        "ทุกการเขียนเติมแคชอัตโนมัติเสมอ"
+      ],
+      "answer": 0,
+      "explain": "Lazy loading ต้องมี programmatic strategy ในการรักษาแคชให้ทันสมัย\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 34"
+    },
+    {
+      "q": "Write-through มีข้อมูลเขียนใหม่จำนวนมากแต่แทบไม่มีคนอ่าน ข้อเสียใดอาจเกิดขึ้น?",
+      "choices": [
+        "แคชไม่อัปเดตจนมี cache miss",
+        "แคชจะเก็บเฉพาะข้อมูลที่มีคำขออ่าน",
+        "ต้นทุนหน่วยความจำเพิ่มจากข้อมูลที่อาจไม่ได้ใช้",
+        "ฐานข้อมูลหลักไม่รับการเขียนอีก"
+      ],
+      "answer": 2,
+      "explain": "Write-through อาจเก็บข้อมูลในหน่วยความจำที่ไม่ได้ถูกใช้งาน จึงเพิ่มต้นทุน\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 34"
+    },
+    {
+      "q": "มีข้อมูลขนาดใหญ่แต่ผู้ใช้เรียกเพียงส่วนน้อย ทีมอยากให้แคชเก็บเฉพาะข้อมูลที่ถูกขอ ควรเลือกอะไร?",
+      "choices": [
+        "เก็บทุกคีย์โดยไม่กำหนดเวลาหมดอายุ",
+        "Lazy loading",
+        "Write-through สำหรับทุกแถวที่เขียน",
+        "โหลดทุกข้อมูลเข้าหน่วยความจำล่วงหน้า"
+      ],
+      "answer": 1,
+      "explain": "ข้อดีของ lazy loading คือแคชมีเฉพาะข้อมูลที่แอปพลิเคชันขอจริง\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 34"
+    },
+    {
+      "q": "แนวทางใดตรงกับ Well-Architected ด้านการจัดการข้อมูลในบทนี้?",
+      "choices": [
+        "หยุดประเมินคิวรีหลังเพิ่มแคช",
+        "เลือกบริการโดยไม่พิจารณาชนิดข้อมูล",
+        "ตั้งอายุทุกไฟล์ให้สูงสุดโดยไม่ดูข้อมูล",
+        "ออกแบบรูปแบบการเข้าถึงที่ใช้แคชและปรับปรุงประสิทธิภาพคิวรี"
+      ],
+      "answer": 3,
+      "explain": "Data management เน้นรูปแบบการเข้าถึงที่ใช้ caching และการปรับปรุง query performance\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 40, 43"
+    },
+    {
+      "q": "หลักด้าน reliability สำหรับ public endpoints ที่บทเรียนแนะนำคือข้อใด?",
+      "choices": [
+        "ลดสำเนาจนเหลือ origin แห่งเดียวเสมอ",
+        "เลือกการเชื่อมต่อจากต้นทุนอย่างเดียว",
+        "กำหนด TTL ทุกไฟล์เป็นศูนย์เสมอ",
+        "ใช้การเชื่อมต่อเครือข่ายที่มีความพร้อมใช้งานสูง"
+      ],
+      "answer": 3,
+      "explain": "Reliability เน้น highly available network connectivity สำหรับ public endpoints\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 41, 43"
+    },
+    {
+      "q": "เพื่อลดต้นทุนถ่ายโอนข้อมูลตาม Well-Architected ควรทำอะไร?",
+      "choices": [
+        "จำลองการถ่ายโอนและเลือกองค์ประกอบหรือบริการที่ช่วยลดต้นทุน",
+        "เพิ่ม TTL ทุกข้อมูลโดยไม่ดูพฤติกรรมใช้",
+        "เลือกองค์ประกอบจากขนาดแคชอย่างเดียว",
+        "พิจารณาเฉพาะความเร็ว CPU ฐานข้อมูล"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนแนะนำ data transfer modeling และการเลือกองค์ประกอบกับบริการเพื่อลดค่าถ่ายโอน\n\nอ้างอิง: ACAv3 EN M12 CachingContent.pdf หน้า 42, 43"
+    }
+  ]
+}

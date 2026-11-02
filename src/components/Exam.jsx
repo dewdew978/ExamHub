@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, 
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import NumberTicker from './NumberTicker';
+import { includesChoice, isCorrectAnswer } from '../lib/examAnswers';
 import { readExamPreferences, createQuestionOrder } from '../lib/examPreferences';
 import {
   CHOICE_ORDER_VERSION,
@@ -27,8 +28,8 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     resolveChoiceOrderVersion(initialProgress));
   const usesBalancedChoices = choiceOrderVersion === CHOICE_ORDER_VERSION;
   const choiceOrderedQuestions = useMemo(() =>
-    balanceQuestionChoices(sourceSubject.questions, usesBalancedChoices),
-  [sourceSubject.questions, usesBalancedChoices]);
+    balanceQuestionChoices(sourceSubject.questions, usesBalancedChoices && !sourceSubject.adminOnly),
+  [sourceSubject.questions, sourceSubject.adminOnly, usesBalancedChoices]);
   const [questionOrder, setQuestionOrder] = useState(() =>
     createQuestionOrder(sourceSubject.questions.length, preferences.autoShuffle, initialProgress));
   const subject = useMemo(() => ({
@@ -56,6 +57,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     return Array(subject.questions.length).fill(false);
   });
   const [showResult, setShowResult] = useState(false);
+  const [pendingChoices, setPendingChoices] = useState({});
   const [timeLeft, setTimeLeft] = useState(() => {
     if (typeof initialProgress?.timeLeft === 'number' && initialProgress.timeLeft > 0) {
       return initialProgress.timeLeft;
@@ -95,7 +97,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
   }, [timeLeft]);
 
   const persistProgress = (qIdx, ansList, bmkList, time) => {
-    if (showResult) return;
+    if (showResult || subject.adminOnly) return;
     try {
       const answeredCount = ansList.filter(a => a !== null).length;
       if (answeredCount > 0 || qIdx > 0) {
@@ -125,7 +127,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
 
   // Automatically save progress whenever answers, bookmarks, or current question change
   useEffect(() => {
-    if (showResult) return;
+    if (showResult || subject.adminOnly) return;
     try {
       const answeredCount = answers.filter(a => a !== null).length;
       if (answeredCount > 0 || currentQ > 0) {
@@ -165,12 +167,12 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
       if (newTime === 0) {
         clearInterval(timer);
         try {
-          localStorage.removeItem('examhub_in_progress_exam');
+          if (!subject.adminOnly) localStorage.removeItem('examhub_in_progress_exam');
         } catch (e) {
           console.warn(e);
         }
         const currentAnswers = answersRef.current;
-        const score = currentAnswers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
+        const score = currentAnswers.reduce((sum, ans, idx) => sum + (isCorrectAnswer(ans, subject.questions[idx].answer) ? 1 : 0), 0);
         onComplete(score);
         setShowResult(true);
         return;
@@ -195,7 +197,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     }, 1000);
     
     return () => clearInterval(timer);
-  }, [timerEnabled, showResult, isPaused, subject.questions, subject.id, onComplete]);
+  }, [timerEnabled, showResult, isPaused, subject.questions, subject.id, subject.adminOnly, onComplete]);
 
   const handleExit = () => {
     if (!showResult) {
@@ -209,6 +211,13 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
 
   const handleSelect = (idx) => {
     if (answered) return;
+    if (Array.isArray(q.answer)) {
+      setPendingChoices(previous => {
+        const selected = previous[currentQ] || [];
+        return { ...previous, [currentQ]: selected.includes(idx) ? selected.filter(i => i !== idx) : [...selected, idx] };
+      });
+      return;
+    }
     const newAnswers = [...answers];
     newAnswers[currentQ] = idx;
     setAnswers(newAnswers);
@@ -219,12 +228,12 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
       setCurrentQ(currentQ + 1);
     } else {
       try {
-        localStorage.removeItem('examhub_in_progress_exam');
+        if (!subject.adminOnly) localStorage.removeItem('examhub_in_progress_exam');
       } catch (e) {
         console.warn(e);
       }
       const score = answers.reduce((sum, ans, idx) => {
-        return sum + (ans === subject.questions[idx].answer ? 1 : 0);
+        return sum + (isCorrectAnswer(ans, subject.questions[idx].answer) ? 1 : 0);
       }, 0);
       onComplete(score);
       setShowResult(true);
@@ -264,7 +273,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {subject.questions.map((q, idx) => {
               const userAnswer = answers[idx];
-              const isRight = userAnswer === q.answer;
+              const isRight = isCorrectAnswer(userAnswer, q.answer);
               const isSkipped = userAnswer === null;
   
               return (
@@ -288,8 +297,8 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                         style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.4rem', marginBottom: '1rem' }}
                       >
                         {q.choices.map((choice, cIdx) => {
-                          const isSelected = userAnswer === cIdx;
-                          const isCorrectChoice = cIdx === q.answer;
+                          const isSelected = includesChoice(userAnswer, cIdx);
+                          const isCorrectChoice = includesChoice(q.answer, cIdx);
                           
                           let bg = 'var(--surface)';
                           let color = 'var(--text)';
@@ -329,7 +338,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                         borderRadius: '6px', fontSize: '0.8125rem' 
                       }}>
                         <div style={{ fontWeight: 600, marginBottom: '0.2rem', color: 'var(--text)' }}>คำอธิบาย:</div>
-                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.5 }}>{renderText(q.explain)}</div>
+                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.5, whiteSpace: 'pre-line' }}>{renderText(q.explain)}</div>
                       </div>
                     </div>
                   </div>
@@ -342,9 +351,9 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     }
 
     const total = subject.questions.length;
-    const score = answers.reduce((sum, ans, idx) => sum + (ans === subject.questions[idx].answer ? 1 : 0), 0);
+    const score = answers.reduce((sum, ans, idx) => sum + (isCorrectAnswer(ans, subject.questions[idx].answer) ? 1 : 0), 0);
     const pct = Math.round((score / total) * 100);
-    const wrong = answers.filter((a, i) => a !== null && a !== subject.questions[i].answer).length;
+    const wrong = answers.filter((a, i) => a !== null && !isCorrectAnswer(a, subject.questions[i].answer)).length;
     const skipped = answers.filter(a => a === null).length;
 
     return (
@@ -419,7 +428,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
             </button>
             <button className="btn btn-outline" onClick={() => {
               try {
-                localStorage.removeItem('examhub_in_progress_exam');
+                if (!subject.adminOnly) localStorage.removeItem('examhub_in_progress_exam');
               } catch (e) {
                 console.warn(e);
               }
@@ -428,6 +437,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
               setChoiceOrderVersion(resolveChoiceOrderVersion(initialProgress, true));
               setQuestionOrder(createQuestionOrder(sourceSubject.questions.length, nextPreferences.autoShuffle));
               setAnswers(Array(subject.questions.length).fill(null));
+              setPendingChoices({});
               setBookmarks(Array(subject.questions.length).fill(false));
               setCurrentQ(0);
               setTimeLeft(subject.questions.length * 60);
@@ -739,8 +749,8 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.5rem' }}
         >
           {q.choices.map((choice, idx) => {
-            const isSelected = answers[currentQ] === idx;
-            const isRight = answered && idx === q.answer;
+            const isSelected = includesChoice(answered ? answers[currentQ] : pendingChoices[currentQ], idx);
+            const isRight = answered && includesChoice(q.answer, idx);
             const isWrong = answered && isSelected && !isRight;
 
             let boxShadow = 'var(--shadow-border)';
@@ -755,6 +765,9 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
               bg = 'rgba(238, 0, 0, 0.1)';
             } else if (answered) {
               color = 'var(--text-muted)';
+            } else if (isSelected) {
+              boxShadow = '0px 0px 0px 2px var(--accent)';
+              bg = 'var(--surface-active)';
             }
 
             return (
@@ -762,6 +775,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                 key={idx} 
                 className="btn"
                 data-choice-option="active"
+                aria-pressed={isSelected}
                 style={{
                   background: bg,
                   boxShadow: boxShadow,
@@ -795,6 +809,19 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           })}
         </div>
 
+        {Array.isArray(q.answer) && !answered && (
+          <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <span>เลือก {q.answer.length} คำตอบ ({pendingChoices[currentQ]?.length || 0}/{q.answer.length})</span>
+            <button className="btn btn-primary"
+              disabled={pendingChoices[currentQ]?.length !== q.answer.length}
+              onClick={() => {
+                setAnswers(previous => previous.map((answer, index) => index === currentQ ? [...pendingChoices[currentQ]] : answer));
+              }}>
+              ยืนยันคำตอบ
+            </button>
+          </div>
+        )}
+
         {answered && (
           <div className="animate-fade-in" style={{ 
             marginTop: '1.25rem', 
@@ -807,7 +834,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
               <Check size={15} /> เฉลยและคำอธิบาย
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5, margin: 0 }}>
-              {renderText(q.explain)}
+              <span style={{ whiteSpace: 'pre-line' }}>{renderText(q.explain)}</span>
             </p>
           </div>
         )}

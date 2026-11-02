@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m16_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การวางแผนรับมือภัยพิบัติ (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "RPO · RTO · Backup and Restore · Pilot Light · Warm Standby · Multi-site · Disaster Recovery · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M16 Planning for Disaster",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M16 Planning for Disaster",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M16 PlanningForDisaster.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "เหตุการณ์ใดเป็นตัวอย่างความล้มเหลวระดับ Large-scale ตามบทเรียน?",
+      "choices": [
+        "เซิร์ฟเวอร์หนึ่งเครื่องหยุดตอบสนอง",
+        "ทรัพยากรหลายรายการทั่ว Availability Zone ใช้งานไม่ได้",
+        "โปรเซสหนึ่งตัวในเซิร์ฟเวอร์หยุดทำงาน",
+        "แอปบนเครื่องผู้ใช้หนึ่งเครื่องปิดตัวลง"
+      ],
+      "answer": 1,
+      "explain": "ตัวอย่าง Large-scale คือทรัพยากรหลายรายการใน Availability Zone ไม่พร้อมใช้งาน ต่างจากเซิร์ฟเวอร์หนึ่งเครื่องที่เป็น Small-scale\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 8"
+    },
+    {
+      "q": "Fault tolerance มีเป้าหมายหลักต่างจากการกู้คืนหลังภัยพิบัติอย่างไร?",
+      "choices": [
+        "ลดความถี่ที่แอปพลิเคชันและข้อมูลไม่พร้อมใช้งาน",
+        "กำหนดระยะเวลาสูงสุดที่ธุรกิจยอมหยุดทำงาน",
+        "กู้คืนข้อมูลจาก Backup หลังเกิดภัยพิบัติ",
+        "วิเคราะห์ผลกระทบทางธุรกิจจากเหตุขัดข้อง"
+      ],
+      "answer": 0,
+      "explain": "Fault tolerance มุ่งลดการเกิดเหตุไม่พร้อมใช้งาน ส่วน DR มุ่งคืนข้อมูลและทำให้แอปกลับมาออนไลน์หลังภัยพิบัติ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 9"
+    },
+    {
+      "q": "หลังเกิดภัยพิบัติ บริษัทต้องคืนข้อมูลและนำแอปกลับมาให้บริการ กิจกรรมนี้จัดอยู่ในแนวคิดใด?",
+      "choices": [
+        "Fault tolerance",
+        "Disaster recovery",
+        "Business impact analysis",
+        "Risk assessment"
+      ],
+      "answer": 1,
+      "explain": "Disaster recovery คือการกู้คืนข้อมูลและทำให้แอปพลิเคชันกลับมาออนไลน์หลังภัยพิบัติ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 9"
+    },
+    {
+      "q": "ข้อใดเป็นชุดปัจจัยที่ควรนำมาพิจารณาในการเลือกกลยุทธ์รับมือภัยพิบัติตามบทเรียน?",
+      "choices": [
+        "จำนวนเซิร์ฟเวอร์ ต้นทุน และจำนวน Backup โดยไม่ดูผลกระทบธุรกิจ",
+        "เวลาที่กู้คืนกับต้นทุน โดยไม่พิจารณาข้อมูลที่สูญเสีย",
+        "เวลาที่ต้องกู้คืน ข้อมูลที่ยอมสูญเสีย พื้นที่ทางภูมิศาสตร์ และต้นทุน",
+        "ข้อมูลที่สูญเสียกับตำแหน่งระบบ โดยไม่พิจารณาระยะเวลาหยุดบริการ"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนระบุ Time dependency, Data loss, Geographic location และ Cost เป็นปัจจัยในการวางแผน\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 10"
+    },
+    {
+      "q": "Recovery point objective หรือ RPO หมายถึงข้อใด?",
+      "choices": [
+        "เวลาที่ใช้สร้างอินสแตนซ์ใหม่หนึ่งเครื่องเสมอ",
+        "ระยะเวลาสูงสุดที่บริการหยุดทำงานได้หลังภัยพิบัติ",
+        "ปริมาณข้อมูลสูงสุดที่ยอมสูญเสียได้โดยวัดเป็นเวลา",
+        "ระยะเวลาที่ต้องเก็บ Backup ทุกชุดไว้เท่ากัน"
+      ],
+      "answer": 2,
+      "explain": "RPO วัดขอบเขตข้อมูลที่ยอมสูญเสียได้เป็นช่วงเวลา และใช้พิจารณาความถี่การสำรองข้อมูล\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 11"
+    },
+    {
+      "q": "Recovery time objective หรือ RTO หมายถึงข้อใด?",
+      "choices": [
+        "ระยะห่างระหว่างการสร้าง Backup ทุกครั้ง",
+        "อายุสูงสุดของข้อมูลที่ยอมสูญเสียก่อนภัยพิบัติ",
+        "เวลาที่ข้อมูลต้องคงอยู่ใน Storage class หนึ่ง",
+        "ระยะเวลาสูงสุดหลังภัยพิบัติที่กระบวนการธุรกิจยอมหยุดทำงานได้"
+      ],
+      "answer": 3,
+      "explain": "RTO คือระยะเวลาสูงสุดที่กระบวนการธุรกิจสามารถหยุดให้บริการหลังภัยพิบัติได้\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 13"
+    },
+    {
+      "q": "ระบบสร้างข้อมูลไม่เกิน 150 รายการต่อชั่วโมง และธุรกิจยอมสูญเสียข้อมูลได้สูงสุด 600 รายการ จากวิธีคำนวณในบทเรียน ควรกำหนด RPO ไม่เกินเท่าใด?",
+      "choices": [
+        "2 ชั่วโมง",
+        "6 ชั่วโมง",
+        "4 ชั่วโมง",
+        "9 ชั่วโมง"
+      ],
+      "answer": 2,
+      "explain": "นำจำนวนรายการที่ยอมสูญเสียหารด้วยอัตราการสร้างข้อมูลได้ 600 ÷ 150 = 4 ชั่วโมง\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 11, 12"
+    },
+    {
+      "q": "กำหนด RPO ไว้ 3 ชั่วโมง หากเกิดภัยพิบัติเวลา 18:00 น. จุดข้อมูลที่กู้คืนได้ต้องไม่เก่ากว่าเวลาใด?",
+      "choices": [
+        "12:00 น.",
+        "15:00 น.",
+        "21:00 น.",
+        "18:30 น."
+      ],
+      "answer": 1,
+      "explain": "RPO 3 ชั่วโมงหมายถึงยอมเสียข้อมูลย้อนหลังได้ไม่เกิน 3 ชั่วโมง จึงต้องมีข้อมูลถึงอย่างน้อย 15:00 น.\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 11, 12"
+    },
+    {
+      "q": "แอปมี RTO 90 นาทีและหยุดให้บริการเวลา 13:20 น. ควรกู้คืนบริการให้ได้ภายในเวลาใด?",
+      "choices": [
+        "14:50 น.",
+        "15:20 น.",
+        "13:50 น.",
+        "16:20 น."
+      ],
+      "answer": 0,
+      "explain": "RTO นับจากเวลาที่เกิดเหตุจนบริการกลับมาได้ 13:20 น. บวก 90 นาทีเท่ากับ 14:50 น.\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 13, 14"
+    },
+    {
+      "q": "ธุรกิจระบุว่าเสียข้อมูลย้อนหลังได้ไม่เกิน 20 นาที และระบบหยุดให้บริการได้ไม่เกิน 2 ชั่วโมง ควรกำหนดค่าใด?",
+      "choices": [
+        "RPO และ RTO เท่ากับ 20 นาทีทั้งคู่",
+        "RPO 2 ชั่วโมง และ RTO 20 นาที",
+        "RPO และ RTO เท่ากับ 2 ชั่วโมงทั้งคู่",
+        "RPO 20 นาที และ RTO 2 ชั่วโมง"
+      ],
+      "answer": 3,
+      "explain": "RPO กำหนดขอบเขตข้อมูลที่สูญเสีย ส่วน RTO กำหนดช่วงเวลาหยุดให้บริการ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 11, 13"
+    },
+    {
+      "q": "ระบบมี Backup ล่าสุดที่กู้คืนได้เมื่อ 10:00 น. เกิดเหตุเวลา 12:30 น. และกลับมาให้บริการเวลา 13:00 น. หากกำหนด RPO 2 ชั่วโมงและ RTO 1 ชั่วโมง ผลเป็นอย่างไร?",
+      "choices": [
+        "ผ่านทั้ง RPO และ RTO",
+        "ไม่ผ่าน RPO แต่ผ่าน RTO",
+        "ไม่ผ่านทั้ง RPO และ RTO",
+        "ผ่าน RPO แต่ไม่ผ่าน RTO"
+      ],
+      "answer": 1,
+      "explain": "ข้อมูลหายย้อนหลัง 2 ชั่วโมง 30 นาทีเกิน RPO แต่กู้คืนใน 30 นาทีซึ่งอยู่ภายใน RTO 1 ชั่วโมง\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 11, 13"
+    },
+    {
+      "q": "Business continuity plan หรือ BCP ตามบทเรียนประกอบด้วยชุดใด?",
+      "choices": [
+        "รายชื่อทรัพยากร ตาราง Backup และรายการติดตั้งซอฟต์แวร์เท่านั้น",
+        "การวิเคราะห์ผลกระทบธุรกิจ การประเมินความเสี่ยง แผน DR และ RPO/RTO",
+        "แผน Backup และตำแหน่งสำเนาข้อมูล โดยไม่ประเมินความเสี่ยงธุรกิจ",
+        "แผน DR ตารางดูแลฮาร์ดแวร์ และคู่มือใช้งานแอป โดยไม่กำหนด RPO/RTO"
+      ],
+      "answer": 1,
+      "explain": "BCP ครอบคลุม Business impact analysis, Risk assessment, DR plan และการประเมินกำหนด RPO/RTO\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 15"
+    },
+    {
+      "q": "องค์กรต้องเตรียมรับเหตุที่ทำให้ Region หลักใช้งานไม่ได้ แนวทางด้านขอบเขตสภาพแวดล้อมใดสอดคล้องกับแผน DR ในบทเรียน?",
+      "choices": [
+        "เก็บทุกสำเนาไว้เฉพาะ Region หลักโดยไม่วางแผน Region อื่น",
+        "เก็บทรัพยากรสำรองทั้งหมดในอินสแตนซ์เดียวกับระบบหลัก",
+        "เพิ่มโวลุมใน Availability Zone เดิมเพียงอย่างเดียว",
+        "เตรียมแผนทรัพยากรที่ครอบคลุมมากกว่าหนึ่ง Region"
+      ],
+      "answer": 3,
+      "explain": "แผนภาพระบุว่า DR plans ครอบคลุมมากกว่าหนึ่ง Region ทั้ง Storage, Compute, Database และส่วนอื่น\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 18"
+    },
+    {
+      "q": "ทีมต้องการให้ข้อมูลจาก S3 bucket ใน Region A มีสำเนาใน S3 bucket ของ Region B ควรใช้ความสามารถใด?",
+      "choices": [
+        "S3 Cross-Region Replication",
+        "EBS volume snapshot",
+        "EC2 Auto Scaling",
+        "DynamoDB point-in-time recovery"
+      ],
+      "answer": 0,
+      "explain": "S3 CRR จำลองข้อมูลจาก Source bucket ไปยัง Destination bucket ต่าง Region\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 20"
+    },
+    {
+      "q": "บริษัทใช้ EBS volume ใน Region หลักและต้องการเตรียมสำเนาสำหรับการกู้คืนในอีก Region ควรทำอย่างไรตามบทเรียน?",
+      "choices": [
+        "ใช้ Route 53 จำลอง Block data ไปยัง Region สำรอง",
+        "สร้าง EBS snapshot แล้วคัดลอก Snapshot ไปยัง Region สำรอง",
+        "ใช้ ELB เก็บสถานะของ EBS volume ข้าม Region",
+        "สร้าง S3 CRR โดยชี้ต้นทางเป็น EBS volume โดยตรง"
+      ],
+      "answer": 1,
+      "explain": "แผนภาพแสดง Snapshot จาก EBS volume ใน Region A และสำเนา Snapshot ใน Region B\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 21"
+    },
+    {
+      "q": "องค์กรต้องย้ายข้อมูล File system จาก On-premises ไปยัง Amazon EFS หรือ Amazon FSx ตามรูปแบบในบทเรียน บริการใดทำหน้าที่ถ่ายโอนข้อมูล?",
+      "choices": [
+        "Amazon EventBridge",
+        "AWS DataSync",
+        "Amazon Route 53",
+        "AWS CloudFormation"
+      ],
+      "answer": 1,
+      "explain": "แผนภาพ File system replication ใช้ DataSync ระหว่าง File system ต้นทางกับ EFS หรือ FSx ปลายทาง\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 22"
+    },
+    {
+      "q": "ทีมต้องเตรียมอิมเมจของ EC2 ที่มีการตั้งค่าเซิร์ฟเวอร์ไว้พร้อมเพื่อบูตอินสแตนซ์ใหม่อย่างรวดเร็วหลังเกิดเหตุ ควรเตรียมสิ่งใดตามบทเรียน?",
+      "choices": [
+        "RDS database snapshots",
+        "DynamoDB table backups",
+        "Custom container images",
+        "Custom AMIs หรือ Golden AMIs"
+      ],
+      "answer": 3,
+      "explain": "Custom AMIs ใช้เตรียมการบูตอินสแตนซ์ใหม่สำหรับกู้คืน Compute infrastructure ได้ในเวลาไม่นาน\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 23"
+    },
+    {
+      "q": "ทีมต้องเตรียมอาร์ติแฟกต์ที่บรรจุแอปสำหรับสร้าง Container กลับมาบน Amazon ECS หลังเกิดเหตุ ตามแผนภาพกู้คืน Compute ควรใช้สิ่งใด?",
+      "choices": [
+        "Custom AMIs ของ EC2",
+        "EBS volume snapshots",
+        "Custom container images",
+        "RDS database snapshots"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนแสดงการใช้ Custom container images เพื่อสร้าง Container กลับมาบน ECS cluster\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 23"
+    },
+    {
+      "q": "แอปส่ง Events ไป Region หลักและต้องการให้มีการ Failover ไป Region รองเมื่อเกิดปัญหาตามแผนภาพในบทเรียน ควรใช้ความสามารถใด?",
+      "choices": [
+        "Amazon EBS snapshot copy",
+        "Amazon S3 lifecycle policy",
+        "Amazon RDS automated backup",
+        "Amazon EventBridge global endpoint"
+      ],
+      "answer": 3,
+      "explain": "EventBridge global endpoint ทำงานร่วมกับสัญญาณสุขภาพเพื่อ Failover การรับ Events ระหว่าง Region\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 24, 28"
+    },
+    {
+      "q": "บริษัทต้องการ Failover ระหว่าง Endpoints หรือเว็บไซต์ S3 โดยใช้ DNS ควรเลือกบริการใด?",
+      "choices": [
+        "AWS Storage Gateway",
+        "Amazon Route 53",
+        "Elastic Load Balancing",
+        "AWS DataSync"
+      ],
+      "answer": 1,
+      "explain": "Route 53 ให้ DNS-based load balancing และ Basic failover ระหว่าง Endpoints หรือ S3 websites\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 25"
+    },
+    {
+      "q": "ในส่วนเครือข่ายของแผน DR บริการใดมีหน้าที่กระจาย Traffic ไปยังทรัพยากรที่ให้บริการ?",
+      "choices": [
+        "AWS CloudFormation",
+        "AWS DataSync",
+        "AWS Direct Connect",
+        "Elastic Load Balancing"
+      ],
+      "answer": 3,
+      "explain": "ELB ให้ Traffic distribution และช่วยให้การทำ DR สะดวกขึ้น\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 25"
+    },
+    {
+      "q": "แผนกู้คืนต้องให้ทรัพยากรใน Amazon VPC เข้าถึงเครือข่าย On-premises อย่างปลอดภัยผ่าน VPN connection ควรใช้บริการใดตามบทเรียน?",
+      "choices": [
+        "Amazon Route 53",
+        "Elastic Load Balancing",
+        "Amazon VPN",
+        "AWS Direct Connect"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนอธิบาย Amazon VPN ว่าให้การเข้าถึงเครือข่าย On-premises จาก VPC อย่างปลอดภัยผ่าน VPN connection\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 25"
+    },
+    {
+      "q": "องค์กรต้องการการเชื่อมต่อเครือข่ายเฉพาะระหว่าง On-premises กับ AWS เพื่อให้ถ่ายโอนข้อมูลได้เร็วและสม่ำเสมอ ควรพิจารณาบริการใด?",
+      "choices": [
+        "AWS Direct Connect",
+        "Amazon VPN",
+        "Amazon Route 53",
+        "Elastic Load Balancing"
+      ],
+      "answer": 0,
+      "explain": "Direct Connect ให้ Dedicated network connection ระหว่าง On-premises กับ AWS สำหรับการถ่ายโอนข้อมูลที่รวดเร็วและสม่ำเสมอ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 25"
+    },
+    {
+      "q": "ข้อใดเป็นแนวทางปกป้องข้อมูล Amazon RDS สำหรับการกู้คืนข้าม Region ที่บทเรียนระบุโดยตรง?",
+      "choices": [
+        "สร้าง Read replica เฉพาะ Region หลักโดยไม่เตรียมสำเนาใน Region อื่น",
+        "เก็บ Snapshot ทุกชุดเฉพาะ Region หลัก",
+        "บันทึก RDS snapshot ไว้ใน Region อื่น",
+        "ใช้ Multi-AZ ใน Region หลักเป็นมาตรการข้าม Region เพียงอย่างเดียว"
+      ],
+      "answer": 2,
+      "explain": "แนวทาง Supporting database recovery ของ RDS ระบุให้เก็บ Snapshot ใน Region แยกต่างหาก\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 26"
+    },
+    {
+      "q": "ทีมต้องการกู้คืน DynamoDB table กลับไปยังจุดเวลาใดเวลาหนึ่ง ควรใช้ความสามารถใด?",
+      "choices": [
+        "Point-in-time recovery",
+        "S3 Cross-Region Replication",
+        "EBS volume snapshots",
+        "Global tables"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนระบุให้ใช้ Point-in-time recovery เพื่อกู้คืน DynamoDB tables\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 26"
+    },
+    {
+      "q": "ระบบต้องการ DynamoDB แบบ Multi-Region และ Multi-active ควรเลือกความสามารถใดตามบทเรียน?",
+      "choices": [
+        "EFS replication ด้วย DataSync",
+        "Automated RDS backups",
+        "Global tables",
+        "Point-in-time recovery"
+      ],
+      "answer": 2,
+      "explain": "DynamoDB global tables ใช้สร้างฐานข้อมูล Multi-Region แบบ Multi-active\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 26"
+    },
+    {
+      "q": "ทีมต้องการสร้างสภาพแวดล้อม Production ชุดใหม่ใน Region สำรองอย่างสม่ำเสมอจากคำอธิบายทรัพยากรที่เตรียมไว้ ควรใช้บริการใด?",
+      "choices": [
+        "Amazon Route 53",
+        "AWS CloudFormation",
+        "AWS DataSync",
+        "AWS Storage Gateway"
+      ],
+      "answer": 1,
+      "explain": "CloudFormation templates ช่วย Deploy กลุ่มทรัพยากรและทำสำเนาสภาพแวดล้อมใน Region หรือ VPC ใหม่ได้รวดเร็ว\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 27, 28"
+    },
+    {
+      "q": "ในช่วงเตรียมแผน Backup and restore ข้อใดควรทำก่อนเกิดภัยพิบัติ?",
+      "choices": [
+        "สร้าง Backup เก็บใน S3 และบันทึกขั้นตอนกู้คืน",
+        "เปิดระบบสำเนาเต็มกำลังและเตรียมรับทุก Traffic ทันที",
+        "รักษาเฉพาะแกนข้อมูลที่จำลองไว้และเตรียม AMIs สำหรับเพิ่มส่วนอื่น",
+        "เปิดองค์ประกอบสำรองครบแต่ใช้กำลังรองรับต่ำตลอดเวลา"
+      ],
+      "answer": 0,
+      "explain": "Preparation phase ของ Backup and restore ต้องสร้าง Backup เก็บใน S3 และจัดทำเอกสารขั้นตอน Restore\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 33"
+    },
+    {
+      "q": "เมื่อใช้ Backup and restore และเกิดภัยพิบัติแล้ว ลำดับใดสอดคล้องกับขั้นตอนในบทเรียน?",
+      "choices": [
+        "ชี้ Traffic → Restore ระบบ → คืนโครงสร้างพื้นฐาน → ดึง Backup",
+        "Restore ระบบ → คืนโครงสร้างพื้นฐาน → ชี้ Traffic → ดึง Backup",
+        "ดึง Backup → ชี้ Traffic → Restore ระบบ → คืนโครงสร้างพื้นฐาน",
+        "ดึง Backup → คืนโครงสร้างพื้นฐานที่จำเป็น → Restore ระบบ → ชี้ Traffic ไปยังระบบใหม่"
+      ],
+      "answer": 3,
+      "explain": "ขั้นตอนหลังเกิดเหตุเริ่มจากดึง Backup คืนโครงสร้างพื้นฐาน Restore ระบบ แล้ว Route traffic ไปยังระบบใหม่\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 33"
+    },
+    {
+      "q": "แผนใดตรงกับลักษณะ Pilot light มากที่สุด?",
+      "choices": [
+        "คงส่วนแกนกลางและข้อมูลที่จำลองไว้ แล้วเพิ่มทรัพยากรส่วนอื่นเมื่อเกิดเหตุ",
+        "เปิดทุกองค์ประกอบครบตลอดเวลาแต่ลดกำลังรองรับ Traffic",
+        "เก็บ Backup อย่างเดียวโดยไม่มีส่วนแกนกลางที่เตรียมไว้",
+        "เปิดทุกองค์ประกอบด้วยกำลังรองรับ Production เต็มรูปแบบตลอดเวลา"
+      ],
+      "answer": 0,
+      "explain": "Pilot light เตรียมแกนข้อมูลที่จำลองไว้และเปิดทรัพยากรรอบแกนพร้อมปรับขนาดเมื่อเกิดภัยพิบัติ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 34, 35"
+    },
+    {
+      "q": "ทีมใช้ Pilot light และมี AMIs ของเซิร์ฟเวอร์สำคัญแล้ว งานใดควรทำในช่วงเตรียมความพร้อมตามบทเรียน?",
+      "choices": [
+        "เก็บ AMIs รุ่นแรกไว้โดยไม่อัปเดตเมื่อระบบหลักเปลี่ยน",
+        "ทดสอบเฉพาะการสร้าง AMI โดยไม่ทดลองรันเซิร์ฟเวอร์",
+        "รัน ทดสอบ และอัปเดตเซิร์ฟเวอร์เหล่านั้นเป็นประจำ",
+        "ทดสอบเซิร์ฟเวอร์เฉพาะหลังเกิดภัยพิบัติจริง"
+      ],
+      "answer": 2,
+      "explain": "การเตรียม Pilot light รวมถึงสร้างและดูแล AMIs พร้อมรัน ทดสอบ และอัปเดตเซิร์ฟเวอร์เป็นประจำ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 35"
+    },
+    {
+      "q": "สภาพแวดล้อมสำรองเปิดองค์ประกอบที่จำเป็นครบตลอด 24 ชั่วโมง แต่มีขนาดเล็กกว่าที่ใช้รองรับ Production รูปแบบนี้คือข้อใด?",
+      "choices": [
+        "Warm standby",
+        "Pilot light",
+        "Backup and restore",
+        "Multi-site แบบเต็มกำลัง"
+      ],
+      "answer": 0,
+      "explain": "Warm standby มีทุกองค์ประกอบทำงานตลอดเวลา แต่ยังไม่ปรับขนาดให้รองรับ Production ทั้งหมด\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 36, 37"
+    },
+    {
+      "q": "เมื่อเกิดภัยพิบัติ ระบบ Warm standby ควรรับมือกับ Production load อย่างไรตามบทเรียน?",
+      "choices": [
+        "ดึง Backup แล้วสร้างโครงสร้างพื้นฐานทั้งหมดก่อนจึงรับงาน",
+        "รับ Production load ทั้งหมดทันทีโดยไม่ต้องเพิ่มกำลังรองรับ",
+        "เปิดองค์ประกอบที่ยังไม่มีรอบแกนข้อมูลก่อนเริ่มรับงาน",
+        "รับภาระงานสำคัญที่สุดทันที แล้วเพิ่มขนาดให้รองรับทั้งหมด"
+      ],
+      "answer": 3,
+      "explain": "Warm standby Failover งานสำคัญได้ทันที แล้ว Scale เพิ่มเพื่อรับ Production load ทั้งหมด\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 37"
+    },
+    {
+      "q": "ธุรกิจต้องมีระบบสำเนาที่พร้อมรองรับ Production เต็มกำลังตลอดเวลาเพื่อรับ Traffic ทั้งหมดทันทีเมื่อระบบหลักล้มเหลว ควรเลือกรูปแบบใด?",
+      "choices": [
+        "Warm standby ที่ยังต้องเพิ่มขนาด",
+        "Pilot light",
+        "Backup and restore",
+        "Multi-site"
+      ],
+      "answer": 3,
+      "explain": "Multi-site มีสภาพแวดล้อมสำเนาเต็มกำลังทำงานอยู่และสามารถ Failover Production load ทั้งหมดได้ทันที\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 38, 39"
+    },
+    {
+      "q": "นอกจากค่าทรัพยากรแล้ว การจัดทำระบบสำเนาเต็มรูปแบบสำหรับ Multi-site ควรพิจารณาค่าใช้จ่ายประเภทใดที่บทเรียนเน้น?",
+      "choices": [
+        "เฉพาะค่าดึงข้อมูลจาก Archive ในวันเกิดเหตุ",
+        "เฉพาะค่าเปิดเซิร์ฟเวอร์ชั่วคราวเมื่อเริ่ม Restore",
+        "ค่าลิขสิทธิ์ของระบบสำเนาทั้งชุด",
+        "เฉพาะค่าจัดเก็บไฟล์ Backup ระยะยาว"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนระบุให้พิจารณา Licensing cost ของ Complete duplicate system เมื่อใช้ Multi-site\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 39"
+    },
+    {
+      "q": "เมื่อเทียบสี่รูปแบบ DR ในบทเรียน รูปแบบใดมีต้นทุนคุ้มค่าที่สุดแต่มี RTO สูงที่สุด?",
+      "choices": [
+        "Warm standby",
+        "Multi-site",
+        "Pilot light",
+        "Backup and restore"
+      ],
+      "answer": 3,
+      "explain": "บทสรุประบุว่า Backup and restore มีต้นทุนคุ้มค่าที่สุด แต่ใช้เวลากู้คืนนานที่สุด\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 42"
+    },
+    {
+      "q": "หากองค์กรให้ความสำคัญกับ RTO ที่เร็วที่สุดและยอมรับต้นทุนระบบสำเนาที่พร้อมใช้งานเต็มรูปแบบได้ ควรเลือกรูปแบบใด?",
+      "choices": [
+        "Multi-site",
+        "Warm standby",
+        "Backup and restore",
+        "Pilot light"
+      ],
+      "answer": 0,
+      "explain": "Multi-site ให้ RTO เร็วที่สุดแต่มีต้นทุนสูงที่สุดเพราะมี Production-ready duplicate ทำงานอยู่\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 42"
+    },
+    {
+      "q": "ระบบรายงานภายในมีความสำคัญต่ำ ยอมรับ RPO และ RTO ระดับหลายชั่วโมง และต้องการลดต้นทุนสำรอง รูปแบบใดเหมาะตามตารางสรุป?",
+      "choices": [
+        "Backup and restore",
+        "Pilot light",
+        "Warm standby",
+        "Multi-site"
+      ],
+      "answer": 0,
+      "explain": "ตารางสรุปแนะนำ Backup and restore สำหรับงานลำดับความสำคัญต่ำและเป้าหมาย RPO/RTO เป็นชั่วโมง\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 40"
+    },
+    {
+      "q": "ธุรกิจเลือกเปิดเฉพาะบริการแกนกลางไว้และยอมรับเป้าหมายกู้คืนระดับหลายสิบนาที โดยเพิ่มทรัพยากรเมื่อเกิดเหตุ รูปแบบใดตรงที่สุดตามตารางในบทเรียน?",
+      "choices": [
+        "Backup and restore",
+        "Warm standby",
+        "Pilot light",
+        "Multi-site"
+      ],
+      "answer": 2,
+      "explain": "ตารางสรุปเชื่อม Pilot light กับ Core services การ Scale ทรัพยากร และเป้าหมายระดับหลายสิบนาที\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 35, 40"
+    },
+    {
+      "q": "แนวทาง Backup ใน S3 ต้องย้ายข้อมูลไป Storage class อื่นเมื่ออายุข้อมูลถึงเกณฑ์ โดยไม่ให้เจ้าหน้าที่ทำทีละไฟล์ ควรใช้สิ่งใด?",
+      "choices": [
+        "EC2 scaling policy",
+        "EventBridge global endpoint",
+        "Route 53 failover policy",
+        "S3 lifecycle policy"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่าง Backup and restore ใช้ Lifecycle policy และ Lab ให้สร้างนโยบายเพื่อจัดการข้อมูลใน Bucket อัตโนมัติ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 31, 44"
+    },
+    {
+      "q": "AWS Storage Gateway มี Interface สามแบบใดสำหรับการสำรองและกู้คืนข้อมูลระหว่าง On-premises กับ AWS ตามบทเรียน?",
+      "choices": [
+        "Tape Gateway, DNS Gateway และ Container Gateway",
+        "File Gateway, Route Gateway และ Database Gateway",
+        "Volume Gateway, API Gateway และ Event Gateway",
+        "File Gateway, Volume Gateway และ Tape Gateway"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนระบุ Storage Gateway สาม Interface คือ File, Volume และ Tape Gateway\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 42"
+    },
+    {
+      "q": "ใน Lab ทีมต้องให้ Linux instance เชื่อมกับ NFS file share และย้ายข้อมูลไป S3 ควรตั้งค่าองค์ประกอบใด?",
+      "choices": [
+        "S3 File Gateway",
+        "Tape Gateway",
+        "EventBridge global endpoint",
+        "Volume Gateway"
+      ],
+      "answer": 0,
+      "explain": "Lab ระบุให้สร้าง S3 File Gateway พร้อม NFS file share แล้วเชื่อมกับ Linux instance เพื่อย้ายข้อมูลเข้า S3\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 44"
+    },
+    {
+      "q": "ทีมตรวจพบว่า Backup สำเร็จทุกคืน แต่ไม่เคยลองใช้กู้คืน การทำ Game Day ควรเพิ่มการตรวจสอบใดตามบทเรียน?",
+      "choices": [
+        "ยืนยันว่า Backup, Snapshots และ AMIs ใช้ Restore ข้อมูลได้จริง",
+        "ตรวจว่าตาราง Backup ทำงานตรงเวลาอย่างเดียว",
+        "ตรวจจำนวนไฟล์ Backup โดยยังไม่ทดลอง Restore",
+        "ตรวจว่า Backup job แสดงสถานะสำเร็จอย่างเดียว"
+      ],
+      "answer": 0,
+      "explain": "Game Day ต้องตรวจทั้งการสร้าง Backup และความสามารถในการนำ Backup, Snapshots และ AMIs ไป Restore ได้จริง\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 41"
+    },
+    {
+      "q": "ระหว่างซ้อม DR ทีมพบว่าระบบติดตามไม่แจ้งเตือนแม้บริการสำคัญหยุดทำงาน ควรเพิ่มแนวปฏิบัติใดที่บทเรียนระบุ?",
+      "choices": [
+        "ทดสอบเฉพาะการ Restore โดยไม่ตรวจการแจ้งเตือน",
+        "ใช้สถานะ Backup job แทนการตรวจสุขภาพบริการทั้งหมด",
+        "ติดตามตรวจสอบระบบ Monitoring ด้วย",
+        "วัดเฉพาะขนาด Backup เพื่อประเมินว่าเกิดเหตุหรือไม่"
+      ],
+      "answer": 2,
+      "explain": "Game Day แนะนำให้ Monitor ระบบ Monitoring ของตนเองเพื่อไม่ให้ส่วนตรวจจับเหตุเป็นจุดบกพร่องที่มองข้าม\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 41"
+    },
+    {
+      "q": "องค์กรกำลังเริ่มออกแบบ DR แต่ยังไม่ระบุระยะเวลาหยุดระบบและข้อมูลที่ยอมสูญเสียได้ ควรทำอะไรเป็นพื้นฐานตาม Well-Architected?",
+      "choices": [
+        "เลือกรูปแบบ DR จากงบประมาณก่อน แล้วกำหนดเป้าหมายตามผลลัพธ์",
+        "กำหนดเป้าหมายการกู้คืนจากความต้องการทางธุรกิจ",
+        "ใช้ RTO/RPO ของแอปอื่นโดยไม่ตรวจความต้องการธุรกิจ",
+        "เลือก Storage class ก่อนแล้วใช้ระยะเวลา Restore เป็นเป้าหมายทันที"
+      ],
+      "answer": 1,
+      "explain": "Well-Architected ให้กำหนด Recovery objectives สำหรับ Downtime และ Data loss ตาม Business requirements\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 48, 51"
+    },
+    {
+      "q": "ทีมเลือกรูปแบบ DR ที่มีค่าใช้จ่ายต่ำที่สุด แต่ทดสอบแล้วกู้คืนไม่ทัน RTO ของธุรกิจ ควรปรับแนวทางใด?",
+      "choices": [
+        "ใช้ผลเวลาสำรองข้อมูลแทนเวลากู้คืนเพื่อประเมิน RTO",
+        "ยอมรับแผนเดิมเพราะต้นทุนต่ำแม้ไม่ผ่านเป้าหมาย",
+        "เลือกกลยุทธ์กู้คืนให้ตอบโจทย์ Recovery objectives ที่กำหนด",
+        "ยืด RTO ให้เท่ากับผลทดสอบโดยไม่ทบทวนความต้องการธุรกิจ"
+      ],
+      "answer": 2,
+      "explain": "กลยุทธ์ DR ต้องตอบ Recovery objectives จาก Business requirements และพิจารณาต้นทุนควบคู่ผลกระทบธุรกิจ\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 10, 48, 51"
+    },
+    {
+      "q": "ทีมมี DR plan ที่ผ่านการทบทวนเอกสารแล้ว วิธีใดช่วยยืนยันว่า Implementation ใช้งานได้ตาม Well-Architected?",
+      "choices": [
+        "ทดสอบการกู้คืนตามแผนจริง",
+        "ตรวจชื่อและวันสร้าง Backup โดยไม่ลองกู้คืน",
+        "ตรวจว่าจำนวนทรัพยากรตรงกับรายการอย่างเดียว",
+        "ทบทวนว่ามีชื่อผู้รับผิดชอบในเอกสารอย่างเดียว"
+      ],
+      "answer": 0,
+      "explain": "Well-Architected แนะนำให้ทดสอบ DR implementation เพื่อ Validate ว่าสิ่งที่สร้างทำงานได้\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 48, 51"
+    },
+    {
+      "q": "เมื่อบริการหยุดทำงาน ลูกค้าติดต่อหลายช่องทางและได้รับข้อมูลไม่ตรงกัน แผนปฏิบัติการควรเพิ่มสิ่งใดตามบทเรียน?",
+      "choices": [
+        "ขั้นตอนสร้าง AMI เพิ่มโดยไม่กำหนดเนื้อหาข่าวสาร",
+        "แผนสื่อสารกับลูกค้าระหว่างเหตุขัดข้อง",
+        "แผนเก็บ Backup เพิ่มขึ้นโดยไม่กำหนดผู้สื่อสาร",
+        "การลด RPO โดยไม่กำหนดช่องทางแจ้งสถานะ"
+      ],
+      "answer": 1,
+      "explain": "แนวปฏิบัติด้านการจัดการ Workload และเหตุการณ์ปฏิบัติการระบุให้กำหนด Customer communication plan สำหรับ Outages\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 49, 51"
+    },
+    {
+      "q": "ระหว่างเหตุฉุกเฉิน ผู้รับผิดชอบต้องเข้าถึงทรัพยากรเพื่อกู้คืนได้ตามกระบวนการที่กำหนด องค์กรควรเตรียมเรื่องใดตามบทเรียน?",
+      "choices": [
+        "นโยบาย Retention ของ Backup แทนขั้นตอนเข้าถึง",
+        "Emergency access process",
+        "ขั้นตอน Restore ข้อมูลที่ไม่ครอบคลุมสิทธิ์เข้าถึง",
+        "ตารางทดสอบ Performance โดยไม่เตรียมสิทธิ์กรณีฉุกเฉิน"
+      ],
+      "answer": 1,
+      "explain": "Best practice ด้าน Permissions management แนะนำให้สร้างกระบวนการเข้าถึงในกรณีฉุกเฉิน\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 50, 51"
+    },
+    {
+      "q": "แอปสองระบบมีความสำคัญต่อรายได้ต่างกันมาก ทีมควรใช้หลักใดเลือกแผนกู้คืนให้แต่ละระบบ?",
+      "choices": [
+        "เลือกจากปริมาณข้อมูลอย่างเดียวโดยไม่ดูความสำคัญต่อรายได้",
+        "พิจารณาผลกระทบทางธุรกิจและสมดุลต้นทุน ข้อมูลสูญหาย และเวลากู้คืน",
+        "ใช้ DR pattern เดียวทุกระบบเพื่อให้ต้นทุนเท่ากันโดยไม่วิเคราะห์ผลกระทบ",
+        "เลือกจากจำนวนเซิร์ฟเวอร์ของแต่ละระบบโดยไม่ดูเวลาหยุดบริการ"
+      ],
+      "answer": 1,
+      "explain": "บทเรียนเน้นการเลือก DR pattern ตามความต้องการธุรกิจ โดยสมดุลต้นทุน Data loss และ Recovery time\n\nอ้างอิง: ACAv3 EN M16 PlanningForDisaster.pdf หน้า 6, 10, 30"
+    }
+  ]
+}

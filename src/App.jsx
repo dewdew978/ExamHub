@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import Landing from './components/Landing';
 import PageLoader from './components/PageLoader';
 
@@ -23,7 +23,8 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import UserAvatar from './components/UserAvatar';
 import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
 import { supabase, checkIsAdmin } from './lib/supabase';
-import localIndex from './data/index.json';
+import { getVisibleSubjects, isAdminPractice } from './lib/adminPractice';
+import { loadExamCatalog, loadExam } from './lib/examRepository';
 import './index.css';
 
 const getViewFromPath = (pathname) => {
@@ -80,9 +81,18 @@ function App() {
   const [categoryScores, setCategoryScores] = useState({});
   const [showChart, setShowChart] = useState(false);
   
-  const [subjects, setSubjects] = useState(localIndex);
+  const [subjectCatalog, setSubjects] = useState([]);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
+  const [authRevision, setAuthRevision] = useState(0);
+  const catalogRequest = useRef(0);
+  const examRequest = useRef(0);
+  const mounted = useRef(true);
+  const currentUser = useRef(user);
+  currentUser.current = user;
+  const subjects = getVisibleSubjects(subjectCatalog, user);
+  const [examLoadError, setExamLoadError] = useState('');
+  const [loading, setLoading] = useState(true);
   const [authRequiredMessage, setAuthRequiredMessage] = useState('');
   
   const [theme, setTheme] = useState(() => {
@@ -186,124 +196,90 @@ function App() {
     }
   }, [currentView]);
 
-  // Fetch initial data
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        // 1. Fetch subjects from Supabase
-        const { data: examsData, error: examsError } = await supabase
-          .from('exams')
-          .select('*');
-          
-        if (examsError) throw examsError;
-        
-        let mergedSubjects = (examsData || []).map(exam => {
-          const local = localIndex.find(l => l.id === exam.id);
-          const customKey = `examhub_custom_exam_${exam.id}`;
-          const savedCustom = localStorage.getItem(customKey);
-          let customQuestionCount = exam.questionCount;
-          let customParsed = null;
-          if (savedCustom) {
-            try {
-              customParsed = JSON.parse(savedCustom);
-              if (customParsed.questions) customQuestionCount = customParsed.questions.length;
-            } catch (e) {
-              console.warn(e);
-            }
-          }
-          return {
-            ...exam,
-            primarySource: customParsed?.primarySource || exam.primarySource || exam.primary_source,
-            organization: customParsed?.organization || exam.organization,
-            curatedBy: customParsed?.curatedBy || exam.curatedBy || exam.curated_by,
-            references: customParsed?.references || exam.references,
-            questionCount: customQuestionCount,
-            requiresAuth: local?.requiresAuth || exam.requiresAuth || false
-          };
-        });
-
-        // Add any local bundled exams that are not yet synced to Supabase
-        localIndex.forEach(local => {
-          if (!mergedSubjects.some(s => s.id === local.id)) {
-            mergedSubjects.push(local);
-          }
-        });
-
-        // Add newly created exams from localStorage if any
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith('examhub_custom_exam_')) {
-            try {
-              const customExam = JSON.parse(localStorage.getItem(key));
-              if (customExam && customExam.id && !mergedSubjects.some(s => s.id === customExam.id)) {
-                mergedSubjects.push({
-                  id: customExam.id,
-                  name: customExam.name,
-                  category: customExam.category || 'General',
-                  icon: customExam.icon || '',
-                  color: customExam.color || '#0070f3',
-                  iconBg: customExam.iconBg || 'rgba(0, 112, 243, 0.15)',
-                  desc: customExam.desc || '',
-                  questionCount: customExam.questions?.length || 0,
-                  year: customExam.year || 3,
-                  type: customExam.type || 'Midterm',
-                  primarySource: customExam.primarySource,
-                  organization: customExam.organization,
-                  curatedBy: customExam.curatedBy,
-                  references: customExam.references || []
-                });
-              }
-            } catch (e) {
-              console.warn(e);
-            }
-          }
-        }
-        if (mergedSubjects.length > 0) {
-          setSubjects(mergedSubjects);
-        }
-
-        // 2. Check auth status
-        const { data: { session } } = await supabase.auth.getSession();
-        const initialView = typeof window !== 'undefined' ? getViewFromPath(window.location.pathname) : 'landing';
-        if (session?.user) {
-          setUser(session.user);
-          await loadUserScores(session.user.id);
-          if (window.location.pathname === '/' || window.location.pathname === '') {
-            setCurrentView('home');
-          } else {
-            setCurrentView(initialView);
-          }
-        } else {
-          setCurrentView(initialView);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setLoading(false);
+  const refreshCatalog = useCallback(async () => {
+    const request = ++catalogRequest.current;
+    try {
+      const catalog = await loadExamCatalog(supabase);
+      if (mounted.current && request === catalogRequest.current) {
+        setSubjects(catalog);
+        setExamLoadError('');
       }
-    };
+    } catch (error) {
+      if (mounted.current && request === catalogRequest.current) {
+        console.error('Error loading exam catalog:', error);
+        setExamLoadError(error.message || 'ไม่สามารถโหลดคลังข้อสอบได้');
+      }
+    } finally {
+      if (mounted.current && request === catalogRequest.current) setLoading(false);
+    }
+  }, []);
 
-    fetchInitialData();
+  // Resolve authentication before requesting the RLS-filtered catalog.
+  useEffect(() => {
+    let active = true;
+    let receivedAuthEvent = false;
+    let recoveringPassword = false;
+    mounted.current = true;
 
-    // Set up auth listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!active) return;
+      receivedAuthEvent = true;
+      const nextUser = session?.user || null;
+      currentUser.current = nextUser;
+      // Invalidate pending responses immediately, including an admin request at sign-out.
+      catalogRequest.current += 1;
+      examRequest.current += 1;
+      setSubjects([]);
+      setUser(nextUser);
+      setAuthReady(true);
+      setAuthRevision(revision => revision + 1);
       if (event === 'PASSWORD_RECOVERY') {
-        if (session?.user) setUser(session.user);
+        recoveringPassword = true;
         setCurrentView('reset-password');
-      } else if (session?.user) {
-        setUser(session.user);
-        loadUserScores(session.user.id);
-      } else {
-        setUser(null);
-        setTotalScore(0);
-        setCategoryScores({});
       }
     });
 
-    return () => subscription.unsubscribe();
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (!active) return;
+      if (error) throw error;
+      if (!receivedAuthEvent) {
+        currentUser.current = session?.user || null;
+        setUser(session?.user || null);
+        setAuthReady(true);
+      }
+      if (!recoveringPassword && session?.user && (window.location.pathname === '/' || window.location.pathname === '')) {
+        setCurrentView('home');
+      }
+    }).catch(error => {
+      if (!active) return;
+      console.error('Error resolving authentication:', error);
+      setExamLoadError(error.message || 'ไม่สามารถตรวจสอบสถานะการเข้าสู่ระบบได้');
+      setLoading(false);
+    });
+
+    return () => {
+      active = false;
+      mounted.current = false;
+      catalogRequest.current += 1;
+      examRequest.current += 1;
+      subscription.unsubscribe();
+    };
   }, []);
 
+  // Keep Supabase calls outside the synchronous auth callback.
+  useEffect(() => {
+    if (!authReady) return;
+    refreshCatalog();
+    if (user) {
+      loadUserScores(user.id);
+    } else {
+      setTotalScore(0);
+      setCategoryScores({});
+    }
+  }, [authReady, authRevision, user, refreshCatalog]);
+
   const loadUserScores = async (userId) => {
+    const request = catalogRequest.current;
     try {
       const { data: scores, error } = await supabase
         .from('user_scores')
@@ -325,8 +301,10 @@ function App() {
         });
       }
       
-      setTotalScore(total);
-      setCategoryScores(categories);
+      if (mounted.current && request === catalogRequest.current) {
+        setTotalScore(total);
+        setCategoryScores(categories);
+      }
     } catch (err) {
       console.error("Error loading scores:", err);
     }
@@ -337,45 +315,32 @@ function App() {
   };
 
   const startExam = async (subjectId, resumeData = null) => {
+    setExamLoadError('');
+    const request = ++examRequest.current;
     try {
-      const subjectMeta = subjects.find(s => s.id === subjectId) || {};
-      let examData = null;
-
-      // 1. Check custom saved exam in localStorage first
-      const customKey = `examhub_custom_exam_${subjectId}`;
-      const savedCustom = localStorage.getItem(customKey);
-      if (savedCustom) {
-        try {
-          examData = JSON.parse(savedCustom);
-        } catch (e) {
-          console.warn("Failed to parse custom exam:", e);
-        }
+      const subjectMeta = subjects.find(subject => subject.id === subjectId);
+      if (isAdminPractice(subjectId, subjectMeta) && !checkIsAdmin(currentUser.current)) return;
+      if (subjectMeta?.requiresAuth && !currentUser.current) {
+        setAuthRequiredMessage(`กรุณาเข้าสู่ระบบก่อนเพื่อทำข้อสอบชุด "${subjectMeta.name}"`);
+        setCurrentView('login');
+        return;
       }
 
-      // 2. Fallback to bundled JSON file
-      if (!examData) {
-        try {
-          const mod = await import(`./data/${subjectId}.json`);
-          examData = mod.default;
-        } catch (err) {
-          console.warn("Could not load local json file:", err);
-          examData = { questions: [] };
-        }
-      }
-      
+      const examData = await loadExam(supabase, subjectId, { requireQuestions: true });
+      if (!mounted.current || request !== examRequest.current) return;
       const fullSubject = {
-        ...subjectMeta,
-        ...examData
+        ...examData,
+        adminOnly: isAdminPractice(subjectId, examData),
       };
-
-      if (fullSubject.requiresAuth && !user) {
+      if (fullSubject.adminOnly && !checkIsAdmin(currentUser.current)) return;
+      if (fullSubject.requiresAuth && !currentUser.current) {
         setAuthRequiredMessage(`กรุณาเข้าสู่ระบบก่อนเพื่อทำข้อสอบชุด "${fullSubject.name}"`);
         setCurrentView('login');
         return;
       }
-      
+
       setSelectedSubject(fullSubject);
-      if (resumeData) {
+      if (resumeData && !fullSubject.adminOnly) {
         setExamProgressData(resumeData);
         setCurrentView('exam');
       } else {
@@ -383,7 +348,9 @@ function App() {
         setCurrentView('examIntro');
       }
     } catch (err) {
-      console.error("Failed to load exam data:", err);
+      if (!mounted.current || request !== examRequest.current) return;
+      console.error('Failed to load exam data:', err);
+      setExamLoadError(err.message || 'ไม่สามารถโหลดข้อสอบได้');
     }
   };
 
@@ -403,6 +370,7 @@ function App() {
   };
 
   const addScore = async (score) => {
+    if (selectedSubject?.adminOnly) return;
     setTotalScore((prev) => prev + score);
     if (selectedSubject) {
       setCategoryScores(prev => ({
@@ -431,6 +399,15 @@ function App() {
   };
 
   const isAdmin = checkIsAdmin(user);
+
+  // Remove private exam content from the rendered view when the admin signs out.
+  useEffect(() => {
+    if (!isAdmin && selectedSubject?.adminOnly) {
+      setSelectedSubject(null);
+      setExamProgressData(null);
+      setCurrentView('home');
+    }
+  }, [isAdmin, selectedSubject]);
 
   const allCategories = [...new Set(subjects.map(s => s.category))];
   
@@ -581,6 +558,7 @@ function App() {
       <AdminDashboard 
         subjects={subjects} 
         user={user} 
+        onCatalogChange={refreshCatalog}
         onBack={goHome} 
       />
     );
@@ -1405,6 +1383,7 @@ function App() {
       </div>
 
       <main className="main-content">
+        {examLoadError && <p role="alert" style={{ color: 'var(--error)', padding: '1rem' }}>{examLoadError}</p>}
         <Suspense fallback={<PageLoader inline />}>
         {currentView === 'home' && (
           <Home 
@@ -1419,7 +1398,7 @@ function App() {
             onOpenReport={openReport}
           />
         )}
-        {currentView === 'examIntro' && selectedSubject && (
+        {currentView === 'examIntro' && selectedSubject && (!selectedSubject.adminOnly || isAdmin) && (
           <ExamIntro 
             subject={selectedSubject} 
             onBack={goHome} 
@@ -1428,12 +1407,12 @@ function App() {
               setCurrentView('exam');
             }}
             onResume={(resumeData) => {
-              setExamProgressData(resumeData);
+              setExamProgressData(selectedSubject.adminOnly ? null : resumeData);
               setCurrentView('exam');
             }}
           />
         )}
-        {currentView === 'exam' && selectedSubject && (
+        {currentView === 'exam' && selectedSubject && (!selectedSubject.adminOnly || isAdmin) && (
           <Exam 
             subject={selectedSubject} 
             onBack={goHome} 
@@ -1467,7 +1446,9 @@ function App() {
           <AdminDashboard 
             subjects={subjects} 
             user={user} 
+            onCatalogChange={refreshCatalog}
             onBack={goHome} 
+            onSelectSubject={startExam}
           />
         )}
         {currentView === 'admin_reports' && !user && (

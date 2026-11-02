@@ -1,4 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { loadExam, saveExam } from '../lib/examRepository';
+import { includesChoice } from '../lib/examAnswers';
 import SubjectIcon from './SubjectIcon';
 import { 
   AlertTriangle, 
@@ -40,7 +42,6 @@ import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import { supabase } from '../lib/supabase';
 import AdminBlogManager from './AdminBlogManager';
-import { EXAM_REFERENCES } from '../data/examReferences';
 
 // Issue types config matching Report.jsx & FAQ.jsx
 const ISSUE_TYPES_MAP = {
@@ -98,7 +99,7 @@ const renderTextWithMath = (text) => {
   });
 };
 
-export default function AdminDashboard({ subjects = [], user = null, onBack, initialTab = 'overview' }) {
+export default function AdminDashboard({ subjects = [], user = null, onBack, onCatalogChange, initialTab = 'overview' }) {
   const [currentNav, setCurrentNav] = useState(initialTab); // 'overview' | 'exams' | 'reports' | 'scores'
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -134,6 +135,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
   const [selectedExamId, setSelectedExamId] = useState(null);
   const [loadedExamData, setLoadedExamData] = useState(null);
   const [loadingExam, setLoadingExam] = useState(false);
+  const [savingExam, setSavingExam] = useState(false);
+  const [examError, setExamError] = useState('');
+  const examSaveInFlight = useRef(false);
+  const examLoadVersion = useRef(0);
   const [examSearchQuery, setExamSearchQuery] = useState('');
   const [examYearFilter, setExamYearFilter] = useState('all');
   const [questionSearchQuery, setQuestionSearchQuery] = useState('');
@@ -177,7 +182,6 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     curatedBy: '',
     references: []
   });
-  const [savingRef, setSavingRef] = useState(false);
 
   // Scores History State
   const [userScoreLogs, setUserScoreLogs] = useState([]);
@@ -311,134 +315,61 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     }
   };
 
-  // Load Exam Questions (from LocalStorage Custom or Bundled JSON)
+  // Supabase is the source of truth; legacy browser drafts remain untouched.
   const loadExamDetails = async (examId, targetQuestionNumber = null) => {
+    if (examSaveInFlight.current) return;
+    const version = ++examLoadVersion.current;
     setSelectedExamId(examId);
+    if (loadedExamData?.id !== examId) setLoadedExamData(null);
     setLoadingExam(true);
+    setExamError('');
     setQuestionSearchQuery('');
 
     try {
-      const subjectMeta = subjects.find(s => s.id === examId) || {};
-      let examData = null;
-
-      // 1. Check custom saved exam in localStorage
-      const customKey = `examhub_custom_exam_${examId}`;
-      const saved = localStorage.getItem(customKey);
-      if (saved) {
-        try {
-          examData = JSON.parse(saved);
-        } catch (e) {
-          console.warn("Error parsing local exam:", e);
-        }
-      }
-
-      // 2. Fallback to bundle file
-      if (!examData) {
-        try {
-          const mod = await import(`../data/${examId}.json`);
-          examData = mod.default;
-        } catch (err) {
-          console.error("Failed to load local JSON file:", err);
-          examData = {
-            id: examId,
-            name: subjectMeta.name || examId,
-            category: subjectMeta.category || 'General',
-            questions: []
-          };
-        }
-      }
-
-      const defaultRef = EXAM_REFERENCES[examId] || {};
-      const merged = {
-        ...defaultRef,
-        ...subjectMeta,
-        ...examData,
-        primarySource: examData?.primarySource || subjectMeta.primarySource || defaultRef.primarySource || '',
-        organization: examData?.organization || subjectMeta.organization || defaultRef.organization || '',
-        curatedBy: examData?.curatedBy || subjectMeta.curatedBy || defaultRef.curatedBy || '',
-        references: (examData?.references && examData.references.length > 0)
-          ? examData.references
-          : (subjectMeta.references && subjectMeta.references.length > 0)
-            ? subjectMeta.references
-            : defaultRef.references || [],
-        isCustomModified: !!saved
-      };
-
-      setLoadedExamData(merged);
-
-      // If requested to open a specific question editor directly
-      if (targetQuestionNumber && merged.questions) {
+      const exam = await loadExam(supabase, examId);
+      if (version !== examLoadVersion.current) return;
+      setLoadedExamData(exam);
+      if (targetQuestionNumber) {
         const qIdx = parseInt(targetQuestionNumber, 10) - 1;
-        if (merged.questions[qIdx]) {
-          openQuestionEditor(qIdx, merged.questions[qIdx]);
-        }
+        if (exam.questions[qIdx]) openQuestionEditor(qIdx, exam.questions[qIdx]);
       }
     } catch (err) {
-      console.error("Failed loading exam details:", err);
-      showToast('ไม่สามารถโหลดข้อมูลชุดข้อสอบนี้ได้');
+      if (version !== examLoadVersion.current) return;
+      setExamError(err.message || 'ไม่สามารถโหลดข้อมูลชุดข้อสอบนี้ได้');
+      showToast(`โหลดข้อสอบไม่สำเร็จ: ${err.message}`);
     } finally {
-      setLoadingExam(false);
+      if (version === examLoadVersion.current) setLoadingExam(false);
     }
   };
 
-  // Save Exam Data (to LocalStorage & State)
-  const saveExamData = (updatedData) => {
-    const examId = updatedData.id || selectedExamId;
-    const customKey = `examhub_custom_exam_${examId}`;
-    
-    // Save to localStorage
-    const toStore = {
-      id: updatedData.id,
-      name: updatedData.name,
-      category: updatedData.category,
-      desc: updatedData.desc,
-      icon: updatedData.icon,
-      color: updatedData.color,
-      primarySource: updatedData.primarySource || '',
-      organization: updatedData.organization || '',
-      curatedBy: updatedData.curatedBy || '',
-      references: updatedData.references || [],
-      questions: updatedData.questions
-    };
-    localStorage.setItem(customKey, JSON.stringify(toStore));
-
-    setLoadedExamData({
-      ...updatedData,
-      isCustomModified: true
-    });
-
-    showToast(`บันทึกชุดข้อสอบ "${updatedData.name}" เรียบร้อย (${updatedData.questions?.length || 0} ข้อ)`);
-  };
-
-  // Reset Exam Data to Default from JSON file
-  const handleResetExamToDefault = async (examId) => {
-    if (!window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตข้อสอบ "${loadedExamData?.name}" กลับเป็นค่าเริ่มต้นจากไฟล์ JSON?`)) {
-      return;
-    }
-
-    const customKey = `examhub_custom_exam_${examId}`;
-    localStorage.removeItem(customKey);
-
+  // Keep the current editor data until the database confirms the complete write.
+  const saveExamData = async (updatedData) => {
+    if (examSaveInFlight.current) return null;
+    examSaveInFlight.current = true;
+    setSavingExam(true);
+    setExamError('');
     try {
-      const mod = await import(`../data/${examId}.json`);
-      const originalData = mod.default;
-      const subjectMeta = subjects.find(s => s.id === examId) || {};
-      const defaultRef = EXAM_REFERENCES[examId] || {};
-      setLoadedExamData({
-        ...defaultRef,
-        ...subjectMeta,
-        ...originalData,
-        primarySource: defaultRef.primarySource || '',
-        organization: defaultRef.organization || '',
-        curatedBy: defaultRef.curatedBy || '',
-        references: defaultRef.references || [],
-        isCustomModified: false
-      });
-      showToast('รีเซ็ตข้อสอบกลับเป็นค่าเริ่มต้นเรียบร้อย');
+      const persisted = await saveExam(supabase, updatedData);
+      setLoadedExamData(persisted);
+      showToast(`บันทึกชุดข้อสอบ "${persisted.name}" ลงฐานข้อมูลแล้ว (${persisted.questions.length} ข้อ)`);
+      try {
+        await onCatalogChange?.();
+      } catch {
+        showToast('บันทึกแล้ว แต่รีเฟรชรายการวิชาไม่สำเร็จ กรุณาโหลดรายการอีกครั้ง');
+      }
+      return persisted;
     } catch (err) {
-      console.error("Failed reset:", err);
-      showToast('เกิดข้อผิดพลาดในการรีเซ็ต');
+      setExamError(err.message || 'ไม่สามารถบันทึกข้อสอบได้');
+      showToast(`บันทึกไม่สำเร็จ: ${err.message}`);
+      return null;
+    } finally {
+      examSaveInFlight.current = false;
+      setSavingExam(false);
     }
+  };
+
+  const handleReloadExam = async (examId) => {
+    await loadExamDetails(examId);
   };
 
   // Download Exam JSON File
@@ -452,6 +383,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       color: examData.color || '#0070f3',
       iconBg: examData.iconBg || 'rgba(0, 112, 243, 0.15)',
       desc: examData.desc || '',
+      year: examData.year,
+      type: examData.type,
+      adminOnly: examData.adminOnly === true,
+      requiresAuth: examData.requiresAuth === true,
       primarySource: examData.primarySource || '',
       organization: examData.organization || '',
       curatedBy: examData.curatedBy || '',
@@ -468,6 +403,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
     showToast(`ดาวน์โหลดไฟล์ ${examData.id}.json เรียบร้อย`);
   };
 
@@ -482,6 +418,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       color: examData.color || '#0070f3',
       iconBg: examData.iconBg || 'rgba(0, 112, 243, 0.15)',
       desc: examData.desc || '',
+      year: examData.year,
+      type: examData.type,
+      adminOnly: examData.adminOnly === true,
+      requiresAuth: examData.requiresAuth === true,
       primarySource: examData.primarySource || '',
       organization: examData.organization || '',
       curatedBy: examData.curatedBy || '',
@@ -492,92 +432,47 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     showToast('คัดลอก JSON ลงในคลิปบอร์ดแล้ว');
   };
 
-  // Open References Modal
+  // Open References Modal with the values actually saved in the database.
   const openRefModal = () => {
-    if (!selectedExamId) return;
-    const defaultRef = EXAM_REFERENCES[selectedExamId] || {};
+    if (!loadedExamData || examSaveInFlight.current) return;
     setRefFormData({
-      primarySource: loadedExamData?.primarySource || defaultRef.primarySource || '',
-      organization: loadedExamData?.organization || defaultRef.organization || '',
-      curatedBy: loadedExamData?.curatedBy || defaultRef.curatedBy || '',
-      references: (loadedExamData?.references && loadedExamData.references.length > 0)
-        ? loadedExamData.references.map(r => ({ ...r }))
-        : (defaultRef.references || []).map(r => ({ ...r }))
+      primarySource: loadedExamData.primarySource || '',
+      organization: loadedExamData.organization || '',
+      curatedBy: loadedExamData.curatedBy || '',
+      references: (loadedExamData.references || []).map(r => ({ ...r }))
     });
     setShowRefModal(true);
   };
 
-  // Save References (to LocalStorage and optionally Supabase)
-  const handleSaveReferences = async (syncToSupabase = false) => {
-    if (!selectedExamId || !loadedExamData) return;
-    setSavingRef(true);
-
-    try {
-      const cleanRefs = (refFormData.references || [])
-        .map(r => ({
-          title: (r.title || '').trim(),
-          author: (r.author || '').trim(),
-          desc: (r.desc || '').trim(),
-          url: (r.url || '').trim()
-        }))
-        .filter(r => r.title.length > 0);
-
-      const updatedExam = {
-        ...loadedExamData,
-        primarySource: refFormData.primarySource.trim(),
-        organization: refFormData.organization.trim(),
-        curatedBy: refFormData.curatedBy.trim(),
-        references: cleanRefs
-      };
-
-      // 1. Save to local storage & state
-      saveExamData(updatedExam);
-
-      // 2. Sync to Supabase if requested
-      if (syncToSupabase) {
-        const { error } = await supabase
-          .from('exams')
-          .update({
-            primarySource: updatedExam.primarySource,
-            organization: updatedExam.organization,
-            curatedBy: updatedExam.curatedBy,
-            references: updatedExam.references,
-            primary_source: updatedExam.primarySource,
-            curated_by: updatedExam.curatedBy
-          })
-          .eq('id', selectedExamId);
-
-        if (error) {
-          console.warn("Supabase reference update error:", error);
-          if (error.code === 'PGRST204') {
-            showToast('บันทึกลงในเครื่องแล้ว (แจ้งเตือน: กรุณารัน scripts/add_references_to_exams.sql ใน Supabase SQL Editor ก่อนซิงค์)');
-          } else {
-            showToast(`บันทึกในเครื่องแล้ว (Supabase: ${error.message})`);
-          }
-        } else {
-          showToast('บันทึกและซิงค์แหล่งอ้างอิงกับ Supabase เรียบร้อย!');
-        }
-      } else {
-        showToast('บันทึกแหล่งอ้างอิงลงในระบบเรียบร้อย');
-      }
-
-      setShowRefModal(false);
-    } catch (err) {
-      console.error("Error saving references:", err);
-      showToast('เกิดข้อผิดพลาดในการบันทึกแหล่งอ้างอิง');
-    } finally {
-      setSavingRef(false);
-    }
+  const handleSaveReferences = async () => {
+    if (!loadedExamData || examSaveInFlight.current) return;
+    const cleanRefs = (refFormData.references || [])
+      .map(r => ({ ...r,
+        title: (r.title || '').trim(),
+        author: (r.author || '').trim(),
+        desc: (r.desc || '').trim(),
+        url: (r.url || '').trim()
+      }))
+      .filter(r => r.title.length > 0);
+    const persisted = await saveExamData({
+      ...loadedExamData,
+      primarySource: refFormData.primarySource.trim(),
+      organization: refFormData.organization.trim(),
+      curatedBy: refFormData.curatedBy.trim(),
+      references: cleanRefs
+    });
+    if (persisted) setShowRefModal(false);
   };
 
   // Question Editor Handlers
   const openQuestionEditor = (index, question = null) => {
+    if (examSaveInFlight.current) return;
     setEditingQuestionIndex(index);
     if (question) {
       setQuestionFormData({
         q: question.q || '',
         choices: question.choices ? [...question.choices] : ['', '', '', ''],
-        answer: typeof question.answer === 'number' ? question.answer : 0,
+        answer: Array.isArray(question.answer) ? [...question.answer] : question.answer ?? 0,
         explain: question.explain || ''
       });
     } else {
@@ -590,7 +485,8 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
     }
   };
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = async () => {
+    if (!loadedExamData || examSaveInFlight.current) return;
     if (!questionFormData.q.trim()) {
       alert('กรุณากรอกคำถาม');
       return;
@@ -602,10 +498,16 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       return;
     }
 
+    const selectedAnswers = [questionFormData.answer].flat();
+    if (selectedAnswers.length === 0 || selectedAnswers.some(a => !Number.isInteger(a) || a < 0 || a >= questionFormData.choices.length)) {
+      alert('กรุณาเลือกคำตอบที่ถูกต้องอย่างน้อยหนึ่งข้อ');
+      return;
+    }
     const updatedQuestion = {
+      ...(editingQuestionIndex >= 0 ? loadedExamData.questions[editingQuestionIndex] : {}),
       q: questionFormData.q.trim(),
       choices: questionFormData.choices.map(c => c.trim()),
-      answer: questionFormData.answer >= questionFormData.choices.length ? 0 : questionFormData.answer,
+      answer: Array.isArray(questionFormData.answer) ? [...questionFormData.answer] : questionFormData.answer,
       explain: questionFormData.explain.trim()
     };
 
@@ -622,11 +524,11 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       questions: currentQuestions
     };
 
-    saveExamData(updatedExam);
-    setEditingQuestionIndex(null);
+    if (await saveExamData(updatedExam)) setEditingQuestionIndex(null);
   };
 
-  const handleDeleteQuestion = (index) => {
+  const handleDeleteQuestion = async (index) => {
+    if (!loadedExamData || examSaveInFlight.current) return;
     if (!window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบคำถามข้อที่ ${index + 1}?`)) {
       return;
     }
@@ -636,10 +538,11 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       ...loadedExamData,
       questions: currentQuestions
     };
-    saveExamData(updatedExam);
+    await saveExamData(updatedExam);
   };
 
-  const handleDuplicateQuestion = (index) => {
+  const handleDuplicateQuestion = async (index) => {
+    if (!loadedExamData || examSaveInFlight.current) return;
     const currentQuestions = [...(loadedExamData.questions || [])];
     const targetQ = currentQuestions[index];
     const duplicated = {
@@ -652,10 +555,11 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       ...loadedExamData,
       questions: currentQuestions
     };
-    saveExamData(updatedExam);
+    await saveExamData(updatedExam);
   };
 
-  const handleMoveQuestion = (fromIdx, toIdx) => {
+  const handleMoveQuestion = async (fromIdx, toIdx) => {
+    if (!loadedExamData || examSaveInFlight.current) return;
     if (toIdx < 0 || toIdx >= (loadedExamData?.questions?.length || 0)) return;
     const currentQuestions = [...(loadedExamData.questions || [])];
     const [moved] = currentQuestions.splice(fromIdx, 1);
@@ -664,11 +568,12 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       ...loadedExamData,
       questions: currentQuestions
     };
-    saveExamData(updatedExam);
+    await saveExamData(updatedExam);
   };
 
   // Bulk Import Parser
-  const handleProcessImport = () => {
+  const handleProcessImport = async () => {
+    if (!loadedExamData || examSaveInFlight.current) return;
     setImportError('');
     if (!importText.trim()) {
       setImportError('กรุณากรอกข้อมูลข้อสอบ');
@@ -687,14 +592,18 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
 
         if (importedQuestions.length > 0) {
           const sanitized = importedQuestions.map(q => ({
+            ...q,
             q: q.q || q.question || '',
             choices: q.choices || q.options || [],
-            answer: typeof q.answer === 'number' ? q.answer : 0,
+            answer: Array.isArray(q.answer) ? [...q.answer] : q.answer ?? 0,
             explain: q.explain || q.explanation || ''
-          })).filter(q => q.q && q.choices.length > 0);
+          }));
 
           const currentQuestions = [...(loadedExamData.questions || []), ...sanitized];
-          saveExamData({ ...loadedExamData, questions: currentQuestions });
+          if (!await saveExamData({ ...loadedExamData, questions: currentQuestions })) {
+            setImportError('บันทึกลงฐานข้อมูลไม่สำเร็จ ข้อมูลที่นำเข้ายังคงอยู่ กรุณาตรวจสอบข้อผิดพลาดและลองอีกครั้ง');
+            return;
+          }
           setShowImportModal(false);
           setImportText('');
           showToast(`นำเข้าข้อสอบสำเร็จ ${sanitized.length} ข้อ`);
@@ -767,7 +676,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       }
 
       const currentQuestions = [...(loadedExamData.questions || []), ...questionsList];
-      saveExamData({ ...loadedExamData, questions: currentQuestions });
+      if (!await saveExamData({ ...loadedExamData, questions: currentQuestions })) {
+        setImportError('บันทึกลงฐานข้อมูลไม่สำเร็จ ข้อมูลที่นำเข้ายังคงอยู่ กรุณาลองอีกครั้ง');
+        return;
+      }
       setShowImportModal(false);
       setImportText('');
       showToast(`นำเข้าข้อสอบสำเร็จ ${questionsList.length} ข้อ`);
@@ -775,6 +687,44 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       console.error("Import parse error:", err);
       setImportError('เกิดข้อผิดพลาดในการแปลงข้อมูล: ' + err.message);
     }
+  };
+
+  const handleCreateExam = async (e) => {
+    e.preventDefault();
+    if (examSaveInFlight.current) return;
+    const cleanId = newExamForm.id.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+    const cleanRefs = (newExamForm.references || [])
+      .map(r => ({
+        title: (r.title || '').trim(),
+        author: (r.author || '').trim(),
+        desc: (r.desc || '').trim(),
+        url: (r.url || '').trim()
+      }))
+      .filter(r => r.title.length > 0);
+
+    const newExamObj = {
+      id: cleanId,
+      name: newExamForm.name.trim(),
+      category: newExamForm.category.trim() || 'General',
+      icon: newExamForm.icon || '',
+      color: newExamForm.color || '#0070f3',
+      iconBg: `${newExamForm.color || '#0070f3'}26`,
+      desc: (newExamForm.desc || '').trim(),
+      year: parseInt(newExamForm.year, 10) || 3,
+      type: newExamForm.type || 'Midterm',
+      primarySource: (newExamForm.primarySource || '').trim(),
+      organization: (newExamForm.organization || '').trim(),
+      curatedBy: (newExamForm.curatedBy || '').trim(),
+      references: cleanRefs,
+      adminOnly: newExamForm.adminOnly === true,
+      requiresAuth: newExamForm.requiresAuth === true,
+      questions: []
+    };
+
+    const persisted = await saveExamData(newExamObj);
+    if (!persisted) return;
+    setSelectedExamId(persisted.id);
+    setShowNewExamModal(false);
   };
 
   // Jump from Report Inbox to Question Editor
@@ -890,6 +840,12 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       position: 'relative'
     }}>
       {/* Toast Notification */}
+      {examError && (
+        <div role="alert" style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 9998, maxWidth: 'min(32rem, 90vw)', padding: '0.85rem 1rem', background: 'var(--surface)', border: '1px solid #ef4444', borderRadius: '8px', color: '#ef4444' }}>
+          {examError}
+          <button type="button" onClick={() => setExamError('')} aria-label="ปิดข้อความผิดพลาด" style={{ marginLeft: '0.5rem', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}><X size={14} /></button>
+        </div>
+      )}
       {toastMessage && (
         <div style={{
           position: 'fixed',
@@ -909,7 +865,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
           gap: '0.5rem',
           animation: 'fadeIn 0.2s ease-out'
         }}>
-          <CheckCircle2 size={16} color="#10b981" />
+          {examError ? <AlertTriangle size={16} color="#ef4444" /> : <CheckCircle2 size={16} color="#10b981" />}
           <span>{toastMessage}</span>
         </div>
       )}
@@ -1895,8 +1851,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                             {/* Year Exams Grid */}
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
                               {group.exams.map(exam => {
-                                const customKey = `examhub_custom_exam_${exam.id}`;
-                                const isModified = !!localStorage.getItem(customKey);
+                                const isSaved = !!exam.updated_at;
 
                                 return (
                                   <div 
@@ -1904,7 +1859,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     onClick={() => loadExamDetails(exam.id)}
                                     style={{
                                       background: 'var(--surface)',
-                                      border: isModified ? '1px solid var(--accent)' : '1px solid var(--border-color)',
+                                      border: isSaved ? '1px solid var(--accent)' : '1px solid var(--border-color)',
                                       borderRadius: '12px',
                                       padding: '1.25rem',
                                       cursor: 'pointer',
@@ -1915,14 +1870,14 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                       transition: 'transform 0.15s ease, box-shadow 0.15s ease'
                                     }}
                                   >
-                                    {isModified && (
+                                    {isSaved && (
                                       <span style={{
                                         position: 'absolute', top: '12px', right: '12px',
                                         fontSize: '0.625rem', fontWeight: 700,
                                         background: 'rgba(0,112,243,0.12)', color: 'var(--accent)',
                                         padding: '0.15rem 0.45rem', borderRadius: '4px'
                                       }}>
-                                        LOCAL EDITED
+                                        DATABASE
                                       </span>
                                     )}
 
@@ -1977,6 +1932,8 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                     <button 
                       className="btn btn-outline"
                       onClick={() => {
+                        if (examSaveInFlight.current) return;
+                        examLoadVersion.current += 1;
                         setSelectedExamId(null);
                         setLoadedExamData(null);
                       }}
@@ -1988,6 +1945,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                       <button 
                         className="btn btn-primary"
+                        disabled={loadingExam || savingExam || !loadedExamData}
                         onClick={() => openQuestionEditor(-1)}
                         style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}
                       >
@@ -1997,6 +1955,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
 
                       <button 
                         className="btn btn-outline"
+                        disabled={loadingExam || savingExam || !loadedExamData}
                         onClick={openRefModal}
                         style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}
                         title="จัดการแหล่งที่มาและเอกสารอ้างอิง"
@@ -2007,6 +1966,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
 
                       <button 
                         className="btn btn-outline"
+                        disabled={loadingExam || savingExam || !loadedExamData}
                         onClick={() => setShowImportModal(true)}
                         style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}
                         title="นำเข้าข้อสอบจาก AI หรือ JSON"
@@ -2035,15 +1995,16 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                         <span>คัดลอก JSON</span>
                       </button>
 
-                      {loadedExamData?.isCustomModified && (
+                      {selectedExamId && (
                         <button 
                           className="btn btn-outline"
-                          onClick={() => handleResetExamToDefault(selectedExamId)}
-                          style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: '#ef4444' }}
-                          title="รีเซ็ตเป็นค่าเริ่มต้น"
+                          disabled={loadingExam || savingExam}
+                          onClick={() => handleReloadExam(selectedExamId)}
+                          style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}
+                          title="โหลดข้อมูลล่าสุดจากฐานข้อมูล"
                         >
                           <RotateCcw size={13} />
-                          <span>รีเซ็ตค่าเดิม</span>
+                          <span>โหลดจากฐานข้อมูล</span>
                         </button>
                       )}
                     </div>
@@ -2082,14 +2043,14 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                               <h2 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0 }}>
                                 {loadedExamData.name}
                               </h2>
-                              {loadedExamData.isCustomModified && (
+                              {loadedExamData.updated_at && (
                                 <span style={{ fontSize: '0.625rem', fontWeight: 700, background: 'rgba(0,112,243,0.12)', color: 'var(--accent)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>
-                                  LOCAL SAVED
+                                  DATABASE SAVED
                                 </span>
                               )}
                             </div>
                             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                              หมวดหมู่: {loadedExamData.category} • ไฟล์: <code>{selectedExamId}.json</code>
+                              หมวดหมู่: {loadedExamData.category} • รหัส: <code>{selectedExamId}</code>
                             </div>
 
                             {/* References & Sources Badge/Action */}
@@ -2116,7 +2077,8 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     </span>
                                   )}
                                   <button 
-                                    onClick={openRefModal}
+                                    disabled={loadingExam || savingExam || !loadedExamData}
+                        onClick={openRefModal}
                                     style={{
                                       background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer',
                                       fontSize: '0.75rem', textDecoration: 'underline', padding: 0
@@ -2127,7 +2089,8 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                 </>
                               ) : (
                                 <button 
-                                  onClick={openRefModal}
+                                  disabled={loadingExam || savingExam || !loadedExamData}
+                        onClick={openRefModal}
                                   style={{
                                     background: 'rgba(16, 185, 129, 0.1)', border: '1px dashed #10b981',
                                     color: '#10b981', borderRadius: '6px', padding: '0.2rem 0.5rem',
@@ -2178,7 +2141,8 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                         <div style={{ textAlign: 'center', padding: '3rem 1rem', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
                           <FileText size={32} style={{ color: 'var(--text-muted)', margin: '0 auto 0.5rem', opacity: 0.5 }} />
                           <div style={{ fontSize: '0.9375rem', fontWeight: 600 }}>ไม่พบคำถาม</div>
-                          <button className="btn btn-primary" onClick={() => openQuestionEditor(-1)} style={{ marginTop: '0.75rem' }}>
+                          <button className="btn btn-primary" disabled={loadingExam || savingExam || !loadedExamData}
+                        onClick={() => openQuestionEditor(-1)} style={{ marginTop: '0.75rem' }}>
                             + เพิ่มข้อสอบข้อแรก
                           </button>
                         </div>
@@ -2211,7 +2175,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     <button 
                                       className="btn btn-outline"
                                       onClick={() => handleMoveQuestion(displayIdx, displayIdx - 1)}
-                                      disabled={displayIdx === 0}
+                                      disabled={savingExam || displayIdx === 0}
                                       style={{ padding: '0.25rem 0.45rem', fontSize: '0.6875rem' }}
                                       title="เลื่อนขึ้น"
                                     >
@@ -2220,7 +2184,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     <button 
                                       className="btn btn-outline"
                                       onClick={() => handleMoveQuestion(displayIdx, displayIdx + 1)}
-                                      disabled={displayIdx === loadedExamData.questions.length - 1}
+                                      disabled={savingExam || displayIdx === loadedExamData.questions.length - 1}
                                       style={{ padding: '0.25rem 0.45rem', fontSize: '0.6875rem' }}
                                       title="เลื่อนลง"
                                     >
@@ -2228,6 +2192,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     </button>
                                     <button 
                                       className="btn btn-outline"
+                                      disabled={savingExam}
                                       onClick={() => handleDuplicateQuestion(displayIdx)}
                                       style={{ padding: '0.25rem 0.45rem', fontSize: '0.75rem' }}
                                       title="คัดลอกข้อนี้"
@@ -2236,6 +2201,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     </button>
                                     <button 
                                       className="btn btn-primary"
+                                      disabled={savingExam}
                                       onClick={() => openQuestionEditor(displayIdx, qItem)}
                                       style={{ padding: '0.25rem 0.65rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
                                     >
@@ -2244,6 +2210,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                                     </button>
                                     <button 
                                       className="btn btn-outline"
+                                      disabled={savingExam}
                                       onClick={() => handleDeleteQuestion(displayIdx)}
                                       style={{ padding: '0.25rem 0.45rem', fontSize: '0.75rem', color: '#ef4444' }}
                                       title="ลบข้อนี้"
@@ -2259,7 +2226,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
 
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.4rem', marginBottom: '0.75rem' }}>
                                   {(qItem.choices || []).map((choice, cIdx) => {
-                                    const isCorrect = cIdx === qItem.answer;
+                                    const isCorrect = includesChoice(qItem.answer, cIdx);
                                     return (
                                       <div 
                                         key={cIdx}
@@ -2629,7 +2596,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       {/* 3. QUESTION EDITOR MODAL                                                  */}
       {/* ========================================================================= */}
       {editingQuestionIndex !== null && (
-        <div style={{
+        <div inert={savingExam ? true : undefined} style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)',
           zIndex: 220, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -2681,7 +2648,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                   <label style={{ fontSize: '0.8125rem', fontWeight: 600 }}>
-                    ตัวเลือก (Choices) — เลือกวงกลมข้อที่ถูกต้อง <span style={{ color: '#ef4444' }}>*</span>
+                    ตัวเลือก (Choices) — เลือกคำตอบที่ถูกต้อง <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <button
                     type="button"
@@ -2694,7 +2661,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {questionFormData.choices.map((choice, idx) => {
-                    const isSelected = questionFormData.answer === idx;
+                    const isSelected = includesChoice(questionFormData.answer, idx);
                     return (
                       <div 
                         key={idx}
@@ -2706,10 +2673,15 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                         }}
                       >
                         <input 
-                          type="radio"
+                          type={Array.isArray(questionFormData.answer) ? "checkbox" : "radio"}
                           name="q_ans_radio"
                           checked={isSelected}
-                          onChange={() => setQuestionFormData({ ...questionFormData, answer: idx })}
+                          onChange={() => {
+                            const answer = Array.isArray(questionFormData.answer)
+                              ? (isSelected ? questionFormData.answer.filter(a => a !== idx) : [...questionFormData.answer, idx].sort((a, b) => a - b))
+                              : idx;
+                            setQuestionFormData({ ...questionFormData, answer });
+                          }}
                           style={{ cursor: 'pointer', accentColor: '#10b981' }}
                         />
                         <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: isSelected ? '#10b981' : 'var(--text)' }}>
@@ -2734,7 +2706,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                             type="button"
                             onClick={() => {
                               const newC = questionFormData.choices.filter((_, i) => i !== idx);
-                              const newA = questionFormData.answer >= newC.length ? 0 : questionFormData.answer;
+                              const shiftAnswer = a => a > idx ? a - 1 : a;
+                              const newA = Array.isArray(questionFormData.answer)
+                                ? questionFormData.answer.filter(a => a !== idx).map(shiftAnswer)
+                                : questionFormData.answer === idx ? 0 : shiftAnswer(questionFormData.answer);
                               setQuestionFormData({ ...questionFormData, choices: newC, answer: newA });
                             }}
                             style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }}
@@ -2778,8 +2753,8 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   {questionFormData.choices.map((c, idx) => (
-                    <div key={idx} style={{ color: idx === questionFormData.answer ? '#10b981' : 'var(--text)', fontWeight: idx === questionFormData.answer ? 600 : 400 }}>
-                      {String.fromCharCode(65 + idx)}. {c ? renderTextWithMath(c) : '(ว่าง)'} {idx === questionFormData.answer && '(เฉลย)'}
+                    <div key={idx} style={{ color: includesChoice(questionFormData.answer, idx) ? '#10b981' : 'var(--text)', fontWeight: includesChoice(questionFormData.answer, idx) ? 600 : 400 }}>
+                      {String.fromCharCode(65 + idx)}. {c ? renderTextWithMath(c) : '(ว่าง)'} {includesChoice(questionFormData.answer, idx) && '(เฉลย)'}
                     </div>
                   ))}
                 </div>
@@ -2791,7 +2766,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
               display: 'flex', justifyContent: 'flex-end', gap: '0.5rem'
             }}>
               <button className="btn btn-outline" onClick={() => setEditingQuestionIndex(null)}>ยกเลิก</button>
-              <button className="btn btn-primary" onClick={handleSaveQuestion}>
+              <button className="btn btn-primary" onClick={handleSaveQuestion} disabled={savingExam}>
                 <Save size={14} /> บันทึกข้อสอบ
               </button>
             </div>
@@ -2803,7 +2778,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, ini
       {/* 4. BULK IMPORT MODAL                                                      */}
       {/* ========================================================================= */}
       {showImportModal && (
-        <div style={{
+        <div inert={savingExam ? true : undefined} style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)',
           zIndex: 220, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -2855,7 +2830,7 @@ D. ตัวเลือก 4
 
             <div style={{ padding: '0.875rem 1.25rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
               <button className="btn btn-outline" onClick={() => setShowImportModal(false)}>ยกเลิก</button>
-              <button className="btn btn-primary" onClick={handleProcessImport}>
+              <button className="btn btn-primary" onClick={handleProcessImport} disabled={savingExam}>
                 <Upload size={14} /> นำเข้าข้อมูล
               </button>
             </div>
@@ -2867,7 +2842,7 @@ D. ตัวเลือก 4
       {/* 5. NEW EXAM MODAL                                                         */}
       {/* ========================================================================= */}
       {showNewExamModal && (
-        <div style={{
+        <div inert={savingExam ? true : undefined} style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)',
           zIndex: 220, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -2887,64 +2862,7 @@ D. ตัวเลือก 4
               </button>
             </div>
 
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              const cleanId = newExamForm.id.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
-              const cleanRefs = (newExamForm.references || [])
-                .map(r => ({
-                  title: (r.title || '').trim(),
-                  author: (r.author || '').trim(),
-                  desc: (r.desc || '').trim(),
-                  url: (r.url || '').trim()
-                }))
-                .filter(r => r.title.length > 0);
-
-              const newExamObj = {
-                id: cleanId,
-                name: newExamForm.name.trim(),
-                category: newExamForm.category.trim() || 'General',
-                icon: newExamForm.icon || '',
-                color: newExamForm.color || '#0070f3',
-                iconBg: `${newExamForm.color || '#0070f3'}26`,
-                desc: (newExamForm.desc || '').trim(),
-                year: parseInt(newExamForm.year, 10) || 3,
-                type: newExamForm.type || 'Midterm',
-                primarySource: (newExamForm.primarySource || '').trim(),
-                organization: (newExamForm.organization || '').trim(),
-                curatedBy: (newExamForm.curatedBy || '').trim(),
-                references: cleanRefs,
-                questions: []
-              };
-
-              // 1. Save locally
-              localStorage.setItem(`examhub_custom_exam_${cleanId}`, JSON.stringify(newExamObj));
-
-              // 2. Sync to Supabase if connected
-              try {
-                await supabase.from('exams').upsert({
-                  id: cleanId,
-                  name: newExamObj.name,
-                  category: newExamObj.category,
-                  icon: newExamObj.icon,
-                  color: newExamObj.color,
-                  iconBg: newExamObj.iconBg,
-                  desc: newExamObj.desc,
-                  questionCount: 0,
-                  year: newExamObj.year,
-                  type: newExamObj.type,
-                  primarySource: newExamObj.primarySource,
-                  organization: newExamObj.organization,
-                  curatedBy: newExamObj.curatedBy,
-                  references: newExamObj.references
-                }, { onConflict: 'id' });
-              } catch (err) {
-                console.warn("Supabase upsert notice:", err);
-              }
-
-              setShowNewExamModal(false);
-              showToast(`สร้างวิชา "${newExamObj.name}" สำเร็จ`);
-              loadExamDetails(cleanId);
-            }} style={{ padding: '1.25rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+            <form onSubmit={handleCreateExam} style={{ padding: '1.25rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
                 <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
                   รหัส ID (เช่น ai_intro_30q) <span style={{ color: '#ef4444' }}>*</span>
@@ -3066,7 +2984,7 @@ D. ตัวเลือก 4
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--border-color)' }}>
                 <button type="button" className="btn btn-outline" onClick={() => setShowNewExamModal(false)}>ยกเลิก</button>
-                <button type="submit" className="btn btn-primary">+ สร้างชุดข้อสอบ</button>
+                <button type="submit" className="btn btn-primary" disabled={savingExam}>{savingExam ? 'กำลังบันทึก...' : '+ สร้างชุดข้อสอบ'}</button>
               </div>
             </form>
           </div>
@@ -3077,7 +2995,7 @@ D. ตัวเลือก 4
       {/* 5B. EXAM REFERENCES MODAL                                                 */}
       {/* ========================================================================= */}
       {showRefModal && (
-        <div style={{
+        <div inert={savingExam ? true : undefined} style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(5px)',
           zIndex: 230, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -3289,25 +3207,9 @@ D. ตัวเลือก 4
                     <Shield size={13} />
                     <span>การเชื่อมต่อ Supabase</span>
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const sql = `-- อัปเดตแหล่งอ้างอิงวิชา ${selectedExamId} ในตาราง exams
-UPDATE public.exams 
-SET "primarySource" = '${(refFormData.primarySource || '').replace(/'/g, "''")}',
-    organization = '${(refFormData.organization || '').replace(/'/g, "''")}',
-    "curatedBy" = '${(refFormData.curatedBy || '').replace(/'/g, "''")}',
-    "references" = '${JSON.stringify(refFormData.references || []).replace(/'/g, "''")}'::jsonb
-WHERE id = '${selectedExamId}';`;
-                      navigator.clipboard.writeText(sql);
-                      showToast('คัดลอก SQL สำหรับรันใน Supabase เรียบร้อย');
-                    }}
-                    style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontSize: '0.72rem', textDecoration: 'underline' }}
-                  >
-                    คัดลอก SQL อัปเดตวิชานี้
-                  </button>
+
                 </div>
-                <span>เมื่อกด <strong>"บันทึก & ซิงค์ Supabase"</strong> ระบบจะบันทึกข้อมูลเข้า LocalStorage และส่งคำสั่งอัปเดตไปยังตาราง <code>exams</code> ใน Supabase ทันที</span>
+                <span>เมื่อกด <strong>"บันทึกลงฐานข้อมูล"</strong> ระบบจะยืนยันการบันทึกข้อมูลและแหล่งอ้างอิงใน Supabase ก่อนปิดหน้าต่าง</span>
               </div>
             </div>
 
@@ -3320,34 +3222,26 @@ WHERE id = '${selectedExamId}';`;
                 type="button"
                 className="btn btn-outline" 
                 onClick={() => setShowRefModal(false)}
-                disabled={savingRef}
+                disabled={savingExam}
               >
                 ยกเลิก
               </button>
 
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button 
-                  type="button"
-                  className="btn btn-outline" 
-                  onClick={() => handleSaveReferences(false)}
-                  disabled={savingRef}
-                  style={{ fontSize: '0.8125rem' }}
-                >
-                  <Save size={14} /> บันทึกลงเครื่อง
-                </button>
+
                 <button 
                   type="button"
                   className="btn btn-primary" 
-                  onClick={() => handleSaveReferences(true)}
-                  disabled={savingRef}
+                  onClick={handleSaveReferences}
+                  disabled={savingExam}
                   style={{ fontSize: '0.8125rem', background: '#10b981', borderColor: '#10b981' }}
                 >
-                  {savingRef ? (
-                    <span>กำลังซิงค์...</span>
+                  {savingExam ? (
+                    <span>กำลังบันทึก...</span>
                   ) : (
                     <>
                       <BookOpen size={14} />
-                      <span>บันทึก & ซิงค์ Supabase</span>
+                      <span>บันทึกลงฐานข้อมูล</span>
                     </>
                   )}
                 </button>

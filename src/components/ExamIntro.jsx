@@ -23,6 +23,7 @@ export default function ExamIntro({ subject, onStart, onResume, onBack }) {
 
   const choiceTypes = new Set(subject.questions.map(q => q.choices?.length || 4));
   const typesArray = Array.from(choiceTypes).sort((a, b) => a - b);
+  const hasMultipleAnswers = subject.questions.some(q => Array.isArray(q.answer));
   const refData = getSubjectReferenceData(subject);
 
   return (
@@ -116,10 +117,11 @@ export default function ExamIntro({ subject, onStart, onResume, onBack }) {
             <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
               <li>จำนวนข้อสอบทั้งหมด <strong>{subject.questions.length} ข้อ</strong></li>
               {typesArray.map(type => (
-                <li key={type}>รูปแบบ: ปรนัย {type} ตัวเลือก 1 คำตอบ</li>
+                <li key={type}>รูปแบบ: ปรนัย {type} ตัวเลือก {hasMultipleAnswers ? '(มีข้อที่เลือกหลายคำตอบ)' : '1 คำตอบ'}</li>
               ))}
               <li>{timerEnabled ? <>เวลาในการทำข้อสอบ <strong>{subject.questions.length} นาที</strong> (เฉลี่ยข้อละ 1 นาที)</> : <>เวลาในการทำข้อสอบ <strong>ไม่จำกัดเวลา</strong></>}</li>
             </ul>
+            {hasMultipleAnswers && <p style={{ marginBottom: '0.75rem' }}>ข้อที่เลือกหลายคำตอบ ให้เลือกให้ครบตามจำนวนที่ระบุ แล้วกด <strong>“ยืนยันคำตอบ”</strong></p>}
             {timerEnabled && <p style={{ marginBottom: '0.75rem' }}>ตัวจับเวลาจะเริ่มเดินหลังจากที่คุณกดปุ่ม <strong>“เริ่มทำข้อสอบ”</strong> ด้านล่าง</p>}
             <p style={{ margin: 0 }}>เมื่อทำถึงข้อสุดท้าย ให้กดปุ่ม <strong>“ดูผลคะแนน”</strong> เพื่อส่งข้อสอบและดูเฉลย <br/>สามารถใช้ <strong>"ตัวนำทางข้อสอบ"</strong> (ไอคอนตารางมุมขวาบน) เพื่อกระโดดไปยังข้อที่ต้องการได้ทันที</p>
           </div>

@@ -11,6 +11,7 @@ let Schedule;
 before(async () => {
   server = await createServer({
     configFile: false,
+    cacheDir: `node_modules/.vite-tests/schedule-${process.pid}`,
     plugins: [react()],
     optimizeDeps: { noDiscovery: true, include: [] },
     server: { middlewareMode: true, hmr: { port: 24680 } },

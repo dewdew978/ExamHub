@@ -240,32 +240,6 @@
     "type": "Midterm"
   },
   {
-    "id": "aws_aca_modules_50q",
-    "category": "Cloud Technology Infrastructure",
-    "name": "AWS Academy Cloud Architecting (ACA) — Module 2-6 (50 Questions)",
-    "icon": "",
-    "color": "#FF9900",
-    "iconBg": "rgba(255,153,0,0.15)",
-    "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 2-6) จาก AWS Academy Cloud Architecting (ACA) จำนวน 50 ข้อ by lnwfilmSynthesis.md",
-    "questionCount": 50,
-    "year": 3,
-    "type": "Midterm",
-    "requiresAuth": true
-  },
-  {
-    "id": "aws_acf_modules_71q",
-    "category": "Cloud Technology Infrastructure",
-    "name": "AWS Academy Cloud Foundations (ACF) — Module 1-8 (71 Questions)",
-    "icon": "",
-    "color": "#FF9900",
-    "iconBg": "rgba(255,153,0,0.15)",
-    "desc": "สรุปคำถามและเฉลยรายโมดูล (Module 1-8) จาก AWS Academy Cloud Foundations (ACF) จำนวน 71 ข้อ by lnwfilmSynthesis.md",
-    "questionCount": 71,
-    "year": 3,
-    "type": "Midterm",
-    "requiresAuth": true
-  },
-  {
     "id": "isd_final_100q",
     "category": "Intelligent System Development",
     "name": "ISD Final Comprehensive Mock Exam (100 Questions)",
@@ -276,5 +250,159 @@
     "questionCount": 100,
     "year": 3,
     "type": "Final"
+  },
+  {
+    "id": "aws_aca_m09_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การรักษาความปลอดภัยในการเข้าถึงของผู้ใช้ แอปพลิเคชัน และข้อมูล (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "IAM · Federation · Cognito · Organizations · KMS · Security Services · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M09 Securing User Application and Data Access",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M09 Securing User Application and Data Access",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M09 SecuringUserApplicationAndDataAccess.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
+  },
+  {
+    "id": "aws_aca_m10_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การติดตามระบบ ความยืดหยุ่น และความพร้อมใช้งานสูง (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "CloudWatch · Auto Scaling · Database Scaling · ELB · Route 53 · High Availability · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M10 Elasticity High Availability and Monitoring",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M10 Elasticity High Availability and Monitoring",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
+  },
+  {
+    "id": "aws_aca_m11_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การทำให้สถาปัตยกรรมเป็นอัตโนมัติ (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "Automation · Infrastructure as Code · CloudFormation · Quick Starts · Amazon Q Developer · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M11 Automating Your Architecture",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M11 Automating Your Architecture",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M11 AutomatingYourArchitecture.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
+  },
+  {
+    "id": "aws_aca_m12_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การแคชเนื้อหา (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "CloudFront · CDN · TTL · ElastiCache · Redis · Memcached · Caching Strategies · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M12 Caching Content",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M12 Caching Content",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M12 CachingContent.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
+  },
+  {
+    "id": "aws_aca_m13_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การสร้างสถาปัตยกรรมที่แยกส่วนการทำงาน (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "Loose Coupling · SQS · SNS · Fanout · Amazon MQ · Messaging · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M13 Building Decoupled Architectures",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M13 Building Decoupled Architectures",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M13 BuildingDecoupledArchitectures.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
+  },
+  {
+    "id": "aws_aca_m14_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การสร้างสถาปัตยกรรม Serverless และ Microservices (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "Serverless · Microservices · Lambda · Containers · Step Functions · API Gateway · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M14 Building Serverless Architectures and Microservices",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M14 Building Serverless Architectures and Microservices",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M14 BuildingServerlessArchitecturesandMicroservicess.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
+  },
+  {
+    "id": "aws_aca_m16_50q",
+    "category": "Cloud Technology Infrastructure",
+    "name": "การวางแผนรับมือภัยพิบัติ (50 ข้อ)",
+    "icon": "",
+    "color": "#FF9900",
+    "iconBg": "rgba(255,153,0,0.15)",
+    "desc": "RPO · RTO · Backup and Restore · Pilot Light · Warm Standby · Multi-site · Disaster Recovery · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final",
+    "requiresAuth": false,
+    "primarySource": "AWS Academy Cloud Architecting v3 — M16 Planning for Disaster",
+    "organization": "AWS Academy",
+    "references": [
+      {
+        "title": "M16 Planning for Disaster",
+        "author": "AWS Academy",
+        "desc": "สไลด์ต้นฉบับ ACAv3 EN M16 PlanningForDisaster.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+      }
+    ]
   }
 ]

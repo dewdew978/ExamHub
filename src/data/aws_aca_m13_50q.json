@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m13_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การสร้างสถาปัตยกรรมที่แยกส่วนการทำงาน (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "Loose Coupling · SQS · SNS · Fanout · Amazon MQ · Messaging · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M13 Building Decoupled Architectures",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M13 Building Decoupled Architectures",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M13 BuildingDecoupledArchitectures.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "ในตัวอย่าง three-tier ที่ tightly coupled การสื่อสารระหว่าง web server กับ application server เป็นอย่างไร?",
+      "choices": [
+        "ส่งผ่าน broker โดยไม่ต้องรอคำตอบ",
+        "เรียกกันโดยตรงแบบ synchronous และรอคำตอบ",
+        "ส่งผ่าน topic ให้ผู้รับหลายรายแบบ push",
+        "ส่งผ่าน queue ให้ผู้รับมาดึงภายหลัง"
+      ],
+      "answer": 1,
+      "explain": "ตัวอย่าง tight coupling ใช้การสื่อสารโดยตรงแบบ synchronous\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 8"
+    },
+    {
+      "q": "ทุกครั้งที่เพิ่ม application server ทีมต้องแก้โค้ดการเชื่อมต่อใน web servers หลายเครื่อง ปัญหานี้ชี้ถึงอะไร?",
+      "choices": [
+        "การใช้ message queue แยก producer กับ consumer แล้ว",
+        "การแยก microservice อิสระจากกันแล้ว",
+        "การใช้ topic กระจายข้อความให้ subscribers แล้ว",
+        "การผูกกันแน่นทำให้การขยายระบบซับซ้อน"
+      ],
+      "answer": 3,
+      "explain": "Tight coupling ทำให้แต่ละเซิร์ฟเวอร์ใหม่ต้องเพิ่มการเชื่อมต่อและแก้โค้ด\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 9"
+    },
+    {
+      "q": "Application server เครื่องหนึ่งล้มแล้ว web servers ที่เชื่อมต่อทั้งหมดได้รับผลกระทบ ข้อใดเป็นเป้าหมายของการ decouple?",
+      "choices": [
+        "ให้ทุกคำขอต้องรอเครื่องที่ล้มกลับมา",
+        "เพิ่มการเชื่อมต่อโดยตรงระหว่างทุกคู่เซิร์ฟเวอร์",
+        "ลดการพึ่งพาโดยตรงและจำกัดผลกระทบของความล้มเหลว",
+        "รวมทุกฟังก์ชันไว้ในโปรเซสเดียวเสมอ"
+      ],
+      "answer": 2,
+      "explain": "Loose coupling ลด direct dependencies และช่วยเพิ่ม resiliency\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 6, 9, 16"
+    },
+    {
+      "q": "ทีมใช้ ALB เป็นตัวกลางระหว่าง tiers ประโยชน์ใดตรงกับตัวอย่างในบทเรียน?",
+      "choices": [
+        "เก็บข้อความถาวรจน consumer ลบ",
+        "ส่งอีเมลให้ subscribers ทุกคนโดยตรง",
+        "แปลงทุกคำขอเป็นข้อความ FIFO โดยอัตโนมัติ",
+        "จัดการ workload และเส้นทาง failover ได้อัตโนมัติ"
+      ],
+      "answer": 3,
+      "explain": "ALB ช่วยจัดการ workloads และ failover routing ระหว่าง tiers\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 10"
+    },
+    {
+      "q": "แอปเดียวมีงานการเงิน แปลงภาพ และคำนวณ เมื่อฟังก์ชันหนึ่งเสียแอปทั้งหมดหยุด แนวทางใดตรงกับบทเรียน?",
+      "choices": [
+        "บังคับให้ทุกฟังก์ชันรอกันแบบ synchronous",
+        "เพิ่มการเรียกโดยตรงระหว่างทุกฟังก์ชัน",
+        "รวมทั้งสามงานให้อยู่ในฟังก์ชันเดียว",
+        "แยกฟังก์ชันเป็น microservices"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนเปรียบเทียบแอปที่รวมฟังก์ชันกับการแยกเป็น microservice architecture\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 11, 12"
+    },
+    {
+      "q": "ข้อใดจับคู่ตัวอย่างการ decouple กับรูปแบบการสื่อสารได้ถูกต้อง?",
+      "choices": [
+        "ELB เป็น synchronous ส่วน SQS เป็น asynchronous",
+        "ELB เป็น asynchronous ส่วน SQS เป็น synchronous",
+        "ELB และ SNS เป็น synchronous ทั้งคู่",
+        "SQS และ MQ เป็น synchronous ทั้งคู่"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนจัด ELB เป็น synchronous และ SQS, SNS, MQ เป็น asynchronous\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 15, 16"
+    },
+    {
+      "q": "เมื่อใช้ point-to-point messaging แอปผู้ส่งและผู้รับเรียกว่าอะไร?",
+      "choices": [
+        "Publisher และ topic",
+        "Subscriber และ publisher",
+        "Broker และ web ACL",
+        "Producer และ consumer"
+      ],
+      "answer": 3,
+      "explain": "Point-to-point เรียกผู้ส่งว่า producer และผู้รับว่า consumer\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 18"
+    },
+    {
+      "q": "ข้อใดอธิบาย Amazon SQS ได้ตรงที่สุด?",
+      "choices": [
+        "บริการ pub/sub notification โดยใช้ topic เท่านั้น",
+        "บริการ message queue ที่มีการจัดการให้เพื่อแยกส่วนประกอบแอป",
+        "บริการ CDN สำหรับกระจายไฟล์ภาพ",
+        "บริการฐานข้อมูลเชิงสัมพันธ์สำหรับธุรกรรม"
+      ],
+      "answer": 1,
+      "explain": "SQS เป็น fully managed message queuing service สำหรับ integrate และ decouple components\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 19"
+    },
+    {
+      "q": "ทีมต้องการระบบคิวโดยไม่ดูแล messaging software หรือ infrastructure เอง คุณสมบัติใดของ SQS ตอบโจทย์?",
+      "choices": [
+        "การมีชื่อคิวลงท้ายด้วย FIFO",
+        "Receive message wait time เท่ากับศูนย์",
+        "Best-effort ordering",
+        "Fully managed"
+      ],
+      "answer": 3,
+      "explain": "Fully managed ช่วยให้ไม่ต้องดูแล messaging software และ infrastructure\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 20"
+    },
+    {
+      "q": "ปริมาณงานส่งเข้าคิวขึ้นลงมาก คุณสมบัติใดของ SQS เหมาะกับเงื่อนไขนี้?",
+      "choices": [
+        "ขยายตามการใช้งานได้อย่างยืดหยุ่น",
+        "ส่งข้อความได้เฉพาะเมื่อไม่มีข้อความค้าง",
+        "บังคับให้ producer ทำงานเท่ากับ consumer เสมอ",
+        "ต้องตรึงขนาด infrastructure ไว้ล่วงหน้า"
+      ],
+      "answer": 0,
+      "explain": "ประโยชน์ด้าน scalability ของ SQS คือ scale elastically based on usage\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 20"
+    },
+    {
+      "q": "โดยหลักการ ข้อความจะอยู่ใน SQS queue จนเกิดเหตุการณ์ใด?",
+      "choices": [
+        "ถูกลบอย่างชัดเจนหรือเกิน message retention period",
+        "มี consumer อ่านครั้งแรกเท่านั้น",
+        "มี producer ส่งข้อความถัดไปเท่านั้น",
+        "มี subscriber อีเมลเปิดอ่านข้อความ"
+      ],
+      "answer": 0,
+      "explain": "ข้อความยังอยู่จนถูก delete หรือเกินระยะ retention ของคิว\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 21"
+    },
+    {
+      "q": "ทีมต้องกำหนดว่าข้อความอยู่ในคิวได้นานเท่าใด ควรตั้งค่าใด?",
+      "choices": [
+        "Receive message wait time",
+        "Visibility timeout",
+        "Message retention period",
+        "HTTP endpoint delivery policy"
+      ],
+      "answer": 2,
+      "explain": "Message retention period ควบคุมอายุการเก็บข้อความในคิว\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 21"
+    },
+    {
+      "q": "ข้อความบางรายการประมวลผลไม่สำเร็จและต้องแยกไปเก็บเพื่อจัดการภายหลัง ควรใช้อะไร?",
+      "choices": [
+        "Dead-letter queue",
+        "SNS email destination",
+        "CloudFront origin",
+        "Application Load Balancer"
+      ],
+      "answer": 0,
+      "explain": "DLQ ใช้เก็บข้อความที่ไม่สามารถประมวลผลได้สำเร็จ\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 21, 28"
+    },
+    {
+      "q": "งานไม่ต้องเรียงตามลำดับอย่างเคร่งครัด แต่ต้องรองรับ throughput สูงมาก คิวประเภทใดตรงกับคุณสมบัติในบทเรียน?",
+      "choices": [
+        "SNS FIFO topic",
+        "SQS standard queue",
+        "SQS FIFO queue",
+        "SNS standard topic"
+      ],
+      "answer": 1,
+      "explain": "Standard queue มี best-effort ordering และ nearly unlimited throughput ตามบทเรียน\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 23"
+    },
+    {
+      "q": "ทีมเลือก SQS standard queue แล้วควรวางความคาดหวังเรื่องการส่งข้อความอย่างไร?",
+      "choices": [
+        "มีการส่งอย่างน้อยหนึ่งครั้งและอาจได้รับข้อความซ้ำ",
+        "ข้อความต้องเรียง FIFO อย่างเคร่งครัดเสมอ",
+        "ทุกข้อความถูกประมวลผลครั้งเดียวแน่นอน",
+        "ข้อความถูกลบทันทีเมื่อ producer ส่งสำเร็จ"
+      ],
+      "answer": 0,
+      "explain": "At-least-once delivery ของ standard queue หมายถึงอาจมีการส่งซ้ำได้\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 23"
+    },
+    {
+      "q": "งานต้องรักษาลำดับข้อความแบบ first-in-first-out ควรใช้คิวใด?",
+      "choices": [
+        "SQS standard queue",
+        "SQS FIFO queue",
+        "SQS standard queue ที่เพิ่ม receive wait time",
+        "SQS standard queue ที่เพิ่ม retention"
+      ],
+      "answer": 1,
+      "explain": "FIFO queue ออกแบบให้มี FIFO delivery ต่างจาก best-effort ordering ของ standard\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 23"
+    },
+    {
+      "q": "หากใช้ standard queue ข้อใดเป็นการตีความการเรียงลำดับที่ถูกต้อง?",
+      "choices": [
+        "เลือกการเรียงจาก visibility timeout เท่านั้น",
+        "เรียงข้อความตามชื่อ consumer อัตโนมัติ",
+        "รับประกันว่าทุกข้อความถึงตามลำดับเสมอ",
+        "ระบบพยายามรักษาลำดับแต่ไม่รับประกัน FIFO เคร่งครัด"
+      ],
+      "answer": 3,
+      "explain": "Standard queue ใช้ best-effort ordering ตามคุณสมบัติในบทเรียน\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 23"
+    },
+    {
+      "q": "SQS queue ที่ตั้ง receive message wait time เป็น 0 ใช้ polling แบบใด?",
+      "choices": [
+        "Long polling",
+        "HTTP delivery retry",
+        "Short polling",
+        "Publish/subscribe push"
+      ],
+      "answer": 2,
+      "explain": "Short polling มี receive message wait time เท่ากับศูนย์\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 24"
+    },
+    {
+      "q": "ระบบใช้ long polling ของ SQS แล้ว ประโยชน์ด้านต้นทุนที่บทเรียนกล่าวถึงคืออะไร?",
+      "choices": [
+        "ลดต้นทุนด้วยการยกเลิก message retention",
+        "ลดจำนวนข้อความด้วยการลบก่อนประมวลผล",
+        "ลด empty responses ของคำขอรับข้อความ",
+        "เปลี่ยนทุกข้อความเป็นข้อความ multicast"
+      ],
+      "answer": 2,
+      "explain": "Long polling ช่วยลด empty receive responses จึงลดต้นทุนการใช้ SQS\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 28"
+    },
+    {
+      "q": "ทีมต้องการให้ SQS ใช้ long polling การตั้งค่าใดสอดคล้องกับบทเรียน?",
+      "choices": [
+        "กำหนด receive message wait time เท่ากับ 0",
+        "กำหนด message retention period เท่ากับ 0",
+        "กำหนด receive message wait time มากกว่า 0",
+        "กำหนด visibility timeout มากกว่าศูนย์เพียงอย่างเดียว"
+      ],
+      "answer": 2,
+      "explain": "Long polling ใช้ receive message wait time มากกว่าศูนย์\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 24"
+    },
+    {
+      "q": "ผู้พัฒนาคิดว่า receive message จะลบข้อความออกจาก SQS ทันที ข้อใดแก้ความเข้าใจได้ถูกต้อง?",
+      "choices": [
+        "Consumer ต้องประมวลผลแล้วส่งคำสั่ง delete message",
+        "SNS topic จะลบข้อความให้หลัง push เสมอ",
+        "Producer ต้องส่งข้อความใหม่เพื่อทับข้อความเดิม",
+        "ALB จะลบข้อความหลังตรวจ health check"
+      ],
+      "answer": 0,
+      "explain": "ลำดับของ SQS คือ send, receive และ delete โดย consumer ต้องลบหลังประมวลผล\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 26, 28"
+    },
+    {
+      "q": "ตามวงจร SQS consumer ควรทำงานใดให้เสร็จภายใน visibility timeout?",
+      "choices": [
+        "ส่งอีเมลยืนยันให้ producer เสมอ",
+        "ลบ queue ทั้งหมดหลังอ่านหนึ่งข้อความ",
+        "สร้าง SNS topic ใหม่ทุกครั้ง",
+        "ประมวลผลและลบข้อความ"
+      ],
+      "answer": 3,
+      "explain": "บทเรียนระบุว่า consumer processes และ deletes ข้อความในช่วง visibility timeout\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 28"
+    },
+    {
+      "q": "Consumer ใช้เวลาแปลงภาพนานกว่าช่วงที่ตั้งให้ประมวลผลข้อความก่อนลบ ทีมควรทบทวนค่าคิวใดโดยตรง?",
+      "choices": [
+        "HTTP retry delivery policy",
+        "Receive message wait time",
+        "Visibility timeout",
+        "ชื่อ topic ของ SNS"
+      ],
+      "answer": 2,
+      "explain": "Visibility timeout เป็นช่วงที่ consumer ใช้ประมวลผลและลบข้อความ จึงต้องปรับให้เหมาะกับงาน\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 25, 28"
+    },
+    {
+      "q": "เว็บรับคำสั่งซื้อช่วงโปรโมชั่นได้เร็วกว่าระบบหลังบ้านมาก ควรใช้ SQS ในบทบาทใด?",
+      "choices": [
+        "เป็น DNS resolver สำหรับผู้ซื้อ",
+        "เป็น buffer รองรับ traffic spikes",
+        "เป็นฐานข้อมูลหลักสำหรับยอดชำระเงิน",
+        "เป็น origin สำหรับไฟล์ภาพของเว็บไซต์"
+      ],
+      "answer": 1,
+      "explain": "SQS ใช้ buffering เพื่อรองรับ traffic spikes และเก็บงานไว้ประมวลผลภายหลัง\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 27"
+    },
+    {
+      "q": "สองส่วนของระบบทำงานปริมาณเท่ากันแต่มีอัตราประมวลผลต่างกัน กรณีใช้งาน SQS ใดเหมาะที่สุด?",
+      "choices": [
+        "HTTP retry policy เพื่อเรียกเว็บซ้ำ",
+        "Work queue เพื่อแยกจังหวะการทำงานของส่วนประกอบ",
+        "CDN เพื่อเก็บไฟล์ใกล้ผู้ใช้",
+        "Mobile push notification เพื่อแจ้งผู้ใช้"
+      ],
+      "answer": 1,
+      "explain": "Work queues decouple components ที่ประมวลผลงานในอัตราต่างกัน\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 27"
+    },
+    {
+      "q": "หลังอัปโหลดไฟล์ ผู้ใช้ไม่ควรรอการแปลงไฟล์ที่ใช้เวลานาน แนวทางใดตรงกับ request offloading?",
+      "choices": [
+        "ส่งงานช้าเข้าคิวให้ consumer ทำภายหลัง",
+        "ให้ producer ส่งงานใหม่จนกว่าจะได้รับคำตอบทันที",
+        "ให้ผู้ใช้รอ synchronous จนแปลงเสร็จทุกครั้ง",
+        "ให้ web server ทำงานช้าก่อนตอบทุกครั้ง"
+      ],
+      "answer": 0,
+      "explain": "Request offloading ย้ายงานช้าออกจากเส้นทางคำขอที่ผู้ใช้กำลังโต้ตอบ\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 27"
+    },
+    {
+      "q": "สถาปนิกต้องการให้จำนวน EC2 workers ปรับตามภาระงานที่รอประมวลผล แนวทางใดอยู่ใน use cases ของ SQS?",
+      "choices": [
+        "ใช้คิวช่วยระบุโหลดและกระตุ้น Auto Scaling",
+        "ลบข้อความทั้งหมดก่อนพิจารณาขยายระบบ",
+        "ใช้ชื่อคิวกำหนดขนาด EC2 แบบถาวร",
+        "ใช้ SNS email แทนตัวชี้ภาระคิว"
+      ],
+      "answer": 0,
+      "explain": "SQS queues ช่วยประเมินโหลดแอปและ invoke scaling actions ได้\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 27"
+    },
+    {
+      "q": "ในตัวอย่างรับและจัดส่งคำสั่งซื้อ บทบาทที่ถูกต้องคือข้อใด?",
+      "choices": [
+        "Order fulfillment เป็น producer ส่วนคิวเป็น consumer",
+        "Order capture เป็น subscriber ส่วน fulfillment เป็น topic",
+        "Order capture และ fulfillment เป็น CDN origins",
+        "Order capture เป็น producer ส่วน order fulfillment เป็น consumer"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่างวาง order capture ฝั่ง producer และ order fulfillment ฝั่ง consumer คั่นด้วย SQS\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 22"
+    },
+    {
+      "q": "เมื่อส่งเหตุการณ์หนึ่งไปหลายแอป โดยผู้ส่งรู้รายละเอียดผู้รับน้อยหรือไม่รู้เลย ควรใช้รูปแบบใด?",
+      "choices": [
+        "Synchronous call ไปเซิร์ฟเวอร์เดียว",
+        "Point-to-point messaging ไปผู้รับเดียว",
+        "การเรียกฐานข้อมูลโดยตรง",
+        "Publish/subscribe messaging"
+      ],
+      "answer": 3,
+      "explain": "Pub/sub เหมาะกับหลาย receiving applications และ publisher ไม่ต้องรู้ผู้รับอย่างละเอียด\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 33"
+    },
+    {
+      "q": "ใน pub/sub องค์ประกอบใดช่วยแยก publisher ออกจาก subscribers?",
+      "choices": [
+        "Cache node",
+        "Topic",
+        "Visibility timeout",
+        "Origin bucket"
+      ],
+      "answer": 1,
+      "explain": "Pub/sub ใช้ topic เป็นตัวกลางในการ decouple applications\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 33"
+    },
+    {
+      "q": "Amazon SNS เป็นบริการประเภทใด?",
+      "choices": [
+        "CDN สำหรับเก็บไฟล์ที่ edge",
+        "Fully managed pub/sub messaging service",
+        "Fully managed relational database",
+        "บริการ key-value cache ในหน่วยความจำ"
+      ],
+      "answer": 1,
+      "explain": "SNS เป็นบริการ pub/sub messaging แบบ fully managed\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 34"
+    },
+    {
+      "q": "ข้อใดเป็นชุดผู้รับที่ SNS รองรับตามบทเรียนทั้งหมด?",
+      "choices": [
+        "ALB listener, cache key และ Redis set",
+        "Email, AWS Lambda และ SQS queue",
+        "ElastiCache node, cache key และ TTL",
+        "CloudFront distribution, TTL และ origin path"
+      ],
+      "answer": 1,
+      "explain": "บทเรียนระบุ email, Lambda และ SQS queue เป็นประเภท SNS subscribers\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 35"
+    },
+    {
+      "q": "ระบบภายนอกต้องรับ SNS notifications ผ่านเว็บปลายทาง ควรใช้ subscriber ประเภทใด?",
+      "choices": [
+        "ElastiCache cluster",
+        "HTTP หรือ HTTPS endpoint",
+        "CloudFront cache policy",
+        "RDS parameter group"
+      ],
+      "answer": 1,
+      "explain": "HTTP และ HTTPS endpoints เป็นประเภท subscriber ของ SNS\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 35"
+    },
+    {
+      "q": "ทีมต้องแจ้งเตือนสถานะแอปทางอีเมลและข้อความมือถือ ควรใช้บริการใดตาม use cases ในบทเรียน?",
+      "choices": [
+        "Amazon SNS",
+        "Amazon CloudFront",
+        "Amazon ElastiCache",
+        "Amazon Elastic Transcoder"
+      ],
+      "answer": 0,
+      "explain": "SNS มี use cases ด้าน application/system alerts และ email/text notifications\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 36"
+    },
+    {
+      "q": "เมื่ออัปโหลดภาพครั้งเดียว ต้องส่งงานทำ thumbnail ปรับภาพมือถือ และปรับภาพเว็บให้ workers คนละกลุ่ม ควรออกแบบอย่างไร?",
+      "choices": [
+        "รวมทุกงานไว้ในคำขอ synchronous เดียว",
+        "ให้ SNS fanout ไปยัง SQS queue ของแต่ละงาน",
+        "ให้ SQS queue เดียวส่งข้อความทุกฉบับถึงทุก worker เสมอ",
+        "ให้แต่ละ worker เชื่อมตรงกับผู้ใช้เพื่อรับไฟล์ซ้ำ"
+      ],
+      "answer": 1,
+      "explain": "ตัวอย่างใช้ SNS topic ส่ง notification ไปสาม SQS queues สำหรับแต่ละการแปลงภาพ\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 37"
+    },
+    {
+      "q": "ในตัวอย่างงานภาพที่ใช้ SNS ร่วมกับ SQS แต่ละกลุ่มแอปประมวลผลถูกจัดอยู่ในองค์ประกอบใด?",
+      "choices": [
+        "Web server ตัวเดียวร่วมทุกงานเสมอ",
+        "CloudFront Regional edge cache",
+        "SNS email subscription เท่านั้น",
+        "Auto Scaling group แยกสำหรับแต่ละงาน"
+      ],
+      "answer": 3,
+      "explain": "แผนภาพแยก thumbnail, mobile sizing และ web sizing เป็น Auto Scaling groups ของตนเอง\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 37"
+    },
+    {
+      "q": "Publisher ส่งประกาศผิดไปยัง SNS แล้ว ข้อจำกัดใดต้องคำนึงถึงตามบทเรียน?",
+      "choices": [
+        "เปลี่ยน visibility timeout เพื่อเรียกประกาศคืนได้",
+        "ลบข้อความจาก SQS ใดก็ย้อนการส่ง SNS ทั้งหมดได้",
+        "ไม่มีตัวเลือก recall ข้อความที่เผยแพร่แล้ว",
+        "เปลี่ยนชื่อ topic เพื่อดึงทุกข้อความกลับได้"
+      ],
+      "answer": 2,
+      "explain": "SNS considerations ระบุว่าไม่มี recall options สำหรับข้อความที่ publish แล้ว\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 38"
+    },
+    {
+      "q": "ทีมใช้ SNS และจำเป็นต้องคงลำดับการส่งข้อความอย่างเคร่งครัด ควรเลือกอะไร?",
+      "choices": [
+        "Standard queue โดยไม่ใช้ topic",
+        "HTTP endpoint โดยไม่กำหนด topic",
+        "FIFO topic",
+        "Standard topic"
+      ],
+      "answer": 2,
+      "explain": "บทเรียนแนะนำ FIFO topic เมื่อจำเป็นต้องมี exact message delivery order\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 38"
+    },
+    {
+      "q": "SNS ส่งไป HTTP endpoint แล้วทีมต้องควบคุมพฤติกรรมลองส่งซ้ำ ควรปรับสิ่งใด?",
+      "choices": [
+        "Delivery policy ของ HTTP หรือ HTTPS endpoint",
+        "Visibility timeout ของ SQS ทุกคิว",
+        "จำนวนโหนดใน ElastiCache",
+        "Maximum TTL ของ CloudFront"
+      ],
+      "answer": 0,
+      "explain": "สามารถ customize delivery policy ของ HTTP/HTTPS endpoint เพื่อควบคุม retries\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 38"
+    },
+    {
+      "q": "ข้อใดเปรียบเทียบกลไกส่งข้อความของ SNS และ SQS ถูกต้อง?",
+      "choices": [
+        "SNS ใช้ push ส่วน SQS ใช้ pull",
+        "ทั้งคู่ต้องให้ผู้ส่งเรียกผู้รับตรงเสมอ",
+        "ทั้งคู่ใช้ push ไปทุกผู้รับเท่านั้น",
+        "SNS ใช้ pull ส่วน SQS ใช้ push"
+      ],
+      "answer": 0,
+      "explain": "ตารางเปรียบเทียบระบุ SNS เป็น push และ SQS เป็น pull\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 39"
+    },
+    {
+      "q": "แอปผู้รับต้องเป็นฝ่ายดึงงานที่ค้างไว้เองและข้อความรออยู่ได้จนถูกลบ ควรเลือกแนวทางใด?",
+      "choices": [
+        "SNS topic โดยไม่มี subscriber",
+        "การเรียก synchronous ผ่าน ALB เพียงอย่างเดียว",
+        "SNS notification ไป email เพียงอย่างเดียว",
+        "SQS producer-consumer queue"
+      ],
+      "answer": 3,
+      "explain": "SQS ใช้ pull และมี message persistence รวมถึงเก็บข้อความจนถูกลบหรือเกิน retention\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 21, 39"
+    },
+    {
+      "q": "ลำดับหลักในการเริ่มใช้ SNS ที่บทเรียนสรุปไว้คือข้อใด?",
+      "choices": [
+        "สร้าง queue → receive → ลบ topic",
+        "สร้าง cache node → ตั้ง TTL → invalidate files",
+        "สร้าง topic → สร้าง subscribers → publish messages",
+        "สร้าง broker → แปลงวิดีโอ → ส่งผ่าน CDN"
+      ],
+      "answer": 2,
+      "explain": "SNS เริ่มจากสร้าง topic แล้วสร้าง subscribers ก่อน publish ข้อความ\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 40"
+    },
+    {
+      "q": "บริการ AWS ส่งเหตุการณ์ไป SNS topic แล้วเรียก workflows ต่อได้ แนวทางนี้สนับสนุนรูปแบบใด?",
+      "choices": [
+        "การแคชข้อมูลทุกชนิดแบบไม่มีวันหมดอายุ",
+        "การผูกทุกส่วนด้วย direct synchronous calls",
+        "Event-driven computing",
+        "การรวมทุกฟังก์ชันไว้ใน monolith เสมอ"
+      ],
+      "answer": 2,
+      "explain": "AWS services publish ไป SNS topic เพื่อ invoke event-driven computing และ workflows ได้\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 40"
+    },
+    {
+      "q": "Amazon MQ ช่วยจัดการ message broker ของซอฟต์แวร์ใดตามบทเรียน?",
+      "choices": [
+        "Redis และ Memcached",
+        "CloudFront และ Route 53",
+        "Apache ActiveMQ และ RabbitMQ",
+        "MySQL และ PostgreSQL"
+      ],
+      "answer": 2,
+      "explain": "MQ เป็น managed message broker service ที่รองรับ ActiveMQ และ RabbitMQ\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 42"
+    },
+    {
+      "q": "Amazon MQ รองรับแนวทางใดในการแยกส่วนแอปพลิเคชัน?",
+      "choices": [
+        "เฉพาะ synchronous load balancing",
+        "เฉพาะ edge caching",
+        "ทั้ง queue-based และ topic-based",
+        "เฉพาะการคิวรีฐานข้อมูลโดยตรง"
+      ],
+      "answer": 2,
+      "explain": "MQ ให้ทั้ง queue- และ topic-based solutions สำหรับ loose coupling\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 42"
+    },
+    {
+      "q": "แอปต่างภาษาและระบบปฏิบัติการต้องสื่อสารผ่าน formal messaging protocols บริการใดตรงกับบทเรียน?",
+      "choices": [
+        "Amazon CloudFront",
+        "Amazon MQ",
+        "Amazon ElastiCache",
+        "Amazon Elastic Transcoder"
+      ],
+      "answer": 1,
+      "explain": "MQ ช่วยให้ส่วนประกอบต่างภาษาและระบบปฏิบัติการสื่อสารผ่าน messaging protocols\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 42"
+    },
+    {
+      "q": "Producer อยู่ศูนย์ข้อมูลบริษัท ส่วน consumer อยู่บน AWS ต้องใช้ message broker เชื่อมสภาพแวดล้อม ควรเลือกอะไร?",
+      "choices": [
+        "Amazon MQ",
+        "CloudFront edge location",
+        "ElastiCache node",
+        "Amazon Route 53 เท่านั้น"
+      ],
+      "answer": 0,
+      "explain": "ตัวอย่าง hybrid cloud ใช้ Amazon MQ broker เชื่อม producer ใน data center กับ consumer บน AWS\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 43, 45"
+    },
+    {
+      "q": "บริษัทมี ActiveMQ ในศูนย์ข้อมูลและต้องการย้าย broker ไปเป็นบริการที่ AWS จัดการให้ ควรพิจารณาอะไร?",
+      "choices": [
+        "Amazon SNS เพื่อใช้ RabbitMQ broker เดิมโดยตรง",
+        "Amazon CloudFront เพื่อเก็บ broker ใกล้ผู้ใช้",
+        "Amazon MQ",
+        "Amazon SQS เพื่อใช้ ActiveMQ เดิมโดยตรง"
+      ],
+      "answer": 2,
+      "explain": "MQ ใช้ย้าย on-premises open-source message brokers ไป AWS Cloud ได้\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 45"
+    },
+    {
+      "q": "ความแตกต่างด้าน API ระหว่าง MQ กับ SQS/SNS ตามตารางในบทเรียนคือข้อใด?",
+      "choices": [
+        "ทั้งสามใช้ SQS API เดียวกันทั้งหมด",
+        "MQ ใช้ industry-standard broker APIs ส่วน SQS/SNS ใช้ API ของบริการ",
+        "SQS/SNS ใช้เฉพาะ HTTP delivery policy แทน API",
+        "MQ ใช้เฉพาะ SNS API ส่วน SNS ใช้ MQ API"
+      ],
+      "answer": 1,
+      "explain": "MQ ใช้ standard message broker APIs ส่วน SQS และ SNS มี API ของตนเอง\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 44"
+    },
+    {
+      "q": "แอป cloud-native ต้องส่งประกาศหนึ่งเหตุการณ์ถึงหลายส่วนงาน ส่วนแอปอีกชุดต้องการคิวงานให้ consumer ดึง ควรจับคู่อย่างไร?",
+      "choices": [
+        "ElastiCache สำหรับประกาศ และ Route 53 สำหรับรับงาน",
+        "MQ สำหรับแคชไฟล์ และ CloudFront สำหรับคิวงาน",
+        "SQS สำหรับประกาศหลายผู้รับ และ SNS สำหรับคิวที่ต้องดึง",
+        "SNS สำหรับประกาศหลายผู้รับ และ SQS สำหรับคิวงาน"
+      ],
+      "answer": 3,
+      "explain": "SNS เป็น one-to-many pub/sub แบบ push ส่วน SQS เป็น producer-consumer แบบ pull\n\nอ้างอิง: ACAv3 EN M13 BuildingDecoupledArchitectures.pdf หน้า 33, 39, 44"
+    }
+  ]
+}

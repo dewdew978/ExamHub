@@ -1,0 +1,22 @@
+# Local credentials, agent state, and migration recovery files stay on this machine.
+.env
+.env.*
+.git
+.agents
+.codex
+.claude
+.superpowers
+.mcp.json
+*.local
+chat_summary.md
+
+# Supabase is the live source of exam content; these are offline source/backups.
+server/data
+exam-output
+deliverables
+docs
+scripts
+tests
+
+node_modules
+dist

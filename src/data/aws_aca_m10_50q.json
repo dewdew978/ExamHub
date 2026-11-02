@@ -1,0 +1,574 @@
+{
+  "id": "aws_aca_m10_50q",
+  "category": "Cloud Technology Infrastructure",
+  "name": "การติดตามระบบ ความยืดหยุ่น และความพร้อมใช้งานสูง (50 ข้อ)",
+  "icon": "",
+  "color": "#FF9900",
+  "iconBg": "rgba(255,153,0,0.15)",
+  "desc": "CloudWatch · Auto Scaling · Database Scaling · ELB · Route 53 · High Availability · ข้อสอบภาษาไทยพร้อมเฉลยและหน้าอ้างอิงจากสไลด์",
+  "questionCount": 50,
+  "year": 3,
+  "type": "Final",
+  "requiresAuth": false,
+  "primarySource": "AWS Academy Cloud Architecting v3 — M10 Elasticity High Availability and Monitoring",
+  "organization": "AWS Academy",
+  "references": [
+    {
+      "title": "M10 Elasticity High Availability and Monitoring",
+      "author": "AWS Academy",
+      "desc": "สไลด์ต้นฉบับ ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf เลขหน้าในเฉลยนับตามหน้าของ PDF ข้อสอบแต่งขึ้นเพื่อทบทวนเนื้อหา"
+    }
+  ],
+  "questions": [
+    {
+      "q": "แอปพลิเคชันต้องติดตามค่าประสิทธิภาพที่ทีมกำหนดขึ้นเองร่วมกับเมตริกมาตรฐานของ AWS ควรใช้บริการใดเป็นแหล่งรวบรวมเมตริก?",
+      "choices": [
+        "AWS Certificate Manager",
+        "Amazon Route 53",
+        "AWS Cost Explorer",
+        "Amazon CloudWatch"
+      ],
+      "answer": 3,
+      "explain": "CloudWatch รองรับทั้งเมตริกของบริการ AWS และ custom metrics ที่ผู้ใช้กำหนดเอง\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 9"
+    },
+    {
+      "q": "ทีมต้องการรวบรวมบันทึกการทำงานของแอปพลิเคชันไว้ในระบบติดตามทรัพยากรของ AWS ควรใช้ส่วนใด?",
+      "choices": [
+        "CloudWatch Logs",
+        "Application Auto Scaling",
+        "EventBridge Scheduler",
+        "Route 53 Resolver"
+      ],
+      "answer": 0,
+      "explain": "CloudWatch ใช้ CloudWatch Logs ในการรวบรวมข้อมูล log\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 9, 10"
+    },
+    {
+      "q": "ข้อมูลลักษณะใดตรงกับความหมายของ CloudWatch metric ตามบทเรียน?",
+      "choices": [
+        "ชุด EC2 instances ที่ใช้ launch template เดียวกัน",
+        "ชุดจุดข้อมูลที่มี timestamp และสามารถมี dimensions",
+        "ชุดกฎ DNS ที่กำหนดเส้นทางไปยังโดเมน",
+        "ชุดผู้สมัครรับข้อความจาก SNS topic"
+      ],
+      "answer": 1,
+      "explain": "เมตริกประกอบด้วยจุดข้อมูลที่มี timestamp และมี dimensions สำหรับระบุคุณลักษณะ\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 10"
+    },
+    {
+      "q": "ผู้ดูแลต้องการหน้าจอเดียวที่แสดงกราฟสถิติเมตริกและสถานะ alarm ของระบบ ควรสร้างสิ่งใด?",
+      "choices": [
+        "EC2 launch template",
+        "CloudWatch dashboard",
+        "Route 53 hosted zone",
+        "EventBridge pipe"
+      ],
+      "answer": 1,
+      "explain": "CloudWatch dashboards ใช้แสดงเมตริก สถิติ และ alarms ให้เห็นภาพรวม\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 12, 16"
+    },
+    {
+      "q": "เมื่อเมตริกถึงเงื่อนไขแจ้งเตือน ทีมต้องการให้ผู้สมัครรับข้อความหลายคนได้รับการแจ้งเตือน ควรเชื่อม CloudWatch alarm กับอะไร?",
+      "choices": [
+        "Route 53 private hosted zone",
+        "Amazon SNS topic",
+        "Aurora cluster volume",
+        "EC2 launch template"
+      ],
+      "answer": 1,
+      "explain": "CloudWatch alarm ส่งการแจ้งเตือนไปยัง SNS topic เพื่อกระจายต่อไปยัง subscribers ได้\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 11"
+    },
+    {
+      "q": "ต้องการให้การเปลี่ยนแปลงของเมตริกกระตุ้นการเพิ่มหรือลด EC2 instances อัตโนมัติ CloudWatch alarm ควรเชื่อมกับสิ่งใด?",
+      "choices": [
+        "Route 53 geolocation policy",
+        "Amazon EC2 Auto Scaling policy",
+        "AWS Cost and Usage Report",
+        "AWS Certificate Manager certificate"
+      ],
+      "answer": 1,
+      "explain": "แผนภาพแสดงว่า CloudWatch alarms สามารถกระตุ้น EC2 Auto Scaling policy ได้\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 11, 16"
+    },
+    {
+      "q": "ต้องเชื่อมเหตุการณ์จากแหล่งข้อมูลหนึ่งไปยังปลายทางหนึ่งแบบ point-to-point ควรเลือกองค์ประกอบใดของ EventBridge?",
+      "choices": [
+        "EventBridge event bus",
+        "CloudWatch alarm",
+        "EventBridge Pipe",
+        "EventBridge Scheduler"
+      ],
+      "answer": 2,
+      "explain": "EventBridge Pipes เป็นการเชื่อมแบบ point-to-point ระหว่างหนึ่ง source และหนึ่ง target\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 13"
+    },
+    {
+      "q": "เหตุการณ์จากบริการ AWS ต้องถูกคัดเลือกตามรูปแบบ แล้วส่งไปยัง Lambda หรือ SNS ที่ต่างกัน ควรใช้แนวทางใด?",
+      "choices": [
+        "EC2 Auto Scaling group พร้อม dynamic policy",
+        "CloudWatch dashboard พร้อมกราฟแยกตามบริการ",
+        "Route 53 พร้อม health checks ของปลายทาง",
+        "EventBridge event bus พร้อม rules ที่จับคู่ event pattern"
+      ],
+      "answer": 3,
+      "explain": "Event bus ใช้ rules ในการตัดสินใจส่งเหตุการณ์ไปยังหนึ่งหรือหลาย targets\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 13, 14"
+    },
+    {
+      "q": "ทีมต้องการให้การทำงานเกิดตามตารางเวลาในสถาปัตยกรรมเหตุการณ์ ควรใช้ความสามารถใดที่กล่าวถึงในบทเรียน?",
+      "choices": [
+        "Amazon EventBridge Scheduler",
+        "ELB target group",
+        "Amazon RDS read replica",
+        "Route 53 health check"
+      ],
+      "answer": 0,
+      "explain": "EventBridge รองรับการทำงานตามกำหนดเวลาผ่าน EventBridge Scheduler\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 13, 14"
+    },
+    {
+      "q": "หากเป้าหมายคือทำความเข้าใจและจัดการค่าใช้จ่ายโครงสร้างพื้นฐาน AWS ชุดเครื่องมือใดตรงกับบทเรียน?",
+      "choices": [
+        "Route 53 health checks, ELB health checks และ EventBridge rules",
+        "CloudWatch Logs, CloudWatch alarms และ CloudWatch dashboards",
+        "EC2 Auto Scaling, AWS Auto Scaling และ Application Auto Scaling",
+        "AWS Cost Explorer, AWS Budgets และ AWS Cost and Usage Report"
+      ],
+      "answer": 3,
+      "explain": "ทั้งสามเครื่องมือถูกระบุสำหรับการทำความเข้าใจและจัดการค่าใช้จ่าย AWS\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 15, 16"
+    },
+    {
+      "q": "ระบบเพิ่มทรัพยากรเมื่อความต้องการสูงและลดทรัพยากรเมื่อความต้องการต่ำ พฤติกรรมนี้สอดคล้องกับแนวคิดใด?",
+      "choices": [
+        "Monitoring",
+        "High availability",
+        "Elasticity",
+        "Fault isolation"
+      ],
+      "answer": 2,
+      "explain": "Elasticity คือความสามารถในการขยายและหดตัวของโครงสร้างพื้นฐานตามความต้องการ capacity\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 19"
+    },
+    {
+      "q": "แอปพลิเคชันเปลี่ยนจาก EC2 instance ขนาดเล็กเป็น instance ขนาดใหญ่กว่า โดยไม่ได้เพิ่มจำนวน instance จัดเป็นการปรับขนาดแบบใด?",
+      "choices": [
+        "Scheduled scaling action",
+        "Horizontal scaling",
+        "Vertical scaling",
+        "Predictive scaling policy"
+      ],
+      "answer": 2,
+      "explain": "Vertical scaling คือการแทนทรัพยากรด้วยทรัพยากรที่มีขนาดต่างออกไป\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 19"
+    },
+    {
+      "q": "ทีมเพิ่มเว็บเซิร์ฟเวอร์อีกสองเครื่องเพื่อรองรับผู้ใช้เพิ่มขึ้น จัดเป็นการปรับขนาดแบบใด?",
+      "choices": [
+        "การเปลี่ยน instance class โดยคงจำนวนเครื่อง",
+        "Vertical scaling",
+        "Horizontal scaling",
+        "การเปลี่ยน storage volume type"
+      ],
+      "answer": 2,
+      "explain": "Horizontal scaling เพิ่มหรือลดจำนวนทรัพยากรที่แอปพลิเคชันใช้งาน\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 19"
+    },
+    {
+      "q": "EC2 Auto Scaling group หมายถึงสิ่งใด?",
+      "choices": [
+        "กลุ่มเชิงตรรกะของ EC2 instances ที่บริการจัดการร่วมกัน",
+        "กลุ่มฐานข้อมูลที่ใช้ cluster volume ร่วมกัน",
+        "ชุดเมตริก CloudWatch จากทุกบริการ",
+        "รายการ DNS records ของแอปพลิเคชันเดียวกัน"
+      ],
+      "answer": 0,
+      "explain": "EC2 Auto Scaling จัดการ logical collection ของ EC2 instances ซึ่งเรียกว่า Auto Scaling group\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 20, 27"
+    },
+    {
+      "q": "ต้องการกำหนด AMI และการตั้งค่า EC2 ที่จะถูกสร้างโดย Auto Scaling group ควรกำหนดไว้ที่ใด?",
+      "choices": [
+        "Launch template",
+        "Route 53 health check",
+        "CloudWatch dashboard",
+        "SNS subscription"
+      ],
+      "answer": 0,
+      "explain": "Launch template กำหนดการตั้งค่า EC2 รวมถึง AMI ID และมีการจัดการ version\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 20, 21"
+    },
+    {
+      "q": "Auto Scaling group มี minimum 1, desired 2 และ maximum 3 ค่าจำนวน instance ที่กลุ่มตั้งเป้าหมายไว้ขณะนั้นคือเท่าใด?",
+      "choices": [
+        "2 instances",
+        "3 instances",
+        "1 instance",
+        "6 instances"
+      ],
+      "answer": 0,
+      "explain": "Desired capacity คือจำนวน instance เป้าหมาย ส่วน minimum และ maximum เป็นขอบเขตของกลุ่ม\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 21, 22"
+    },
+    {
+      "q": "ร้านค้ารู้ล่วงหน้าว่าจะเริ่มแคมเปญเวลา 09:00 ของวันพรุ่งนี้ และต้องเพิ่ม EC2 ก่อนช่วงดังกล่าว ควรใช้วิธีใด?",
+      "choices": [
+        "Scheduled action",
+        "Predictive scaling policy",
+        "Dynamic scaling policy",
+        "Step scaling policy ตามเมตริก"
+      ],
+      "answer": 0,
+      "explain": "Scheduled actions ปรับขนาดตามวันและเวลา เหมาะกับ workload ที่ทราบกำหนดล่วงหน้า\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 23"
+    },
+    {
+      "q": "ปริมาณใช้งานผันผวนระดับปานกลางและต้องการเพิ่มลด EC2 ตามเมตริกที่ติดตามอยู่ ควรเลือกกลไกใด?",
+      "choices": [
+        "Predictive scaling policy ตามรูปแบบในอดีต",
+        "การปรับ desired capacity ด้วยมือ",
+        "Dynamic scaling policy",
+        "Scheduled action ตามเวลาคงที่"
+      ],
+      "answer": 2,
+      "explain": "Dynamic policies ใช้เมตริกที่ติดตามในการปรับขนาด เหมาะกับ workload ที่มีความผันผวน\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 23"
+    },
+    {
+      "q": "ระบบมีรูปแบบการเข้าใช้งานซ้ำที่คาดการณ์ได้ และต้องการใช้ machine learning วิเคราะห์ประวัติ traffic เพื่อปรับขนาด ควรเลือกอะไร?",
+      "choices": [
+        "Step scaling policy ตามช่วงเมตริก",
+        "การปรับ desired capacity ด้วยมือ",
+        "Predictive scaling policy",
+        "Scheduled action ตามเวลาที่ระบุเอง"
+      ],
+      "answer": 2,
+      "explain": "Predictive scaling ใช้ machine learning และรูปแบบ traffic ในอดีตเพื่อคาดการณ์ capacity\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 23"
+    },
+    {
+      "q": "Step scaling policy ในบทเรียนกำหนดว่าเมตริก 61–70% ให้เพิ่ม capacity 10% หากค่าที่วัดได้คือ 65% จะเกิดอะไรขึ้น?",
+      "choices": [
+        "เพิ่ม capacity 30%",
+        "คง capacity เดิม",
+        "ลด capacity 10%",
+        "เพิ่ม capacity 10%"
+      ],
+      "answer": 3,
+      "explain": "65% อยู่ในช่วง 61–70% ซึ่งตัวอย่างกำหนดให้เพิ่ม capacity 10%\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 24"
+    },
+    {
+      "q": "ทีมต้องการปรับขนาด resources ของ Lambda, SageMaker และ ElastiCache for Redis ด้วย target tracking, step scaling หรือ scheduled scaling ควรใช้บริการใดตามบทเรียน?",
+      "choices": [
+        "AWS Application Auto Scaling",
+        "Amazon EC2 Auto Scaling",
+        "Aurora Auto Scaling",
+        "AWS Auto Scaling ที่ใช้ scaling plan"
+      ],
+      "answer": 0,
+      "explain": "Application Auto Scaling รองรับบริการเหล่านี้ และมีกลไก target tracking, step scaling และ scheduled scaling\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 25"
+    },
+    {
+      "q": "เมื่อกำหนด Auto Scaling group ให้ใช้หลาย Availability Zones บริการช่วยจัดการจำนวน instance อย่างไร?",
+      "choices": [
+        "ใช้ AZ อื่นเฉพาะเก็บ launch template โดยไม่สร้าง instance",
+        "ปรับสมดุลจำนวน instance ระหว่าง Availability Zones",
+        "สร้างกลุ่มแยกที่ไม่สามารถปรับจำนวนข้าม AZ ได้",
+        "เก็บ instance ทั้งหมดไว้ใน AZ แรกที่เลือกเสมอ"
+      ],
+      "answer": 1,
+      "explain": "EC2 Auto Scaling สามารถกระจายและปรับสมดุลจำนวน instances ระหว่าง Availability Zones\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 20"
+    },
+    {
+      "q": "ทีมต้องการใช้ scaling plan เพื่อกำหนด auto scaling ให้หลายทรัพยากร เช่น Aurora, ECS และ DynamoDB ควรพิจารณาบริการใดตามบทเรียน?",
+      "choices": [
+        "CloudWatch Logs",
+        "AWS Certificate Manager",
+        "AWS Auto Scaling",
+        "Amazon Route 53"
+      ],
+      "answer": 2,
+      "explain": "AWS Auto Scaling ใช้ scaling plan เพื่อกำหนดการปรับขนาดให้ทรัพยากรหลายบริการ\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 25"
+    },
+    {
+      "q": "Aurora cluster มีภาระงานอ่านเพิ่มขึ้นและต้องการเพิ่มความสามารถรองรับการอ่านแบบ horizontal ควรทำอย่างไร?",
+      "choices": [
+        "เพิ่มขนาด cluster volume โดยคงจำนวน replica",
+        "เพิ่ม DB instance class ของ replica เดิมโดยคงจำนวน replica",
+        "เพิ่ม DB instance class ของ primary โดยคงจำนวน replica",
+        "เพิ่ม Aurora read replicas โดยใช้ Aurora Auto Scaling"
+      ],
+      "answer": 3,
+      "explain": "Aurora Auto Scaling จัดการจำนวน read replicas เพื่อขยายความสามารถรองรับการอ่าน\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 29, 30"
+    },
+    {
+      "q": "หากต้องการเพิ่มขนาด compute ของ Aurora DB instance ที่มีอยู่ ควรปรับส่วนใด?",
+      "choices": [
+        "จำนวน Availability Zones ที่ deploy replicas",
+        "DB instance class หรือ size",
+        "จำนวน Aurora read replicas",
+        "จำนวนสำเนาข้อมูลใน cluster volume"
+      ],
+      "answer": 1,
+      "explain": "Aurora รองรับ vertical scaling โดยเปลี่ยน DB instance class หรือขนาด\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 30"
+    },
+    {
+      "q": "ส่วนใดของ Aurora ที่บทเรียนระบุว่าบริการจัดการการปรับขนาดให้?",
+      "choices": [
+        "การกำหนดจำนวน Aurora Replicas ที่ต้องการ",
+        "การเลือก locations สำหรับ deploy instances",
+        "การเลือก DB instance class",
+        "การปรับขนาด storage"
+      ],
+      "answer": 3,
+      "explain": "ตารางเปรียบเทียบระบุว่า Aurora มี storage scaling ที่จัดการโดยบริการ\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 29, 34"
+    },
+    {
+      "q": "ทีมใช้ Aurora Serverless และต้องการควบคุมช่วง capacity ที่ระบบปรับให้อัตโนมัติ ควรกำหนดอะไร?",
+      "choices": [
+        "ค่า ACUs ต่ำสุดและสูงสุด",
+        "ค่า minimum และ maximum ของ EC2 Auto Scaling group",
+        "จำนวน read replicas แบบคงที่เท่านั้น",
+        "ขนาด DB instance class ที่คงที่ของ RDS"
+      ],
+      "answer": 0,
+      "explain": "Aurora Serverless ปรับทรัพยากรอัตโนมัติภายในขอบเขต capacity ต่ำสุดและสูงสุดที่กำหนด\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 31, 35"
+    },
+    {
+      "q": "Amazon RDS มีงานอ่านจำนวนมากและทีมเลือกเพิ่ม read replica ข้อใดอธิบายวิธีนี้ถูกต้อง?",
+      "choices": [
+        "เป็น horizontal scaling และรับข้อมูลจาก primary แบบ asynchronous",
+        "เป็น vertical scaling และแทน primary ด้วย instance ที่ใหญ่กว่า",
+        "เป็นการกระจาย DNS โดยไม่สร้างฐานข้อมูลเพิ่ม",
+        "เป็นการขยาย storage โดยไม่เพิ่ม database instance"
+      ],
+      "answer": 0,
+      "explain": "RDS เพิ่ม read replica เพื่อ horizontal scaling และแผนภาพแสดง asynchronous data replication\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 32"
+    },
+    {
+      "q": "ฐานข้อมูล Amazon RDS ต้องการเพิ่มพื้นที่จัดเก็บโดยอัตโนมัติ ควรใช้ความสามารถใด?",
+      "choices": [
+        "Aurora Auto Scaling",
+        "DynamoDB auto scaling",
+        "Amazon RDS storage auto scaling",
+        "Amazon EC2 Auto Scaling"
+      ],
+      "answer": 2,
+      "explain": "RDS สามารถขยาย storage ด้วย RDS storage auto scaling แทนการปรับ volume ด้วยตนเอง\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 32"
+    },
+    {
+      "q": "DynamoDB ต้องรองรับงานเขียนเพิ่มขึ้นมาก แต่งานอ่านแทบไม่เปลี่ยน ตามบทเรียนสามารถปรับ capacity อย่างไร?",
+      "choices": [
+        "เพิ่มได้เฉพาะ RCUs ส่วน WCUs เปลี่ยนไม่ได้",
+        "ปรับ WCUs แยกจาก RCUs ได้",
+        "ต้องเพิ่ม read replica ก่อนจึงจะเพิ่ม WCUs ได้",
+        "ต้องเพิ่ม RCUs และ WCUs ด้วยค่าเดียวกันเสมอ"
+      ],
+      "answer": 1,
+      "explain": "DynamoDB ปรับ read capacity units และ write capacity units แยกจากกันได้\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 29"
+    },
+    {
+      "q": "ทีมต้องการให้ DynamoDB ปรับขนาดตามการอ่านและเขียนจริง โดยเลือกโหมดที่บทเรียนระบุไว้โดยตรง ควรใช้โหมดใด?",
+      "choices": [
+        "On-demand capacity mode",
+        "Aurora cluster capacity mode",
+        "Provisioned capacity ที่ปิด auto scaling",
+        "EC2 scheduled capacity mode"
+      ],
+      "answer": 0,
+      "explain": "On-demand ให้ DynamoDB ปรับขนาดตารางตามการอ่านและเขียนที่เกิดขึ้นจริง\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 33, 35"
+    },
+    {
+      "q": "DynamoDB ใน provisioned capacity mode ต้องปรับ throughput ตาม traffic อัตโนมัติ ชุดบริการใดทำงานร่วมกันตามบทเรียน?",
+      "choices": [
+        "Aurora Auto Scaling, CloudWatch และ Application Auto Scaling",
+        "DynamoDB auto scaling, CloudWatch และ Application Auto Scaling",
+        "DynamoDB auto scaling, CloudWatch และ EC2 Auto Scaling",
+        "RDS storage auto scaling, CloudWatch และ EC2 Auto Scaling"
+      ],
+      "answer": 1,
+      "explain": "Provisioned mode เชื่อม DynamoDB auto scaling กับ CloudWatch และ Application Auto Scaling\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 33, 35"
+    },
+    {
+      "q": "ตามตารางในบทเรียน ระบบที่มี uptime 99.99% มี downtime สูงสุดต่อปีประมาณเท่าใด?",
+      "choices": [
+        "5.25 นาที",
+        "52.6 นาที",
+        "3.65 วัน",
+        "8.76 ชั่วโมง"
+      ],
+      "answer": 1,
+      "explain": "ตารางจับคู่ uptime 99.99% กับ downtime ต่อปีประมาณ 52.6 นาที\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 37"
+    },
+    {
+      "q": "ELB ตรวจพบว่า target หนึ่งไม่ผ่าน health check ขณะที่ targets อื่นยังปกติ หลักการส่ง traffic ที่ระบุในบทเรียนคือข้อใด?",
+      "choices": [
+        "กระจาย traffic ไปยังทุก target ต่อไปเท่ากัน",
+        "ส่ง traffic ไปยัง targets ที่ healthy",
+        "รอให้ทุก target ไม่ผ่าน health check ก่อนเปลี่ยนการส่ง traffic",
+        "ส่ง traffic ไปยัง target ที่ตอบ health check ช้าที่สุดก่อน"
+      ],
+      "answer": 1,
+      "explain": "ELB ตรวจสุขภาพ targets และส่ง traffic ไปยัง targets ที่ healthy\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 38"
+    },
+    {
+      "q": "ข้อใดอธิบายความสามารถในการรับ traffic ของ ELB ได้ถูกต้อง?",
+      "choices": [
+        "รับได้เฉพาะ public traffic",
+        "รับได้เฉพาะ private traffic",
+        "รับได้เฉพาะ traffic ที่ข้าม Regions",
+        "รับได้ทั้ง public traffic และ private traffic"
+      ],
+      "answer": 3,
+      "explain": "ELB รองรับทั้ง traffic สาธารณะและ traffic ภายใน\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 38"
+    },
+    {
+      "q": "เว็บแอปพลิเคชันใช้ HTTP/HTTPS และต้องการ load balancer ที่ทำงานใน OSI layer 7 ควรเลือกชนิดใด?",
+      "choices": [
+        "Network Load Balancer",
+        "Gateway Load Balancer",
+        "Application Load Balancer",
+        "Classic Load Balancer สำหรับ EC2-Classic"
+      ],
+      "answer": 2,
+      "explain": "Application Load Balancer ใช้กับ HTTP/HTTPS และทำงานที่ application layer หรือ layer 7\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 39, 45"
+    },
+    {
+      "q": "บริการต้องรองรับ UDP ใช้ static IP addresses และต้องการ latency ต่ำมาก ควรเลือก load balancer ชนิดใด?",
+      "choices": [
+        "Application Load Balancer",
+        "Gateway Load Balancer",
+        "Classic Load Balancer สำหรับ EC2-Classic",
+        "Network Load Balancer"
+      ],
+      "answer": 3,
+      "explain": "Network Load Balancer รองรับ UDP, static IP addresses และงานที่ต้องการ latency ต่ำมาก\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 39"
+    },
+    {
+      "q": "บริษัทต้องกระจาย traffic ผ่านกลุ่ม virtual security appliances ของผู้ให้บริการภายนอกโดยใช้ GENEVE ควรใช้บริการใด?",
+      "choices": [
+        "Network Load Balancer",
+        "Classic Load Balancer สำหรับ EC2-Classic",
+        "Gateway Load Balancer",
+        "Application Load Balancer"
+      ],
+      "answer": 2,
+      "explain": "Gateway Load Balancer รองรับ third-party virtual appliance fleets ผ่าน GENEVE protocol\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 39, 43"
+    },
+    {
+      "q": "ในแผนภาพองค์ประกอบของ load balancer บริการใดเกี่ยวข้องกับการจัดหา TLS certificate?",
+      "choices": [
+        "Amazon CloudWatch",
+        "Amazon Route 53",
+        "AWS Certificate Manager",
+        "AWS IAM"
+      ],
+      "answer": 2,
+      "explain": "แผนภาพระบุ AWS Certificate Manager หรือ ACM เป็นแหล่ง TLS certificate ของ load balancer\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 40"
+    },
+    {
+      "q": "เว็บและ application tier มี EC2 กระจายสอง Availability Zones แล้ว แต่ฐานข้อมูลยังเป็นจุดเดียว แนวทางใดสอดคล้องกับสถาปัตยกรรม HA ในบทเรียนมากที่สุด?",
+      "choices": [
+        "เพิ่มขนาดฐานข้อมูลโดยยังวางเฉพาะใน AZ เดียว",
+        "เพิ่ม EC2 ใน web tier แต่คงฐานข้อมูล instance เดียวใน AZ เดิม",
+        "เพิ่ม ALB อีกตัวแต่คงฐานข้อมูล instance เดียวใน AZ เดิม",
+        "ใช้ Amazon RDS Multi-AZ ร่วมกับ ALB และ Auto Scaling ของแต่ละ tier"
+      ],
+      "answer": 3,
+      "explain": "สถาปัตยกรรมตัวอย่างใช้ ALB และ Auto Scaling หลาย AZ ร่วมกับ RDS Multi-AZ ใน data tier\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 41"
+    },
+    {
+      "q": "บทบาทหลักของ Amazon Route 53 ในการแปลงชื่อโดเมนตามบทเรียนคืออะไร?",
+      "choices": [
+        "ทำหน้าที่กระจาย HTTP requests ภายใน target group โดยตรง",
+        "เป็น recursive DNS resolver ของ ISP เท่านั้น",
+        "ให้บริการ authoritative name servers และ hosted zones",
+        "ทำหน้าที่เพิ่มลด EC2 ตาม CPU utilization"
+      ],
+      "answer": 2,
+      "explain": "Route 53 เป็น DNS service ที่ให้ hosted zones และ authoritative name servers\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 48, 49"
+    },
+    {
+      "q": "ทีมต้องการตรวจสุขภาพ endpoint เพื่อใช้ตัดสินใจ failover ระหว่าง Availability Zones หรือ Regions Route 53 ตรวจสิ่งใดได้ตามบทเรียน?",
+      "choices": [
+        "เฉพาะ ALB ที่อยู่ใน Region เดียว",
+        "เฉพาะ EC2 instances ใน AZ เดียว",
+        "เฉพาะ DynamoDB tables ที่มี provisioned capacity",
+        "IP addresses หรือ domains"
+      ],
+      "answer": 3,
+      "explain": "Route 53 ทำ health checks ต่อ IP addresses หรือ domains เพื่อสนับสนุน AZ หรือ Regional failover\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 48"
+    },
+    {
+      "q": "บริษัทมีแอปพลิเคชันและ ALB แยกกันในสอง Regions และต้องการ DNS failover เมื่อปลายทางหนึ่งมีปัญหา ควรใช้บริการใดประสานการส่ง traffic?",
+      "choices": [
+        "Application Load Balancer ตัวเดียวใน Region A",
+        "Amazon Route 53",
+        "Network Load Balancer ตัวเดียวใน Region B",
+        "EC2 Auto Scaling group ตัวเดียวใน Region A"
+      ],
+      "answer": 1,
+      "explain": "แผนภาพ Multi-Region failover ใช้ Route 53 อยู่เหนือ ALB ของแต่ละ Region\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 48, 55"
+    },
+    {
+      "q": "เว็บไซต์ต้องการแสดงเนื้อหาให้เหมาะกับกลุ่มผู้ใช้ตามตำแหน่งทางภูมิศาสตร์ ควรเลือก Route 53 routing policy ใดตามตัวอย่าง?",
+      "choices": [
+        "Multivalue answer routing",
+        "Failover routing",
+        "Simple routing",
+        "Geolocation routing"
+      ],
+      "answer": 3,
+      "explain": "ตัวอย่าง geolocation routing ใช้ส่ง traffic และปรับเนื้อหาตามกลุ่มผู้ใช้ในพื้นที่ต่างกัน\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 53"
+    },
+    {
+      "q": "ทีมกำลังสร้าง DNS zone สำหรับเส้นทางการเข้าถึงเว็บไซต์จากอินเทอร์เน็ต ควรเลือก hosted zone ชนิดใด?",
+      "choices": [
+        "Private hosted zone",
+        "CloudWatch metric namespace",
+        "Public hosted zone",
+        "EC2 Auto Scaling group"
+      ],
+      "answer": 2,
+      "explain": "Public hosted zones ใช้สำหรับ route internet traffic\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 54"
+    },
+    {
+      "q": "ต้องจัดการ DNS สำหรับ traffic ภายใน VPC ควรใช้สิ่งใดตามบทเรียน?",
+      "choices": [
+        "Public hosted zone สำหรับ internet traffic",
+        "Gateway Load Balancer target group",
+        "SNS topic",
+        "Private hosted zone"
+      ],
+      "answer": 3,
+      "explain": "Private hosted zones ใช้สำหรับ route VPC traffic\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 54"
+    },
+    {
+      "q": "ในการค้นหา www.myweb.com ตามแผนภาพ DNS lookup เมื่อ resolver ถาม root name server จะได้รับข้อมูลใดเพื่อค้นหาต่อ?",
+      "choices": [
+        "ตำแหน่งของ name server สำหรับ .com",
+        "IP address ของ www.myweb.com โดยตรงในทุกกรณี",
+        "IP address ของเว็บเซิร์ฟเวอร์ในบัญชี AWS โดยตรง",
+        "ตำแหน่งของ name server สำหรับ .org"
+      ],
+      "answer": 0,
+      "explain": "Root name server ชี้ไปยัง name server ของ top-level domain .com ก่อนค้นหา name server ของ myweb.com\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 47"
+    },
+    {
+      "q": "ทีมต้องการใช้ fault isolation ลดผลกระทบเมื่อสถานที่หนึ่งขัดข้อง แนวทางใดตรงกับ Well-Architected best practice ในบทเรียน?",
+      "choices": [
+        "เพิ่มขนาด instance โดยยังอยู่ location เดียว",
+        "เพิ่ม storage โดยยังอยู่ location เดียว",
+        "เพิ่มจำนวน instances แต่จำกัดให้อยู่ location เดียว",
+        "Deploy workload ไปหลาย locations"
+      ],
+      "answer": 3,
+      "explain": "การ deploy workload หลาย locations เป็นแนวทาง failure management ที่ใช้ fault isolation\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 66"
+    },
+    {
+      "q": "มีองค์ประกอบหนึ่งที่จำเป็นต้องอยู่ location เดียว ทีมควรออกแบบการกู้คืนอย่างไรตามบทเรียน?",
+      "choices": [
+        "ทำให้การกู้คืนองค์ประกอบนั้นเป็นอัตโนมัติ",
+        "ใช้การกู้คืนแบบ manual เป็นแนวทางหลักทุกครั้ง",
+        "เพิ่มขนาดทรัพยากรแทนการเตรียมกระบวนการกู้คืน",
+        "จำกัดการติดตามสุขภาพไว้เฉพาะหลังเกิดเหตุขัดข้อง"
+      ],
+      "answer": 0,
+      "explain": "บทเรียนแนะนำให้ automate recovery สำหรับองค์ประกอบที่ถูกจำกัดให้อยู่ location เดียว\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 66, 69"
+    },
+    {
+      "q": "ชุดคุณลักษณะใดตรงกับ reactive architecture ที่กล่าวถึงในบทเรียน?",
+      "choices": [
+        "Static, Manual, Single-location และ Message-free",
+        "Elastic, Responsive, Resilient และ Message-driven",
+        "Elastic, Manual, Fixed-capacity และ Single-location",
+        "Responsive, Fixed-capacity, Manual และ Message-free"
+      ],
+      "answer": 1,
+      "explain": "Reactive architecture ในบทเรียนมีคุณลักษณะ Elastic, Responsive, Resilient และ Message-driven\n\nอ้างอิง: ACAv3 EN M10 ElasticityHigh AvailabilityAndMonitoring.pdf หน้า 18"
+    }
+  ]
+}
