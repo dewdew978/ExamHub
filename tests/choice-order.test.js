@@ -13,16 +13,25 @@ const fourChoiceQuestion = (id, answer = 0) => ({
   explain: `Explain ${id}`,
 });
 
-test('balances correct answers across A-D without changing which text is correct', () => {
-  const source = Array.from({ length: 8 }, (_, index) => fourChoiceQuestion(index));
+test('balances correct answers globally without exposing four-question blocks', () => {
+  const source = Array.from({ length: 16 }, (_, index) => fourChoiceQuestion(index));
 
   const balanced = balanceQuestionChoices(source);
 
-  assert.deepEqual(balanced.map(question => question.answer), [0, 1, 2, 3, 0, 1, 2, 3]);
+  const answerKey = balanced.map(question => question.answer);
+  assert.deepEqual(answerKey.reduce((counts, answer) => {
+    counts[answer] += 1;
+    return counts;
+  }, [0, 0, 0, 0]), [4, 4, 4, 4]);
+  assert.notDeepEqual(answerKey, Array.from({ length: 16 }, (_, index) => index % 4));
+  assert.ok(Array.from({ length: 4 }, (_, block) =>
+    new Set(answerKey.slice(block * 4, block * 4 + 4)).size
+  ).some(uniqueAnswers => uniqueAnswers < 4));
+  assert.deepEqual(balanceQuestionChoices(source), balanced);
   for (let index = 0; index < source.length; index += 1) {
     assert.equal(balanced[index].choices[balanced[index].answer], source[index].choices[source[index].answer]);
   }
-  assert.equal(CHOICE_ORDER_VERSION, 1);
+  assert.equal(CHOICE_ORDER_VERSION, 2);
 });
 
 test('does not mutate source questions or their choice arrays', () => {
@@ -37,7 +46,7 @@ test('does not mutate source questions or their choice arrays', () => {
   assert.notEqual(balanced[0].choices, source[0].choices);
 });
 
-test('uses a valid round-robin target for questions with different choice counts', () => {
+test('uses a valid deterministic target for questions with different choice counts', () => {
   const source = [
     { q: 'Two', choices: ['wrong', 'right'], answer: 1 },
     { q: 'Three', choices: ['right', 'wrong 1', 'wrong 2'], answer: 0 },
@@ -46,8 +55,16 @@ test('uses a valid round-robin target for questions with different choice counts
 
   const balanced = balanceQuestionChoices(source);
 
-  assert.deepEqual(balanced.map(question => question.answer), [0, 1, 0]);
+  assert.ok(balanced.every(question => question.answer >= 0 && question.answer < question.choices.length));
   assert.deepEqual(balanced.map(question => question.choices[question.answer]), ['right', 'right', 'right']);
+});
+
+test('preserves version one ordering for saved in-progress attempts', () => {
+  const source = Array.from({ length: 4 }, (_, index) => fourChoiceQuestion(index, 3));
+  const legacyBalanced = balanceQuestionChoices(source, true, 1);
+
+  assert.deepEqual(legacyBalanced.map(question => question.answer), [0, 1, 2, 3]);
+  assert.equal(resolveChoiceOrderVersion({ choiceOrderVersion: 1 }), 1);
 });
 
 test('leaves legacy and malformed questions in their original order', () => {
@@ -68,5 +85,5 @@ test('switches a retried legacy exam to the current balanced choice order', () =
   assert.equal(resolveChoiceOrderVersion(legacyProgress), null);
   assert.equal(resolveChoiceOrderVersion(legacyProgress, true), CHOICE_ORDER_VERSION);
   assert.equal(resolveChoiceOrderVersion(undefined), CHOICE_ORDER_VERSION);
-  assert.equal(resolveChoiceOrderVersion({ choiceOrderVersion: 1 }), CHOICE_ORDER_VERSION);
+  assert.equal(resolveChoiceOrderVersion({ choiceOrderVersion: 2 }), CHOICE_ORDER_VERSION);
 });

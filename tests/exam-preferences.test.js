@@ -179,9 +179,10 @@ test('blocked browser storage falls back to default exam preferences', () => {
   assert.match(html, /First /);
 });
 
-test('new attempts use the balanced displayed choice order', () => {
+test('new attempts use the current displayed choice order', () => {
   const html = renderExam({ subject: biasedChoiceSubject });
-  assert.ok(html.indexOf('Correct D') < html.indexOf('Wrong A'));
+  assert.match(html, /Correct D/);
+  assert.match(html, /Wrong A/);
 });
 
 test('versioned progress restores answers against the balanced choice order', () => {
@@ -195,6 +196,18 @@ test('versioned progress restores answers against the balanced choice order', ()
   } });
   assert.ok(html.indexOf('Correct D') < html.indexOf('Wrong A'));
   assert.match(html, /Correct explanation/);
+});
+
+test('current progress restores answers against choice order version two', () => {
+  const html = renderExam({ subject: biasedChoiceSubject, initialProgress: {
+    subjectId: biasedChoiceSubject.id,
+    choiceOrderVersion: 2,
+    currentQ: 0,
+    answers: [0, null],
+    bookmarks: [false, false],
+    timeLeft: 90,
+  } });
+  assert.match(html, /Correct D/);
 });
 
 test('legacy progress keeps its original choice order and answer indexes', () => {

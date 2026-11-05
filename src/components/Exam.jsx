@@ -5,11 +5,7 @@ import { InlineMath } from 'react-katex';
 import NumberTicker from './NumberTicker';
 import { includesChoice, isCorrectAnswer } from '../lib/examAnswers';
 import { readExamPreferences, createQuestionOrder } from '../lib/examPreferences';
-import {
-  CHOICE_ORDER_VERSION,
-  balanceQuestionChoices,
-  resolveChoiceOrderVersion,
-} from '../lib/choiceOrder';
+import { balanceQuestionChoices, resolveChoiceOrderVersion } from '../lib/choiceOrder';
 
 const renderTextWithMath = (text, enabled) => {
   if (!enabled || typeof text !== 'string') return text;
@@ -26,10 +22,14 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
   const [preferences, setPreferences] = useState(readExamPreferences);
   const [choiceOrderVersion, setChoiceOrderVersion] = useState(() =>
     resolveChoiceOrderVersion(initialProgress));
-  const usesBalancedChoices = choiceOrderVersion === CHOICE_ORDER_VERSION;
+  const usesBalancedChoices = choiceOrderVersion !== null;
   const choiceOrderedQuestions = useMemo(() =>
-    balanceQuestionChoices(sourceSubject.questions, usesBalancedChoices && !sourceSubject.adminOnly),
-  [sourceSubject.questions, sourceSubject.adminOnly, usesBalancedChoices]);
+    balanceQuestionChoices(
+      sourceSubject.questions,
+      usesBalancedChoices && !sourceSubject.adminOnly,
+      choiceOrderVersion,
+    ),
+  [sourceSubject.questions, sourceSubject.adminOnly, usesBalancedChoices, choiceOrderVersion]);
   const [questionOrder, setQuestionOrder] = useState(() =>
     createQuestionOrder(sourceSubject.questions.length, preferences.autoShuffle, initialProgress));
   const subject = useMemo(() => ({
@@ -111,7 +111,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           answers: ansList,
           bookmarks: bmkList,
           questionOrder,
-          choiceOrderVersion: usesBalancedChoices ? CHOICE_ORDER_VERSION : undefined,
+          choiceOrderVersion: usesBalancedChoices ? choiceOrderVersion : undefined,
           timerEnabled,
           timeLeft: time,
           totalQuestions: subject.questions.length,
@@ -141,7 +141,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
           answers,
           bookmarks,
           questionOrder,
-          choiceOrderVersion: usesBalancedChoices ? CHOICE_ORDER_VERSION : undefined,
+          choiceOrderVersion: usesBalancedChoices ? choiceOrderVersion : undefined,
           timerEnabled,
           timeLeft: timeLeftRef.current,
           totalQuestions: subject.questions.length,
@@ -153,7 +153,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     } catch (e) {
       console.warn("Failed to persist progress:", e);
     }
-  }, [currentQ, answers, bookmarks, showResult, subject, questionOrder, timerEnabled, usesBalancedChoices]);
+  }, [currentQ, answers, bookmarks, showResult, subject, questionOrder, timerEnabled, usesBalancedChoices, choiceOrderVersion]);
 
   useEffect(() => {
     if (!timerEnabled || showResult || isPaused) return;
