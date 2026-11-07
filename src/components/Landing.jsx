@@ -201,7 +201,6 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
             <span><strong style={{ color: 'var(--accent)' }}>NEW</strong> · Just shipped v2.0 · อัปเดตคลังข้อสอบ & เฉลยละเอียด</span>
           </div>
           <h1 className="landing-title">ฝึกทำข้อสอบทุกวิชาในที่เดียว<br /><span className="landing-title-gradient">ยกระดับคะแนนสู่เกรด A</span></h1>
-          <p className="landing-subtitle">แพลตฟอร์มฝึกทำข้อสอบออนไลน์ครบทุกวิชา ทุกชั้นปี พร้อมเฉลยละเอียดและคำอธิบาย step-by-step วิเคราะห์จุดอ่อน และพัฒนาความรู้อย่างมีประสิทธิภาพ</p>
           <div className="landing-cta-row">
             <button className="landing-btn-primary" onClick={onStart}><span>เริ่มฝึกทำข้อสอบ</span><ArrowRight size={18} /></button>
             <button className="landing-btn-secondary" onClick={() => scrollToSection('landing-steps')}><span>วิธีใช้งาน</span></button>
