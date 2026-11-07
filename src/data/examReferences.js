@@ -189,6 +189,33 @@ export const EXAM_REFERENCES = {
   },
 
   // Intelligent System Development
+  'isd_final_90q': {
+    primarySource: '06026240 Intelligent System Development: Final Exam Balanced Blueprint (90 Questions)',
+    organization: 'Intelligent System Development Curriculum (Dr. Bhattarabhorn Wattanacheep)',
+    curatedBy: 'ISD Synthesis',
+    references: [
+      {
+        title: 'ตอนที่ 1: LLMs & Prompt Engineering และ Agentic AI (ข้อ 1 - 20)',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: '8-Layer Architecture, ReAct Pattern, Structured Output & Pydantic, Local LLM & Ollama, In-Context Learning'
+      },
+      {
+        title: 'ตอนที่ 2: Noisy Documents and Text-to-Answer Model (ข้อ 21 - 40)',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'Noise Simulation, Deskewing, Adaptive Thresholding, Dilation, CHK1-CHK7 Consistency Rules, Guard Layer & SQLite'
+      },
+      {
+        title: 'ตอนที่ 3: Evaluation and Overfitting (ข้อ 41 - 60)',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'Precision/Recall, MCC, Macro/Micro, RMSE/MAE/MAPE, Huber Loss, CER/WER, LLM-as-a-Judge, Overfitting & Early Stopping'
+      },
+      {
+        title: 'ตอนที่ 4 - 6: Full-stack Intelligent System (API, Front-End & Back-End) (ข้อ 61 - 90)',
+        author: 'Dr. Bhattarabhorn Wattanacheep',
+        desc: 'HTTP Status Codes, CORS, Pydantic Field, Semantic HTML, Flexbox/Grid, Nginx Reverse Proxy, 3-2-1 Backup, Docker & Observability'
+      }
+    ]
+  },
   'isd_final_100q': {
     primarySource: '06026240 Intelligent System Development: Final Exam Comprehensive Blueprint',
     organization: 'Intelligent System Development Curriculum (Dr. Bhattarabhorn Wattanacheep)',

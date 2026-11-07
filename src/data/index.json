@@ -252,6 +252,18 @@
     "type": "Final"
   },
   {
+    "id": "isd_final_90q",
+    "category": "Intelligent System Development",
+    "name": "ISD Final Exam (Balanced 90 Items)",
+    "icon": "🤖",
+    "color": "#8b5cf6",
+    "iconBg": "rgba(139, 92, 246, 0.15)",
+    "desc": "ข้อสอบเสมือนจริงปลายภาค ISD 90 ข้อ (ฉบับปรับปรุงตัวเลือกสมดุล ไร้คำใบ้) ครบ 6 ตอน: LLMs & Agentic, Noisy Docs, Evaluation, API, Front-End, Back-End",
+    "questionCount": 90,
+    "year": 3,
+    "type": "Final"
+  },
+  {
     "id": "aws_aca_m09_50q",
     "category": "Cloud Technology Infrastructure",
     "name": "การรักษาความปลอดภัยในการเข้าถึงของผู้ใช้ แอปพลิเคชัน และข้อมูล (50 ข้อ)",
