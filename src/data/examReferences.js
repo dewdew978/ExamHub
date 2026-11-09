@@ -81,6 +81,60 @@ export const EXAM_REFERENCES = {
   },
 
   // Data Warehousing
+  'dw_final_set1_50q': {
+    primarySource: 'Data Warehouse Final Exam Comprehensive Blueprint (Set 1)',
+    organization: 'Data Engineering & Cloud Data Warehouse Curriculum',
+    curatedBy: 'Kimball & Modern Data Stack Standards',
+    references: [
+      {
+        title: 'ETL vs ELT & Data Ingestion Strategies (Full vs Incremental)',
+        author: 'Data Engineering Standards',
+        desc: 'การสลับลำดับการแปลงข้อมูล, ฟูลโหลด, อินครีเมนทัลโหลด, และการจัดการประวัติย้อนหลัง'
+      },
+      {
+        title: 'Slowly Changing Dimensions (SCD Type 1 - 3) & Surrogate Keys',
+        author: 'Ralph Kimball & Margy Ross',
+        desc: 'การอัปเดตทับ (Type 1), การเพิ่มแถวเก็บประวัติพร้อมช่วงเวลา (Type 2), และการเพิ่มคอลัมน์ค่าก่อนหน้า (Type 3)'
+      },
+      {
+        title: 'Data Quality Dimensions, Profiling & Consistency Rules (CHK)',
+        author: 'Enterprise Data Governance & Quality Standards',
+        desc: 'มิติความถูกต้อง, ความสอดคล้อง, โดเมน, ความสดใหม่, และการจัดการ Orphan Facts'
+      },
+      {
+        title: 'Modern Data Stack & Cloud DW (dbt, Airflow, MPP, Snowflake, BigQuery)',
+        author: 'Modern Analytics Stack Reference',
+        desc: 'dbt models & seed, Airflow DAG orchestrator, MPP architecture, Columnar storage และ Serverless Data Warehouse'
+      }
+    ]
+  },
+  'dw_final_set2_50q': {
+    primarySource: 'Data Warehouse Final Exam Comprehensive Blueprint (Set 2)',
+    organization: 'Data Engineering & Cloud Data Warehouse Curriculum',
+    curatedBy: 'Kimball & Modern Data Stack Standards',
+    references: [
+      {
+        title: 'Data Profiling, Quality Audits & Missing Values Strategy',
+        author: 'Data Governance Institute',
+        desc: 'การสำรวจสถิติข้อมูล, ค่าว่างที่คาดหมาย vs ผิดปกติ, และการจัดการความคลาดเคลื่อนร่วมกับเจ้าของข้อมูล'
+      },
+      {
+        title: 'Advanced Dimensional Modeling: Late Arriving Dimensions & Surrogate Keys',
+        author: 'Ralph Kimball & Margy Ross',
+        desc: 'การจัดการข้อมูลมิติเดินทางมาช้ากว่าแฟกต์ (Late Arriving Dimensions), คีย์ตัวแทน และการเชื่อมโยงมิติเวลา'
+      },
+      {
+        title: 'Functional Dependency Violations & Reconciliation Rules',
+        author: 'Kimball Dimensional Best Practices',
+        desc: 'การตรวจจับความขัดแย้งของข้อมูลระดับแถว, กฎการกระทบยอดในชั้น Data Mart, และการรับรองความถูกต้องของตัวชี้วัด'
+      },
+      {
+        title: 'Cloud DW Optimizations: Partitioning, Virtual Warehouses & Lakehouse',
+        author: 'Cloud Data Architecture Principles',
+        desc: 'Partition Pruning, Data Skew & Shuffle mitigation, Separation of Storage and Compute, และ Lakehouse Architecture'
+      }
+    ]
+  },
   'dw_hard_60': {
     primarySource: 'The Data Warehouse Toolkit & Enterprise Dimensional Modeling',
     organization: 'Kimball Group & Corporate Information Factory (Inmon)',

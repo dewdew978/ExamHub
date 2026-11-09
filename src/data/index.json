@@ -168,6 +168,30 @@
     "type": "Midterm"
   },
   {
+    "id": "dw_final_set1_50q",
+    "category": "Data Warehousing",
+    "name": "Data Warehouse Final Mock Exam (Set 1 - 50 Questions)",
+    "icon": "🏛️",
+    "color": "#0284c7",
+    "iconBg": "rgba(2, 132, 199, 0.15)",
+    "desc": "แนวข้อสอบปลายภาคคลังข้อมูล ชุดที่ 1 (50 ข้อ) ครอบคลุม ETL/ELT, Loading, SCD 1-3, Data Quality, Dimensional Modeling, dbt, Airflow, MPP & Cloud DW",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final"
+  },
+  {
+    "id": "dw_final_set2_50q",
+    "category": "Data Warehousing",
+    "name": "Data Warehouse Final Mock Exam (Set 2 - 50 Questions)",
+    "icon": "🏛️",
+    "color": "#0ea5e9",
+    "iconBg": "rgba(14, 165, 233, 0.15)",
+    "desc": "แนวข้อสอบปลายภาคคลังข้อมูล ชุดที่ 2 (50 ข้อ) ครอบคลุม Data Profiling, Handling Nulls, Functional Dependency, Late Arriving Dimensions, Surrogate Keys & DW Best Practices",
+    "questionCount": 50,
+    "year": 3,
+    "type": "Final"
+  },
+  {
     "id": "med_img_dl_30q",
     "category": "Medical Image & Deep Learning",
     "name": "Deep Learning in Medical Image & Video Analysis Quiz",
