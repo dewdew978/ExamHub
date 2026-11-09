@@ -89,7 +89,7 @@ export const EXAM_REFERENCES = {
       {
         title: 'ETL vs ELT & Data Ingestion Strategies (Full vs Incremental)',
         author: 'Data Engineering Standards',
-        desc: 'การสลับลำดับการแปลงข้อมูล, ฟูลโหลด, อินครีเมนทัลโหลด, และการจัดการประวัติย้อนหลัง'
+        desc: 'การสลับลำดับการแปลงข้อมูล (Transform), Full Load, Incremental Load, และการจัดการประวัติย้อนหลัง'
       },
       {
         title: 'Slowly Changing Dimensions (SCD Type 1 - 3) & Surrogate Keys',
@@ -99,7 +99,7 @@ export const EXAM_REFERENCES = {
       {
         title: 'Data Quality Dimensions, Profiling & Consistency Rules (CHK)',
         author: 'Enterprise Data Governance & Quality Standards',
-        desc: 'มิติความถูกต้อง, ความสอดคล้อง, โดเมน, ความสดใหม่, และการจัดการ Orphan Facts'
+        desc: 'Data Quality Dimensions (Accuracy, Consistency, Domain, Timeliness) และการจัดการ Orphan Facts'
       },
       {
         title: 'Modern Data Stack & Cloud DW (dbt, Airflow, MPP, Snowflake, BigQuery)',
@@ -116,17 +116,17 @@ export const EXAM_REFERENCES = {
       {
         title: 'Data Profiling, Quality Audits & Missing Values Strategy',
         author: 'Data Governance Institute',
-        desc: 'การสำรวจสถิติข้อมูล, ค่าว่างที่คาดหมาย vs ผิดปกติ, และการจัดการความคลาดเคลื่อนร่วมกับเจ้าของข้อมูล'
+        desc: 'การสำรวจสถิติข้อมูล (Data Profiling), การจัดการค่าว่าง (Nulls), และการจัดการความคลาดเคลื่อนร่วมกับเจ้าของข้อมูล'
       },
       {
         title: 'Advanced Dimensional Modeling: Late Arriving Dimensions & Surrogate Keys',
         author: 'Ralph Kimball & Margy Ross',
-        desc: 'การจัดการข้อมูลมิติเดินทางมาช้ากว่าแฟกต์ (Late Arriving Dimensions), คีย์ตัวแทน และการเชื่อมโยงมิติเวลา'
+        desc: 'การจัดการข้อมูลมิติเดินทางมาช้ากว่า Fact Table (Late Arriving Dimensions), Surrogate Key และการเชื่อมโยง Time Dimension'
       },
       {
         title: 'Functional Dependency Violations & Reconciliation Rules',
         author: 'Kimball Dimensional Best Practices',
-        desc: 'การตรวจจับความขัดแย้งของข้อมูลระดับแถว, กฎการกระทบยอดในชั้น Data Mart, และการรับรองความถูกต้องของตัวชี้วัด'
+        desc: 'การตรวจจับความขัดแย้งของข้อมูลระดับแถว (Functional Dependency), กฎการกระทบยอดในชั้น Data Mart, และการรับรองความถูกต้องของตัวชี้วัด'
       },
       {
         title: 'Cloud DW Optimizations: Partitioning, Virtual Warehouses & Lakehouse',
