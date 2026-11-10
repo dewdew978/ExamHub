@@ -1,4 +1,4 @@
-﻿# EXETIA
+# EXETIA
 
 > แพลตฟอร์มคลังข้อสอบและแบบฝึกหัดออนไลน์ (Data Science, Cloud, AI & MIS)
 
@@ -10,6 +10,11 @@ EXETIA เป็นเว็บแอปพลิเคชันคลังข�
 - [AWS Cloud Computing](https://exetia-exam.vercel.app/home): ข้อสอบแนวปฏิบัติ AWS Cloud
 - [Intelligent Systems](https://exetia-exam.vercel.app/home): ระบบรู้จำ การประมวลผลสัญญาณ และ AI
 - [Management Information Systems](https://exetia-exam.vercel.app/home): ระบบฐานข้อมูล, CRM และ Project Management
+
+## ผู้พัฒนา (Creator & Developer)
+- ปวริศ ปัญสิงห์ (Pawarit Pansing / ดิว)
+- Portfolio: https://dewdew978.github.io/portfolio/
+- GitHub: https://github.com/dewdew978
 
 ## ลิงก์สำคัญ (Important Links)
 - [หน้าแรก](https://exetia-exam.vercel.app/)

@@ -335,7 +335,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
         </div>
         <p style={{ margin: '0 0 0.25rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
-          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
+          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>ปวริศ ปัญสิงห์ (Pawarit Pansing - ดิว)</a>
         </p>
         <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>

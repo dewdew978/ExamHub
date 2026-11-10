@@ -364,6 +364,69 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         </div>
       </section>
 
+      {/* Creator & Developer Section */}
+      <section className="about-section" style={{ paddingTop: '0', paddingBottom: '3rem' }}>
+        <div className="about-section-header" style={{ marginBottom: '2.5rem' }}>
+          <span className="about-section-tag">Creator & Developer</span>
+          <h2 className="about-section-title">ผู้ก่อตั้งและพัฒนาแพลตฟอร์ม</h2>
+          <p className="about-section-desc">
+            เบื้องหลังการพัฒนาและคัดสรรข้อสอบคุณภาพบน EXETIA
+          </p>
+        </div>
+
+        <div className="about-card-large" style={{ maxWidth: '780px', margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{
+            width: '76px', height: '76px', borderRadius: '50%',
+            background: 'linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontSize: '1.75rem', fontWeight: 800, marginBottom: '1.25rem',
+            boxShadow: '0 8px 24px -4px rgba(0, 112, 243, 0.4)'
+          }}>
+            DP
+          </div>
+          <h3 style={{ margin: '0 0 0.35rem', fontSize: '1.5rem', letterSpacing: '-0.5px' }}>
+            ปวริศ ปัญสิงห์ (ดิว / Pawarit Pansing)
+          </h3>
+          <p style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '0.9rem', marginBottom: '1rem' }}>
+            Founder & Full-Stack Developer
+          </p>
+          <p style={{ maxWidth: '620px', lineHeight: 1.7, fontSize: '0.95rem', color: 'var(--text-muted)', margin: '0 auto 1.5rem auto' }}>
+            EXETIA ถูกพัฒนาขึ้นโดย ดิว - ปวริศ ปัญสิงห์ (Pawarit Pansing) เพื่อเป็นพื้นที่ในการรวบรวมข้อสอบ แนวข้อสอบ และเฉลยเชิงลึกสำหรับนักศึกษาและผู้ที่สนใจด้าน Data Science, Machine Learning, Cloud Computing และเทคโนโลยีสารสนเทศ
+          </p>
+          <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <a
+              href="https://dewdew978.github.io/portfolio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                fontSize: '0.875rem', padding: '0.55rem 1.25rem', borderRadius: '12px',
+                background: 'var(--surface-hover)', border: '1px solid var(--border-color)',
+                color: 'var(--text)', textDecoration: 'none', fontWeight: 600,
+                boxShadow: 'var(--shadow-sm)'
+              }}
+            >
+              <span>Portfolio: Pawarit Pansing</span>
+              <ArrowRight size={14} />
+            </a>
+            <a
+              href="https://github.com/dewdew978"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                fontSize: '0.875rem', padding: '0.55rem 1.25rem', borderRadius: '12px',
+                background: 'var(--surface-hover)', border: '1px solid var(--border-color)',
+                color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 600,
+                boxShadow: 'var(--shadow-sm)'
+              }}
+            >
+              <span>GitHub @dewdew978</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* 4. Bottom CTA */}
       <div className="about-bottom-cta">
         <h2>พร้อมเริ่มต้นฝึกทำข้อสอบแล้วหรือยัง?</h2>
@@ -384,7 +447,7 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
         </div>
         <p style={{ margin: '0 0 0.35rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
         <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
-          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Pawarit</a>
+          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>ปวริศ ปัญสิงห์ (Pawarit Pansing - ดิว)</a>
         </p>
         <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.7 }}>© 2026 EXETIA. All rights reserved.</p>
       </footer>
