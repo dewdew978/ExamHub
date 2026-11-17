@@ -1,6 +1,5 @@
-import React from "react"
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from "recharts"
-import { Star, X } from "lucide-react"
+import { Radar as RadarIcon, X } from "lucide-react"
 
 const defaultChartData = [
   { skill: "MIS", score: 0 },
@@ -11,82 +10,52 @@ const defaultChartData = [
   { skill: "Deep Learning", score: 0 },
 ]
 
+// Skill radar: accumulated score per subject category.
 export function Pattern({ data = defaultChartData, onClose }) {
+  const top = [...data].sort((a, b) => b.score - a.score).slice(0, 3).filter(d => d.score > 0)
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 100,
-      backdropFilter: 'blur(4px)',
-      padding: '1rem'
-    }} onClick={onClose}>
-      <div 
-        className="card animate-fade-in" 
-        style={{ 
-          width: '100%', 
-          maxWidth: '360px', 
-          padding: '1.25rem 1rem', 
-          display: 'flex', 
-          flexDirection: 'column',
-          position: 'relative',
-          borderRadius: '14px'
-        }}
-        onClick={e => e.stopPropagation()}
-      >
-        <button 
-          onClick={onClose}
-          style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '1rem', padding: '0.25rem', display: 'flex' }}
-          aria-label="ปิด"
-        >
-          <X size={16} />
-        </button>
-        <div style={{ textAlign: 'center', marginBottom: '1rem', marginTop: '0.25rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', margin: 0 }}>
-            <Star size={18} color="var(--accent)" />
-            Skill Assessment
-          </h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginTop: '0.2rem', margin: 0 }}>Team proficiency across key areas</p>
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" style={{ maxWidth: 420 }} onClick={e => e.stopPropagation()} role="dialog" aria-label="คะแนนสะสมและทักษะ">
+        <div className="modal-header">
+          <span className="tile tile-accent"><RadarIcon size={16} /></span>
+          <div style={{ flex: 1 }}>
+            <div className="modal-title">คะแนนสะสม & ทักษะ</div>
+            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>ภาพรวมความถนัดแยกตามหมวดวิชา</div>
+          </div>
+          <button type="button" className="btn btn-ghost btn-icon btn-sm" onClick={onClose} aria-label="ปิด"><X size={16} /></button>
         </div>
-        
-        <div style={{ width: '100%', height: '260px', margin: '0 auto' }}>
+
+        <div style={{ width: '100%', height: 280, padding: '0 0.5rem' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={data} margin={{ top: 10, right: 15, bottom: 10, left: 15 }}>
-              <defs>
-                <linearGradient id="chart24-fill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.5} />
-                  <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.08} />
-                </linearGradient>
-                <filter id="chart24-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="6" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
-              <Tooltip 
-                contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border-color)', borderRadius: '8px', boxShadow: 'var(--shadow-md)' }}
+            <RadarChart data={data} margin={{ top: 16, right: 28, bottom: 8, left: 28 }}>
+              <Tooltip
+                contentStyle={{ background: 'var(--surface)', border: 'none', borderRadius: 8, boxShadow: 'var(--shadow-popover)', fontSize: 12 }}
                 itemStyle={{ color: 'var(--accent)', fontWeight: 600 }}
-                labelStyle={{ color: 'var(--text)', fontWeight: 500, marginBottom: '0.25rem' }}
+                labelStyle={{ color: 'var(--text)', fontWeight: 500 }}
               />
-              <PolarAngleAxis dataKey="skill" tick={{ fill: 'var(--text-muted)', fontSize: 12, fontWeight: 500 }} />
-              <PolarGrid stroke="var(--border-color)" strokeDasharray="3 3" />
+              <PolarGrid stroke="var(--border-color)" />
+              <PolarAngleAxis dataKey="skill" tick={{ fill: 'var(--text-muted)', fontSize: 11, fontWeight: 500 }} />
               <Radar
-                name="Proficiency"
+                name="คะแนน"
                 dataKey="score"
-                fill="url(#chart24-fill)"
+                fill="var(--accent)"
+                fillOpacity={0.18}
                 stroke="var(--accent)"
-                strokeWidth={2}
-                filter="url(#chart24-glow)"
-                dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
-                activeDot={{ r: 6, fill: "var(--accent)", strokeWidth: 0 }}
+                strokeWidth={1.75}
+                dot={{ r: 3, fill: "var(--accent)", strokeWidth: 0 }}
+                activeDot={{ r: 5, fill: "var(--accent)", strokeWidth: 0 }}
               />
             </RadarChart>
           </ResponsiveContainer>
+        </div>
+
+        <div className="modal-footer" style={{ justifyContent: 'flex-start', flexWrap: 'wrap', gap: '0.4rem' }}>
+          {top.length === 0
+            ? <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>ทำข้อสอบให้ครบชุดเพื่อเริ่มสะสมคะแนน</span>
+            : <>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginRight: 4 }}>ถนัดที่สุด</span>
+                {top.map(d => <span key={d.skill} className="badge badge-accent">{d.skill}</span>)}
+              </>}
         </div>
       </div>
     </div>

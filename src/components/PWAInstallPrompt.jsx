@@ -88,8 +88,8 @@ export default function PWAInstallPrompt() {
             width: 'calc(100% - 2.5rem)',
             background: 'var(--surface)',
             border: '1px solid var(--border-color)',
-            borderRadius: '16px',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(134, 59, 255, 0.2)',
+            borderRadius: '12px',
+            boxShadow: 'var(--shadow-popover)',
             padding: '1rem 1.15rem',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
@@ -100,13 +100,13 @@ export default function PWAInstallPrompt() {
               width: '44px',
               height: '44px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, var(--accent) 0%, #a855f7 100%)',
+              background: 'linear-gradient(135deg, #7b5cff 0%, #5a36e0 100%)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: '0 4px 14px rgba(134, 59, 255, 0.4)'
+              boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.15)'
             }}>
               <Smartphone size={22} />
             </div>
@@ -194,7 +194,7 @@ export default function PWAInstallPrompt() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.65)',
+            background: 'rgba(20, 18, 15, 0.4)',
             backdropFilter: 'blur(4px)',
             zIndex: 10000,
             display: 'flex',
@@ -210,7 +210,7 @@ export default function PWAInstallPrompt() {
               maxWidth: '380px',
               width: '100%',
               padding: '1.75rem 1.5rem',
-              borderRadius: '16px',
+              borderRadius: '12px',
               textAlign: 'center'
             }}
             onClick={(e) => e.stopPropagation()}

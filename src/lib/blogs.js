@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import examPreferencesBlog from '../data/blog-exam-preferences.json';
+import uiRedesignBlog from '../data/blog-ui-redesign.json';
 
 export const BLOG_CATEGORIES = {
   all: { label: 'ทั้งหมด', color: 'var(--accent)', bg: 'rgba(0, 112, 243, 0.1)' },
@@ -10,6 +11,7 @@ export const BLOG_CATEGORIES = {
 };
 
 export const INITIAL_BLOGS = [
+  uiRedesignBlog,
   examPreferencesBlog,
   {
     id: 'dw-advanced-60q-release',

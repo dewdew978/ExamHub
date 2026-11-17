@@ -45,14 +45,14 @@ import AdminBlogManager from './AdminBlogManager';
 
 // Issue types config matching Report.jsx & FAQ.jsx
 const ISSUE_TYPES_MAP = {
-  wrong_answer: { label: 'เฉลยผิด / คำตอบไม่ถูกต้อง', icon: AlertTriangle, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' },
-  wrong_translation: { label: 'คำแปล / ภาษาไทยผิดพลาด', icon: FileText, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
-  bug_system: { label: 'บั๊ก / ระบบแสดงผลผิดพลาด', icon: Bug, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
-  suggestion: { label: 'ข้อเสนอแนะ / ปรับปรุง', icon: Sparkles, color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)' },
+  wrong_answer: { label: 'เฉลยผิด / คำตอบไม่ถูกต้อง', icon: AlertTriangle, color: 'var(--error)', bg: 'rgba(239, 68, 68, 0.12)' },
+  wrong_translation: { label: 'คำแปล / ภาษาไทยผิดพลาด', icon: FileText, color: 'var(--warning)', bg: 'rgba(245, 158, 11, 0.12)' },
+  bug_system: { label: 'บั๊ก / ระบบแสดงผลผิดพลาด', icon: Bug, color: 'var(--info)', bg: 'rgba(59, 130, 246, 0.12)' },
+  suggestion: { label: 'ข้อเสนอแนะ / ปรับปรุง', icon: Sparkles, color: 'var(--success)', bg: 'rgba(16, 185, 129, 0.12)' },
   request_exam: { label: 'ขอเพิ่มวิชา / ข้อสอบใหม่ (Needs)', icon: BookOpen, color: '#0070f3', bg: 'rgba(0, 112, 243, 0.12)' },
-  suggest_feature: { label: 'เสนอแนะฟีเจอร์ใหม่ (Needs)', icon: Sparkles, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
-  report_bug: { label: 'แจ้งปัญหา / บั๊ก (Needs)', icon: Bug, color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' },
-  general_feedback: { label: 'ข้อเสนอแนะทั่วไป (Needs)', icon: HelpCircle, color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)' },
+  suggest_feature: { label: 'เสนอแนะฟีเจอร์ใหม่ (Needs)', icon: Sparkles, color: 'var(--warning)', bg: 'rgba(245, 158, 11, 0.12)' },
+  report_bug: { label: 'แจ้งปัญหา / บั๊ก (Needs)', icon: Bug, color: 'var(--error)', bg: 'rgba(239, 68, 68, 0.12)' },
+  general_feedback: { label: 'ข้อเสนอแนะทั่วไป (Needs)', icon: HelpCircle, color: 'var(--success)', bg: 'rgba(16, 185, 129, 0.12)' },
   other: { label: 'อื่นๆ', icon: HelpCircle, color: '#888888', bg: 'rgba(136, 136, 136, 0.12)' }
 };
 
@@ -60,21 +60,21 @@ const ISSUE_TYPES_MAP = {
 const STATUS_CONFIG = {
   pending: {
     label: 'รอตรวจสอบ',
-    color: '#f59e0b',
+    color: 'var(--warning)',
     bg: 'rgba(245, 158, 11, 0.12)',
     border: 'rgba(245, 158, 11, 0.3)',
     icon: Clock
   },
   investigating: {
     label: 'กำลังตรวจ',
-    color: '#3b82f6',
+    color: 'var(--info)',
     bg: 'rgba(59, 130, 246, 0.12)',
     border: 'rgba(59, 130, 246, 0.3)',
     icon: Eye
   },
   resolved: {
     label: 'แก้ไขแล้ว',
-    color: '#10b981',
+    color: 'var(--success)',
     bg: 'rgba(16, 185, 129, 0.12)',
     border: 'rgba(16, 185, 129, 0.3)',
     icon: CheckCircle2
@@ -841,7 +841,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
     }}>
       {/* Toast Notification */}
       {examError && (
-        <div role="alert" style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 9998, maxWidth: 'min(32rem, 90vw)', padding: '0.85rem 1rem', background: 'var(--surface)', border: '1px solid #ef4444', borderRadius: '8px', color: '#ef4444' }}>
+        <div role="alert" style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 9998, maxWidth: 'min(32rem, 90vw)', padding: '0.85rem 1rem', background: 'var(--surface)', border: '1px solid #ef4444', borderRadius: '8px', color: 'var(--error)' }}>
           {examError}
           <button type="button" onClick={() => setExamError('')} aria-label="ปิดข้อความผิดพลาด" style={{ marginLeft: '0.5rem', background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}><X size={14} /></button>
         </div>
@@ -877,11 +877,11 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
         width: '260px',
         flexShrink: 0,
         borderRight: '1px solid var(--border-color)',
-        background: 'var(--surface)',
+        background: 'var(--sidebar-bg)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: '1rem',
+        padding: '0.75rem',
         position: 'sticky',
         top: 0,
         height: '100vh',
@@ -895,12 +895,12 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+                background: 'linear-gradient(135deg, #7b5cff 0%, #5a36e0 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: 'white',
-                boxShadow: '0 2px 8px rgba(99, 102, 241, 0.4)'
+                boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.15), 0 1px 2px rgba(60,30,180,0.3)'
               }}>
                 <Zap size={18} />
               </div>
@@ -923,10 +923,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
               padding: '0.2rem 0.5rem',
               borderRadius: '999px',
               background: 'rgba(16, 185, 129, 0.12)',
-              color: '#10b981',
+              color: 'var(--success)',
               border: '1px solid rgba(16, 185, 129, 0.25)'
             }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success)', display: 'inline-block' }} />
               <span>LIVE</span>
             </div>
           </div>
@@ -978,17 +978,17 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.75rem',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: '8px',
+                  padding: '0.45rem 0.6rem',
+                  borderRadius: '6px',
                   border: 'none',
-                  background: currentNav === 'overview' ? 'var(--surface-hover)' : 'transparent',
+                  background: currentNav === 'overview' ? 'var(--surface)' : 'transparent',
                   color: currentNav === 'overview' ? 'var(--text)' : 'var(--text-muted)',
-                  fontWeight: currentNav === 'overview' ? 600 : 400,
+                  fontWeight: 500,
                   fontSize: '0.875rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
-                  borderLeft: currentNav === 'overview' ? '3px solid var(--accent)' : '3px solid transparent'
+                  boxShadow: currentNav === 'overview' ? '0 0 0 1px var(--border-color), var(--shadow-xs)' : 'none'
                 }}
               >
                 <Activity size={16} color={currentNav === 'overview' ? 'var(--accent)' : 'currentColor'} />
@@ -1005,17 +1005,17 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.75rem',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: '8px',
+                  padding: '0.45rem 0.6rem',
+                  borderRadius: '6px',
                   border: 'none',
-                  background: currentNav === 'exams' ? 'var(--surface-hover)' : 'transparent',
+                  background: currentNav === 'exams' ? 'var(--surface)' : 'transparent',
                   color: currentNav === 'exams' ? 'var(--text)' : 'var(--text-muted)',
-                  fontWeight: currentNav === 'exams' ? 600 : 400,
+                  fontWeight: 500,
                   fontSize: '0.875rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
-                  borderLeft: currentNav === 'exams' ? '3px solid var(--accent)' : '3px solid transparent'
+                  boxShadow: currentNav === 'exams' ? '0 0 0 1px var(--border-color), var(--shadow-xs)' : 'none'
                 }}
               >
                 <BookOpen size={16} color={currentNav === 'exams' ? 'var(--accent)' : 'currentColor'} />
@@ -1042,20 +1042,20 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.75rem',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: '8px',
+                  padding: '0.45rem 0.6rem',
+                  borderRadius: '6px',
                   border: 'none',
-                  background: currentNav === 'reports' ? 'var(--surface-hover)' : 'transparent',
+                  background: currentNav === 'reports' ? 'var(--surface)' : 'transparent',
                   color: currentNav === 'reports' ? 'var(--text)' : 'var(--text-muted)',
-                  fontWeight: currentNav === 'reports' ? 600 : 400,
+                  fontWeight: 500,
                   fontSize: '0.875rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
-                  borderLeft: currentNav === 'reports' ? '3px solid #f59e0b' : '3px solid transparent'
+                  boxShadow: currentNav === 'reports' ? '0 0 0 1px var(--border-color), var(--shadow-xs)' : 'none'
                 }}
               >
-                <Inbox size={16} color={currentNav === 'reports' ? '#f59e0b' : 'currentColor'} />
+                <Inbox size={16} color={currentNav === 'reports' ? 'var(--warning)' : 'currentColor'} />
                 <span style={{ flex: 1 }}>กล่องรีพอร์ต (Inbox)</span>
                 {reportStats.pending > 0 ? (
                   <span style={{
@@ -1063,7 +1063,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     fontWeight: 700,
                     padding: '0.1rem 0.45rem',
                     borderRadius: '999px',
-                    background: '#f59e0b',
+                    background: 'var(--warning)',
                     color: 'white'
                   }}>
                     {reportStats.pending}
@@ -1083,17 +1083,17 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.75rem',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: '8px',
+                  padding: '0.45rem 0.6rem',
+                  borderRadius: '6px',
                   border: 'none',
-                  background: currentNav === 'scores' ? 'var(--surface-hover)' : 'transparent',
+                  background: currentNav === 'scores' ? 'var(--surface)' : 'transparent',
                   color: currentNav === 'scores' ? 'var(--text)' : 'var(--text-muted)',
-                  fontWeight: currentNav === 'scores' ? 600 : 400,
+                  fontWeight: 500,
                   fontSize: '0.875rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
-                  borderLeft: currentNav === 'scores' ? '3px solid var(--accent)' : '3px solid transparent'
+                  boxShadow: currentNav === 'scores' ? '0 0 0 1px var(--border-color), var(--shadow-xs)' : 'none'
                 }}
               >
                 <BarChart3 size={16} color={currentNav === 'scores' ? 'var(--accent)' : 'currentColor'} />
@@ -1110,20 +1110,20 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.75rem',
-                  padding: '0.6rem 0.75rem',
-                  borderRadius: '8px',
+                  padding: '0.45rem 0.6rem',
+                  borderRadius: '6px',
                   border: 'none',
-                  background: currentNav === 'blogs' ? 'var(--surface-hover)' : 'transparent',
+                  background: currentNav === 'blogs' ? 'var(--surface)' : 'transparent',
                   color: currentNav === 'blogs' ? 'var(--text)' : 'var(--text-muted)',
-                  fontWeight: currentNav === 'blogs' ? 600 : 400,
+                  fontWeight: 500,
                   fontSize: '0.875rem',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
-                  borderLeft: currentNav === 'blogs' ? '3px solid #8b5cf6' : '3px solid transparent'
+                  boxShadow: currentNav === 'blogs' ? '0 0 0 1px var(--border-color), var(--shadow-xs)' : 'none'
                 }}
               >
-                <Sparkles size={16} color={currentNav === 'blogs' ? '#8b5cf6' : 'currentColor'} />
+                <Sparkles size={16} color={currentNav === 'blogs' ? 'var(--accent)' : 'currentColor'} />
                 <span style={{ flex: 1 }}>ข่าวสาร & บล็อก (Blog)</span>
               </button>
             </nav>
@@ -1173,7 +1173,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
               <div style={{ fontSize: '0.8125rem', fontWeight: 600, truncate: true, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user?.email || 'Admin'}
               </div>
-              <div style={{ fontSize: '0.6875rem', color: '#10b981', fontWeight: 600 }}>
+              <div style={{ fontSize: '0.6875rem', color: 'var(--success)', fontWeight: 600 }}>
                 Super Admin
               </div>
             </div>
@@ -1297,10 +1297,10 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     </h1>
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
-                      fontSize: '0.6875rem', fontWeight: 600, color: '#10b981',
+                      fontSize: '0.6875rem', fontWeight: 600, color: 'var(--success)',
                       background: 'rgba(16,185,129,0.1)', padding: '0.15rem 0.5rem', borderRadius: '999px'
                     }}>
-                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10b981' }} />
+                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--success)' }} />
                       Supabase Sync
                     </span>
                   </div>
@@ -1343,23 +1343,23 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     transition: 'all 0.2s ease',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = '#6366f1'}
+                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--border-strong)'}
                   onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                 >
                   <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: '#6366f1', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '1rem', boxShadow: '0 2px 8px rgba(99,102,241,0.3)'
+                    width: '32px', height: '32px', borderRadius: '8px',
+                    background: 'color-mix(in srgb, #6366f1 12%, var(--surface))', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    marginBottom: '0.85rem', boxShadow: 'none'
                   }}>
                     <BookOpen size={18} />
                   </div>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                     ชุดข้อสอบในระบบ (Catalog)
                   </div>
-                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', letterSpacing: '-0.5px' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 600, margin: '0.2rem 0', letterSpacing: '-0.02em' }}>
                     {subjects.length} <span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>วิชา</span>
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <CheckCircle2 size={13} /> 100% พร้อมใช้งาน
                   </div>
                 </div>
@@ -1376,20 +1376,20 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     transition: 'all 0.2s ease',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = '#10b981'}
+                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--border-strong)'}
                   onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                 >
                   <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: '#10b981', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '1rem', boxShadow: '0 2px 8px rgba(16,185,129,0.3)'
+                    width: '32px', height: '32px', borderRadius: '8px',
+                    background: 'color-mix(in srgb, #10b981 12%, var(--surface))', color: 'var(--success)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    marginBottom: '0.85rem', boxShadow: 'none'
                   }}>
                     <Layers size={18} />
                   </div>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                     คลังคำถามทั้งหมด (Question Bank)
                   </div>
-                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', letterSpacing: '-0.5px' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 600, margin: '0.2rem 0', letterSpacing: '-0.02em' }}>
                     {totalQuestionsSum} <span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>ข้อ</span>
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -1409,20 +1409,20 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     transition: 'all 0.2s ease',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = '#f59e0b'}
+                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--border-strong)'}
                   onMouseOut={(e) => e.currentTarget.style.borderColor = reportStats.pending > 0 ? 'rgba(245, 158, 11, 0.4)' : 'var(--border-color)'}
                 >
                   <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: '#f59e0b', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '1rem', boxShadow: '0 2px 8px rgba(245,158,11,0.3)'
+                    width: '32px', height: '32px', borderRadius: '8px',
+                    background: 'color-mix(in srgb, #f59e0b 12%, var(--surface))', color: 'var(--warning)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    marginBottom: '0.85rem', boxShadow: 'none'
                   }}>
                     <Clock size={18} />
                   </div>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                     ปัญหารอตรวจสอบ (Pending Backlog)
                   </div>
-                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', color: reportStats.pending > 0 ? '#f59e0b' : 'inherit', letterSpacing: '-0.5px' }}>
+                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', color: reportStats.pending > 0 ? 'var(--warning)' : 'inherit', letterSpacing: '-0.5px' }}>
                     {reportStats.pending} <span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>เรื่อง</span>
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -1442,23 +1442,23 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     transition: 'all 0.2s ease',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = '#3b82f6'}
+                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--border-strong)'}
                   onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                 >
                   <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: '#3b82f6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '1rem', boxShadow: '0 2px 8px rgba(59,130,246,0.3)'
+                    width: '32px', height: '32px', borderRadius: '8px',
+                    background: 'color-mix(in srgb, #3b82f6 12%, var(--surface))', color: 'var(--info)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    marginBottom: '0.85rem', boxShadow: 'none'
                   }}>
                     <BarChart3 size={18} />
                   </div>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                     ประวัติการทำข้อสอบ (Runs Log)
                   </div>
-                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', letterSpacing: '-0.5px' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 600, margin: '0.2rem 0', letterSpacing: '-0.02em' }}>
                     {userScoreLogs.length}+ <span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>ครั้ง</span>
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#10b981' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--success)' }}>
                     ซิงค์กับ Supabase user_scores
                   </div>
                 </div>
@@ -1475,23 +1475,23 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     transition: 'all 0.2s ease',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                   }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = '#8b5cf6'}
+                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--border-strong)'}
                   onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                 >
                   <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: '#8b5cf6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '1rem', boxShadow: '0 2px 8px rgba(139,92,246,0.3)'
+                    width: '32px', height: '32px', borderRadius: '8px',
+                    background: 'color-mix(in srgb, #8b5cf6 12%, var(--surface))', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    marginBottom: '0.85rem', boxShadow: 'none'
                   }}>
                     <Sparkles size={18} />
                   </div>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                     ข่าวสาร & บันทึกระบบ (Changelog)
                   </div>
-                  <div style={{ fontSize: '1.875rem', fontWeight: 700, margin: '0.25rem 0', letterSpacing: '-0.5px' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 600, margin: '0.2rem 0', letterSpacing: '-0.02em' }}>
                     4+ <span style={{ fontSize: '0.875rem', fontWeight: 400, color: 'var(--text-muted)' }}>โพสต์</span>
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#8b5cf6' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>
                     จัดการไทม์ไลน์ข่าวสาร →
                   </div>
                 </div>
@@ -1525,7 +1525,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
 
                   {reports.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '2.5rem 1rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                      <CheckCircle2 size={32} style={{ color: '#10b981', margin: '0 auto 0.5rem', opacity: 0.8 }} />
+                      <CheckCircle2 size={32} style={{ color: 'var(--success)', margin: '0 auto 0.5rem', opacity: 0.8 }} />
                       <div>ไม่มีรายงานปัญหาค้างในระบบ</div>
                     </div>
                   ) : (
@@ -1715,16 +1715,16 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                           padding: '0.45rem 0.85rem', borderRadius: '6px',
                           border: examYearFilter === '2' ? '1px solid #10b981' : '1px solid var(--border-color)',
                           background: examYearFilter === '2' ? 'rgba(16, 185, 129, 0.12)' : 'transparent',
-                          color: examYearFilter === '2' ? '#10b981' : 'var(--text)',
+                          color: examYearFilter === '2' ? 'var(--success)' : 'var(--text)',
                           fontSize: '0.8125rem', fontWeight: examYearFilter === '2' ? 600 : 500,
                           cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem'
                         }}
                       >
-                        <GraduationCap size={14} color={examYearFilter === '2' ? '#10b981' : 'var(--text-muted)'} />
+                        <GraduationCap size={14} color={examYearFilter === '2' ? 'var(--success)' : 'var(--text-muted)'} />
                         <span>ชั้นปีที่ 2</span>
                         <span style={{
                           fontSize: '0.6875rem', padding: '0.05rem 0.4rem', borderRadius: '10px',
-                          background: examYearFilter === '2' ? '#10b981' : 'var(--surface-hover)',
+                          background: examYearFilter === '2' ? 'var(--success)' : 'var(--surface-hover)',
                           color: examYearFilter === '2' ? 'white' : 'var(--text-muted)'
                         }}>
                           {yearStats['2'] || 0}
@@ -1737,16 +1737,16 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                           padding: '0.45rem 0.85rem', borderRadius: '6px',
                           border: examYearFilter === '3' ? '1px solid #6366f1' : '1px solid var(--border-color)',
                           background: examYearFilter === '3' ? 'rgba(99, 102, 241, 0.12)' : 'transparent',
-                          color: examYearFilter === '3' ? '#6366f1' : 'var(--text)',
+                          color: examYearFilter === '3' ? 'var(--accent)' : 'var(--text)',
                           fontSize: '0.8125rem', fontWeight: examYearFilter === '3' ? 600 : 500,
                           cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem'
                         }}
                       >
-                        <GraduationCap size={14} color={examYearFilter === '3' ? '#6366f1' : 'var(--text-muted)'} />
+                        <GraduationCap size={14} color={examYearFilter === '3' ? 'var(--accent)' : 'var(--text-muted)'} />
                         <span>ชั้นปีที่ 3</span>
                         <span style={{
                           fontSize: '0.6875rem', padding: '0.05rem 0.4rem', borderRadius: '10px',
-                          background: examYearFilter === '3' ? '#6366f1' : 'var(--surface-hover)',
+                          background: examYearFilter === '3' ? 'var(--accent)' : 'var(--surface-hover)',
                           color: examYearFilter === '3' ? 'white' : 'var(--text-muted)'
                         }}>
                           {yearStats['3'] || 0}
@@ -1798,7 +1798,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                       {examsGroupedByYear.map(group => {
                         const isYear2 = group.year === '2';
-                        const themeColor = isYear2 ? '#10b981' : '#6366f1';
+                        const themeColor = isYear2 ? 'var(--success)' : 'var(--accent)';
                         const themeBg = isYear2 ? 'rgba(16, 185, 129, 0.08)' : 'rgba(99, 102, 241, 0.08)';
                         const themeBorder = isYear2 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(99, 102, 241, 0.25)';
 
@@ -2057,7 +2057,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                             <div style={{ marginTop: '0.45rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', fontSize: '0.78rem' }}>
                               {loadedExamData.primarySource ? (
                                 <>
-                                  <span style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
+                                  <span style={{ color: 'var(--success)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
                                     <BookOpen size={12} />
                                     <span>{loadedExamData.primarySource}</span>
                                   </span>
@@ -2069,7 +2069,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                                       padding: '0.1rem 0.4rem', 
                                       borderRadius: '999px', 
                                       background: 'rgba(16, 185, 129, 0.12)', 
-                                      color: '#10b981', 
+                                      color: 'var(--success)', 
                                       fontSize: '0.6875rem',
                                       fontWeight: 600
                                     }}>
@@ -2093,7 +2093,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                         onClick={openRefModal}
                                   style={{
                                     background: 'rgba(16, 185, 129, 0.1)', border: '1px dashed #10b981',
-                                    color: '#10b981', borderRadius: '6px', padding: '0.2rem 0.5rem',
+                                    color: 'var(--success)', borderRadius: '6px', padding: '0.2rem 0.5rem',
                                     fontSize: '0.75rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.25rem'
                                   }}
                                 >
@@ -2212,7 +2212,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                                       className="btn btn-outline"
                                       disabled={savingExam}
                                       onClick={() => handleDeleteQuestion(displayIdx)}
-                                      style={{ padding: '0.25rem 0.45rem', fontSize: '0.75rem', color: '#ef4444' }}
+                                      style={{ padding: '0.25rem 0.45rem', fontSize: '0.75rem', color: 'var(--error)' }}
                                       title="ลบข้อนี้"
                                     >
                                       <Trash2 size={13} />
@@ -2241,7 +2241,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                                           gap: '0.5rem'
                                         }}
                                       >
-                                        <span style={{ fontWeight: 700, color: isCorrect ? '#10b981' : 'var(--text-muted)' }}>
+                                        <span style={{ fontWeight: 700, color: isCorrect ? 'var(--success)' : 'var(--text-muted)' }}>
                                           {String.fromCharCode(65 + cIdx)}.
                                         </span>
                                         <span style={{ flex: 1, fontWeight: isCorrect ? 600 : 400 }}>
@@ -2470,7 +2470,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                             <button 
                               className="btn btn-outline"
                               onClick={() => setDeleteConfirmReport(rep)}
-                              style={{ fontSize: '0.75rem', padding: '0.3rem 0.5rem', color: '#ef4444' }}
+                              style={{ fontSize: '0.75rem', padding: '0.3rem 0.5rem', color: 'var(--error)' }}
                             >
                               <Trash2 size={12} />
                             </button>
@@ -2561,7 +2561,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                         <span style={{ fontWeight: 500 }}>
                           {log.exam_id}
                         </span>
-                        <span style={{ fontWeight: 700, color: '#10b981' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--success)' }}>
                           {log.score} คะแนน
                         </span>
                         <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
@@ -2629,7 +2629,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
             <div style={{ padding: '1.25rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
                 <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                  โจทย์คำถาม (รองรับ $KaTeX Math$) <span style={{ color: '#ef4444' }}>*</span>
+                  โจทย์คำถาม (รองรับ $KaTeX Math$) <span style={{ color: 'var(--error)' }}>*</span>
                 </label>
                 <textarea
                   rows={3}
@@ -2648,7 +2648,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                   <label style={{ fontSize: '0.8125rem', fontWeight: 600 }}>
-                    ตัวเลือก (Choices) — เลือกคำตอบที่ถูกต้อง <span style={{ color: '#ef4444' }}>*</span>
+                    ตัวเลือก (Choices) — เลือกคำตอบที่ถูกต้อง <span style={{ color: 'var(--error)' }}>*</span>
                   </label>
                   <button
                     type="button"
@@ -2682,9 +2682,9 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                               : idx;
                             setQuestionFormData({ ...questionFormData, answer });
                           }}
-                          style={{ cursor: 'pointer', accentColor: '#10b981' }}
+                          style={{ cursor: 'pointer', accentColor: 'var(--success)' }}
                         />
-                        <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: isSelected ? '#10b981' : 'var(--text)' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.8125rem', color: isSelected ? 'var(--success)' : 'var(--text)' }}>
                           {String.fromCharCode(65 + idx)}.
                         </span>
                         <input 
@@ -2712,7 +2712,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                                 : questionFormData.answer === idx ? 0 : shiftAnswer(questionFormData.answer);
                               setQuestionFormData({ ...questionFormData, choices: newC, answer: newA });
                             }}
-                            style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }}
+                            style={{ background: 'transparent', border: 'none', color: 'var(--error)', cursor: 'pointer' }}
                           >
                             <Trash2 size={13} />
                           </button>
@@ -2753,7 +2753,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   {questionFormData.choices.map((c, idx) => (
-                    <div key={idx} style={{ color: includesChoice(questionFormData.answer, idx) ? '#10b981' : 'var(--text)', fontWeight: includesChoice(questionFormData.answer, idx) ? 600 : 400 }}>
+                    <div key={idx} style={{ color: includesChoice(questionFormData.answer, idx) ? 'var(--success)' : 'var(--text)', fontWeight: includesChoice(questionFormData.answer, idx) ? 600 : 400 }}>
                       {String.fromCharCode(65 + idx)}. {c ? renderTextWithMath(c) : '(ว่าง)'} {includesChoice(questionFormData.answer, idx) && '(เฉลย)'}
                     </div>
                   ))}
@@ -2804,7 +2804,7 @@ export default function AdminDashboard({ subjects = [], user = null, onBack, onC
               </p>
 
               {importError && (
-                <div style={{ padding: '0.5rem 0.75rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '6px', fontSize: '0.8125rem' }}>
+                <div style={{ padding: '0.5rem 0.75rem', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--error)', borderRadius: '6px', fontSize: '0.8125rem' }}>
                   {importError}
                 </div>
               )}
@@ -2865,7 +2865,7 @@ D. ตัวเลือก 4
             <form onSubmit={handleCreateExam} style={{ padding: '1.25rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
               <div>
                 <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
-                  รหัส ID (เช่น ai_intro_30q) <span style={{ color: '#ef4444' }}>*</span>
+                  รหัส ID (เช่น ai_intro_30q) <span style={{ color: 'var(--error)' }}>*</span>
                 </label>
                 <input 
                   type="text"
@@ -2879,7 +2879,7 @@ D. ตัวเลือก 4
 
               <div>
                 <label style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
-                  ชื่อชุดข้อสอบ <span style={{ color: '#ef4444' }}>*</span>
+                  ชื่อชุดข้อสอบ <span style={{ color: 'var(--error)' }}>*</span>
                 </label>
                 <input 
                   type="text"
@@ -3119,7 +3119,7 @@ D. ตัวเลือก 4
                             const updated = refFormData.references.filter((_, i) => i !== idx);
                             setRefFormData({ ...refFormData, references: updated });
                           }}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem' }}
+                          style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem' }}
                         >
                           <Trash2 size={13} /> ลบ
                         </button>
@@ -3203,7 +3203,7 @@ D. ตัวเลือก 4
                 lineHeight: 1.5
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                  <span style={{ color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <span style={{ color: 'var(--success)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                     <Shield size={13} />
                     <span>การเชื่อมต่อ Supabase</span>
                   </span>
@@ -3234,7 +3234,7 @@ D. ตัวเลือก 4
                   className="btn btn-primary" 
                   onClick={handleSaveReferences}
                   disabled={savingExam}
-                  style={{ fontSize: '0.8125rem', background: '#10b981', borderColor: '#10b981' }}
+                  style={{ fontSize: '0.8125rem', background: 'var(--success)', borderColor: 'var(--success)' }}
                 >
                   {savingExam ? (
                     <span>กำลังบันทึก...</span>
@@ -3318,7 +3318,7 @@ D. ตัวเลือก 4
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
               <button className="btn btn-outline" onClick={() => setDeleteConfirmReport(null)}>ยกเลิก</button>
-              <button className="btn btn-primary" style={{ background: '#ef4444', borderColor: '#ef4444', color: 'white' }} onClick={() => handleDeleteReport(deleteConfirmReport.id)}>
+              <button className="btn btn-primary" style={{ background: 'var(--error)', borderColor: 'var(--error)', color: 'white' }} onClick={() => handleDeleteReport(deleteConfirmReport.id)}>
                 ยืนยันลบ
               </button>
             </div>

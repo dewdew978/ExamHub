@@ -20,8 +20,10 @@ const UserSettings = lazy(() => import('./components/UserSettings'));
 const TermsOfService = lazy(() => import('./components/TermsOfService'));
 const Blog = lazy(() => import('./components/Blog'));
 import PWAInstallPrompt from './components/PWAInstallPrompt';
-import UserAvatar from './components/UserAvatar';
-import { BookOpen, Star, Sun, Moon, CalendarDays, LogIn, LogOut, History as HistoryIcon, ChevronDown, AlertTriangle, Menu, X, ShieldAlert, ShieldCheck, User, Sparkles } from 'lucide-react';
+import { Sun, Moon, LogIn, LogOut, History as HistoryIcon, AlertTriangle, Menu, ShieldAlert, User, ChevronRight, Search } from 'lucide-react';
+import Sidebar from './components/shell/Sidebar';
+import CommandMenu from './components/shell/CommandMenu';
+import GateState from './components/shell/GateState';
 import { supabase, checkIsAdmin } from './lib/supabase';
 import { getVisibleSubjects, isAdminPractice } from './lib/adminPractice';
 import { loadExamCatalog, loadExam } from './lib/examRepository';
@@ -71,8 +73,8 @@ function App() {
     }
     return 'landing';
   });
-  const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showCommand, setShowCommand] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [examProgressData, setExamProgressData] = useState(null);
@@ -126,6 +128,18 @@ function App() {
     const id = setTimeout(prefetch, 2500);
     return () => clearTimeout(id);
   }, [currentView]);
+
+  // ⌘K / Ctrl+K opens the quick switcher anywhere in the app
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setShowCommand(open => !open);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Sync browser URL bar with current view
   useEffect(() => {
@@ -365,7 +379,6 @@ function App() {
   const openReport = (data = null) => {
     setReportInitialData(data);
     setCurrentView('report');
-    setShowMenu(false);
     setShowMobileMenu(false);
   };
 
@@ -425,13 +438,7 @@ function App() {
   });
 
   if (loading) {
-    return (
-      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', gap: '1rem' }}>
-        <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid var(--border)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>กำลังโหลด EXETIA...</p>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   // Standalone Landing Page before entering Home
@@ -516,8 +523,7 @@ function App() {
   // Hide header on login view
   if (currentView === 'login') {
     return (
-      <div className="app-container">
-        <main className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+ <Suspense fallback={<PageLoader />}>
           <Login 
             authRequiredMessage={authRequiredMessage}
             onLogin={(user) => {
@@ -530,16 +536,14 @@ function App() {
               setCurrentView(user ? 'home' : 'landing');
             }} // Guest mode / Back to Landing
           />
-        </main>
-      </div>
+        </Suspense>
     );
   }
 
   // Standalone Reset Password Page
   if (currentView === 'reset-password') {
     return (
-      <div className="app-container">
-        <main className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+ <Suspense fallback={<PageLoader />}>
           <ResetPassword 
             onSuccess={(updatedUser) => {
               if (updatedUser) setUser(updatedUser);
@@ -547,8 +551,7 @@ function App() {
             }}
             onBackToLogin={() => setCurrentView('login')}
           />
-        </main>
-      </div>
+        </Suspense>
     );
   }
 
@@ -564,826 +567,69 @@ function App() {
     );
   }
 
+  const viewTitles = {
+    home: 'คลังข้อสอบ', schedule: 'ตารางสอบ', history: 'ประวัติคะแนน', report: 'แจ้งข้อสอบผิด / ปัญหา',
+    settings: 'ข้อมูลส่วนตัว & ตั้งค่า', admin_reports: 'แดชบอร์ดผู้ดูแล',
+  };
+  const crumbs = ['examIntro', 'exam'].includes(currentView) && selectedSubject
+    ? [{ label: 'คลังข้อสอบ', onClick: goHome }, { label: selectedSubject.name }]
+    : [{ label: viewTitles[currentView] || 'EXETIA' }];
+
   return (
-    <div className="app-container">
-      {/* Floating / Rounded Island Navbar for App Views */}
-      <div className="app-navbar-wrapper">
-        <header className="app-navbar">
-          <div className="app-navbar-inner">
-            {/* Left: Brand Logo */}
-            <div className="app-brand-col">
-              <a href="#" className="app-brand" onClick={(e) => { e.preventDefault(); goHome(); }}>
-                <div className="app-brand-icon">
-                  <BookOpen size={19} />
-                </div>
-                <span>EXETIA</span>
-              </a>
-            </div>
+    <div className={`shell${showMobileMenu ? ' nav-open' : ''}`}>
+      <Sidebar
+        currentView={currentView}
+        user={user}
+        isAdmin={isAdmin}
+        theme={theme}
+        totalScore={totalScore}
+        examCount={subjects.length}
+        onNavigate={(view) => (view === 'home' ? goHome() : setCurrentView(view))}
+        onOpenChart={() => setShowChart(true)}
+        onOpenReport={() => openReport()}
+        onOpenSearch={() => setShowCommand(true)}
+        onToggleTheme={toggleTheme}
+        onLogout={() => setShowLogoutConfirm(true)}
+        onLogin={() => setCurrentView('login')}
+        onClose={showMobileMenu ? () => setShowMobileMenu(false) : undefined}
+      />
+      <div className="sidebar-overlay" onClick={() => setShowMobileMenu(false)} />
 
-            {/* Center: Main Nav Links (คลังข้อสอบ, ตารางสอบ, ประวัติคะแนน, คำถามที่พบบ่อย) */}
-            <div className="app-nav-center">
-              <nav className="app-nav-links">
-                <button 
-                  className={`app-nav-link ${currentView === 'landing' ? 'active' : ''}`}
-                  onClick={() => setCurrentView('landing')}
-                >
-                  หน้าแรก
-                </button>
-                <button 
-                  className={`app-nav-link ${currentView === 'home' ? 'active' : ''}`}
-                  onClick={goHome}
-                >
-                  คลังข้อสอบ
-                </button>
-                <button 
-                  className={`app-nav-link ${currentView === 'blog' ? 'active' : ''}`}
-                  onClick={() => setCurrentView('blog')}
-                >
-                  ข่าวสาร & อัปเดต
-                </button>
-                <button 
-                  className={`app-nav-link ${currentView === 'faq' ? 'active' : ''}`}
-                  onClick={() => setCurrentView('faq')}
-                >
-                  คำถามที่พบบ่อย
-                </button>
-                <button 
-                  className={`app-nav-link ${currentView === 'about' ? 'active' : ''}`}
-                  onClick={() => setCurrentView('about')}
-                >
-                  เกี่ยวกับเรา
-                </button>
-              </nav>
-            </div>
-
-            {/* Right: Actions (Theme toggle, Profile/Menu, Auth) */}
-            <div className="app-nav-actions">
-              {/* Theme Toggle */}
-              <button 
-                className="btn btn-outline app-icon-btn" 
-                onClick={toggleTheme}
-                style={{ width: '40px', height: '40px', padding: 0 }}
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-              </button>
-
-              {/* User Dropdown / Menu */}
-              <div style={{ position: 'relative' }}>
-                <button 
-                  className={`btn ${['settings', 'schedule', 'history', 'report', 'admin_reports'].includes(currentView) ? 'btn-primary' : 'btn-outline'}`} 
-                  onClick={() => setShowMenu(!showMenu)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', borderRadius: '999px', height: '40px', padding: '0 0.9rem' }}
-                >
-                  {user ? <User size={15} /> : <Menu size={15} />}
-                  <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                    {user?.user_metadata?.nickname || (user ? 'โปรไฟล์' : 'เมนู')}
-                  </span>
-                  <ChevronDown size={13} />
-                </button>
-                
-                {showMenu && (
-                  <>
-                    <div 
-                      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 90 }} 
-                      onClick={() => setShowMenu(false)} 
-                    />
-                    <div 
-                      className="card animate-fade-in"
-                      style={{
-                        position: 'absolute',
-                        top: 'calc(100% + 8px)',
-                        right: 0,
-                        background: 'var(--surface)',
-                        border: '1px solid var(--border)',
-                        borderRadius: '16px',
-                        boxShadow: '0 12px 36px rgba(0,0,0,0.15)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        overflow: 'hidden',
-                        zIndex: 100,
-                        minWidth: '220px',
-                        backdropFilter: 'blur(16px)'
-                      }}
-                    >
-                      {/* 1. หน้าหลัก (Home) */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: currentView === 'home' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                          color: currentView === 'home' ? 'var(--accent)' : 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: '1px solid var(--border)',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          fontWeight: currentView === 'home' ? 600 : 400
-                        }}
-                        onClick={() => {
-                          goHome();
-                          setShowMenu(false);
-                        }}
-                        onMouseOver={(e) => {
-                          if (currentView !== 'home') e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          if (currentView !== 'home') e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <BookOpen size={14} color="var(--accent)" />
-                        <span>คลังข้อสอบ (หน้าหลัก)</span>
-                      </button>
-
-                      {/* 2. หน้าแนะนำ (Landing) */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: currentView === 'landing' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                          color: currentView === 'landing' ? 'var(--accent)' : 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: '1px solid var(--border)',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem'
-                        }}
-                        onClick={() => {
-                          setCurrentView('landing');
-                          setShowMenu(false);
-                        }}
-                        onMouseOver={(e) => {
-                          if (currentView !== 'landing') e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          if (currentView !== 'landing') e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <Sparkles size={14} color="var(--accent)" />
-                        <span>หน้าแนะนำ (Landing)</span>
-                      </button>
-
-                      {/* 2.1 ข่าวสาร & อัปเดต (Blog) */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: currentView === 'blog' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                          color: currentView === 'blog' ? 'var(--accent)' : 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: '1px solid var(--border)',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          fontWeight: currentView === 'blog' ? 600 : 400
-                        }}
-                        onClick={() => {
-                          setCurrentView('blog');
-                          setShowMenu(false);
-                        }}
-                        onMouseOver={(e) => {
-                          if (currentView !== 'blog') e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          if (currentView !== 'blog') e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <Sparkles size={14} color="#8b5cf6" />
-                        <span>ข่าวสาร & อัปเดต (Blog)</span>
-                      </button>
-
-                      {/* 3. ข้อมูลส่วนตัว & ตั้งค่า */}
-                      {user && (
-                        <button 
-                          style={{
-                            fontFamily: 'inherit',
-                            padding: '0.75rem 1rem',
-                            background: currentView === 'settings' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                            color: currentView === 'settings' ? 'var(--accent)' : 'var(--text)',
-                            border: 'none',
-                            textAlign: 'left',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            borderBottom: '1px solid var(--border)',
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                          }}
-                          onClick={() => {
-                            setCurrentView('settings');
-                            setShowMenu(false);
-                          }}
-                          onMouseOver={(e) => {
-                            if (currentView !== 'settings') e.currentTarget.style.background = 'var(--card)';
-                          }}
-                          onMouseOut={(e) => {
-                            if (currentView !== 'settings') e.currentTarget.style.background = 'transparent';
-                          }}
-                        >
-                          <User size={14} color="var(--accent)" />
-                          <span>ข้อมูลส่วนตัว & ตั้งค่า</span>
-                        </button>
-                      )}
-
-                      {/* 4. ตารางสอบ */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: currentView === 'schedule' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                          color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: '1px solid var(--border)',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          fontWeight: currentView === 'schedule' ? 600 : 400
-                        }}
-                        onClick={() => {
-                          setCurrentView('schedule');
-                          setShowMenu(false);
-                        }}
-                        onMouseOver={(e) => {
-                          if (currentView !== 'schedule') e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          if (currentView !== 'schedule') e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <CalendarDays size={14} color="var(--accent)" />
-                        <span>ตารางสอบ</span>
-                      </button>
-
-                      {/* 5. ประวัติคะแนน */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: currentView === 'history' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                          color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: '1px solid var(--border)',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          fontWeight: currentView === 'history' ? 600 : 400
-                        }}
-                        onClick={() => {
-                          setCurrentView('history');
-                          setShowMenu(false);
-                        }}
-                        onMouseOver={(e) => {
-                          if (currentView !== 'history') e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          if (currentView !== 'history') e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <HistoryIcon size={14} color="var(--accent)" />
-                        <span>ประวัติคะแนน</span>
-                      </button>
-
-                      {/* 6. คะแนนสะสม & เรดาร์ทักษะ */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: 'transparent',
-                          color: 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: '1px solid var(--border)',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between'
-                        }}
-                        onClick={() => {
-                          setShowChart(true);
-                          setShowMenu(false);
-                        }}
-                        onMouseOver={(e) => {
-                          e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <Star size={14} color="var(--accent)" />
-                          <span>คะแนนสะสม & ทักษะ</span>
-                        </div>
-                        <span style={{ 
-                          fontSize: '0.75rem', 
-                          padding: '0.1rem 0.5rem', 
-                          borderRadius: '999px', 
-                          background: 'rgba(0,112,243,0.1)', 
-                          color: 'var(--accent)', 
-                          fontWeight: 600 
-                        }}>
-                          {totalScore}
-                        </span>
-                      </button>
-
-                      {/* 7. รายงานข้อสอบผิด */}
-                      <button 
-                        style={{
-                          fontFamily: 'inherit',
-                          padding: '0.75rem 1rem',
-                          background: currentView === 'report' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                          color: currentView === 'report' ? 'var(--accent)' : 'var(--text)',
-                          border: 'none',
-                          textAlign: 'left',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                          borderBottom: isAdmin ? '1px solid var(--border)' : 'none',
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          fontWeight: currentView === 'report' ? 600 : 400
-                        }}
-                        onClick={() => openReport()}
-                        onMouseOver={(e) => {
-                          if (currentView !== 'report') e.currentTarget.style.background = 'var(--card)';
-                        }}
-                        onMouseOut={(e) => {
-                          if (currentView !== 'report') e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <AlertTriangle size={14} color="var(--accent)" />
-                        <span>รายงานข้อสอบผิด / ปัญหา</span>
-                      </button>
-                      {isAdmin && (
-                        <button 
-                          style={{
-                            fontFamily: 'inherit',
-                            padding: '0.75rem 1rem',
-                            background: currentView === 'admin_reports' ? 'rgba(0,112,243,0.1)' : 'transparent',
-                            color: currentView === 'admin_reports' ? 'var(--accent)' : 'var(--text)',
-                            border: 'none',
-                            textAlign: 'left',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                          }}
-                          onClick={() => {
-                            setCurrentView('admin_reports');
-                            setShowMenu(false);
-                          }}
-                          onMouseOver={(e) => {
-                            if (currentView !== 'admin_reports') e.currentTarget.style.background = 'var(--card)';
-                          }}
-                          onMouseOut={(e) => {
-                            if (currentView !== 'admin_reports') e.currentTarget.style.background = 'transparent';
-                          }}
-                        >
-                          <ShieldCheck size={14} color="var(--accent)" />
-                          <span>แดชบอร์ดจัดการ (Admin)</span>
-                        </button>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Login / Logout */}
-              {user ? (
-                <button 
-                  className="btn btn-outline app-icon-btn" 
-                  onClick={() => setShowLogoutConfirm(true)} 
-                  title={`ออกจากระบบ (${user.email})`}
-                  style={{ width: '44px', height: '44px', padding: 0 }}
-                >
-                  <LogOut size={18} />
-                </button>
-              ) : (
-                <button 
-                  className="btn btn-primary" 
-                  onClick={() => setCurrentView('login')}
-                  style={{ borderRadius: '999px', height: '44px', padding: '0 1.5rem', fontSize: '0.95rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
-                >
-                  <LogIn size={17} />
-                  <span>เข้าสู่ระบบ</span>
-                </button>
-              )}
-            </div>
-
-            {/* Mobile Actions: Menu Trigger */}
-            <div className="app-nav-mobile" style={{ position: 'relative' }}>
-              <button 
-                className={`btn ${showMobileMenu ? 'btn-primary' : 'btn-outline'}`}
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                style={{ borderRadius: '999px', height: '36px', padding: '0 0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
-                aria-label="เปิดเมนู"
-              >
-                {showMobileMenu ? <X size={16} /> : <Menu size={16} />}
-                <span style={{ fontSize: '0.825rem', fontWeight: 600 }}>เมนู</span>
-              </button>
-
-              {showMobileMenu && (
-            <>
-              <div 
-                style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 60 }} 
-                onClick={() => setShowMobileMenu(false)} 
-              />
-              <div 
-                className="card animate-fade-in"
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '0.5rem',
-                  background: 'var(--bg)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '12px',
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.18)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                  zIndex: 70,
-                  minWidth: '240px',
-                  maxWidth: 'calc(100vw - 2rem)'
-                }}
-              >
-                {/* 0. ข้อมูลผู้ใช้ & ตั้งค่าโปรไฟล์ */}
-                {user && (
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.875rem 1rem',
-                      background: currentView === 'settings' ? 'var(--surface-hover)' : 'rgba(0, 112, 243, 0.05)',
-                      color: currentView === 'settings' ? 'var(--accent)' : 'var(--text)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      width: '100%',
-                      borderBottom: '1px solid var(--border-divider)'
-                    }}
-                    onClick={() => {
-                      setCurrentView('settings');
-                      setShowMobileMenu(false);
-                    }}
-                  >
-                    <UserAvatar name={user?.user_metadata?.nickname || user?.email || ''} size={32} />
-                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-                      <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {user?.user_metadata?.nickname || user?.email?.split('@')[0]}
-                      </span>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--accent)' }}>
-                        ตั้งค่าโปรไฟล์ส่วนตัว & รหัสผ่าน
-                      </span>
-                    </div>
-                  </button>
-                )}
-
-                {/* 0.1 หน้าแนะนำ (Landing) */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: currentView === 'landing' ? 'var(--surface-hover)' : 'transparent',
-                    color: currentView === 'landing' ? 'var(--accent)' : 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    fontWeight: currentView === 'landing' ? 600 : 400
-                  }}
-                  onClick={() => {
-                    setCurrentView('landing');
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <Sparkles size={16} color="var(--accent)" />
-                  <span>หน้าแนะนำ (Landing)</span>
-                </button>
-
-                {/* 0.2 ข่าวสาร & อัปเดต (Blog) */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: currentView === 'blog' ? 'var(--surface-hover)' : 'transparent',
-                    color: currentView === 'blog' ? 'var(--accent)' : 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    fontWeight: currentView === 'blog' ? 600 : 400
-                  }}
-                  onClick={() => {
-                    setCurrentView('blog');
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <Sparkles size={16} color="#8b5cf6" />
-                  <span>ข่าวสาร & อัปเดต (Blog)</span>
-                </button>
-
-
-
-                {/* 1. หน้าหลัก */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: currentView === 'home' ? 'var(--surface-hover)' : 'transparent',
-                    color: currentView === 'home' ? 'var(--accent)' : 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    fontWeight: currentView === 'home' ? 600 : 400
-                  }}
-                  onClick={() => {
-                    goHome();
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <BookOpen size={16} />
-                  <span>คลังข้อสอบ (Home)</span>
-                </button>
-
-                {/* 2. ตารางสอบ */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: currentView === 'schedule' ? 'var(--surface-hover)' : 'transparent',
-                    color: currentView === 'schedule' ? 'var(--accent)' : 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    fontWeight: currentView === 'schedule' ? 600 : 400
-                  }}
-                  onClick={() => {
-                    setCurrentView('schedule');
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <CalendarDays size={16} />
-                  <span>ตารางสอบ</span>
-                </button>
-
-                {/* 3. ประวัติคะแนน */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: currentView === 'history' ? 'var(--surface-hover)' : 'transparent',
-                    color: currentView === 'history' ? 'var(--accent)' : 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    fontWeight: currentView === 'history' ? 600 : 400
-                  }}
-                  onClick={() => {
-                    setCurrentView('history');
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <HistoryIcon size={16} />
-                  <span>ประวัติคะแนน</span>
-                </button>
-
-                {/* 4. คะแนนสะสม & เรดาร์ทักษะ */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: 'transparent',
-                    color: 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%'
-                  }}
-                  onClick={() => {
-                    setShowChart(true);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <Star size={16} color="var(--accent)" />
-                    <span>คะแนนสะสม & ทักษะ</span>
-                  </div>
-                  <span style={{ 
-                    fontSize: '0.75rem', 
-                    padding: '0.125rem 0.5rem', 
-                    borderRadius: '999px', 
-                    background: 'rgba(0,112,243,0.1)', 
-                    color: 'var(--accent)', 
-                    fontWeight: 600 
-                  }}>
-                    {totalScore}
-                  </span>
-                </button>
-
-                {/* 5. รายงานข้อสอบผิด */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: currentView === 'report' ? 'var(--surface-hover)' : 'transparent',
-                    color: currentView === 'report' ? 'var(--accent)' : 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    fontWeight: currentView === 'report' ? 600 : 400
-                  }}
-                  onClick={() => {
-                    openReport();
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <AlertTriangle size={16} />
-                  <span>รายงานข้อสอบผิด / ปัญหา</span>
-                </button>
-
-                {/* 6. แดชบอร์ดจัดการ (Admin Hub) */}
-                {isAdmin && (
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.875rem 1rem',
-                      background: currentView === 'admin_reports' ? 'var(--surface-hover)' : 'transparent',
-                      color: currentView === 'admin_reports' ? 'var(--accent)' : 'var(--text)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      width: '100%',
-                      fontWeight: currentView === 'admin_reports' ? 600 : 400
-                    }}
-                    onClick={() => {
-                      setCurrentView('admin_reports');
-                      setShowMobileMenu(false);
-                    }}
-                  >
-                    <ShieldCheck size={16} color="var(--accent)" />
-                    <span>แดชบอร์ดจัดการ (Admin)</span>
-                  </button>
-                )}
-
-                <div style={{ height: '1px', background: 'var(--border-divider)', margin: '0.25rem 0' }} />
-
-                {/* 6. สลับธีม */}
-                <button 
-                  style={{
-                    fontFamily: 'inherit',
-                    padding: '0.875rem 1rem',
-                    background: 'transparent',
-                    color: 'var(--text)',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontSize: '0.875rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%'
-                  }}
-                  onClick={() => {
-                    toggleTheme();
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-                    <span>ธีม (Theme)</span>
-                  </div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    {theme === 'dark' ? 'มืด (Dark)' : 'สว่าง (Light)'}
-                  </span>
-                </button>
-
-                <div style={{ height: '1px', background: 'var(--border-divider)', margin: '0.25rem 0' }} />
-
-                {/* 7. Login / Logout */}
-                {user ? (
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.875rem 1rem',
-                      background: 'transparent',
-                      color: 'var(--error)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      width: '100%'
-                    }}
-                    onClick={() => {
-                      setShowMobileMenu(false);
-                      setShowLogoutConfirm(true);
-                    }}
-                  >
-                    <LogOut size={16} />
-                    <span>ออกจากระบบ ({user.email?.split('@')[0]})</span>
-                  </button>
-                ) : (
-                  <button 
-                    style={{
-                      fontFamily: 'inherit',
-                      padding: '0.875rem 1rem',
-                      background: 'var(--surface-hover)',
-                      color: 'var(--accent)',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      width: '100%',
-                      fontWeight: 600
-                    }}
-                    onClick={() => {
-                      setShowMobileMenu(false);
-                      setCurrentView('login');
-                    }}
-                  >
-                    <LogIn size={16} />
-                    <span>เข้าสู่ระบบ (Login)</span>
-                  </button>
-                )}
-              </div>
-            </>
+      <div className="shell-main">
+        <header className="topbar">
+          <button type="button" className="btn btn-ghost btn-icon topbar-menu" onClick={() => setShowMobileMenu(true)} aria-label="เปิดเมนู">
+            <Menu size={18} />
+          </button>
+          <nav className="crumbs" aria-label="ตำแหน่งปัจจุบัน">
+            {crumbs.map((c, i) => (
+              <span key={i} style={{ display: 'contents' }}>
+                {i > 0 && <ChevronRight size={14} className="sep" />}
+                {c.onClick ? <button type="button" onClick={c.onClick}>{c.label}</button> : <span className="current">{c.label}</span>}
+              </span>
+            ))}
+          </nav>
+          <button type="button" className="btn btn-ghost btn-sm hide-sm" onClick={() => setShowCommand(true)} style={{ color: 'var(--text-subtle)' }}>
+            <Search size={14} /> ค้นหา <span className="kbd">⌘K</span>
+          </button>
+          <button type="button" className="btn btn-ghost btn-icon btn-sm" onClick={() => setShowCommand(true)} aria-label="ค้นหา" style={{ display: 'none' }} />
+          <button type="button" className="btn btn-ghost btn-icon" onClick={toggleTheme} aria-label="สลับธีม" title={theme === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'}>
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          {!user && (
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => setCurrentView('login')}>
+              <LogIn size={14} /> เข้าสู่ระบบ
+            </button>
           )}
-            </div>
-          </div>
         </header>
-      </div>
 
       <main className="main-content">
-        {examLoadError && <p role="alert" style={{ color: 'var(--error)', padding: '1rem' }}>{examLoadError}</p>}
+        {examLoadError && (
+          <div role="alert" style={{ margin: '1rem auto 0', maxWidth: 1180, padding: '0 2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.85rem', borderRadius: 8, background: 'var(--error-soft)', color: 'var(--error)', fontSize: '0.8125rem' }}>
+              <AlertTriangle size={15} /> {examLoadError}
+            </div>
+          </div>
+        )}
         <Suspense fallback={<PageLoader inline />}>
         {currentView === 'home' && (
           <Home 
@@ -1428,10 +674,7 @@ function App() {
           <ScoreHistory user={user} />
         )}
         {currentView === 'history' && !user && (
-          <div style={{ textAlign: 'center', padding: '4rem' }}>
-            <p>กรุณาเข้าสู่ระบบเพื่อดูประวัติคะแนน</p>
-            <button className="btn btn-primary" style={{ marginTop: '1rem' }} onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
-          </div>
+          <GateState icon={HistoryIcon} title="เข้าสู่ระบบเพื่อดูประวัติคะแนน" text="ประวัติการทำข้อสอบและพัฒนาการของคุณจะถูกบันทึกไว้ในบัญชี" primary={{ label: 'เข้าสู่ระบบ', onClick: () => setCurrentView('login') }} />
         )}
         {currentView === 'report' && (
           <Report 
@@ -1452,45 +695,10 @@ function App() {
           />
         )}
         {currentView === 'admin_reports' && !user && (
-          <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '3rem auto', borderRadius: '16px' }}>
-            <div style={{
-              width: '64px', height: '64px', borderRadius: '50%',
-              background: 'rgba(245, 158, 11, 0.15)', color: 'var(--warning)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 1.5rem'
-            }}>
-              <ShieldAlert size={36} />
-            </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
-              เฉพาะผู้ดูแลระบบ (Admin Only)
-            </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
-              หน้านี้จำกัดสิทธิ์เฉพาะผู้ดูแลระบบ กรุณาเข้าสู่ระบบด้วยบัญชี Admin เพื่อเข้าถึงข้อมูล
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button className="btn btn-outline" onClick={goHome}>กลับสู่หน้าหลัก</button>
-              <button className="btn btn-primary" onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
-            </div>
-          </div>
+          <GateState icon={ShieldAlert} title="เฉพาะผู้ดูแลระบบ" text="หน้านี้จำกัดสิทธิ์เฉพาะผู้ดูแลระบบ กรุณาเข้าสู่ระบบด้วยบัญชี Admin" primary={{ label: 'เข้าสู่ระบบ', onClick: () => setCurrentView('login') }} secondary={{ label: 'กลับสู่คลังข้อสอบ', onClick: goHome }} />
         )}
         {currentView === 'admin_reports' && user && !isAdmin && (
-          <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '3rem auto', borderRadius: '16px' }}>
-            <div style={{
-              width: '64px', height: '64px', borderRadius: '50%',
-              background: 'rgba(239, 68, 68, 0.15)', color: 'var(--error)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 1.5rem'
-            }}>
-              <ShieldAlert size={36} />
-            </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
-              คุณไม่มีสิทธิ์เข้าถึงหน้านี้
-            </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
-              บัญชีของคุณ ({user.email}) ไม่ใช่บัญชีผู้ดูแลระบบ (Admin) ไม่สามารถดูรายการรายงานปัญหาได้
-            </p>
-            <button className="btn btn-primary" onClick={goHome}>กลับสู่หน้าหลัก</button>
-          </div>
+          <GateState icon={ShieldAlert} tone="error" title="คุณไม่มีสิทธิ์เข้าถึงหน้านี้" text={`บัญชี ${user.email} ไม่ใช่บัญชีผู้ดูแลระบบ จึงไม่สามารถดูรายการรายงานปัญหาได้`} primary={{ label: 'กลับสู่คลังข้อสอบ', onClick: goHome }} />
         )}
         {currentView === 'settings' && user && (
           <UserSettings 
@@ -1519,27 +727,21 @@ function App() {
           />
         )}
         {currentView === 'settings' && !user && (
-          <div className="card animate-fade-in" style={{ padding: '3.5rem 2rem', textAlign: 'center', maxWidth: '500px', margin: '3rem auto', borderRadius: '16px' }}>
-            <div style={{
-              width: '64px', height: '64px', borderRadius: '50%',
-              background: 'rgba(0, 112, 243, 0.12)', color: 'var(--accent)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto 1.5rem'
-            }}>
-              <User size={36} />
-            </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', letterSpacing: '-0.5px' }}>
-              กรุณาเข้าสู่ระบบ
-            </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
-              กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูลส่วนตัวและตั้งค่าการใช้งาน
-            </p>
-            <button className="btn btn-primary" onClick={() => setCurrentView('login')}>เข้าสู่ระบบ</button>
-          </div>
+          <GateState icon={User} title="กรุณาเข้าสู่ระบบ" text="เข้าสู่ระบบเพื่อจัดการข้อมูลส่วนตัวและตั้งค่าการใช้งาน" primary={{ label: 'เข้าสู่ระบบ', onClick: () => setCurrentView('login') }} />
         )}
         </Suspense>
       </main>
-      
+      </div>
+
+      {showCommand && (
+        <CommandMenu
+          subjects={subjects}
+          onClose={() => setShowCommand(false)}
+          onSelectSubject={startExam}
+          onNavigate={(view) => (view === 'home' ? goHome() : view === 'report' ? openReport() : setCurrentView(view))}
+        />
+      )}
+
       {showChart && (
         <Suspense fallback={null}>
           <Pattern data={chartData} onClose={() => setShowChart(false)} />
@@ -1547,29 +749,18 @@ function App() {
       )}
 
       {showLogoutConfirm && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
-          zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div className="card animate-fade-in" style={{ padding: '2.5rem', maxWidth: '400px', width: '90%', textAlign: 'center' }}>
-            <LogOut size={48} style={{ color: 'var(--error)', margin: '0 auto 1.5rem', opacity: 0.8 }} />
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 600 }}>ยืนยันการออกจากระบบ</h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ EXETIA?</p>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-              <button className="btn btn-outline" onClick={() => setShowLogoutConfirm(false)}>
-                ยกเลิก
-              </button>
-              <button 
-                className="btn btn-primary" 
-                style={{ background: 'var(--error)', color: 'white', borderColor: 'var(--error)' }}
-                onClick={() => {
-                  setShowLogoutConfirm(false);
-                  handleLogout();
-                }}
-              >
-                ออกจากระบบ
-              </button>
+        <div className="modal-backdrop" onClick={() => setShowLogoutConfirm(false)}>
+          <div className="modal" role="alertdialog" aria-label="ยืนยันการออกจากระบบ" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <span className="tile" style={{ background: 'var(--error-soft)', color: 'var(--error)', boxShadow: 'none' }}><LogOut size={16} /></span>
+              <div>
+                <div className="modal-title">ออกจากระบบ?</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: 2 }}>คุณจะออกจากบัญชี {user?.email} บนอุปกรณ์นี้</div>
+              </div>
+            </div>
+            <div className="modal-footer" style={{ marginTop: '1rem' }}>
+              <button type="button" className="btn" onClick={() => setShowLogoutConfirm(false)}>ยกเลิก</button>
+              <button type="button" className="btn btn-danger" onClick={() => { setShowLogoutConfirm(false); handleLogout(); }}>ออกจากระบบ</button>
             </div>
           </div>
         </div>

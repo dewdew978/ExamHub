@@ -1,170 +1,127 @@
-import { useState, useEffect, Fragment, lazy, Suspense } from 'react';
-import { 
-  GraduationCap, 
-  ChevronRight, 
-  Layers, 
-  Target,
-  FileCheck2,
-  ArrowRight
+import { useMemo } from 'react';
+import {
+  ArrowRight, Layers, Timer, FileCheck2, Lightbulb, Radar, History as HistoryIcon, Search, Smartphone,
+  LibraryBig, CalendarDays, Check, FileText, PlayCircle,
 } from 'lucide-react';
-const Aurora = lazy(() => import('./Aurora'));
-import BorderGlow from './BorderGlow';
 import Navbar from './Navbar';
+import SubjectIcon from './SubjectIcon';
 import StatCount, { statCountStyles } from './StatCount';
 
 // Tutorial video lives in the public "media" bucket of Supabase Storage
 const TUTORIAL_VIDEO_URL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/media/exetia-tutorial.mp4`;
 
+const FEATURES = [
+  { icon: LibraryBig, title: 'คลังข้อสอบครบทุกชั้นปี', desc: 'ข้อสอบ Midterm และ Final แยกตามรายวิชาและชั้นปี ทบทวนได้ตรงจุด' },
+  { icon: Lightbulb, title: 'เฉลยละเอียดทุกข้อ', desc: 'ตรวจคำตอบทันทีพร้อมคำอธิบายวิธีคิด รองรับสูตร KaTeX และโค้ด' },
+  { icon: Radar, title: 'วิเคราะห์ทักษะ', desc: 'เรดาร์ชาร์ตแสดงความถนัดแต่ละหมวด ช่วยปิดจุดอ่อนได้แม่นยำ' },
+  { icon: HistoryIcon, title: 'ประวัติคะแนน', desc: 'บันทึกผลทุกครั้งที่สอบ ดูพัฒนาการย้อนหลังเป็นกราฟ' },
+  { icon: Timer, title: 'จำลองห้องสอบจริง', desc: 'จับเวลานับถอยหลัง พักสอบได้ และทำต่อจากข้อเดิม' },
+  { icon: Smartphone, title: 'ติดตั้งเป็นแอป', desc: 'รองรับ PWA ใช้งานได้ทั้งคอม แท็บเล็ต และมือถือ' },
+];
+
 export default function Landing({ subjects = [], totalQuestions = 0, onStart, onNavigateAbout, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
-  const [showAurora, setShowAurora] = useState(false);
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document !== 'undefined') {
-      return document.documentElement.classList.contains('dark');
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    // Avoid running heavy WebGL shaders on mobile screens (< 768px) or when reduced motion is preferred
-    if (typeof window !== 'undefined') {
-      const isMobile = window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!isMobile) {
-        setShowAurora(true);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
-
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const featureList = [
-    {
-      title: 'คลังข้อสอบครบทุกชั้นปี',
-      desc: 'รวบรวมข้อสอบทั้ง Midterm และ Final แยกตามรายวิชาและระดับชั้นปี เพื่อการทบทวนที่ตรงจุดและมีประสิทธิภาพ'
-    },
-    {
-      title: 'เฉลยละเอียด Step-by-Step',
-      desc: 'ระบบตรวจคำตอบทันทีพร้อมเฉลยและคำอธิบายวิธีคิด รองรับสูตรคณิตศาสตร์ KaTeX และบล็อกโค้ดชัดเจน'
-    },
-    {
-      title: 'วิเคราะห์ทักษะ & ประวัติคะแนน',
-      desc: 'บันทึกคะแนนสะสมและแสดงเรดาร์ชาร์ตวิเคราะห์ความถนัดในแต่ละหมวดหมู่วิชา ช่วยปิดจุดอ่อนได้อย่างแม่นยำ'
+  const categories = useMemo(() => {
+    const map = new Map();
+    for (const s of subjects) {
+      const c = map.get(s.category) || { name: s.category, color: s.color, sets: 0, questions: 0 };
+      c.sets += 1;
+      c.questions += s.questionCount || 0;
+      map.set(s.category, c);
     }
-  ];
+    return [...map.values()];
+  }, [subjects]);
+
+  const preview = subjects.slice(0, 6);
 
   return (
-    <div className="landing-page-root animate-fade-in">
+    <div className="landing-root">
       <style>{`
-        .landing-page-root {
-          width: 100%;
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          background-color: var(--bg);
-          color: var(--text);
-          overflow-x: hidden;
-        }
-        .landing-hero {
-          position: relative;
-          min-height: 92vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 8.5rem 1.5rem 4.5rem;
-          overflow: hidden;
-          text-align: center;
-        }
-        .landing-hero::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at 50% 25%, rgba(99, 102, 241, 0.12), transparent 70%);
-          pointer-events: none;
-          z-index: 1;
-        }
-        .landing-hero-inner { position: relative; z-index: 2; width: 100%; min-width: 0; max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
-        .landing-badge {
-          display: inline-flex;
-          max-width: 100%;
-          box-sizing: border-box;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.4rem 1.15rem;
-          border-radius: 999px;
-          background: var(--surface);
-          border: 1px solid var(--border-color);
-          font-size: 0.8125rem;
-          font-weight: 500;
-          margin-bottom: 1.75rem;
-        }
-        .landing-badge-dot {
-          width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
-          animation: landingPulse 2s infinite ease-in-out;
-        }
-        @keyframes landingPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
-        .landing-title {
-          font-size: clamp(2.35rem, 5.8vw, 4rem);
-          font-weight: 700;
-          letter-spacing: normal;
-          line-height: 1.12;
-          margin: 0 0 1.35rem 0;
-          color: var(--text);
-        }
-        .landing-title-gradient {
-          background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 50%, #ec4899 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .landing-subtitle { font-size: clamp(1rem, 2.2vw, 1.18rem); color: var(--text-muted); max-width: 680px; line-height: 1.7; margin: 0 0 2.25rem 0; }
-        .landing-cta-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
-        .landing-btn-primary { background: var(--btn-primary-bg) !important; color: var(--btn-primary-text) !important; height: 48px !important; padding: 0 1.85rem !important; border-radius: 999px !important; border: none !important; cursor: pointer !important; }
-        .landing-btn-secondary { background: var(--surface) !important; color: var(--text) !important; height: 48px !important; padding: 0 1.65rem !important; border-radius: 999px !important; border: 1px solid var(--border-color) !important; cursor: pointer !important; }
-        .landing-stats-bar { display: flex; align-items: center; justify-content: center; gap: 3rem; padding: 1.25rem 2.75rem; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-color); backdrop-filter: blur(16px); }
-        .landing-stat-number { font-size: 1.75rem; font-weight: 700; color: var(--text); }
-        .landing-stat-label { color: var(--text-muted); font-size: 0.8125rem; margin-top: 0.25rem; }
-        .landing-demo-wrapper { width: 100%; max-width: 760px; margin: 3.5rem auto 0; text-align: left; }
-        .landing-demo-card { background: var(--surface); border: 1px solid var(--border-color); border-radius: 24px; padding: 1.75rem 2rem; }
-        .landing-demo-choice { padding: 0.85rem 1.1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--surface); cursor: pointer; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.65rem; width: 100%; font-family: inherit; }
-        .landing-steps-section { padding: 5.5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
-        .landing-section-header { text-align: center; margin-bottom: 3.5rem; }
-        .landing-section-tag { color: var(--accent); font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 0.5rem; display: inline-block; }
-        .landing-section-title { font-size: 2.35rem; font-weight: 700; letter-spacing: normal; margin-bottom: 0.75rem; }
-        .landing-section-desc { color: var(--text-muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto; }
-        .landing-steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
-        .landing-video { margin: 2.5rem auto 0; max-width: 900px; display: grid; gap: 0.75rem; }
-        .landing-video video { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; border: 1px solid var(--border-color); background: #0a0b10; display: block; }
-        .landing-video figcaption { text-align: center; color: var(--text-muted); font-size: 0.875rem; }
-        .landing-step-card { padding: 2rem 1.75rem; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-color); position: relative; }
-        .landing-step-num { font-size: 3.25rem; font-weight: 700; color: var(--border-divider); position: absolute; top: 1.25rem; right: 1.5rem; }
-        .landing-features-section { padding: 5.5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
-        .landing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-        .landing-feature-glow-card { border-radius: 20px; height: 100%; }
-        .landing-feature-content { padding: 1.85rem; height: 100%; }
-        .landing-pills-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; max-width: 900px; margin: 0 auto 3rem; }
-        .landing-subject-pill { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1.1rem; border-radius: 999px; background: var(--surface); border: 1px solid var(--border-color); cursor: pointer; }
-        .landing-faq-section { padding: 5rem 1.5rem; max-width: 860px; margin: 0 auto; }
-        .landing-faq-item { border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 1rem; background: var(--surface); }
-        .landing-faq-q { padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; font-weight: 600; cursor: pointer; }
-        .landing-faq-a { padding: 0 1.5rem 1.25rem 1.5rem; color: var(--text-muted); font-size: 0.925rem; }
-        .landing-bottom-cta-wrapper { margin: 3rem 1.5rem 5.5rem; max-width: 1050px; margin-left: auto; margin-right: auto; }
-        .landing-bottom-cta { padding: 4.5rem 2rem; text-align: center; }
-        .landing-footer { border-top: 1px solid var(--border-divider); padding: 2.5rem 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; }
+        .landing-root { min-height: 100vh; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        .lp-container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+        .lp-hero { position: relative; padding: 8.5rem 0 0; text-align: center; }
+        .lp-hero::before { content: ''; position: absolute; inset: 0 0 30% 0; pointer-events: none;
+          background-image: linear-gradient(var(--border-divider) 1px, transparent 1px), linear-gradient(90deg, var(--border-divider) 1px, transparent 1px);
+          background-size: 48px 48px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%); }
+        .lp-hero::after { content: ''; position: absolute; width: 760px; height: 420px; left: 50%; top: 40px; transform: translateX(-50%); pointer-events: none;
+          background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 16%, transparent) 0%, transparent 65%); }
+        .lp-hero-inner { position: relative; z-index: 1; }
+        .lp-pill { display: inline-flex; align-items: center; gap: 0.5rem; height: 30px; padding: 0 0.4rem 0 0.75rem; border-radius: 999px; background: var(--surface); box-shadow: 0 0 0 1px var(--border-color), var(--shadow-xs); font-size: 0.78rem; color: var(--text-muted); border: none; cursor: pointer; margin-bottom: 1.5rem; }
+        .lp-pill b { color: var(--accent-text); font-weight: 600; }
+        .lp-pill span.arrow { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 999px; background: var(--surface-hover); }
+        .lp-title { font-size: clamp(2.25rem, 5.4vw, 3.75rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.12; max-width: 820px; margin: 0 auto; }
+        .lp-title em { font-style: normal; color: var(--accent); }
+        .lp-line { display: inline-block; white-space: nowrap; }
+        @media (max-width: 520px) { .lp-line { white-space: normal; } }
+        .lp-sub { font-size: clamp(1rem, 2vw, 1.125rem); color: var(--text-muted); max-width: 600px; margin: 1.1rem auto 0; line-height: 1.65; }
+        .lp-cta { display: flex; gap: 0.6rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+        .lp-cta .btn { height: 42px; padding: 0 1.15rem; font-size: 0.9rem; border-radius: 8px; }
+        .lp-stats { display: flex; justify-content: center; gap: 2.5rem; margin-top: 2.25rem; color: var(--text-muted); font-size: 0.8125rem; flex-wrap: wrap; }
+        .lp-stats strong { display: block; font-size: 1.35rem; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
 
-        @media (max-width: 820px) {
-          .landing-steps-grid { grid-template-columns: 1fr; }
-          .landing-grid { grid-template-columns: 1fr; }
+        .lp-frame { position: relative; z-index: 1; margin: 3.5rem auto 0; max-width: 1040px; border-radius: 14px; background: var(--surface); box-shadow: 0 0 0 1px var(--border-color), 0 30px 80px -20px rgba(40, 20, 120, 0.25); overflow: hidden; text-align: left; }
+        .lp-frame-bar { height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-bottom: 1px solid var(--border-divider); background: var(--bg-subtle); }
+        .lp-frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--surface-active); }
+        .lp-frame-body { display: grid; grid-template-columns: 200px 1fr; min-height: 380px; }
+        .lp-frame-side { background: var(--sidebar-bg); border-right: 1px solid var(--border-color); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+        .lp-frame-side .nav-item { pointer-events: none; height: 28px; font-size: 0.75rem; }
+        .lp-frame-main { padding: 18px 20px; overflow: hidden; }
+        .lp-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+        .lp-mini-card { border-radius: 10px; box-shadow: 0 0 0 1px var(--border-color); overflow: hidden; background: var(--surface); }
+        .lp-mini-cover { height: 46px; position: relative; }
+        .lp-mini-body { padding: 8px 10px 10px; }
+        .lp-mini-body b { display: block; font-size: 0.75rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lp-mini-body span { font-size: 0.66rem; color: var(--text-muted); }
+
+        .lp-section { padding: 6rem 0 0; }
+        .lp-eyebrow { font-size: 0.78rem; font-weight: 500; color: var(--accent-text); margin-bottom: 0.6rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .lp-h2 { font-size: clamp(1.6rem, 3.4vw, 2.25rem); font-weight: 600; letter-spacing: -0.025em; line-height: 1.2; max-width: 640px; }
+        .lp-lead { color: var(--text-muted); font-size: 1rem; max-width: 560px; margin-top: 0.6rem; line-height: 1.65; }
+
+        .lp-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 2.25rem; border-radius: 14px; box-shadow: var(--shadow-sm); background: var(--surface); overflow: hidden; }
+        .lp-step { padding: 1.5rem 1.4rem; border-left: 1px solid var(--border-divider); }
+        .lp-step:first-child { border-left: none; }
+        .lp-step-n { font-size: 0.72rem; color: var(--text-subtle); font-variant-numeric: tabular-nums; }
+        .lp-step h3 { font-size: 1rem; margin: 0.9rem 0 0.3rem; }
+        .lp-step p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+
+        .lp-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; margin-top: 2.25rem; }
+        .lp-feature { padding: 1.25rem; border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-sm); }
+        .lp-feature h3 { font-size: 0.95rem; margin: 0.85rem 0 0.25rem; }
+        .lp-feature p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+
+        .lp-cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.6rem; margin-top: 2rem; }
+        .lp-cat { display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0.9rem; border-radius: 10px; background: var(--surface); box-shadow: var(--shadow-sm); border: none; text-align: left; cursor: pointer; color: inherit; }
+        .lp-cat:hover { box-shadow: var(--shadow-md); }
+        .lp-cat b { font-size: 0.86rem; font-weight: 500; display: block; }
+        .lp-cat span { font-size: 0.75rem; color: var(--text-muted); }
+
+        .lp-video { margin-top: 2rem; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); background: #111; }
+        .lp-video video { width: 100%; aspect-ratio: 16 / 9; display: block; }
+        .lp-video-cap { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+
+        .lp-band { margin: 6rem auto 5rem; border-radius: 18px; padding: 3.25rem 2rem; text-align: center; position: relative; overflow: hidden;
+          background: var(--sidebar-bg); box-shadow: inset 0 0 0 1px var(--border-color); }
+        .lp-band::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 120%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%); pointer-events: none; }
+        .lp-band > * { position: relative; }
+
+        @media (max-width: 900px) {
+          .lp-frame-body { grid-template-columns: 1fr; }
+          .lp-frame-side { display: none; }
+          .lp-mini-grid { grid-template-columns: repeat(2, 1fr); }
+          .lp-steps { grid-template-columns: 1fr; }
+          .lp-step { border-left: none; border-top: 1px solid var(--border-divider); }
+          .lp-step:first-child { border-top: none; }
+          .lp-features { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 560px) {
+          .lp-features { grid-template-columns: 1fr; }
+          .lp-hero { padding-top: 6.5rem; }
+          .lp-stats { gap: 1.5rem; }
         }
         ${statCountStyles}
       `}</style>
@@ -172,7 +129,7 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
       <Navbar
         user={user}
         onBrand={() => scrollToSection('top')}
-        onStart={() => scrollToSection('top')}
+        onStart={onStart}
         onStartGuest={onStart}
         showLogin={false}
         links={[
@@ -185,159 +142,166 @@ export default function Landing({ subjects = [], totalQuestions = 0, onStart, on
       />
 
       <main id="main-content">
-        <section className="landing-hero" id="top">
-        {showAurora && (
-          <Suspense fallback={null}>
-            <Aurora colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} blend={0.5} amplitude={1.0} speed={0.6} />
-          </Suspense>
-        )}
-        <div className="landing-hero-inner">
-          <div className="landing-badge">
-            <span className="landing-badge-dot" />
-            <span><strong style={{ color: 'var(--accent)' }}>NEW</strong> · Just shipped v2.0 · อัปเดตคลังข้อสอบ & เฉลยละเอียด</span>
-          </div>
-          <h1 className="landing-title">ฝึกทำข้อสอบทุกวิชาในที่เดียว<br /><span className="landing-title-gradient">ยกระดับคะแนนสู่เกรด A</span></h1>
-          <div className="landing-cta-row">
-            <button className="landing-btn-primary" onClick={onStart}><span>เริ่มฝึกทำข้อสอบ</span><ArrowRight size={18} /></button>
-            <button className="landing-btn-secondary" onClick={() => scrollToSection('landing-steps')}><span>วิธีใช้งาน</span></button>
-          </div>
-          <div className="landing-stats-bar" id="landing-stats">
-            {[
-              { value: 2, label: 'ระดับชั้นปี' },
-              { value: subjects.length || 0, label: 'ชุดข้อสอบ' },
-              { value: totalQuestions || 0, label: 'ข้อสอบทั้งหมด' },
-            ].map((stat, i) => (
-              <Fragment key={stat.label}>
-                {i > 0 && <div className="landing-stat-divider" />}
-                <div className="landing-stat-item">
-                  <div className="landing-stat-number">
-                    <StatCount value={stat.value} delay={0.3 + i * 0.15} />
-                  </div>
-                  <div className="landing-stat-label">{stat.label}</div>
+        <section className="lp-hero" id="top">
+          <div className="lp-container lp-hero-inner">
+            <button type="button" className="lp-pill" onClick={onNavigateBlog}>
+              <b>ใหม่</b> อัปเดตคลังข้อสอบ & เฉลยละเอียด <span className="arrow"><ArrowRight size={12} /></span>
+            </button>
+            <h1 className="lp-title"><span className="lp-line">ฝึกทำข้อสอบทุกวิชาในที่เดียว</span> <em className="lp-line">ยกระดับคะแนนสู่เกรด A</em></h1>
+            <p className="lp-sub">คลังข้อสอบ Data Science, Machine Learning, AWS Cloud, ISD และ MIS พร้อมเฉลยละเอียดทุกข้อ ติดตามพัฒนาการได้ในที่เดียว</p>
+            <div className="lp-cta">
+              <button type="button" className="btn btn-primary" onClick={onStart}>เริ่มฝึกทำข้อสอบ <ArrowRight size={15} /></button>
+              <button type="button" className="btn" onClick={() => scrollToSection('landing-steps')}><PlayCircle size={15} /> ดูวิธีใช้งาน</button>
+            </div>
+            <div className="lp-stats" id="landing-stats">
+              <div><strong><StatCount value={subjects.length || 0} delay={0.3} /></strong>ชุดข้อสอบ</div>
+              <div><strong><StatCount value={totalQuestions || 0} delay={0.45} /></strong>ข้อสอบพร้อมเฉลย</div>
+              <div><strong><StatCount value={categories.length || 0} delay={0.6} /></strong>หมวดวิชา</div>
+            </div>
+
+            <div className="lp-frame" aria-hidden="true">
+              <div className="lp-frame-bar"><i /><i /><i /></div>
+              <div className="lp-frame-body">
+                <div className="lp-frame-side">
+                  <div className="nav-item active"><LibraryBig size={14} /><span className="nav-label">คลังข้อสอบ</span></div>
+                  <div className="nav-item"><CalendarDays size={14} /><span className="nav-label">ตารางสอบ</span></div>
+                  <div className="nav-item"><HistoryIcon size={14} /><span className="nav-label">ประวัติคะแนน</span></div>
+                  <div className="nav-item"><Radar size={14} /><span className="nav-label">ทักษะ</span></div>
                 </div>
-              </Fragment>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="landing-steps-section" id="landing-steps">
-        <div className="landing-section-header">
-          <span className="landing-section-tag">How It Works</span>
-          <h2 className="landing-section-title">3 ขั้นตอนง่ายๆ ในการเตรียมพร้อมสอบ</h2>
-        </div>
-        <div className="landing-steps-grid">
-          <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">01</div><Layers size={24} style={{ marginBottom: '1rem', color: 'var(--accent)' }} /><h3>เลือกวิชา</h3><p>เลือกรายวิชาตามชั้นปีที่คุณต้องการฝึก</p></div>
-          <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">02</div><Target size={24} style={{ marginBottom: '1rem', color: '#f59e0b' }} /><h3>จับเวลา</h3><p>ฝึกทำข้อสอบพร้อมระบบจับเวลานับถอยหลัง</p></div>
-          <div className="landing-step-card"><div className="landing-step-num" aria-hidden="true">03</div><FileCheck2 size={24} style={{ marginBottom: '1rem', color: 'var(--success)' }} /><h3>วิเคราะห์</h3><p>ดูเฉลยละเอียดและเรดาร์ชาร์ตวิเคราะห์ทักษะ</p></div>
-        </div>
-        <figure className="landing-video">
-          {/* preload="none": the video downloads only when the visitor presses play */}
-          <video
-            controls
-            preload="none"
-            playsInline
-            poster="/exetia-tutorial-poster.jpg"
-            src={TUTORIAL_VIDEO_URL}
-            aria-label="วิดีโอสอนใช้งาน EXETIA"
-          />
-          <figcaption>วิดีโอสอนใช้งาน EXETIA · 1:53 นาที · เลือกวิชา ทำข้อสอบ ดูเฉลย สมัครสมาชิก และแจ้งข้อสอบผิด</figcaption>
-        </figure>
-      </section>
-
-      <section className="landing-features-section" id="landing-features">
-        <div className="landing-section-header"><h2 className="landing-section-title">ฟีเจอร์เด่น</h2></div>
-        <div className="landing-grid">
-          {featureList.map((feat, idx) => (
-            <BorderGlow key={idx} className="landing-feature-glow-card" borderRadius={20} backgroundColor="var(--surface)" colors={['#0070f3', '#8b5cf6', '#ec4899']}>
-              <div className="landing-feature-content">
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.65rem', color: 'var(--text)' }}>{feat.title}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.8875rem', lineHeight: 1.65, margin: 0 }}>{feat.desc}</p>
-              </div>
-            </BorderGlow>
-          ))}
-        </div>
-      </section>
-
-      <section className="landing-features-section" id="landing-preview">
-        <div className="landing-section-header">
-          <span className="landing-section-tag">Curriculum Ready</span>
-          <h2 className="landing-section-title">ครอบคลุมทุกหมวดหมู่วิชา</h2>
-          <p className="landing-section-desc">
-            เลือกระดับชั้นปีที่ต้องการแล้วเริ่มฝึกซ้อมทำข้อสอบได้ทันที
-          </p>
-        </div>
-
-        {/* Year Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          {[2, 3].map(year => {
-            const yearSubs = subjects.filter(s => s.year === year);
-            return (
-              <BorderGlow
-                key={year}
-                className="landing-feature-glow-card"
-                borderRadius={20}
-                glowRadius={36}
-                edgeSensitivity={30}
-                glowColor={isDark ? "260 100 70" : "260 90 60"}
-                backgroundColor="var(--surface)"
-                colors={['#8b5cf6', '#3b82f6', '#06b6d4']}
-              >
-                <div 
-                  className="landing-feature-content"
-                  onClick={onStart}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                    <div style={{
-                      width: '42px', height: '42px', borderRadius: '10px',
-                      background: 'rgba(0, 112, 243, 0.1)', display: 'flex',
-                      alignItems: 'center', justifyContent: 'center', color: 'var(--accent)'
-                    }}>
-                      <GraduationCap size={22} />
+                <div className="lp-frame-main">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                    <div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 600 }}>คลังข้อสอบ</div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>เลือกชุดข้อสอบที่ต้องการฝึก</div>
                     </div>
-                    <span style={{
-                      fontSize: '0.75rem', fontWeight: 600, padding: '0.2rem 0.6rem',
-                      borderRadius: '999px', background: 'var(--surface-hover)',
-                      boxShadow: 'var(--shadow-border)', color: 'var(--text)'
-                    }}>
-                      {yearSubs.length} ชุดข้อสอบ
-                    </span>
+                    <div className="input" style={{ width: 180, height: 28, display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.7rem', color: 'var(--text-subtle)' }}><Search size={12} /> ค้นหาชุดข้อสอบ…</div>
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.35rem' }}>
-                    รายวิชาชั้นปีที่ {year}
-                  </h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.25rem' }}>
-                    รวมข้อสอบ Midterm และ Final ของวิชาปีที่ {year} พร้อมเฉลยละเอียดและคำอธิบาย
-                  </p>
-                  <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--accent)', fontSize: '0.875rem', fontWeight: 600 }}>
-                    <span>เข้าสู่ห้องสอบปี {year}</span>
-                    <ChevronRight size={16} />
+                  <div className="lp-mini-grid">
+                    {(preview.length ? preview : Array.from({ length: 6 }, (_, i) => ({ id: i, name: 'ชุดข้อสอบ', category: '', questionCount: 20 }))).map(s => (
+                      <div key={s.id} className="lp-mini-card">
+                        <div className="lp-mini-cover" style={{ background: `color-mix(in srgb, ${s.color || '#6b47f5'} 12%, var(--surface))` }}>
+                          <span className="tile" style={{ position: 'absolute', left: 8, bottom: 6, width: 22, height: 22, background: 'var(--surface)' }}>
+                            <SubjectIcon category={s.category} size={12} color={s.color || 'var(--accent)'} />
+                          </span>
+                        </div>
+                        <div className="lp-mini-body"><b>{s.name}</b><span>{s.questionCount} ข้อ{s.type ? ` · ${s.type}` : ''}</span></div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </BorderGlow>
-            );
-          })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="lp-section" id="landing-steps">
+          <div className="lp-container">
+            <div className="lp-eyebrow"><Layers size={14} /> วิธีใช้งาน</div>
+            <h2 className="lp-h2">3 ขั้นตอนง่ายๆ ในการเตรียมพร้อมสอบ</h2>
+            <div className="lp-steps">
+              {[
+                { icon: Layers, title: 'เลือกวิชา', desc: 'เลือกรายวิชาตามชั้นปีหรือค้นหาชุดข้อสอบที่ต้องการฝึก' },
+                { icon: Timer, title: 'ทำข้อสอบ', desc: 'ฝึกพร้อมระบบจับเวลา ติดดาวข้อที่ไม่มั่นใจ และพักสอบได้' },
+                { icon: FileCheck2, title: 'ทบทวน', desc: 'ดูเฉลยละเอียด กรองเฉพาะข้อที่ผิด และติดตามทักษะของคุณ' },
+              ].map((step, i) => (
+                <div key={step.title} className="lp-step">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span className="tile tile-accent"><step.icon size={16} /></span>
+                    <span className="lp-step-n">0{i + 1}</span>
+                  </div>
+                  <h3>{step.title}</h3>
+                  <p>{step.desc}</p>
+                </div>
+              ))}
+            </div>
+            <figure style={{ marginTop: 0 }}>
+              <div className="lp-video">
+                {/* preload="none": the video downloads only when the visitor presses play */}
+                <video controls preload="none" playsInline poster="/exetia-tutorial-poster.jpg" src={TUTORIAL_VIDEO_URL} aria-label="วิดีโอสอนใช้งาน EXETIA" />
+              </div>
+              <figcaption className="lp-video-cap"><PlayCircle size={14} /> วิดีโอสอนใช้งาน · 1:53 นาที · เลือกวิชา ทำข้อสอบ ดูเฉลย สมัครสมาชิก และแจ้งข้อสอบผิด</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="lp-section" id="landing-features">
+          <div className="lp-container">
+            <div className="lp-eyebrow"><Check size={14} /> ฟีเจอร์เด่น</div>
+            <h2 className="lp-h2">ทุกอย่างที่ต้องใช้ก่อนลงสนามสอบจริง</h2>
+            <div className="lp-features">
+              {FEATURES.map(f => (
+                <div key={f.title} className="lp-feature">
+                  <span className="tile"><f.icon size={16} /></span>
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {categories.length > 0 && (
+          <section className="lp-section" id="landing-preview">
+            <div className="lp-container">
+              <div className="lp-eyebrow"><FileText size={14} /> หมวดวิชา</div>
+              <h2 className="lp-h2">ครอบคลุมทุกหมวดหมู่วิชา</h2>
+              <p className="lp-lead">เลือกหมวดที่ต้องการแล้วเริ่มฝึกซ้อมได้ทันที ไม่ต้องสมัครสมาชิกก็ใช้งานได้</p>
+              <div className="lp-cats">
+                {categories.map(c => (
+                  <button key={c.name} type="button" className="lp-cat" onClick={onStart}>
+                    <span className="tile" style={{ background: `color-mix(in srgb, ${c.color || '#6b47f5'} 12%, var(--surface))`, boxShadow: 'none' }}>
+                      <SubjectIcon category={c.name} size={16} color={c.color || 'var(--accent)'} />
+                    </span>
+                    <div style={{ minWidth: 0 }}>
+                      <b>{c.name}</b>
+                      <span>{c.sets} ชุด · {c.questions.toLocaleString()} ข้อ</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        <div className="lp-container">
+          <div className="lp-band">
+            <h2 className="lp-h2" style={{ margin: '0 auto' }}>พร้อมเริ่มฝึกแล้วหรือยัง?</h2>
+            <p className="lp-lead" style={{ margin: '0.6rem auto 0' }}>ฟรี ไม่ต้องติดตั้ง เปิดเว็บแล้วเริ่มทำข้อสอบได้เลย</p>
+            <div className="lp-cta"><button type="button" className="btn btn-primary" onClick={onStart}>เข้าคลังข้อสอบ <ArrowRight size={15} /></button></div>
+          </div>
         </div>
-      </section>
       </main>
 
-      {/* 6. Footer */}
-      <footer className="landing-footer">
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginBottom: '0.75rem', fontSize: '0.875rem', flexWrap: 'wrap' }}>
-          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => scrollToSection('top')}>หน้าแรก</span>
-          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => scrollToSection('landing-steps')}>ขั้นตอนการใช้งาน</span>
-          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={() => scrollToSection('landing-features')}>ฟีเจอร์เด่น</span>
-          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateFaq}>คำถามที่พบบ่อย (FAQ)</span>
-          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateAbout}>เกี่ยวกับเรา</span>
-          <span style={{ cursor: 'pointer', color: 'var(--text-muted)' }} onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</span>
-          <span style={{ cursor: 'pointer', color: 'var(--accent)', fontWeight: 600 }} onClick={onStart}>เริ่มทำข้อสอบ</span>
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <div style={{ maxWidth: 320 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, color: 'var(--text)', marginBottom: 8 }}>
+              <span className="workspace-logo" style={{ width: 22, height: 22, borderRadius: 6 }}><LibraryBig size={12} /></span> EXETIA
+            </div>
+            <p>แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
+            <p style={{ marginTop: 6 }}>
+              พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text)', textDecoration: 'none', fontWeight: 500 }}>ปวริศ ปัญสิงห์ (Pawarit Pansing - ดิว)</a>
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap' }}>
+            <div>
+              <h4>ผลิตภัณฑ์</h4>
+              <button type="button" onClick={onStart}>คลังข้อสอบ</button>
+              <button type="button" onClick={() => scrollToSection('landing-steps')}>ขั้นตอนการใช้งาน</button>
+              <button type="button" onClick={() => scrollToSection('landing-features')}>ฟีเจอร์เด่น</button>
+            </div>
+            <div>
+              <h4>ข้อมูล</h4>
+              <button type="button" onClick={onNavigateBlog}>ข่าวสาร & อัปเดต</button>
+              <button type="button" onClick={onNavigateFaq}>คำถามที่พบบ่อย</button>
+              <button type="button" onClick={onNavigateAbout}>เกี่ยวกับเรา</button>
+              <button type="button" onClick={onNavigateTerms}>ข้อกำหนด & ความเป็นส่วนตัว</button>
+            </div>
+          </div>
         </div>
-        <p style={{ margin: '0 0 0.25rem 0' }}>EXETIA — แพลตฟอร์มฝึกทำข้อสอบออนไลน์สำหรับนักศึกษา</p>
-        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8125rem' }}>
-          พัฒนาโดย <a href="https://dewdew978.github.io/portfolio/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>ปวริศ ปัญสิงห์ (Pawarit Pansing - ดิว)</a>
-        </p>
-        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>© 2026 EXETIA. All rights reserved.</p>
+        <div style={{ borderTop: '1px solid var(--border-divider)', padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+          © {new Date().getFullYear()} EXETIA. All rights reserved.
+        </div>
       </footer>
     </div>
   );
