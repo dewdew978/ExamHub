@@ -149,7 +149,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
         </div>
       </div>
 
-      <div className="stat-grid" style={{ marginBottom: '1.25rem' }}>
+      <div className="stat-grid stagger" style={{ marginBottom: '1.25rem' }}>
         <div className="stat">
           <div className="stat-label"><LibraryBig size={13} /> ชุดข้อสอบ</div>
           <div className="stat-value">{subjects.length}</div>
@@ -181,7 +181,7 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
               <span className="badge badge-accent">ทำค้างไว้</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.4rem', fontSize: '0.75rem', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
-              <div className="progress" style={{ width: 160 }}><span style={{ width: `${resumePct}%` }} /></div>
+              <div className="progress" style={{ width: 160 }}><span className="grow-x" style={{ width: `${resumePct}%` }} /></div>
               <span>{inProgressExam.answeredCount}/{inProgressExam.totalQuestions} ข้อ</span>
               <span>· ข้อที่ {inProgressExam.currentQ + 1}</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
@@ -249,11 +249,11 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
           <p>{subjects.length === 0 ? 'เรากำลังรวบรวมข้อสอบและจัดทำเฉลย โปรดติดตามการอัปเดต' : 'ลองเปลี่ยนชั้นปี ประเภทข้อสอบ หรือคำค้นหา'}</p>
         </div>
       ) : layout === 'grid' ? (
-        <div className="card-grid">
-          {filtered.map(sub => {
+        <div className="card-grid" key={`${year}-${category}-${examType}`}>
+          {filtered.map((sub, i) => {
             const locked = sub.requiresAuth && !user;
             return (
-              <button key={sub.id} type="button" className="project-card" onClick={() => open(sub)} style={locked ? { opacity: 0.85 } : undefined}>
+              <button key={sub.id} type="button" className="project-card stagger-item" onClick={() => open(sub)} style={{ '--i': Math.min(i, 12), ...(locked ? { opacity: 0.85 } : null) }}>
                 <Cover subject={sub} />
                 <div className="project-body">
                   <div className="project-title">{sub.name}</div>
@@ -284,10 +284,10 @@ export default function Home({ subjects, onSelectSubject, user, onRequireLogin, 
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(sub => {
+                {filtered.map((sub, i) => {
                   const locked = sub.requiresAuth && !user;
                   return (
-                    <tr key={sub.id} className="clickable" onClick={() => open(sub)}>
+                    <tr key={sub.id} className="clickable stagger-item" style={{ '--i': Math.min(i, 14) }} onClick={() => open(sub)}>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 240 }}>
                           <span className="tile" style={{ width: 28, height: 28, background: sub.iconBg || undefined, boxShadow: 'none' }}>

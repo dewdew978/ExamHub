@@ -94,7 +94,7 @@ export default function ScoreHistory({ user }) {
         </div>
       ) : (
         <>
-          <div className="stat-grid" style={{ marginBottom: '1rem' }}>
+          <div className="stat-grid stagger" style={{ marginBottom: '1rem' }}>
             <div className="stat"><div className="stat-label"><ListChecks size={13} /> จำนวนครั้งที่สอบ</div><div className="stat-value">{rows.length}</div></div>
             <div className="stat"><div className="stat-label"><Target size={13} /> ค่าเฉลี่ย</div><div className="stat-value">{avg ?? '—'}{avg !== null && <span style={{ fontSize: '0.9rem', color: 'var(--text-subtle)' }}>%</span>}</div></div>
             <div className="stat"><div className="stat-label"><Trophy size={13} /> ดีที่สุด</div><div className="stat-value">{best ?? '—'}{best !== null && <span style={{ fontSize: '0.9rem', color: 'var(--text-subtle)' }}>%</span>}</div></div>
@@ -147,8 +147,8 @@ export default function ScoreHistory({ user }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {visible.map(r => (
-                    <tr key={r.key}>
+                  {visible.map((r, i) => (
+                    <tr key={r.key} className="stagger-item" style={{ '--i': Math.min(i, 14) }}>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 200 }}>
                           <span className="tile" style={{ width: 26, height: 26 }}><SubjectIcon category={r.category} size={13} color="var(--text-muted)" /></span>
@@ -163,7 +163,7 @@ export default function ScoreHistory({ user }) {
                       <td style={{ textAlign: 'right' }}>
                         {r.pct !== null
                           ? <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <div className="progress hide-sm" style={{ width: 64, height: 4 }}><span style={{ width: `${r.pct}%`, background: r.pct >= 80 ? 'var(--success)' : r.pct >= 50 ? 'var(--info)' : 'var(--error)' }} /></div>
+                              <div className="progress hide-sm" style={{ width: 64, height: 4 }}><span className="grow-x" style={{ width: `${r.pct}%`, background: r.pct >= 80 ? 'var(--success)' : r.pct >= 50 ? 'var(--info)' : 'var(--error)' }} /></div>
                               <span className={`badge ${pctTone(r.pct)}`}>{r.pct}%</span>
                             </div>
                           : <span style={{ color: 'var(--text-subtle)' }}>—</span>}

@@ -325,7 +325,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                     ? { bg: 'var(--error-soft)', fg: 'var(--error)', label: 'ผิด', Icon: XCircle }
                     : { bg: 'var(--surface-hover)', fg: 'var(--text-muted)', label: 'ข้าม', Icon: MinusCircle };
                 return (
-                  <div key={idx} className="card" style={{ padding: '1rem 1.1rem' }}>
+                  <div key={idx} className="card stagger-item" style={{ padding: '1rem 1.1rem', '--i': Math.min(visible.findIndex(v => v.idx === idx), 12) }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
                       <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>ข้อ {idx + 1}</span>
                       <span className="badge" style={{ background: tone.bg, color: tone.fg, boxShadow: 'none' }}><tone.Icon size={11} /> {tone.label}</span>
@@ -393,8 +393,8 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
             <span className={`badge ${verdict.cls}`} style={{ height: 24, fontSize: '0.78rem', padding: '0 0.6rem' }}>{verdict.label}</span>
 
             <div style={{ display: 'flex', height: 8, borderRadius: 999, overflow: 'hidden', margin: '1.5rem auto 0', maxWidth: 420, background: 'var(--surface-active)' }} aria-hidden="true">
-              <span style={{ width: `${(score / total) * 100}%`, background: 'var(--success)' }} />
-              <span style={{ width: `${(wrong / total) * 100}%`, background: 'var(--error)' }} />
+              <span className="grow-x" style={{ width: `${(score / total) * 100}%`, background: 'var(--success)' }} />
+              <span className="grow-x" style={{ width: `${(wrong / total) * 100}%`, background: 'var(--error)', animationDelay: '0.15s' }} />
             </div>
           </div>
 
@@ -441,6 +441,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
               type="button"
               onClick={() => { setCurrentQ(idx); setShowNavigator(false); }}
               aria-label={`ไปข้อที่ ${idx + 1}`}
+              className={`nav-cell${isCurrent ? ' is-current' : ''}`}
               style={{
                 position: 'relative', height: 30, borderRadius: 6, border: 'none', cursor: 'pointer',
                 fontSize: '0.75rem', fontWeight: isCurrent ? 600 : 500, fontVariantNumeric: 'tabular-nums',
@@ -549,7 +550,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
             </div>
           )}
 
-          <div className="card" style={{ padding: '1.25rem 1.25rem 1.35rem', marginBottom: '1rem' }}>
+          <div key={currentQ} className="card question-enter" style={{ padding: '1.25rem 1.25rem 1.35rem', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', gap: '0.5rem' }}>
               <span className="badge badge-accent">ข้อที่ {currentQ + 1} จาก {subject.questions.length}</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
@@ -597,8 +598,9 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
                   <button
                     key={idx}
                     type="button"
-                    className="exam-choice"
+                    className={`exam-choice${answered ? ' is-locked' : ''}`}
                     data-choice-option="active"
+                    data-result={isRight ? 'right' : isWrong ? 'wrong' : undefined}
                     aria-pressed={isSelected}
                     style={{
                       background: bg, boxShadow, color, cursor: answered ? 'default' : 'pointer',
