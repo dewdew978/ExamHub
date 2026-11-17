@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronRight, ChevronLeft, RotateCcw, Home as HomeIcon, Check, Clock, X, Info, FileText, Pause, Play, LayoutGrid, Bookmark, Flag, Lightbulb, MinusCircle, Target } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 import NumberTicker from './NumberTicker';
@@ -68,6 +68,7 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
   const [isReviewMode, setIsReviewMode] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [showNavigator, setShowNavigator] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState('all');
 
   const toggleBookmark = () => {
     const newBookmarks = [...bookmarks];
@@ -252,612 +253,434 @@ export default function Exam({ subject: sourceSubject, onBack, onComplete, onRep
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const restartExam = () => {
+    try {
+      if (!subject.adminOnly) localStorage.removeItem('examhub_in_progress_exam');
+    } catch (e) {
+      console.warn(e);
+    }
+    const nextPreferences = readExamPreferences();
+    setPreferences(nextPreferences);
+    setChoiceOrderVersion(resolveChoiceOrderVersion(initialProgress, true));
+    setQuestionOrder(createQuestionOrder(sourceSubject.questions.length, nextPreferences.autoShuffle));
+    setAnswers(Array(subject.questions.length).fill(null));
+    setPendingChoices({});
+    setBookmarks(Array(subject.questions.length).fill(false));
+    setCurrentQ(0);
+    setTimeLeft(subject.questions.length * 60);
+    setShowAlert(true);
+    setIsReviewMode(false);
+    setReviewFilter('all');
+    setShowResult(false);
+  };
+
+  const choiceLetter = (i) => String.fromCharCode(65 + i);
+
   if (showResult) {
+    const total = subject.questions.length;
+    const statusOf = (idx) => {
+      const ans = answers[idx];
+      if (ans === null) return 'skipped';
+      return isCorrectAnswer(ans, subject.questions[idx].answer) ? 'right' : 'wrong';
+    };
+
     if (isReviewMode) {
+      const counts = { all: total, right: 0, wrong: 0, skipped: 0 };
+      subject.questions.forEach((_, i) => { counts[statusOf(i)] += 1; });
+      const visible = subject.questions.map((question, idx) => ({ question, idx })).filter(({ idx }) => reviewFilter === 'all' || statusOf(idx) === reviewFilter);
+
       return (
-        <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '1.5rem auto', padding: '0 0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-            <button 
-              className="btn btn-outline"
-              onClick={() => setIsReviewMode(false)}
-              style={{ width: '32px', height: '32px', padding: 0 }}
-            >
-              <ArrowLeft size={16} />
-            </button>
+        <div className="page animate-fade-in" style={{ maxWidth: 860 }}>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => setIsReviewMode(false)} style={{ marginBottom: '1rem', marginLeft: '-0.5rem' }}>
+            <ArrowLeft size={14} /> สรุปผลคะแนน
+          </button>
+          <div className="page-header">
             <div>
-              <h2 style={{ fontSize: '1.15rem', marginBottom: '0.125rem', letterSpacing: '-0.3px' }}>เฉลยข้อสอบ: {subject.name}</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', margin: 0 }}>ทบทวนข้อผิดพลาดและดูคำอธิบาย</p>
+              <div className="page-eyebrow">เฉลยข้อสอบ</div>
+              <h1 className="page-title">{subject.name}</h1>
+              <p className="page-subtitle">ทบทวนข้อผิดพลาดและอ่านคำอธิบายรายข้อ</p>
             </div>
           </div>
-  
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {subject.questions.map((q, idx) => {
-              const userAnswer = answers[idx];
-              const isRight = isCorrectAnswer(userAnswer, q.answer);
-              const isSkipped = userAnswer === null;
-  
-              return (
-                <div key={idx} className="card" style={{ padding: '1.25rem 1rem', borderRadius: '10px', borderLeft: isRight ? '4px solid var(--success)' : isSkipped ? '4px solid var(--text-muted)' : '4px solid var(--error)' }}>
-                  <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <div style={{
-                      width: '26px', height: '26px', borderRadius: '50%', flexShrink: 0,
-                      background: isRight ? 'rgba(16, 185, 129, 0.15)' : isSkipped ? 'var(--surface-active)' : 'rgba(238, 0, 0, 0.15)',
-                      color: isRight ? 'var(--success)' : isSkipped ? 'var(--text-muted)' : 'var(--error)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.8125rem'
-                    }}>
-                      {idx + 1}
+
+          <div className="tabs" style={{ marginBottom: '1rem' }}>
+            {[
+              ['all', 'ทั้งหมด'], ['wrong', 'ตอบผิด'], ['skipped', 'ข้าม'], ['right', 'ตอบถูก'],
+            ].map(([key, label]) => (
+              <button key={key} type="button" className={`tab${reviewFilter === key ? ' active' : ''}`} onClick={() => setReviewFilter(key)}>
+                {label} <span className="count">{counts[key]}</span>
+              </button>
+            ))}
+          </div>
+
+          {visible.length === 0 ? (
+            <div className="empty-state"><span className="tile"><CheckCircle size={18} /></span><h3>ไม่มีข้อในหมวดนี้</h3></div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {visible.map(({ question, idx }) => {
+                const userAnswer = answers[idx];
+                const status = statusOf(idx);
+                const tone = status === 'right'
+                  ? { bg: 'var(--success-soft)', fg: 'var(--success)', label: 'ถูก', Icon: CheckCircle }
+                  : status === 'wrong'
+                    ? { bg: 'var(--error-soft)', fg: 'var(--error)', label: 'ผิด', Icon: XCircle }
+                    : { bg: 'var(--surface-hover)', fg: 'var(--text-muted)', label: 'ข้าม', Icon: MinusCircle };
+                return (
+                  <div key={idx} className="card" style={{ padding: '1rem 1.1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>ข้อ {idx + 1}</span>
+                      <span className="badge" style={{ background: tone.bg, color: tone.fg, boxShadow: 'none' }}><tone.Icon size={11} /> {tone.label}</span>
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <h3 style={{ fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '1rem', fontWeight: 500 }}>
-                        {renderText(q.q)}
-                      </h3>
-  
-                      <div
-                        data-choice-list="review"
-                        style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.4rem', marginBottom: '1rem' }}
-                      >
-                        {q.choices.map((choice, cIdx) => {
-                          const isSelected = includesChoice(userAnswer, cIdx);
-                          const isCorrectChoice = includesChoice(q.answer, cIdx);
-                          
-                          let bg = 'var(--surface)';
-                          let color = 'var(--text)';
-                          let boxShadow = 'var(--shadow-border)';
-                          let icon = null;
-  
-                          if (isCorrectChoice) {
-                            bg = 'rgba(16, 185, 129, 0.1)';
-                            boxShadow = '0px 0px 0px 1px var(--success)';
-                            icon = <CheckCircle size={15} color="var(--success)" />;
-                          } else if (isSelected && !isCorrectChoice) {
-                            bg = 'rgba(238, 0, 0, 0.1)';
-                            boxShadow = '0px 0px 0px 1px var(--error)';
-                            icon = <XCircle size={15} color="var(--error)" />;
-                          } else {
-                            color = 'var(--text-muted)';
-                          }
-  
-                          return (
-                            <div key={cIdx} data-choice-option="review" style={{
-                              padding: '0.6rem 0.8rem', borderRadius: '6px',
-                              background: bg, boxShadow: boxShadow, color: color,
-                              display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.875rem',
-                              height: '100%'
+                    <h3 style={{ fontSize: '0.95rem', lineHeight: 1.55, marginBottom: '0.85rem', fontWeight: 500 }}>{renderText(question.q)}</h3>
+
+                    <div data-choice-list="review" style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.35rem', marginBottom: '0.85rem' }}>
+                      {question.choices.map((choice, cIdx) => {
+                        const isSelected = includesChoice(userAnswer, cIdx);
+                        const isCorrectChoice = includesChoice(question.answer, cIdx);
+                        const state = isCorrectChoice ? 'right' : isSelected ? 'wrong' : 'idle';
+                        return (
+                          <div key={cIdx} data-choice-option="review" style={{
+                            padding: '0.55rem 0.75rem', borderRadius: 8, height: '100%',
+                            display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.86rem',
+                            background: state === 'right' ? 'var(--success-soft)' : state === 'wrong' ? 'var(--error-soft)' : 'transparent',
+                            boxShadow: state === 'idle' ? 'inset 0 0 0 1px var(--border-divider)' : 'none',
+                            color: state === 'idle' ? 'var(--text-muted)' : 'var(--text)',
+                          }}>
+                            <span style={{
+                              width: 20, height: 20, borderRadius: 5, flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: '0.7rem', fontWeight: 600,
+                              background: state === 'right' ? 'var(--success)' : state === 'wrong' ? 'var(--error)' : 'var(--surface-hover)',
+                              color: state === 'idle' ? 'var(--text-muted)' : '#fff',
                             }}>
-                              <div style={{ width: '18px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
-                                {icon || <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{String.fromCharCode(65 + cIdx)}</span>}
-                              </div>
-                              <span style={{ lineHeight: 1.4 }}>{renderText(choice)}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-  
-                      <div style={{ 
-                        padding: '0.875rem', background: 'var(--surface-hover)', 
-                        borderRadius: '6px', fontSize: '0.8125rem' 
-                      }}>
-                        <div style={{ fontWeight: 600, marginBottom: '0.2rem', color: 'var(--text)' }}>คำอธิบาย:</div>
-                        <div style={{ color: 'var(--text-muted)', lineHeight: 1.5, whiteSpace: 'pre-line' }}>{renderText(q.explain)}</div>
-                      </div>
+                              {state === 'right' ? <Check size={12} strokeWidth={3} /> : state === 'wrong' ? <X size={12} strokeWidth={3} /> : choiceLetter(cIdx)}
+                            </span>
+                            <span style={{ lineHeight: 1.45 }}>{renderText(choice)}</span>
+                            {isSelected && <span style={{ marginLeft: 'auto', fontSize: '0.7rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>คำตอบของคุณ</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div style={{ padding: '0.75rem 0.85rem', background: 'var(--bg-subtle)', boxShadow: 'inset 0 0 0 1px var(--border-divider)', borderRadius: 8, fontSize: '0.8125rem' }}>
+                      <div style={{ fontWeight: 600, marginBottom: '0.2rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}><Lightbulb size={13} color="var(--warning)" /> คำอธิบาย</div>
+                      <div style={{ color: 'var(--text-muted)', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{renderText(question.explain)}</div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       );
     }
 
-    const total = subject.questions.length;
     const score = answers.reduce((sum, ans, idx) => sum + (isCorrectAnswer(ans, subject.questions[idx].answer) ? 1 : 0), 0);
     const pct = Math.round((score / total) * 100);
     const wrong = answers.filter((a, i) => a !== null && !isCorrectAnswer(a, subject.questions[i].answer)).length;
     const skipped = answers.filter(a => a === null).length;
+    const verdict = pct >= 80
+      ? { label: 'ยอดเยี่ยมมาก!', cls: 'badge-success' }
+      : pct >= 50 ? { label: 'ผ่านเกณฑ์', cls: 'badge-info' } : { label: 'พยายามอีกนิดนะ', cls: 'badge-error' };
 
     return (
-      <div className="animate-fade-in" style={{ maxWidth: '540px', margin: '2rem auto', padding: '0 0.75rem' }}>
-        <div className="card" style={{ padding: '2.5rem 1.5rem', borderRadius: '12px', textAlign: 'center' }}>
-          <div style={{ 
-            fontSize: '3rem', 
-            fontWeight: 700,
-            letterSpacing: 'normal',
-            marginBottom: '0.5rem',
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'center',
-            gap: '0.35rem',
-            lineHeight: 1
-          }}>
-            <NumberTicker value={score} duration={1600} style={{ color: 'var(--text)' }} />
-            <span style={{ fontSize: '1.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>/{total}</span>
-          </div>
+      <div className="page animate-fade-in" style={{ maxWidth: 720 }}>
+        <div className="card" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '1.75rem 1.5rem 1.5rem', textAlign: 'center' }}>
+            <div className="page-eyebrow" style={{ justifyContent: 'center' }}>ผลการสอบ · {subject.name}</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '0.3rem', lineHeight: 1, margin: '0.75rem 0' }}>
+              <NumberTicker value={score} duration={1400} style={{ fontSize: '3.25rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--text)' }} />
+              <span style={{ fontSize: '1.5rem', color: 'var(--text-subtle)', fontWeight: 500 }}>/{total}</span>
+            </div>
+            <span className={`badge ${verdict.cls}`} style={{ height: 24, fontSize: '0.78rem', padding: '0 0.6rem' }}>{verdict.label}</span>
 
-          <div style={{ marginBottom: '1.75rem' }}>
-            <span style={{
-              display: 'inline-block',
-              padding: '0.35rem 0.85rem',
-              borderRadius: '9999px',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              background: pct >= 80 ? 'rgba(34, 197, 94, 0.12)' : pct >= 50 ? 'rgba(59, 130, 246, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-              color: pct >= 80 ? '#16a34a' : pct >= 50 ? '#2563eb' : '#dc2626',
-              marginBottom: '0.5rem'
-            }}>
-              {pct >= 80 ? 'ยอดเยี่ยมมาก!' : pct >= 50 ? 'ผ่านเกณฑ์' : 'พยายามอีกนิดนะ'}
-            </span>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>คะแนนที่คุณทำได้</p>
-          </div>
-          
-          <div style={{ 
-            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', 
-            padding: '1rem', borderRadius: '10px', boxShadow: 'var(--shadow-border)',
-            marginBottom: '2rem', background: 'var(--surface-hover)'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#16a34a' }}>
-                <NumberTicker value={score} duration={1200} />
-              </div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>ถูก</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#dc2626' }}>
-                <NumberTicker value={wrong} duration={1200} />
-              </div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>ผิด</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-muted)' }}>
-                <NumberTicker value={skipped} duration={1200} />
-              </div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>ข้าม</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)' }}>
-                <NumberTicker value={pct} duration={1600} />%
-              </div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.15rem' }}>เปอร์เซ็นต์</div>
+            <div style={{ display: 'flex', height: 8, borderRadius: 999, overflow: 'hidden', margin: '1.5rem auto 0', maxWidth: 420, background: 'var(--surface-active)' }} aria-hidden="true">
+              <span style={{ width: `${(score / total) * 100}%`, background: 'var(--success)' }} />
+              <span style={{ width: `${(wrong / total) * 100}%`, background: 'var(--error)' }} />
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="btn btn-primary" onClick={() => setIsReviewMode(true)} style={{ padding: '0.55rem 1.15rem' }}>
-              <FileText size={15} />
-              ดูเฉลย
-            </button>
-            <button className="btn btn-outline" onClick={() => {
-              try {
-                if (!subject.adminOnly) localStorage.removeItem('examhub_in_progress_exam');
-              } catch (e) {
-                console.warn(e);
-              }
-              const nextPreferences = readExamPreferences();
-              setPreferences(nextPreferences);
-              setChoiceOrderVersion(resolveChoiceOrderVersion(initialProgress, true));
-              setQuestionOrder(createQuestionOrder(sourceSubject.questions.length, nextPreferences.autoShuffle));
-              setAnswers(Array(subject.questions.length).fill(null));
-              setPendingChoices({});
-              setBookmarks(Array(subject.questions.length).fill(false));
-              setCurrentQ(0);
-              setTimeLeft(subject.questions.length * 60);
-              setShowAlert(true);
-              setIsReviewMode(false);
-              setShowResult(false);
-            }} style={{ padding: '0.55rem 1.15rem' }}>
-              <RotateCcw size={15} />
-              ลองใหม่
-            </button>
-            <button className="btn btn-outline" onClick={onBack} style={{ padding: '0.55rem 1.15rem' }}>
-              <HomeIcon size={15} />
-              กลับหน้าหลัก
-            </button>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderTop: '1px solid var(--border-divider)' }}>
+            {[
+              { label: 'ถูก', value: score, color: 'var(--success)', Icon: CheckCircle },
+              { label: 'ผิด', value: wrong, color: 'var(--error)', Icon: XCircle },
+              { label: 'ข้าม', value: skipped, color: 'var(--text-muted)', Icon: MinusCircle },
+              { label: 'เปอร์เซ็นต์', value: pct, suffix: '%', color: 'var(--text)', Icon: Target },
+            ].map((s, i) => (
+              <div key={s.label} style={{ padding: '0.9rem 0.5rem', textAlign: 'center', borderLeft: i ? '1px solid var(--border-divider)' : 'none' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><s.Icon size={12} color={s.color} /> {s.label}</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 600, color: s.color, marginTop: 2 }}><NumberTicker value={s.value} duration={1200} />{s.suffix}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="modal-footer" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button type="button" className="btn" onClick={onBack}><HomeIcon size={14} /> กลับคลังข้อสอบ</button>
+            <button type="button" className="btn" onClick={restartExam}><RotateCcw size={14} /> ลองใหม่</button>
+            <button type="button" className="btn btn-primary" onClick={() => setIsReviewMode(true)}><FileText size={14} /> ดูเฉลย</button>
           </div>
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="animate-fade-in" style={{ maxWidth: '800px', margin: '0.5rem auto 2.5rem' }}>
-      
-      {/* Pause Modal Overlay */}
-      {isPaused && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.7)',
-          backdropFilter: 'blur(5px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          padding: '1rem'
-        }}>
-          <div className="card animate-fade-in" style={{
-            padding: '2rem 1.5rem',
-            maxWidth: '400px',
-            width: '100%',
-            textAlign: 'center',
-            borderRadius: '14px',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
-          }}>
-            <div style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              background: 'rgba(0, 112, 243, 0.1)',
-              color: 'var(--accent)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem'
-            }}>
-              <Pause size={24} />
-            </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.35rem' }}>
-              พักการทำข้อสอบ
-            </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginBottom: '1.5rem', lineHeight: 1.5 }}>
-              เวลาถูกหยุดชั่วคราวแล้ว คุณสามารถกด "ทำข้อสอบต่อ" เพื่อกลับไปทำข้อสอบได้ทันที
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              <button 
-                className="btn btn-primary" 
-                onClick={() => setIsPaused(false)}
-                style={{ padding: '0.7rem 1.25rem', width: '100%', fontSize: '0.875rem' }}
-              >
-                <Play size={15} />
-                ทำข้อสอบต่อ
-              </button>
-              <button 
-                className="btn btn-outline" 
-                onClick={handleExit}
-                style={{ padding: '0.65rem 1.25rem', width: '100%', fontSize: '0.875rem' }}
-              >
-                <HomeIcon size={15} />
-                ออกจากการสอบ
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  const answeredCount = answers.filter(a => a !== null).length;
+  const progressPct = (answeredCount / subject.questions.length) * 100;
 
-      {/* Header bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <button 
-            className="btn btn-outline" 
-            onClick={handleExit}
-            style={{ width: '32px', height: '32px', padding: 0 }}
-            title="กลับหน้าหลัก"
-          >
-            <ArrowLeft size={15} />
-          </button>
-          <div>
-            <h2 style={{ fontSize: '1.05rem', margin: 0, letterSpacing: '-0.3px', fontWeight: 600 }}>{subject.name}</h2>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-          <button 
-            className={`btn ${showNavigator ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setShowNavigator(!showNavigator)}
-            style={{ width: '32px', height: '32px', padding: 0 }}
-            title="ดูภาพรวมข้อสอบ"
-          >
-            <LayoutGrid size={15} />
-          </button>
-          {timerEnabled && <button
-            className="btn btn-outline" 
-            onClick={() => setIsPaused(true)}
-            style={{ width: '32px', height: '32px', padding: 0 }}
-            title="พักสอบชั่วคราว"
-          >
-            <Pause size={15} />
-          </button>}
-          {timerEnabled ? <div style={{
-            display: 'flex', alignItems: 'center', gap: '0.35rem', 
-            background: timeLeft < 60 ? 'rgba(239, 68, 68, 0.1)' : 'var(--surface-hover)', 
-            color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
-            padding: '0.35rem 0.65rem', borderRadius: '6px', 
-            boxShadow: 'var(--shadow-border)', fontWeight: 600, fontSize: '0.9375rem'
-          }}>
-            <Clock size={16} />
-            <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
-          </div> : <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>ไม่จำกัดเวลา</span>}
-        </div>
+  const navigator = (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+        <div style={{ fontSize: '0.8125rem', fontWeight: 600 }}>นำทางข้อสอบ</div>
+        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{answeredCount}/{subject.questions.length}</span>
       </div>
-
-      {showNavigator && (
-        <div className="card animate-fade-in" style={{ padding: '1rem', marginBottom: '1.25rem', borderRadius: '10px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <h3 style={{ fontSize: '0.875rem', fontWeight: 600, margin: 0 }}>นำทางข้อสอบ</h3>
-            <div style={{ display: 'flex', gap: '0.625rem', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'rgba(16, 185, 129, 0.2)', border: '1px solid var(--success)' }}></div>
-                ทำแล้ว
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'var(--surface)', border: '1px solid var(--border-divider)' }}></div>
-                ยังไม่ทำ
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                <Bookmark size={11} fill="var(--warning)" color="var(--warning)" />
-                ติดดาว
-              </div>
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(36px, 1fr))', gap: '0.35rem' }}>
-            {subject.questions.map((_, idx) => {
-              const isCurrent = currentQ === idx;
-              const isAnswered = answers[idx] !== null;
-              
-              let bg = 'var(--surface)';
-              let border = '1px solid var(--border-divider)';
-              let color = 'var(--text)';
-              
-              if (isCurrent) {
-                bg = 'var(--accent)';
-                border = '1px solid var(--accent)';
-                color = 'white';
-              } else if (isAnswered) {
-                bg = 'rgba(16, 185, 129, 0.1)';
-                border = '1px solid var(--success)';
-                color = 'var(--success)';
-              }
-
-              return (
-                <button
-                  key={idx}
-                  onClick={() => { setCurrentQ(idx); setShowNavigator(false); }}
-                  style={{
-                    position: 'relative',
-                    height: '34px',
-                    borderRadius: '6px',
-                    background: bg,
-                    border: border,
-                    color: color,
-                    fontWeight: isCurrent ? 600 : 400,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.8125rem',
-                    transition: 'all 0.15s ease',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  {idx + 1}
-                  {bookmarks[idx] && (
-                    <div style={{ position: 'absolute', top: '-3px', right: '-3px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', borderRadius: '50%', padding: '1px' }}>
-                      <Bookmark size={9} fill="var(--warning)" color="var(--warning)" />
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {showAlert && (
-        <div className="animate-fade-in" style={{
-          background: 'rgba(0, 112, 243, 0.05)',
-          border: '1px solid rgba(0, 112, 243, 0.2)',
-          borderRadius: '8px',
-          padding: '0.75rem 1rem',
-          marginBottom: '1.25rem',
-          display: 'flex',
-          gap: '0.625rem',
-          alignItems: 'flex-start',
-          position: 'relative'
-        }}>
-          <div style={{ color: 'var(--accent)', marginTop: '0.1rem' }}>
-            <Info size={16} />
-          </div>
-          <div style={{ paddingRight: '1.5rem' }}>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.4, margin: 0 }}>
-              {timerEnabled
-                ? <>ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที (รวม {subject.questions.length} นาที) เมื่อเวลาหมดจะทำการส่งข้อสอบอัตโนมัติ</>
-                : 'ฝึกทำข้อสอบแบบไม่จำกัดเวลา เมื่อทำเสร็จให้กดดูผลคะแนนเพื่อส่งข้อสอบ'}
-            </p>
-          </div>
-          <button 
-            onClick={() => setShowAlert(false)}
-            style={{
-              position: 'absolute',
-              top: '0.625rem',
-              right: '0.625rem',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0.2rem'
-            }}
-          >
-            <X size={15} />
-          </button>
-        </div>
-      )}
-
-      {/* Progress bar */}
-      <div style={{ 
-        background: 'var(--border-divider)', height: '4px', borderRadius: '2px', 
-        marginBottom: '0.5rem', overflow: 'hidden' 
-      }}>
-        <div style={{ 
-          height: '100%', 
-          background: 'var(--text)', 
-          width: `${((currentQ + 1) / subject.questions.length) * 100}%`,
-          transition: 'width 0.3s ease'
-        }}></div>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '1.25rem', fontWeight: 500 }}>
-        <span>ข้อที่ {currentQ + 1} จาก {subject.questions.length}</span>
-      </div>
-
-      <div className="card" style={{ padding: '1.25rem 1rem', borderRadius: '12px', marginBottom: '1.25rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-          <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-            Question {currentQ + 1}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-            {onReport && (
-              <button 
-                type="button"
-                onClick={() => onReport({ subjectId: subject.id, questionNumber: questionOrder[currentQ] + 1, issueType: 'wrong_answer' })}
-                style={{ 
-                  background: 'transparent', border: 'none', cursor: 'pointer', 
-                  color: 'var(--text-muted)',
-                  display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', fontWeight: 500,
-                  padding: '0.25rem 0.4rem', borderRadius: '4px'
-                }}
-                title="รายงานข้อนี้ผิด"
-              >
-                <AlertTriangle size={14} />
-                <span>แจ้งข้อผิด</span>
-              </button>
-            )}
-            <button 
-              onClick={toggleBookmark}
-              style={{ 
-                background: 'transparent', border: 'none', cursor: 'pointer', 
-                color: bookmarks[currentQ] ? 'var(--warning)' : 'var(--text-muted)',
-                display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', fontWeight: 500,
-                padding: '0.25rem 0.4rem', borderRadius: '4px'
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(32px, 1fr))', gap: '0.3rem' }}>
+        {subject.questions.map((_, idx) => {
+          const isCurrent = currentQ === idx;
+          const isAnswered = answers[idx] !== null;
+          return (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => { setCurrentQ(idx); setShowNavigator(false); }}
+              aria-label={`ไปข้อที่ ${idx + 1}`}
+              style={{
+                position: 'relative', height: 30, borderRadius: 6, border: 'none', cursor: 'pointer',
+                fontSize: '0.75rem', fontWeight: isCurrent ? 600 : 500, fontVariantNumeric: 'tabular-nums',
+                background: isCurrent ? 'var(--accent)' : isAnswered ? 'var(--accent-soft)' : 'var(--surface)',
+                color: isCurrent ? '#fff' : isAnswered ? 'var(--accent-text)' : 'var(--text-muted)',
+                boxShadow: isCurrent || isAnswered ? 'none' : 'inset 0 0 0 1px var(--border-color)',
               }}
             >
-              <Bookmark size={14} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
-              <span>{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาว'}</span>
+              {idx + 1}
+              {bookmarks[idx] && (
+                <span style={{ position: 'absolute', top: -4, right: -3, display: 'flex' }}>
+                  <Bookmark size={10} fill="var(--warning)" color="var(--warning)" />
+                </span>
+              )}
             </button>
-          </div>
-        </div>
+          );
+        })}
+      </div>
+      <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><span style={{ width: 9, height: 9, borderRadius: 3, background: 'var(--accent-soft)' }} /> ทำแล้ว</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><span style={{ width: 9, height: 9, borderRadius: 3, boxShadow: 'inset 0 0 0 1px var(--border-strong)' }} /> ยังไม่ทำ</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Bookmark size={10} fill="var(--warning)" color="var(--warning)" /> ติดดาว</span>
+      </div>
+    </div>
+  );
 
-        <h3 style={{ fontSize: '1.05rem', lineHeight: 1.5, marginBottom: '1.25rem', fontWeight: 500 }}>
-          {renderText(q.q)}
-        </h3>
-
-        <div
-          data-choice-list="active"
-          style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.5rem' }}
-        >
-          {q.choices.map((choice, idx) => {
-            const isSelected = includesChoice(answered ? answers[currentQ] : pendingChoices[currentQ], idx);
-            const isRight = answered && includesChoice(q.answer, idx);
-            const isWrong = answered && isSelected && !isRight;
-
-            let boxShadow = 'var(--shadow-border)';
-            let bg = 'var(--surface)';
-            let color = 'var(--text)';
-
-            if (isRight) {
-              boxShadow = '0px 0px 0px 1px var(--success)';
-              bg = 'rgba(16, 185, 129, 0.1)';
-            } else if (isWrong) {
-              boxShadow = '0px 0px 0px 1px var(--error)';
-              bg = 'rgba(238, 0, 0, 0.1)';
-            } else if (answered) {
-              color = 'var(--text-muted)';
-            } else if (isSelected) {
-              boxShadow = '0px 0px 0px 2px var(--accent)';
-              bg = 'var(--surface-active)';
-            }
-
-            return (
-              <button 
-                key={idx} 
-                className="btn"
-                data-choice-option="active"
-                aria-pressed={isSelected}
-                style={{
-                  background: bg,
-                  boxShadow: boxShadow,
-                  borderRadius: '8px',
-                  padding: '0.75rem 0.875rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  cursor: answered ? 'default' : 'pointer',
-                  textAlign: 'left',
-                  color: color,
-                  fontSize: '0.875rem',
-                  width: '100%',
-                  height: '100%',
-                  justifyContent: 'flex-start'
-                }}
-                onClick={() => handleSelect(idx)}
-              >
-                <div style={{
-                  width: '22px', height: '22px', borderRadius: '4px', flexShrink: 0,
-                  background: isRight ? 'var(--success)' : isWrong ? 'var(--error)' : 'var(--surface-active)',
-                  color: (isRight || isWrong) ? '#fff' : 'var(--text-muted)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: 600, fontSize: '0.75rem'
-                }}>
-                  {isRight ? <CheckCircle size={14} /> : isWrong ? <XCircle size={14} /> : String.fromCharCode(65 + idx)}
-                </div>
-                <span style={{ lineHeight: 1.45 }}>{renderText(choice)}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {Array.isArray(q.answer) && !answered && (
-          <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <span>เลือก {q.answer.length} คำตอบ ({pendingChoices[currentQ]?.length || 0}/{q.answer.length})</span>
-            <button className="btn btn-primary"
-              disabled={pendingChoices[currentQ]?.length !== q.answer.length}
-              onClick={() => {
-                setAnswers(previous => previous.map((answer, index) => index === currentQ ? [...pendingChoices[currentQ]] : answer));
-              }}>
-              ยืนยันคำตอบ
-            </button>
-          </div>
-        )}
-
-        {answered && (
-          <div className="animate-fade-in" style={{ 
-            marginTop: '1.25rem', 
-            padding: '1rem', 
-            background: 'var(--surface-hover)', 
-            boxShadow: 'var(--shadow-border)',
-            borderRadius: '8px' 
-          }}>
-            <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.8125rem', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <Check size={15} /> เฉลยและคำอธิบาย
+  return (
+    <div className="page animate-fade-in exam-page" style={{ maxWidth: 1120, paddingTop: '1.25rem' }}>
+      {isPaused && (
+        <div className="modal-backdrop">
+          <div className="modal" role="dialog" aria-label="พักการทำข้อสอบ">
+            <div className="modal-header">
+              <span className="tile tile-accent"><Pause size={16} /></span>
+              <div>
+                <div className="modal-title">พักการทำข้อสอบ</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: 2 }}>เวลาหยุดชั่วคราวที่ {formatTime(timeLeft)} กลับมาทำต่อได้ทุกเมื่อ</div>
+              </div>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5, margin: 0 }}>
-              <span style={{ whiteSpace: 'pre-line' }}>{renderText(q.explain)}</span>
-            </p>
+            <div className="modal-footer" style={{ marginTop: '1rem' }}>
+              <button type="button" className="btn" onClick={handleExit}><HomeIcon size={14} /> ออกจากการสอบ</button>
+              <button type="button" className="btn btn-primary" onClick={() => setIsPaused(false)}><Play size={14} /> ทำข้อสอบต่อ</button>
+            </div>
           </div>
+        </div>
+      )}
+
+      {/* Exam toolbar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+        <button type="button" className="btn btn-ghost btn-icon" onClick={handleExit} title="บันทึกและออก" aria-label="บันทึกและออก">
+          <ArrowLeft size={16} />
+        </button>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <div style={{ fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1.3 }}>{subject.name}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: 4 }}>
+            <div className="progress" style={{ width: 180, height: 4 }}><span style={{ width: `${progressPct}%` }} /></div>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>ตอบแล้ว {answeredCount}/{subject.questions.length}</span>
+          </div>
+        </div>
+        <button
+          type="button"
+          className={`btn btn-icon exam-nav-toggle${showNavigator ? ' active' : ''}`}
+          onClick={() => setShowNavigator(!showNavigator)}
+          title="ดูภาพรวมข้อสอบ"
+          aria-label="ดูภาพรวมข้อสอบ"
+          style={showNavigator ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : undefined}
+        >
+          <LayoutGrid size={15} />
+        </button>
+        {timerEnabled && (
+          <button type="button" className="btn btn-icon" onClick={() => setIsPaused(true)} title="พักสอบชั่วคราว" aria-label="พักสอบชั่วคราว">
+            <Pause size={15} />
+          </button>
         )}
+        {timerEnabled ? (
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.35rem', height: 32, padding: '0 0.7rem', borderRadius: 6,
+            background: timeLeft < 60 ? 'var(--error-soft)' : 'var(--surface)',
+            color: timeLeft < 60 ? 'var(--error)' : 'var(--text)',
+            boxShadow: timeLeft < 60 ? 'none' : '0 0 0 1px var(--border-color)',
+            fontWeight: 600, fontSize: '0.875rem',
+          }}>
+            <Clock size={14} />
+            <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatTime(timeLeft)}</span>
+          </div>
+        ) : <span className="badge">ไม่จำกัดเวลา</span>}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button 
-          className="btn btn-outline" 
-          onClick={prevQuestion}
-          disabled={currentQ === 0}
-          style={{ visibility: currentQ === 0 ? 'hidden' : 'visible' }}
-        >
-          <ChevronLeft size={16} />
-          ก่อนหน้า
-        </button>
-        <button 
-          className="btn btn-primary" 
-          onClick={nextQuestion}
-        >
-          {currentQ < subject.questions.length - 1 ? 'ข้อถัดไป' : 'ดูผลคะแนน'}
-          <ChevronRight size={16} />
-        </button>
+      <div className="exam-layout">
+        <div style={{ minWidth: 0 }}>
+          {showNavigator && <div className="card animate-fade-in exam-nav-inline" style={{ padding: '1rem', marginBottom: '1rem' }}>{navigator}</div>}
+
+          {showAlert && (
+            <div className="animate-fade-in" style={{
+              display: 'flex', gap: '0.6rem', alignItems: 'flex-start', padding: '0.65rem 0.8rem', marginBottom: '1rem',
+              borderRadius: 8, background: 'var(--accent-softer)', boxShadow: 'inset 0 0 0 1px var(--accent-soft)',
+            }}>
+              <Info size={15} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+              <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0, flex: 1 }}>
+                {timerEnabled
+                  ? <>ชุดข้อสอบนี้มีเวลาให้ข้อละ 1 นาที (รวม {subject.questions.length} นาที) เมื่อเวลาหมดจะทำการส่งข้อสอบอัตโนมัติ</>
+                  : 'ฝึกทำข้อสอบแบบไม่จำกัดเวลา เมื่อทำเสร็จให้กดดูผลคะแนนเพื่อส่งข้อสอบ'}
+              </p>
+              <button type="button" className="btn btn-ghost btn-icon btn-sm" onClick={() => setShowAlert(false)} aria-label="ปิดคำแนะนำ" style={{ marginTop: -4, marginRight: -4 }}>
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          <div className="card" style={{ padding: '1.25rem 1.25rem 1.35rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', gap: '0.5rem' }}>
+              <span className="badge badge-accent">ข้อที่ {currentQ + 1} จาก {subject.questions.length}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
+                {onReport && (
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => onReport({ subjectId: subject.id, questionNumber: questionOrder[currentQ] + 1, issueType: 'wrong_answer' })}
+                    title="รายงานข้อนี้ผิด"
+                  >
+                    <Flag size={13} /> แจ้งข้อผิด
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  onClick={toggleBookmark}
+                  style={bookmarks[currentQ] ? { color: 'var(--warning)' } : undefined}
+                >
+                  <Bookmark size={13} fill={bookmarks[currentQ] ? 'currentColor' : 'none'} />
+                  <span>{bookmarks[currentQ] ? 'ติดดาวแล้ว' : 'ติดดาว'}</span>
+                </button>
+              </div>
+            </div>
+
+            <h3 style={{ fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '1.1rem', fontWeight: 500 }}>
+              {renderText(q.q)}
+            </h3>
+
+            <div data-choice-list="active" style={{ display: 'grid', gridAutoRows: '1fr', gap: '0.45rem' }}>
+              {q.choices.map((choice, idx) => {
+                const isSelected = includesChoice(answered ? answers[currentQ] : pendingChoices[currentQ], idx);
+                const isRight = answered && includesChoice(q.answer, idx);
+                const isWrong = answered && isSelected && !isRight;
+
+                let boxShadow = '0 0 0 1px var(--border-color)';
+                let bg = 'var(--surface)';
+                let color = 'var(--text)';
+                if (isRight) { boxShadow = '0 0 0 1px color-mix(in srgb, var(--success) 45%, transparent)'; bg = 'var(--success-soft)'; }
+                else if (isWrong) { boxShadow = '0 0 0 1px color-mix(in srgb, var(--error) 45%, transparent)'; bg = 'var(--error-soft)'; }
+                else if (answered) { color = 'var(--text-muted)'; }
+                else if (isSelected) { boxShadow = '0 0 0 1.5px var(--accent)'; bg = 'var(--accent-softer)'; }
+
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="exam-choice"
+                    data-choice-option="active"
+                    aria-pressed={isSelected}
+                    style={{
+                      background: bg, boxShadow, color, cursor: answered ? 'default' : 'pointer',
+                      border: 'none', borderRadius: 8, padding: '0.7rem 0.85rem', width: '100%', height: '100%',
+                      display: 'flex', alignItems: 'center', gap: '0.75rem', textAlign: 'left', fontSize: '0.9rem',
+                      transition: 'background 0.12s ease, box-shadow 0.12s ease',
+                    }}
+                    onClick={() => handleSelect(idx)}
+                  >
+                    <span style={{
+                      width: 24, height: 24, borderRadius: 6, flexShrink: 0,
+                      background: isRight ? 'var(--success)' : isWrong ? 'var(--error)' : isSelected ? 'var(--accent)' : 'var(--surface-hover)',
+                      color: (isRight || isWrong || isSelected) ? '#fff' : 'var(--text-muted)',
+                      boxShadow: (isRight || isWrong || isSelected) ? 'none' : 'inset 0 0 0 1px var(--border-color)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.75rem',
+                    }}>
+                      {isRight ? <Check size={14} strokeWidth={3} /> : isWrong ? <X size={14} strokeWidth={3} /> : choiceLetter(idx)}
+                    </span>
+                    <span style={{ lineHeight: 1.5 }}>{renderText(choice)}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {Array.isArray(q.answer) && !answered && (
+              <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                <span>เลือก {q.answer.length} คำตอบ ({pendingChoices[currentQ]?.length || 0}/{q.answer.length})</span>
+                <button type="button" className="btn btn-primary"
+                  disabled={pendingChoices[currentQ]?.length !== q.answer.length}
+                  onClick={() => {
+                    setAnswers(previous => previous.map((answer, index) => index === currentQ ? [...pendingChoices[currentQ]] : answer));
+                  }}>
+                  ยืนยันคำตอบ
+                </button>
+              </div>
+            )}
+
+            {answered && (
+              <div className="animate-fade-in" style={{ marginTop: '1.1rem', padding: '0.85rem 0.95rem', background: 'var(--bg-subtle)', boxShadow: 'inset 0 0 0 1px var(--border-divider)', borderRadius: 8 }}>
+                <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: '0.8125rem', marginBottom: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <Lightbulb size={14} color="var(--warning)" /> เฉลยและคำอธิบาย
+                </div>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.84rem', lineHeight: 1.6, margin: 0 }}>
+                  <span style={{ whiteSpace: 'pre-line' }}>{renderText(q.explain)}</span>
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button
+              type="button"
+              className="btn"
+              onClick={prevQuestion}
+              disabled={currentQ === 0}
+              style={{ visibility: currentQ === 0 ? 'hidden' : 'visible' }}
+            >
+              <ChevronLeft size={15} /> ก่อนหน้า
+            </button>
+            <button type="button" className="btn btn-primary" onClick={nextQuestion}>
+              {currentQ < subject.questions.length - 1 ? 'ข้อถัดไป' : 'ดูผลคะแนน'}
+              <ChevronRight size={15} />
+            </button>
+          </div>
+        </div>
+
+        <aside className="card exam-nav-side" style={{ padding: '1rem', position: 'sticky', top: 'calc(var(--topbar-h) + 1rem)' }}>
+          {navigator}
+        </aside>
       </div>
+
+      <style>{`
+        .exam-layout { display: grid; grid-template-columns: minmax(0, 1fr) 248px; gap: 1.25rem; align-items: start; }
+        .exam-nav-toggle { display: none; }
+        .exam-nav-inline { display: none; }
+        @media (max-width: 1080px) {
+          .exam-layout { grid-template-columns: 1fr; }
+          .exam-nav-side { display: none; }
+          .exam-nav-toggle { display: inline-flex; }
+          .exam-nav-inline { display: block; }
+        }
+      `}</style>
     </div>
   );
 }

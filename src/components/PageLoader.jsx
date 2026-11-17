@@ -1,5 +1,5 @@
-// Spinner shown while a lazily loaded page chunk downloads.
-// `inline` fills the content area under the app navbar; otherwise it covers the full screen.
+// Shown while a lazily loaded page chunk downloads.
+// `inline` fills the content area beside the sidebar; otherwise it covers the full screen.
 export default function PageLoader({ inline = false }) {
   return (
     <div
@@ -13,17 +13,10 @@ export default function PageLoader({ inline = false }) {
         background: inline ? 'transparent' : 'var(--bg)',
       }}
     >
-      <div
-        style={{
-          width: '32px',
-          height: '32px',
-          border: '3px solid var(--border-color)',
-          borderTopColor: 'var(--accent)',
-          borderRadius: '50%',
-          animation: 'page-loader-spin 0.8s linear infinite',
-        }}
-      />
-      <style>{`@keyframes page-loader-spin { to { transform: rotate(360deg); } }`}</style>
+      <div style={{ width: 120, height: 3, borderRadius: 3, background: 'var(--surface-active)', overflow: 'hidden' }}>
+        <div style={{ width: '40%', height: '100%', borderRadius: 3, background: 'var(--accent)', animation: 'page-loader-slide 1s ease-in-out infinite' }} />
+      </div>
+      <style>{`@keyframes page-loader-slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }`}</style>
     </div>
   );
 }

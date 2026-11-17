@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   Sparkles, 
   CheckCircle2, 
@@ -11,8 +11,6 @@ import {
   Search,
   BookOpen
 } from 'lucide-react';
-import Aurora from './Aurora';
-import BorderGlow from './BorderGlow';
 import { supabase } from '../lib/supabase';
 import Navbar from './Navbar';
 
@@ -85,13 +83,6 @@ const NEED_TYPES = [
 ];
 
 export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavigateTerms, onNavigateBlog, onLogin, user }) {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document !== 'undefined') {
-      return document.documentElement.classList.contains('dark');
-    }
-    return false;
-  });
-
   // FAQ Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
@@ -106,14 +97,6 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState('');
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
 
   const toggleItem = (catIdx, itemIdx) => {
     const key = `${catIdx}_${itemIdx}`;
@@ -510,12 +493,6 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
 
       {/* 2. Hero Section */}
       <section className="faq-hero">
-        <Aurora 
-          colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} 
-          blend={0.5} 
-          amplitude={1.0} 
-          speed={0.6} 
-        />
         <div className="faq-hero-inner">
           <div className="faq-badge">
             <HelpCircle size={15} color="var(--accent)" />
@@ -645,14 +622,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
             </p>
           </div>
 
-          <BorderGlow
-            borderRadius={24}
-            glowRadius={40}
-            edgeSensitivity={30}
-            glowColor={isDark ? "210 100 70" : "210 90 60"}
-            backgroundColor="var(--surface)"
-            colors={['#0070f3', '#8b5cf6', '#ec4899']}
-          >
+          <div className="card public-form-card">
             <div className="needs-form-card">
               {submitted ? (
                 <div style={{ textAlign: 'center', padding: '2.5rem 1rem' }} className="animate-fade-in">
@@ -782,7 +752,7 @@ export default function FAQ({ onHome, onNavigateLanding, onNavigateAbout, onNavi
                 </form>
               )}
             </div>
-          </BorderGlow>
+          </div>
         </div>
       </section>
 

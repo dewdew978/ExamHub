@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { 
   User, 
-  ArrowLeft, 
   Save, 
   CheckCircle2, 
   Lock, 
@@ -270,205 +269,63 @@ export default function UserSettings({
       
       {/* Scoped CSS for clean responsive layout */}
       <style>{`
-        .user-settings-page {
-          max-width: 960px;
-          margin: 1.5rem auto 3.5rem;
-          padding: 0 1rem;
+        .user-settings-page { max-width: 880px; margin: 0 auto; padding: 1.75rem 2rem 4rem; }
+        .settings-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .settings-header-left { display: flex; align-items: center; gap: 0.9rem; }
+        .settings-header-left h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+        .settings-header-left p { font-size: 0.875rem; color: var(--text-muted); margin: 0.2rem 0 0; }
+        .settings-badge { display: inline-flex; align-items: center; gap: 0.3rem; height: 24px; padding: 0 0.55rem; border-radius: 6px; font-size: 0.75rem; font-weight: 500; }
+        .settings-grid { display: flex; flex-direction: column; gap: 1.25rem; }
+        .settings-nav { display: flex; gap: 1.25rem; border-bottom: 1px solid var(--border-color); overflow-x: auto; scrollbar-width: none; }
+        .settings-tab-btn { position: relative; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0; border: none; background: none; cursor: pointer; color: var(--text-muted); font-size: 0.8125rem; font-weight: 500; white-space: nowrap; }
+        .settings-tab-btn svg { width: 15px; height: 15px; }
+        .settings-tab-btn:hover { color: var(--text); }
+        .settings-tab-btn.active { color: var(--text); }
+        .settings-tab-btn.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; border-radius: 2px; background: var(--accent); }
+        .settings-content { min-width: 0; width: 100%; }
+        .settings-card { padding: 1.25rem 1.35rem 1.35rem; border-radius: var(--radius-lg); }
+        .settings-card-header { padding-bottom: 0.9rem; margin-bottom: 1.1rem; border-bottom: 1px solid var(--border-divider); }
+        .settings-card-header h2 { font-size: 0.95rem; font-weight: 600; margin: 0 0 0.2rem; display: flex; align-items: center; gap: 0.45rem; }
+        .settings-card-header h2 svg { width: 16px; height: 16px; color: var(--text-muted); stroke: currentColor; }
+        .settings-card-header p { font-size: 0.8125rem; color: var(--text-muted); margin: 0; }
+        .settings-card label { font-size: 0.8125rem !important; font-weight: 500 !important; }
+        .settings-card .input { height: 34px; }
+        .settings-card textarea.input { height: auto; min-height: 80px; padding: 0.55rem 0.7rem; }
+        .pref-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 1rem; border-radius: var(--radius-md); background: var(--surface); box-shadow: 0 0 0 1px var(--border-color); }
+        .settings-submit-btn { height: 34px; padding: 0 1rem; }
+        .pref-row > div:first-child > div:first-child { font-weight: 500 !important; font-size: 0.875rem !important; }
+        .pref-row > div:first-child > div:first-child svg { color: var(--text-muted); stroke: currentColor; width: 15px; height: 15px; }
+        .pref-row input[type="checkbox"] {
+          appearance: none; -webkit-appearance: none; position: relative; flex-shrink: 0; cursor: pointer;
+          width: 34px !important; height: 20px !important; border-radius: 999px; margin: 0;
+          background: var(--surface-active); box-shadow: inset 0 0 0 1px var(--border-color); transition: background 0.15s ease;
         }
-        .settings-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 1.5rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid var(--border-divider);
-          gap: 1rem;
+        .pref-row input[type="checkbox"]::after {
+          content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+          background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: transform 0.15s ease;
         }
-        .settings-header-left {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-        .settings-header-left h1 {
-          font-size: 1.25rem;
-          font-weight: 700;
-          margin: 0;
-          letter-spacing: -0.3px;
-        }
-        .settings-header-left p {
-          font-size: 0.8125rem;
-          color: var(--text-muted);
-          margin: 0.15rem 0 0 0;
-        }
-        .settings-badge {
-          font-size: 0.75rem;
-          font-weight: 600;
-          padding: 0.3rem 0.75rem;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.375rem;
-          flex-shrink: 0;
-        }
-
-        /* Desktop Layout: 2 Columns (Sidebar + Content) */
-        .settings-grid {
-          display: flex;
-          gap: 1.5rem;
-          align-items: flex-start;
-        }
-        .settings-nav {
-          width: 240px;
-          flex-shrink: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 0.375rem;
-          background: var(--surface);
-          padding: 0.5rem;
-          border-radius: 12px;
-          border: 1px solid var(--border-color);
-        }
-        .settings-tab-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1rem;
-          border-radius: 8px;
-          border: none;
-          background: transparent;
-          color: var(--text);
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          text-align: left;
-          width: 100%;
-          transition: all 0.15s ease;
-          font-family: inherit;
-        }
-        .settings-tab-btn:hover {
-          background: var(--surface-hover);
-        }
-        .settings-tab-btn.active {
-          background: var(--card);
-          color: var(--accent);
-          font-weight: 600;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-          border-left: 3px solid var(--accent);
-        }
-        .settings-content {
-          flex: 1;
-          min-width: 0;
-          width: 100%;
-        }
-        .settings-card {
-          padding: 2rem;
-          border-radius: 14px;
-          border: 1px solid var(--border-color);
-        }
-        .settings-card-header {
-          border-bottom: 1px solid var(--border-divider);
-          padding-bottom: 1rem;
-          margin-bottom: 1.5rem;
-        }
-        .settings-card-header h2 {
-          font-size: 1.15rem;
-          font-weight: 600;
-          margin: 0 0 0.25rem 0;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        .settings-card-header p {
-          font-size: 0.8125rem;
-          color: var(--text-muted);
-          margin: 0;
-        }
-        .pref-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 1.15rem;
-          border-radius: 10px;
-          background: var(--surface);
-          border: 1px solid var(--border-color);
-          gap: 1rem;
-        }
-        .settings-submit-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          padding: 0.75rem 1.75rem;
-        }
-
-        /* Mobile Responsive (< 768px) */
+        .pref-row input[type="checkbox"]:checked { background: var(--accent); box-shadow: none; }
+        .pref-row input[type="checkbox"]:checked::after { transform: translateX(14px); }
+        .pref-row input[type="checkbox"]:focus-visible { outline: none; box-shadow: var(--focus-ring); }
         @media (max-width: 768px) {
-          .user-settings-page {
-            margin: 1rem auto 2.5rem;
-            padding: 0 0.75rem;
-          }
-          .settings-header {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
-          .settings-header-left {
-            gap: 0.75rem;
-          }
-          .settings-grid {
-            flex-direction: column;
-            gap: 1rem;
-          }
-          .settings-nav {
-            width: 100%;
-            flex-direction: row;
-            padding: 0.35rem;
-            gap: 0.35rem;
-            border-radius: 10px;
-            overflow-x: auto;
-          }
-          .settings-tab-btn {
-            flex: 1;
-            justify-content: center;
-            padding: 0.65rem 0.5rem;
-            font-size: 0.8125rem;
-            white-space: nowrap;
-            text-align: center;
-            border-left: none !important;
-            border-radius: 6px;
-            gap: 0.35rem;
-          }
-          .settings-tab-btn.active {
-            background: var(--card);
-            border-bottom: 2px solid var(--accent);
-          }
-          .settings-card {
-            padding: 1.25rem 1rem;
-            border-radius: 12px;
-          }
-          .pref-row {
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 1rem;
-            gap: 0.75rem;
-          }
-          .settings-submit-btn {
-            width: 100%;
-          }
+          .user-settings-page { padding: 1.25rem 1rem 3rem; }
+          .settings-card { padding: 1.1rem 1rem; }
+          .pref-row { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+          .settings-submit-btn { width: 100%; }
         }
       `}</style>
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div style={{
+        <div role="status" style={{
           position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          background: toastType === 'error' ? 'var(--error)' : 'var(--success)',
-          color: 'white',
-          padding: '0.875rem 1.5rem',
+          bottom: '1.5rem',
+          right: '1.5rem',
+          background: 'var(--surface)',
+          color: toastType === 'error' ? 'var(--error)' : 'var(--text)',
+          padding: '0.7rem 1rem',
           borderRadius: '10px',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+          boxShadow: 'var(--shadow-popover)',
           display: 'flex',
           alignItems: 'center',
           gap: '0.75rem',
@@ -477,7 +334,7 @@ export default function UserSettings({
           fontSize: '0.875rem',
           animation: 'fadeIn 0.2s ease-out'
         }}>
-          <CheckCircle2 size={18} />
+          <CheckCircle2 size={16} color={toastType === 'error' ? 'var(--error)' : 'var(--success)'} />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -485,13 +342,7 @@ export default function UserSettings({
       {/* Top Header Bar */}
       <div className="settings-header">
         <div className="settings-header-left">
-          <button 
-            className="btn btn-outline" 
-            onClick={onBack}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem', padding: '0.45rem 0.75rem', fontSize: '0.8125rem' }}
-          >
-            <ArrowLeft size={15} /> ย้อนกลับ
-          </button>
+          <UserAvatar name={metadata.nickname || user?.email || ''} size={44} />
           <div>
             <h1>การตั้งค่าบัญชี & โปรไฟล์</h1>
             <p>จัดการข้อมูลส่วนตัว การตั้งค่าระบบ และความปลอดภัย</p>
@@ -502,9 +353,8 @@ export default function UserSettings({
           <span 
             className="settings-badge"
             style={{
-              background: isAdmin ? 'rgba(99, 102, 241, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-              color: isAdmin ? '#6366f1' : 'var(--success)',
-              border: isAdmin ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
+              background: isAdmin ? 'var(--accent-soft)' : 'var(--success-soft)',
+              color: isAdmin ? 'var(--accent-text)' : 'var(--success)',
             }}
           >
             {isAdmin ? <ShieldCheck size={13} /> : <User size={13} />}

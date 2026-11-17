@@ -1,24 +1,7 @@
-import { useState, useEffect } from 'react';
 import { Target, Lightbulb, ArrowRight, Heart } from 'lucide-react';
-import Aurora from './Aurora';
 import Navbar from './Navbar';
 
 export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNavigateTerms, onNavigateBlog, user }) {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document !== 'undefined') {
-      return document.documentElement.classList.contains('dark');
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
-
   const values = [
     {
       icon: <Target size={28} color="#0070f3" />,
@@ -274,12 +257,6 @@ export default function AboutUs({ onStart, onLogin, onHome, onNavigateFaq, onNav
 
       {/* 2. Hero Section */}
       <section className="about-hero">
-        <Aurora
-          colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]}
-          blend={0.5}
-          amplitude={1.0}
-          speed={0.6}
-        />
 
         <div className="about-hero-inner">
           <div className="about-badge">

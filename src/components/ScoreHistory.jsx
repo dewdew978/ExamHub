@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { History, Calendar, CheckCircle } from 'lucide-react';
+import { History, Trophy, Target, ListChecks, Search } from 'lucide-react';
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
+import SubjectIcon from './SubjectIcon';
 
 export default function ScoreHistory({ user }) {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState('all');
+  const [query, setQuery] = useState('');
 
   const fetchHistory = useCallback(async () => {
     try {
@@ -49,96 +53,131 @@ export default function ScoreHistory({ user }) {
     }
   }, [user, fetchHistory]);
 
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
-        <div className="animate-spin" style={{ width: '32px', height: '32px', border: '3px solid var(--border-divider)', borderTopColor: 'var(--accent)', borderRadius: '50%' }} />
-      </div>
-    );
-  }
+  const rows = history.map((item, i) => {
+    const total = item.exams?.questionCount || null;
+    const pct = total ? Math.round((item.score / total) * 100) : null;
+    return { ...item, key: `${item.exam_id}-${item.created_at || i}`, total, pct, name: item.exams?.name || item.exam_id, category: item.exams?.category || 'ทั่วไป' };
+  });
+  const categories = [...new Set(rows.map(r => r.category))];
+  const q = query.trim().toLowerCase();
+  const visible = rows.filter(r => (category === 'all' || r.category === category) && (!q || r.name.toLowerCase().includes(q)));
+  const withPct = rows.filter(r => r.pct !== null);
+  const avg = withPct.length ? Math.round(withPct.reduce((s, r) => s + r.pct, 0) / withPct.length) : null;
+  const best = withPct.length ? Math.max(...withPct.map(r => r.pct)) : null;
+  const totalScore = rows.reduce((s, r) => s + (r.score || 0), 0);
+  const chartData = [...withPct].reverse().slice(-14).map((r, i) => ({ i: i + 1, name: r.name, pct: r.pct }));
+
+  const formatDate = (value) => value
+    ? new Date(value).toLocaleString('th-TH', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' })
+    : '—';
+
+  const pctTone = (pct) => pct === null ? '' : pct >= 80 ? 'badge-success' : pct >= 50 ? 'badge-info' : 'badge-error';
 
   return (
-    <div className="animate-fade-in" style={{ padding: '1rem 0', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-        <div style={{ 
-          background: 'var(--accent)', color: 'white', padding: '0.45rem', 
-          borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' 
-        }}>
-          <History size={20} />
-        </div>
+    <div className="page animate-fade-in">
+      <div className="page-header">
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0, letterSpacing: '-0.3px' }}>ประวัติการทำข้อสอบ</h2>
-          <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.8125rem' }}>ดูคะแนนแบบละเอียดว่าคุณทำข้อสอบชุดไหนไปบ้าง</p>
+          <h1 className="page-title">ประวัติคะแนน</h1>
+          <p className="page-subtitle">ผลการทำข้อสอบทุกครั้งของคุณ เรียงจากล่าสุด</p>
         </div>
       </div>
 
-      {history.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '3rem 1.5rem', borderRadius: '12px' }}>
-          <History size={36} style={{ opacity: 0.2, margin: '0 auto 0.75rem' }} />
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9375rem', margin: 0 }}>คุณยังไม่มีประวัติการทำข้อสอบ</p>
+      {loading ? (
+        <div className="empty-state" style={{ padding: '4rem 1rem' }}>
+          <div className="progress" style={{ width: 120, margin: '0 auto' }}><span style={{ width: '40%' }} /></div>
+        </div>
+      ) : rows.length === 0 ? (
+        <div className="empty-state">
+          <span className="tile"><History size={18} /></span>
+          <h3>ยังไม่มีประวัติการทำข้อสอบ</h3>
+          <p>ทำข้อสอบชุดแรกให้จบเพื่อเริ่มติดตามพัฒนาการของคุณ</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {history.map((item, index) => {
-            const examName = item.exams?.name || item.exam_id || 'Unknown Exam';
-            const category = item.exams?.category || 'General';
-            
-            // Format date if available
-            let dateStr = 'ไม่ระบุเวลา';
-            if (item.created_at) {
-              const d = new Date(item.created_at);
-              dateStr = d.toLocaleDateString('th-TH', { 
-                year: 'numeric', month: 'short', day: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-              });
-            }
+        <>
+          <div className="stat-grid" style={{ marginBottom: '1rem' }}>
+            <div className="stat"><div className="stat-label"><ListChecks size={13} /> จำนวนครั้งที่สอบ</div><div className="stat-value">{rows.length}</div></div>
+            <div className="stat"><div className="stat-label"><Target size={13} /> ค่าเฉลี่ย</div><div className="stat-value">{avg ?? '—'}{avg !== null && <span style={{ fontSize: '0.9rem', color: 'var(--text-subtle)' }}>%</span>}</div></div>
+            <div className="stat"><div className="stat-label"><Trophy size={13} /> ดีที่สุด</div><div className="stat-value">{best ?? '—'}{best !== null && <span style={{ fontSize: '0.9rem', color: 'var(--text-subtle)' }}>%</span>}</div></div>
+            <div className="stat"><div className="stat-label"><History size={13} /> คะแนนสะสม</div><div className="stat-value">{totalScore.toLocaleString()}</div></div>
+          </div>
 
-            return (
-              <div 
-                key={index} 
-                className="card"
-                style={{ 
-                  padding: '1.15rem 1rem', 
-                  borderRadius: '10px', 
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: '0.75rem'
-                }}
-              >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.35rem', lineHeight: 1.35, letterSpacing: '-0.2px' }}>{examName}</h3>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 0.75rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Calendar size={13} /> 
-                      {dateStr}
-                    </span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', background: 'var(--surface-hover)', padding: '0.1rem 0.4rem', borderRadius: '4px', boxShadow: 'var(--shadow-border)' }}>
-                      <CheckCircle size={11} style={{ color: 'var(--accent)' }} /> 
-                      {category}
-                    </span>
-                  </div>
-                </div>
-                
-                <div style={{ 
-                  background: 'rgba(16, 185, 129, 0.1)', 
-                  color: 'var(--success)', 
-                  padding: '0.4rem 0.75rem', 
-                  borderRadius: '8px',
-                  fontWeight: 700,
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: '0.25rem',
-                  boxShadow: '0 0 0 1px rgba(16, 185, 129, 0.2)',
-                  flexShrink: 0
-                }}>
-                  <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>{item.score}</span>
-                  <span style={{ fontSize: '0.75rem', opacity: 0.85 }}>คะแนน</span>
-                </div>
+          {chartData.length > 1 && (
+            <div className="card" style={{ padding: '1rem 1rem 0.5rem', marginBottom: '1.25rem' }}>
+              <div className="section-title">เปอร์เซ็นต์ล่าสุด <span className="muted">· {chartData.length} ครั้งหลังสุด</span></div>
+              <div style={{ height: 160 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: -24 }}>
+                    <CartesianGrid vertical={false} stroke="var(--border-divider)" />
+                    <XAxis dataKey="i" tick={{ fill: 'var(--text-subtle)', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <YAxis domain={[0, 100]} ticks={[0, 50, 100]} tick={{ fill: 'var(--text-subtle)', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <Tooltip
+                      cursor={{ fill: 'var(--surface-hover)' }}
+                      contentStyle={{ background: 'var(--surface)', border: 'none', borderRadius: 8, boxShadow: 'var(--shadow-popover)', fontSize: 12 }}
+                      labelFormatter={(_, p) => p?.[0]?.payload?.name || ''}
+                      formatter={(v) => [`${v}%`, 'คะแนน']}
+                    />
+                    <Bar dataKey="pct" fill="var(--accent)" radius={[4, 4, 0, 0]} maxBarSize={28} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          )}
+
+          <div className="toolbar">
+            <div className="search" style={{ width: 240, maxWidth: '100%' }}>
+              <Search size={14} />
+              <input className="input" value={query} onChange={e => setQuery(e.target.value)} placeholder="ค้นหาชุดข้อสอบ…" aria-label="ค้นหาประวัติ" />
+            </div>
+            <button type="button" className={`chip${category === 'all' ? ' active' : ''}`} onClick={() => setCategory('all')}>ทุกหมวด</button>
+            {categories.map(c => (
+              <button key={c} type="button" className={`chip${category === c ? ' active' : ''}`} onClick={() => setCategory(c)}>{c}</button>
+            ))}
+          </div>
+
+          <div className="ds-table-wrap">
+            <div className="ds-table-scroll">
+              <table className="ds-table">
+                <thead>
+                  <tr>
+                    <th>ชุดข้อสอบ</th>
+                    <th>หมวดวิชา</th>
+                    <th>วันที่ทำ</th>
+                    <th style={{ textAlign: 'right' }}>คะแนน</th>
+                    <th style={{ textAlign: 'right' }}>ผลลัพธ์</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map(r => (
+                    <tr key={r.key}>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 200 }}>
+                          <span className="tile" style={{ width: 26, height: 26 }}><SubjectIcon category={r.category} size={13} color="var(--text-muted)" /></span>
+                          <span style={{ fontWeight: 500 }}>{r.name}</span>
+                        </div>
+                      </td>
+                      <td style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{r.category}</td>
+                      <td style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{formatDate(r.created_at)}</td>
+                      <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>
+                        <strong style={{ fontWeight: 600 }}>{r.score}</strong>{r.total && <span style={{ color: 'var(--text-subtle)' }}>/{r.total}</span>}
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        {r.pct !== null
+                          ? <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <div className="progress hide-sm" style={{ width: 64, height: 4 }}><span style={{ width: `${r.pct}%`, background: r.pct >= 80 ? 'var(--success)' : r.pct >= 50 ? 'var(--info)' : 'var(--error)' }} /></div>
+                              <span className={`badge ${pctTone(r.pct)}`}>{r.pct}%</span>
+                            </div>
+                          : <span style={{ color: 'var(--text-subtle)' }}>—</span>}
+                      </td>
+                    </tr>
+                  ))}
+                  {visible.length === 0 && (
+                    <tr><td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>ไม่พบรายการที่ตรงกับตัวกรอง</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

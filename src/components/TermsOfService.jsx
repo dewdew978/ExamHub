@@ -1,25 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Shield, Lock, Scale, BookOpen, CheckCircle, AlertCircle, UserCheck, Eye, Database, HelpCircle } from 'lucide-react';
-import Aurora from './Aurora';
 import Navbar from './Navbar';
 
 export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbout, onNavigateFaq, onNavigateBlog, user }) {
   const [activeTab, setActiveTab] = useState('terms'); // 'terms' | 'privacy'
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document !== 'undefined') {
-      return document.documentElement.classList.contains('dark');
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div className="terms-page-root animate-fade-in">
       <style>{`
@@ -264,12 +248,6 @@ export default function TermsOfService({ onStart, onLogin, onHome, onNavigateAbo
 
       {/* Hero Header */}
       <section className="terms-hero">
-        <Aurora 
-          colorStops={isDark ? ["#7cff67", "#B497CF", "#5227FF"] : ["#0070f3", "#a855f7", "#ec4899"]} 
-          blend={0.5} 
-          amplitude={1.0} 
-          speed={0.6} 
-        />
         <div className="terms-hero-inner">
           <div className="terms-badge">
             <span className="terms-badge-dot" />

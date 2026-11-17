@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Check, Clock, CalendarDays, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import { Check, Clock, CalendarDays, MapPin, Users, Hourglass } from 'lucide-react';
 
 const examSchedule = [
   {
@@ -178,179 +178,127 @@ export default function Schedule({ now = Date.now() }) {
     return matchYear && matchTerm;
   });
 
+  const upcoming = filteredSchedule.filter(item => item.timestamp >= currentTime);
+  const nextExam = upcoming[0];
+  const nextDays = nextExam ? getDaysUntilExam(nextExam.timestamp, currentTime) : null;
+  const doneCount = filteredSchedule.length - upcoming.length;
+
+  // Group rows by exam day so parallel groups (ทฤษฎี / ปฏิบัติ) sit together.
+  const groups = [];
+  for (const item of filteredSchedule) {
+    const last = groups[groups.length - 1];
+    if (last && last.date === item.date) last.items.push(item);
+    else groups.push({ date: item.date, timestamp: item.timestamp, items: [item] });
+  }
+
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '700px', margin: '2rem auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <CalendarDays size={24} color="var(--accent)" />
-          ตารางสอบ (Exam Schedule)
-        </h2>
-        <p style={{ color: 'var(--text-muted)', marginTop: '0.25rem' }}>กำหนดการสอบ Midterm และ Final ประจำภาคการศึกษา</p>
+    <div className="page animate-fade-in" style={{ maxWidth: 960 }}>
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">ตารางสอบ</h1>
+          <p className="page-subtitle">กำหนดการสอบ Midterm และ Final ประจำภาคการศึกษา</p>
+        </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-        <button 
-          className={`btn ${activeYear === 3 ? 'btn-primary' : 'btn-outline'}`} 
-          onClick={() => setActiveYear(3)}
-          style={{ flex: 1 }}
-        >
-          ปี 3
-        </button>
-        <button 
-          className={`btn ${activeYear === 4 ? 'btn-primary' : 'btn-outline'}`} 
-          onClick={() => setActiveYear(4)}
-          style={{ flex: 1 }}
-        >
-          ปี 4
-        </button>
-      </div>
-
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem' }}>
-        <button 
-          className={`btn ${activeTerm === 'All' ? 'btn-primary' : 'btn-outline'}`} 
-          onClick={() => setActiveTerm('All')}
-          style={{ flex: 1, padding: '0.375rem 0.75rem', fontSize: '0.8125rem' }}
-        >
-          ทั้งหมด
-        </button>
-        <button 
-          className={`btn ${activeTerm === 'Midterm' ? 'btn-primary' : 'btn-outline'}`} 
-          onClick={() => setActiveTerm('Midterm')}
-          style={{ flex: 1, padding: '0.375rem 0.75rem', fontSize: '0.8125rem' }}
-        >
-          Midterm
-        </button>
-        <button 
-          className={`btn ${activeTerm === 'Final' ? 'btn-primary' : 'btn-outline'}`} 
-          onClick={() => setActiveTerm('Final')}
-          style={{ flex: 1, padding: '0.375rem 0.75rem', fontSize: '0.8125rem' }}
-        >
-          Final
-        </button>
+      <div className="toolbar">
+        <div className="seg" role="group" aria-label="ชั้นปี">
+          {[3, 4].map(y => (
+            <button key={y} type="button" className={`seg-item${activeYear === y ? ' active' : ''}`} onClick={() => setActiveYear(y)}>ปี {y}</button>
+          ))}
+        </div>
+        {['All', 'Midterm', 'Final'].map(t => (
+          <button key={t} type="button" className={`chip${activeTerm === t ? ' active' : ''}`} onClick={() => setActiveTerm(t)}>
+            {t === 'All' ? 'ทั้งหมด' : t}
+          </button>
+        ))}
+        <div className="spacer" />
+        {filteredSchedule.length > 0 && (
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>สอบแล้ว {doneCount}/{filteredSchedule.length} วิชา</span>
+        )}
       </div>
 
       {filteredSchedule.length === 0 ? (
-        <div className="card" style={{ padding: '2.5rem 1.5rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <CalendarDays size={36} style={{ margin: '0 auto 0.75rem auto', opacity: 0.2 }} />
-          <p style={{ fontSize: '1rem', fontWeight: 500 }}>ยังไม่มีกำหนดการสอบ</p>
-          <p style={{ fontSize: '0.8125rem', marginTop: '0.35rem' }}>เตรียมพบกับตารางสอบเร็วๆ นี้</p>
+        <div className="empty-state">
+          <span className="tile"><CalendarDays size={18} /></span>
+          <h3>ยังไม่มีกำหนดการสอบ</h3>
+          <p>เตรียมพบกับตารางสอบเร็วๆ นี้</p>
         </div>
       ) : (
-        <div style={{ position: 'relative', paddingLeft: '2rem' }}>
-          {/* Timeline line */}
-          <div style={{
-            position: 'absolute',
-            left: '0.625rem',
-            top: '0.75rem',
-            bottom: '0.75rem',
-            width: '2px',
-            background: 'var(--border-divider)',
-            zIndex: 0
-          }} />
-
-          {filteredSchedule.map((item, index) => {
-            const isPast = item.timestamp < currentTime;
-            const isNext = !isPast && (index === 0 || filteredSchedule[index - 1].timestamp < currentTime);
-            const daysUntilExam = getDaysUntilExam(item.timestamp, currentTime);
-            
-            let indicatorBg = 'var(--surface)';
-            let indicatorBorder = '2px solid var(--border-divider)';
-            
-            if (isPast) {
-              indicatorBg = 'var(--accent)';
-              indicatorBorder = '2px solid var(--accent)';
-            } else if (isNext) {
-              indicatorBg = 'var(--surface)';
-              indicatorBorder = '2px solid var(--accent)';
-            }
-
-            return (
-              <div key={item.id} style={{ position: 'relative', marginBottom: '1.25rem' }}>
-                {/* Indicator */}
-                <div style={{
-                  position: 'absolute',
-                  left: '-2rem',
-                  top: '0.25rem',
-                  width: '1.25rem',
-                  height: '1.25rem',
-                  borderRadius: '50%',
-                  background: indicatorBg,
-                  border: indicatorBorder,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  zIndex: 1,
-                  boxShadow: isNext ? '0 0 0 3px rgba(0, 112, 243, 0.15)' : 'none'
-                }}>
-                  {isPast && <Check size={10} color="#fff" strokeWidth={3} />}
-                  {isNext && <div style={{ width: '0.4rem', height: '0.4rem', borderRadius: '50%', background: 'var(--accent)' }} />}
-                </div>
-
-                {/* Content Card */}
-                <div className="card" style={{ 
-                  padding: '1.15rem 1rem', 
-                  borderLeft: isNext ? '3px solid var(--accent)' : 'none',
-                  opacity: isPast ? 0.8 : 1,
-                  borderRadius: '10px'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
-                    <div style={{ flex: 1, minWidth: '220px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                        <span style={{ 
-                          fontSize: '0.7rem', 
-                          fontWeight: 600, 
-                          padding: '0.15rem 0.4rem', 
-                          borderRadius: '4px',
-                          background: item.type === 'Midterm' ? 'rgba(245, 166, 35, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                          color: item.type === 'Midterm' ? 'var(--warning)' : 'var(--success)',
-                          textTransform: 'uppercase'
-                        }}>
-                          {item.type}
-                        </span>
-                        {item.progress && (
-                          <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600 }}>
-                            {item.progress}%
-                          </span>
-                        )}
-                        <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                          {item.date}
-                        </span>
-                      </div>
-                      <h3 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.35rem', lineHeight: 1.35, letterSpacing: '-0.2px' }}>
-                        {item.courseCode && `${item.courseCode} `}{item.title}
-                      </h3>
-                      {item.group && (
-                        <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                          {item.group}
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flexShrink: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
-                        <Clock size={14} />
-                        {item.time}
-                      </div>
-                      {item.location !== "-" && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>
-                          <MapPin size={14} />
-                          {item.location}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {!isPast && daysUntilExam >= 0 && (
-                    <div style={{ marginTop: '0.75rem', paddingTop: '0.65rem', borderTop: '1px solid var(--border-divider)', color: isNext ? 'var(--accent)' : 'var(--text-muted)', fontSize: '0.8125rem', fontWeight: 500 }}>
-                      {daysUntilExam === 0
-                        ? 'สอบวันนี้'
-                        : `เหลืออีก ${daysUntilExam} วันก่อนถึงวันสอบวิชานี้`}
-                    </div>
-                  )}
-                </div>
+        <>
+          {nextExam && (
+            <div className="card" style={{ padding: '1rem 1.1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', boxShadow: '0 0 0 1px var(--accent-soft), var(--shadow-xs)', background: 'var(--accent-softer)' }}>
+              <span className="tile tile-accent" style={{ width: 40, height: 40 }}><Hourglass size={18} /></span>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--accent-text)', fontWeight: 500 }}>สอบถัดไป</div>
+                <div style={{ fontWeight: 600, fontSize: '0.95rem', marginTop: 2 }}>{nextExam.title}</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2 }}>{nextExam.time} · {nextExam.location}</div>
               </div>
-            );
-          })}
-        </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '1.75rem', fontWeight: 600, lineHeight: 1, letterSpacing: '-0.02em' }}>{nextDays === 0 ? 'วันนี้' : nextDays}</div>
+                {nextDays !== 0 && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>วันก่อนสอบ</div>}
+              </div>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {groups.map(group => {
+              const isPastDay = group.items.every(i => i.timestamp < currentTime);
+              return (
+                <section key={`${group.date}-${group.timestamp}`}>
+                  <div className="section-title" style={{ color: isPastDay ? 'var(--text-muted)' : 'var(--text)' }}>
+                    <CalendarDays size={14} /> {group.date}
+                    {isPastDay && <span className="badge" style={{ marginLeft: 4 }}><Check size={10} /> สอบแล้ว</span>}
+                  </div>
+                  <div className="ds-table-wrap">
+                    {group.items.map((item, idx) => {
+                      const isPast = item.timestamp < currentTime;
+                      const isNext = nextExam && item.timestamp === nextExam.timestamp;
+                      const daysUntilExam = getDaysUntilExam(item.timestamp, currentTime);
+                      return (
+                        <div key={item.id} style={{
+                          display: 'flex', alignItems: 'flex-start', gap: '0.9rem', padding: '0.85rem 1rem', flexWrap: 'wrap',
+                          borderTop: idx ? '1px solid var(--border-divider)' : 'none',
+                          opacity: isPast ? 0.65 : 1,
+                        }}>
+                          <div style={{ flex: '1 1 260px', minWidth: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: 4, flexWrap: 'wrap' }}>
+                              <span className={`badge ${item.type === 'Midterm' ? 'badge-warning' : 'badge-success'}`}>{item.type}</span>
+                              {item.progress && (
+                                <span className="badge badge-accent" title="ความพร้อมของคลังข้อสอบวิชานี้">{item.progress}%</span>
+                              )}
+                              {item.courseCode && <span style={{ fontSize: '0.72rem', color: 'var(--text-subtle)', fontFamily: 'var(--font-mono)' }}>{item.courseCode}</span>}
+                            </div>
+                            <div style={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: 1.4 }}>{item.title}</div>
+                            {item.group && (
+                              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                                <Users size={12} /> {item.group}
+                              </div>
+                            )}
+                          </div>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: '0.78rem', color: 'var(--text-muted)', minWidth: 190 }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Clock size={13} /> {item.time}</span>
+                            {item.location !== "-" && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><MapPin size={13} /> {item.location}</span>}
+                          </div>
+                          <div style={{ minWidth: 150, textAlign: 'right', fontSize: '0.75rem', alignSelf: 'center' }}>
+                            {isPast
+                              ? <span style={{ color: 'var(--text-subtle)', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Check size={12} /> เสร็จสิ้น</span>
+                              : daysUntilExam >= 0 && (
+                                <span style={{ color: isNext ? 'var(--accent-text)' : 'var(--text-muted)', fontWeight: isNext ? 500 : 400 }}>
+                                  {daysUntilExam === 0
+                                    ? 'สอบวันนี้'
+                                    : `เหลืออีก ${daysUntilExam} วันก่อนถึงวันสอบวิชานี้`}
+                                </span>
+                              )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );
